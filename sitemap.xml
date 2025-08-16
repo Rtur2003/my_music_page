@@ -4,75 +4,75 @@
         xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
     
     <url>
-        <loc>https://www.muzikportfoyu.com/</loc>
+        <loc>https://rtur2003.github.io/MYPAGE/</loc>
         <lastmod>2024-01-01T12:00:00+03:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
         <image:image>
-            <image:loc>https://www.muzikportfoyu.com/assets/images/hero-musician.jpg</image:loc>
+            <image:loc>https://rtur2003.github.io/MYPAGE/assets/images/hero-musician.jpg</image:loc>
             <image:title>Müzik Sanatçısı</image:title>
             <image:caption>Profesyonel müzik sanatçısı portföy fotoğrafı</image:caption>
         </image:image>
     </url>
     
     <url>
-        <loc>https://www.muzikportfoyu.com/#about</loc>
+        <loc>https://rtur2003.github.io/MYPAGE/#about</loc>
         <lastmod>2024-01-01T12:00:00+03:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
         <image:image>
-            <image:loc>https://www.muzikportfoyu.com/assets/images/about-me.jpg</image:loc>
+            <image:loc>https://rtur2003.github.io/MYPAGE/assets/images/about-me.jpg</image:loc>
             <image:title>Hakkımda</image:title>
             <image:caption>Müzik sanatçısının kişisel fotoğrafı</image:caption>
         </image:image>
     </url>
     
     <url>
-        <loc>https://www.muzikportfoyu.com/#music</loc>
+        <loc>https://rtur2003.github.io/MYPAGE/#music</loc>
         <lastmod>2024-01-01T12:00:00+03:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     
     <url>
-        <loc>https://www.muzikportfoyu.com/#gallery</loc>
+        <loc>https://rtur2003.github.io/MYPAGE/#gallery</loc>
         <lastmod>2024-01-01T12:00:00+03:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
         <image:image>
-            <image:loc>https://www.muzikportfoyu.com/assets/images/gallery-1.jpg</image:loc>
+            <image:loc>https://rtur2003.github.io/MYPAGE/assets/images/gallery-1.jpg</image:loc>
             <image:title>Konser Anı</image:title>
             <image:caption>İstanbul Konseri - 2024</image:caption>
         </image:image>
         <image:image>
-            <image:loc>https://www.muzikportfoyu.com/assets/images/gallery-2.jpg</image:loc>
+            <image:loc>https://rtur2003.github.io/MYPAGE/assets/images/gallery-2.jpg</image:loc>
             <image:title>Stüdyo Çalışması</image:title>
             <image:caption>Yeni Albüm Kayıtları</image:caption>
         </image:image>
         <image:image>
-            <image:loc>https://www.muzikportfoyu.com/assets/images/gallery-3.jpg</image:loc>
+            <image:loc>https://rtur2003.github.io/MYPAGE/assets/images/gallery-3.jpg</image:loc>
             <image:title>Sahne Arkası</image:title>
             <image:caption>Video Çekimi</image:caption>
         </image:image>
         <image:image>
-            <image:loc>https://www.muzikportfoyu.com/assets/images/gallery-4.jpg</image:loc>
+            <image:loc>https://rtur2003.github.io/MYPAGE/assets/images/gallery-4.jpg</image:loc>
             <image:title>Sahne Performansı</image:title>
             <image:caption>Ankara Konseri - 2024</image:caption>
         </image:image>
         <image:image>
-            <image:loc>https://www.muzikportfoyu.com/assets/images/gallery-5.jpg</image:loc>
+            <image:loc>https://rtur2003.github.io/MYPAGE/assets/images/gallery-5.jpg</image:loc>
             <image:title>Kayıt Anı</image:title>
             <image:caption>Single Kaydı</image:caption>
         </image:image>
         <image:image>
-            <image:loc>https://www.muzikportfoyu.com/assets/images/gallery-6.jpg</image:loc>
+            <image:loc>https://rtur2003.github.io/MYPAGE/assets/images/gallery-6.jpg</image:loc>
             <image:title>Backstage</image:title>
             <image:caption>Konser Hazırlığı</image:caption>
         </image:image>
     </url>
     
     <url>
-        <loc>https://www.muzikportfoyu.com/#contact</loc>
+        <loc>https://rtur2003.github.io/MYPAGE/#contact</loc>
         <lastmod>2024-01-01T12:00:00+03:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
