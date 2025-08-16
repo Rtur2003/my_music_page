@@ -1,0 +1,24 @@
+{
+    "git.detectSubmodules": false,
+    "git.scanRepositories": ["./"],
+    "git.autoRepositoryDetection": "openEditors",
+    "explorer.excludeGitIgnore": true,
+    "files.watcherExclude": {
+        "**/.git/**": true,
+        "**/node_modules/**": true,
+        "**/*.tmp": true,
+        "**/*.log": true
+    },
+    "search.exclude": {
+        "**/.git": true,
+        "**/node_modules": true,
+        "**/*.code-search": true
+    },
+    "git.ignoredRepositories": [
+        "../commend-ai",
+        "../Kognita", 
+        "../PricePal",
+        "../SKEYED.Backend.V2",
+        "../Yeni klasör"
+    ]
+}
