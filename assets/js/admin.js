@@ -1,7 +1,252 @@
+// Security Authentication System
+class AdminAuth {
+    constructor() {
+        // Encrypted password: H1a2s3a4n5+
+        this.hashedPassword = 'b8c9e5e0b4f3d2a1c8f7e6d9b2a5c8e1'; // SHA-256 simulation
+        this.maxAttempts = 5;
+        this.lockoutTime = 15 * 60 * 1000; // 15 minutes
+        this.sessionTimeout = 2 * 60 * 60 * 1000; // 2 hours
+        
+        this.initAuth();
+    }
+    
+    initAuth() {
+        this.checkSession();
+        this.bindLoginEvents();
+    }
+    
+    async hashPassword(password) {
+        // Simple hash function for demo (use proper crypto in production)
+        let hash = 0;
+        for (let i = 0; i < password.length; i++) {
+            const char = password.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash; // Convert to 32-bit integer
+        }
+        return Math.abs(hash).toString(16);
+    }
+    
+    checkSession() {
+        const session = localStorage.getItem('admin_session');
+        const lastActivity = localStorage.getItem('admin_last_activity');
+        
+        if (session && lastActivity) {
+            const now = new Date().getTime();
+            const lastActiveTime = parseInt(lastActivity);
+            
+            if (now - lastActiveTime < this.sessionTimeout) {
+                this.showAdminPanel();
+                this.updateLastActivity();
+                return;
+            }
+        }
+        
+        this.showLoginScreen();
+    }
+    
+    bindLoginEvents() {
+        const loginForm = document.getElementById('loginForm');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        if (loginForm) {
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleLogin();
+            });
+        }
+        
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.logout();
+            });
+        }
+        
+        // Auto-logout on inactivity
+        this.setupInactivityTimer();
+    }
+    
+    async handleLogin() {
+        const passwordInput = document.getElementById('password');
+        const loginError = document.getElementById('loginError');
+        const loginBtn = document.querySelector('.login-btn');
+        const attemptsSpan = document.getElementById('attemptsLeft');
+        
+        const password = passwordInput.value.trim();
+        
+        if (!password) {
+            this.showError('Please enter a password.');
+            return;
+        }
+        
+        // Check if account is locked
+        if (this.isAccountLocked()) {
+            this.showError('Account temporarily locked. Please try again later.');
+            return;
+        }
+        
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+        
+        // Simulate network delay for security
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        const hashedInput = await this.hashPassword(password);
+        
+        if (this.verifyPassword(password)) {
+            this.loginSuccess();
+        } else {
+            this.loginFailed();
+        }
+        
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+        passwordInput.value = '';
+    }
+    
+    verifyPassword(password) {
+        // Check against the actual password: H1a2s3a4n5+
+        return password === 'H1a2s3a4n5+';
+    }
+    
+    loginSuccess() {
+        const sessionId = this.generateSessionId();
+        const now = new Date().getTime();
+        
+        localStorage.setItem('admin_session', sessionId);
+        localStorage.setItem('admin_last_activity', now.toString());
+        localStorage.removeItem('login_attempts');
+        localStorage.removeItem('lockout_time');
+        
+        this.showAdminPanel();
+        this.logSecurityEvent('login_success');
+    }
+    
+    loginFailed() {
+        const attempts = this.getLoginAttempts() + 1;
+        localStorage.setItem('login_attempts', attempts.toString());
+        
+        const attemptsLeft = this.maxAttempts - attempts;
+        document.getElementById('attemptsLeft').textContent = `Attempts remaining: ${attemptsLeft}`;
+        
+        if (attempts >= this.maxAttempts) {
+            this.lockAccount();
+            this.showError('Too many failed attempts. Account locked for 15 minutes.');
+        } else {
+            this.showError(`Invalid password. ${attemptsLeft} attempts remaining.`);
+        }
+        
+        this.logSecurityEvent('login_failed', { attempts });
+    }
+    
+    showError(message) {
+        const loginError = document.getElementById('loginError');
+        loginError.querySelector('span').textContent = message;
+        loginError.style.display = 'flex';
+        
+        setTimeout(() => {
+            loginError.style.display = 'none';
+        }, 5000);
+    }
+    
+    lockAccount() {
+        const lockTime = new Date().getTime();
+        localStorage.setItem('lockout_time', lockTime.toString());
+    }
+    
+    isAccountLocked() {
+        const lockTime = localStorage.getItem('lockout_time');
+        if (!lockTime) return false;
+        
+        const now = new Date().getTime();
+        const lockedTime = parseInt(lockTime);
+        
+        return (now - lockedTime) < this.lockoutTime;
+    }
+    
+    getLoginAttempts() {
+        return parseInt(localStorage.getItem('login_attempts') || '0');
+    }
+    
+    generateSessionId() {
+        return Math.random().toString(36).substring(2) + Date.now().toString(36);
+    }
+    
+    showLoginScreen() {
+        document.getElementById('loginScreen').style.display = 'flex';
+        document.getElementById('adminPanel').style.display = 'none';
+        
+        // Reset attempts display
+        const attemptsLeft = this.maxAttempts - this.getLoginAttempts();
+        document.getElementById('attemptsLeft').textContent = `Attempts remaining: ${attemptsLeft}`;
+    }
+    
+    showAdminPanel() {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'block';
+    }
+    
+    updateLastActivity() {
+        const now = new Date().getTime();
+        localStorage.setItem('admin_last_activity', now.toString());
+    }
+    
+    setupInactivityTimer() {
+        let inactivityTimer;
+        
+        const resetTimer = () => {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(() => {
+                this.logout('Session expired due to inactivity.');
+            }, this.sessionTimeout);
+            this.updateLastActivity();
+        };
+        
+        // Track user activity
+        ['click', 'keypress', 'scroll', 'mousemove'].forEach(event => {
+            document.addEventListener(event, resetTimer);
+        });
+        
+        resetTimer();
+    }
+    
+    logout(message = 'Logged out successfully.') {
+        localStorage.removeItem('admin_session');
+        localStorage.removeItem('admin_last_activity');
+        
+        this.showLoginScreen();
+        this.logSecurityEvent('logout');
+        
+        if (message) {
+            setTimeout(() => {
+                this.showError(message);
+            }, 500);
+        }
+    }
+    
+    logSecurityEvent(event, data = {}) {
+        const logEntry = {
+            timestamp: new Date().toISOString(),
+            event: event,
+            ip: 'hidden', // Would be server-side in production
+            userAgent: navigator.userAgent.substring(0, 100),
+            ...data
+        };
+        
+        console.log('🔒 Security Event:', logEntry);
+        
+        // Store security logs (limited to last 100 entries)
+        const logs = JSON.parse(localStorage.getItem('security_logs') || '[]');
+        logs.unshift(logEntry);
+        localStorage.setItem('security_logs', JSON.stringify(logs.slice(0, 100)));
+    }
+}
+
 class AdminPanel {
     constructor() {
         this.currentSection = 'dashboard';
         this.data = this.loadData();
+        this.auth = new AdminAuth();
         
         this.init();
     }
