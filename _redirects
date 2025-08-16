@@ -1,0 +1,23 @@
+# Netlify Redirects Configuration
+# SPA fallback - redirect all non-existing paths to index.html
+/*    /index.html   200
+
+# Force HTTPS redirect
+http://rtur2003.netlify.app/*  https://rtur2003.netlify.app/:splat  301!
+http://www.rtur2003.netlify.app/*  https://rtur2003.netlify.app/:splat  301!
+
+# Admin panel security - password protection
+/admin.html  /admin.html  200  role=admin
+
+# Block access to sensitive files
+/.env*  /404.html  404
+/config.json  /404.html  404
+/*.md  /404.html  404
+/.git/*  /404.html  404
+/node_modules/*  /404.html  404
+
+# Old URL redirects (if you had different structure before)
+/music/*  /index.html#music  301
+/gallery/*  /index.html#gallery  301
+/contact/*  /index.html#contact  301
+/about/*  /index.html#about  301
