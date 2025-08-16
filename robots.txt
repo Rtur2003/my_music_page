@@ -1,0 +1,45 @@
+User-agent: *
+Allow: /
+
+# Ana sayfalar
+Allow: /index.html
+Allow: /admin.html
+
+# Static dosyalar
+Allow: /assets/
+Allow: /assets/css/
+Allow: /assets/js/
+Allow: /assets/images/
+Allow: /assets/music/
+Allow: /assets/fonts/
+
+# SEO dosyaları
+Allow: /sitemap.xml
+Allow: /robots.txt
+
+# Disallow hiçbir şey - tüm içerik herkese açık
+
+# Sitemap konumu
+Sitemap: https://www.muzikportfoyu.com/sitemap.xml
+
+# Crawl delay (büyük siteler için)
+Crawl-delay: 1
+
+# Özel bot talimatları
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /

@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Profesyonel müzik portföyü - En yeni müziklerimi keşfedin ve dinleyin">
+    <meta name="keywords" content="müzik, sanatçı, şarkı, albüm, müzik yapımcısı, konser, stüdyo, prodüktör">
+    <meta name="author" content="Müzik Sanatçısı">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Turkish">
+    <meta name="revisit-after" content="7 days">
+    <meta name="rating" content="General">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Müzik Portföyüm | Profesyonel Müzik Sanatçısı">
+    <meta property="og:description" content="Profesyonel müzik portföyü - En yeni müziklerimi keşfedin ve dinleyin">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.muzikportfoyu.com/">
+    <meta property="og:image" content="https://www.muzikportfoyu.com/assets/images/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Müzik Portföyü">
+    <meta property="og:locale" content="tr_TR">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Müzik Portföyüm | Profesyonel Müzik Sanatçısı">
+    <meta name="twitter:description" content="Profesyonel müzik portföyü - En yeni müziklerimi keşfedin ve dinleyin">
+    <meta name="twitter:image" content="https://www.muzikportfoyu.com/assets/images/og-image.jpg">
+    <meta name="twitter:creator" content="@muzikartist">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16x16.png">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6c5ce7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Müzik Portföyü">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.muzikportfoyu.com/">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "MusicGroup",
+        "name": "Müzik Sanatçısı",
+        "url": "https://www.muzikportfoyu.com/",
+        "image": "https://www.muzikportfoyu.com/assets/images/hero-musician.jpg",
+        "description": "Profesyonel müzik sanatçısı ve prodüktör",
+        "genre": ["Pop", "Rock", "Alternative", "Acoustic"],
+        "foundingLocation": {
+            "@type": "Place",
+            "name": "İstanbul, Türkiye"
+        },
+        "sameAs": [
+            "https://open.spotify.com/artist/muzikartist",
+            "https://www.youtube.com/channel/muzikartist",
+            "https://www.instagram.com/muzikartist",
+            "https://twitter.com/muzikartist"
+        ],
+        "album": [
+            {
+                "@type": "MusicAlbum",
+                "name": "Rüya Gibi",
+                "datePublished": "2024",
+                "genre": "Pop"
+            }
+        ]
+    }
+    </script>
+    
+    <title>Müzik Portföyüm | Profesyonel Müzik Sanatçısı</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+</head>
+<body>
+    <div class="page-loader">
+        <div class="loader-container">
+            <div class="music-note-loader">
+                <i class="fas fa-music"></i>
+            </div>
+            <p>Müzik Yükleniyor...</p>
+        </div>
+    </div>
+
+    <header class="header" id="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <a href="#home">
+                        <i class="fas fa-music"></i>
+                        <span>MÜZİK</span>
+                    </a>
+                </div>
+                
+                <ul class="nav-menu" id="nav-menu">
+                    <li class="nav-item">
+                        <a href="#home" class="nav-link active">Ana Sayfa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#about" class="nav-link">Hakkımda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#music" class="nav-link">Müziklerim</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#gallery" class="nav-link">Galeri</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#contact" class="nav-link">İletişim</a>
+                    </li>
+                </ul>
+                
+                <div class="nav-toggle" id="nav-toggle">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <div class="hero-background">
+                <div class="hero-overlay"></div>
+                <div class="floating-notes">
+                    <i class="fas fa-music note-1"></i>
+                    <i class="fas fa-music note-2"></i>
+                    <i class="fas fa-music note-3"></i>
+                    <i class="fas fa-music note-4"></i>
+                    <i class="fas fa-music note-5"></i>
+                </div>
+            </div>
+            
+            <div class="hero-content">
+                <div class="container">
+                    <div class="hero-text">
+                        <h1 class="hero-title">
+                            <span class="title-line">Müziğin</span>
+                            <span class="title-line highlight">Büyülü Dünyası</span>
+                        </h1>
+                        <p class="hero-description">
+                            Tutkuyla yarattığım müziklerle duyguları harmanlıyor, 
+                            her notada hikayeler anlatıyorum.
+                        </p>
+                        <div class="hero-buttons">
+                            <a href="#music" class="btn btn-primary">
+                                <i class="fas fa-play"></i>
+                                Müzikleri Dinle
+                            </a>
+                            <a href="#about" class="btn btn-secondary">
+                                <i class="fas fa-user"></i>
+                                Hakkımda
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="hero-image">
+                        <div class="image-container">
+                            <img src="assets/images/hero-musician.jpg" alt="Müzik Sanatçısı" class="hero-img">
+                            <div class="image-glow"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="scroll-indicator">
+                <div class="mouse">
+                    <div class="wheel"></div>
+                </div>
+                <p>Aşağı kaydır</p>
+            </div>
+        </section>
+
+        <section class="about" id="about">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Hakkımda</h2>
+                    <p class="section-subtitle">Müziğe olan tutkum ve hikayem</p>
+                </div>
+                
+                <div class="about-content">
+                    <div class="about-image">
+                        <img src="assets/images/about-me.jpg" alt="Hakkımda" class="about-img">
+                        <div class="experience-badge">
+                            <span class="years">5+</span>
+                            <span class="text">Yıl Deneyim</span>
+                        </div>
+                    </div>
+                    
+                    <div class="about-text">
+                        <h3>Müzik Yolculuğum</h3>
+                        <p>
+                            Müziğe olan tutkum çocukluk yıllarımda başladı. Her nota, her melodi 
+                            benim için bir hikaye anlatır. Yıllar boyunca farklı türlerde müzik 
+                            yaparak kendimi geliştirdim.
+                        </p>
+                        <p>
+                            Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını 
+                            dokunmak. Her eserimde bir parça kalbimi bırakarak, dinleyicilerimle 
+                            duygusal bir bağ kurmaya çalışıyorum.
+                        </p>
+                        
+                        <div class="skills">
+                            <div class="skill-item">
+                                <i class="fas fa-guitar"></i>
+                                <span>Gitar</span>
+                            </div>
+                            <div class="skill-item">
+                                <i class="fas fa-microphone"></i>
+                                <span>Vokal</span>
+                            </div>
+                            <div class="skill-item">
+                                <i class="fas fa-sliders-h"></i>
+                                <span>Prodüksiyon</span>
+                            </div>
+                            <div class="skill-item">
+                                <i class="fas fa-music"></i>
+                                <span>Kompozisyon</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="music" id="music">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Müziklerim</h2>
+                    <p class="section-subtitle">En sevilen eserlerimi dinleyin</p>
+                </div>
+                
+                <div class="music-player-main">
+                    <div class="current-track">
+                        <div class="track-image">
+                            <img src="assets/images/album-cover-1.jpg" alt="Şu an çalan şarkı">
+                            <div class="play-pulse"></div>
+                        </div>
+                        <div class="track-info">
+                            <h3 class="track-title">Rüya Gibi</h3>
+                            <p class="track-artist">Müzik Sanatçısı</p>
+                        </div>
+                    </div>
+                    
+                    <div class="player-controls">
+                        <button class="control-btn shuffle">
+                            <i class="fas fa-random"></i>
+                        </button>
+                        <button class="control-btn prev">
+                            <i class="fas fa-step-backward"></i>
+                        </button>
+                        <button class="control-btn play-pause" id="playPauseBtn">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button class="control-btn next">
+                            <i class="fas fa-step-forward"></i>
+                        </button>
+                        <button class="control-btn repeat">
+                            <i class="fas fa-redo"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <span class="time current-time">0:00</span>
+                        <div class="progress-bar">
+                            <div class="progress"></div>
+                            <div class="progress-thumb"></div>
+                        </div>
+                        <span class="time total-time">3:45</span>
+                    </div>
+                    
+                    <audio id="audioPlayer">
+                        <source src="assets/music/sample-track.mp3" type="audio/mpeg">
+                        Tarayıcınız audio etiketini desteklemiyor.
+                    </audio>
+                </div>
+                
+                <div class="music-grid">
+                    <div class="music-card active" data-src="assets/music/sample-track.mp3">
+                        <div class="card-image">
+                            <img src="assets/images/album-cover-1.jpg" alt="Rüya Gibi">
+                            <div class="play-overlay">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h4>Rüya Gibi</h4>
+                            <p>Pop • 2024</p>
+                            <div class="card-duration">3:45</div>
+                        </div>
+                    </div>
+                    
+                    <div class="music-card" data-src="assets/music/sample-track-2.mp3">
+                        <div class="card-image">
+                            <img src="assets/images/album-cover-2.jpg" alt="Yıldızlar Altında">
+                            <div class="play-overlay">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h4>Yıldızlar Altında</h4>
+                            <p>Alternatif • 2024</p>
+                            <div class="card-duration">4:12</div>
+                        </div>
+                    </div>
+                    
+                    <div class="music-card" data-src="assets/music/sample-track-3.mp3">
+                        <div class="card-image">
+                            <img src="assets/images/album-cover-3.jpg" alt="Sessiz Gece">
+                            <div class="play-overlay">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h4>Sessiz Gece</h4>
+                            <p>Akustik • 2023</p>
+                            <div class="card-duration">3:28</div>
+                        </div>
+                    </div>
+                    
+                    <div class="music-card" data-src="assets/music/sample-track-4.mp3">
+                        <div class="card-image">
+                            <img src="assets/images/album-cover-4.jpg" alt="Umut">
+                            <div class="play-overlay">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h4>Umut</h4>
+                            <p>Rock • 2023</p>
+                            <div class="card-duration">5:03</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="gallery" id="gallery">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Galeri</h2>
+                    <p class="section-subtitle">Müzik yolculuğumdan kareler</p>
+                </div>
+                
+                <div class="gallery-filter">
+                    <button class="filter-btn active" data-filter="all">Tümü</button>
+                    <button class="filter-btn" data-filter="concerts">Konserler</button>
+                    <button class="filter-btn" data-filter="studio">Stüdyo</button>
+                    <button class="filter-btn" data-filter="behind-scenes">Sahne Arkası</button>
+                </div>
+                
+                <div class="gallery-grid">
+                    <div class="gallery-item" data-category="concerts">
+                        <img src="assets/images/gallery-1.jpg" alt="Konser Anı">
+                        <div class="gallery-overlay">
+                            <h4>Konser Anı</h4>
+                            <p>İstanbul Konseri - 2024</p>
+                            <button class="view-btn">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item" data-category="studio">
+                        <img src="assets/images/gallery-2.jpg" alt="Stüdyo Çalışması">
+                        <div class="gallery-overlay">
+                            <h4>Stüdyo Çalışması</h4>
+                            <p>Yeni Albüm Kayıtları</p>
+                            <button class="view-btn">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item" data-category="behind-scenes">
+                        <img src="assets/images/gallery-3.jpg" alt="Sahne Arkası">
+                        <div class="gallery-overlay">
+                            <h4>Sahne Arkası</h4>
+                            <p>Video Çekimi</p>
+                            <button class="view-btn">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item" data-category="concerts">
+                        <img src="assets/images/gallery-4.jpg" alt="Sahne Performansı">
+                        <div class="gallery-overlay">
+                            <h4>Sahne Performansı</h4>
+                            <p>Ankara Konseri - 2024</p>
+                            <button class="view-btn">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item" data-category="studio">
+                        <img src="assets/images/gallery-5.jpg" alt="Kayıt Anı">
+                        <div class="gallery-overlay">
+                            <h4>Kayıt Anı</h4>
+                            <p>Single Kaydı</p>
+                            <button class="view-btn">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item" data-category="behind-scenes">
+                        <img src="assets/images/gallery-6.jpg" alt="Backstage">
+                        <div class="gallery-overlay">
+                            <h4>Backstage</h4>
+                            <p>Konser Hazırlığı</p>
+                            <button class="view-btn">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact" id="contact">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">İletişim</h2>
+                    <p class="section-subtitle">Benimle iletişime geçin</p>
+                </div>
+                
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <h3>Bana Ulaşın</h3>
+                        <p>Müzik projeleri, işbirlikleri veya genel sorularınız için bana ulaşabilirsiniz.</p>
+                        
+                        <div class="contact-items">
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <h4>E-posta</h4>
+                                    <p>info@muzikportfoyu.com</p>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <div>
+                                    <h4>Telefon</h4>
+                                    <p>+90 555 123 45 67</p>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div>
+                                    <h4>Konum</h4>
+                                    <p>İstanbul, Türkiye</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="social-links">
+                            <a href="#" class="social-link">
+                                <i class="fab fa-spotify"></i>
+                            </a>
+                            <a href="#" class="social-link">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                            <a href="#" class="social-link">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" class="social-link">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="social-link">
+                                <i class="fab fa-soundcloud"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Ad Soyad</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">E-posta</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Konu</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Mesaj</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                            Mesaj Gönder
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-music"></i>
+                        <span>MÜZİK</span>
+                    </div>
+                    <p>Müziğin evrensel dilinde hikayeler anlatıyorum. Her nota bir duygu, her melodi bir anı.</p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-spotify"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Hızlı Linkler</h4>
+                    <ul>
+                        <li><a href="#home">Ana Sayfa</a></li>
+                        <li><a href="#about">Hakkımda</a></li>
+                        <li><a href="#music">Müziklerim</a></li>
+                        <li><a href="#gallery">Galeri</a></li>
+                        <li><a href="#contact">İletişim</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Müzik Türleri</h4>
+                    <ul>
+                        <li><a href="#">Pop</a></li>
+                        <li><a href="#">Rock</a></li>
+                        <li><a href="#">Alternatif</a></li>
+                        <li><a href="#">Akustik</a></li>
+                        <li><a href="#">Instrumental</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>İletişim</h4>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-envelope"></i> info@muzikportfoyu.com</p>
+                        <p><i class="fas fa-phone"></i> +90 555 123 45 67</p>
+                        <p><i class="fas fa-map-marker-alt"></i> İstanbul, Türkiye</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-divider"></div>
+                <div class="footer-bottom-content">
+                    <p>&copy; 2024 Müzik Portföyü. Tüm hakları saklıdır.</p>
+                    <div class="footer-links">
+                        <a href="#">Gizlilik Politikası</a>
+                        <a href="#">Kullanım Şartları</a>
+                        <a href="#">Çerezler</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <img src="" alt="" id="modalImage">
+            <div class="modal-caption" id="modalCaption"></div>
+        </div>
+    </div>
+
+    <button class="scroll-top" id="scrollTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/music-player.js"></script>
+    <script src="assets/js/gallery.js"></script>
+</body>
+</html>

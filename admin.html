@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Müzik Portföyü</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <div class="admin-logo">
+                <i class="fas fa-music"></i>
+                <span>Admin Panel</span>
+            </div>
+            
+            <nav class="admin-nav">
+                <ul>
+                    <li class="nav-item active">
+                        <a href="#dashboard" data-section="dashboard">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#music" data-section="music">
+                            <i class="fas fa-music"></i>
+                            <span>Müzik Yönetimi</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#gallery" data-section="gallery">
+                            <i class="fas fa-images"></i>
+                            <span>Galeri Yönetimi</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#content" data-section="content">
+                            <i class="fas fa-edit"></i>
+                            <span>İçerik Düzenleme</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#settings" data-section="settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Ayarlar</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="admin-footer">
+                <a href="index.html" class="back-to-site">
+                    <i class="fas fa-arrow-left"></i>
+                    Siteye Dön
+                </a>
+            </div>
+        </aside>
+        
+        <main class="admin-main">
+            <header class="admin-header">
+                <div class="admin-header-left">
+                    <button class="sidebar-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="page-title">Dashboard</h1>
+                </div>
+                
+                <div class="admin-header-right">
+                    <div class="admin-user">
+                        <img src="assets/images/admin-avatar.jpg" alt="Admin" class="user-avatar">
+                        <span class="user-name">Admin</span>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="admin-content">
+                <section id="dashboard" class="admin-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-music"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalTracks">4</h3>
+                                <p>Toplam Müzik</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-images"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalImages">6</h3>
+                                <p>Toplam Resim</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalViews">1,234</h3>
+                                <p>Toplam Görüntüleme</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-download"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalDownloads">89</h3>
+                                <p>Toplam İndirme</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-widgets">
+                        <div class="widget">
+                            <h3>Son Aktiviteler</h3>
+                            <div class="activity-list">
+                                <div class="activity-item">
+                                    <i class="fas fa-music"></i>
+                                    <div class="activity-content">
+                                        <p><strong>Yeni müzik eklendi:</strong> "Rüya Gibi"</p>
+                                        <span class="activity-time">2 saat önce</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <i class="fas fa-image"></i>
+                                    <div class="activity-content">
+                                        <p><strong>Galeri güncellendi:</strong> 3 yeni fotoğraf</p>
+                                        <span class="activity-time">5 saat önce</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <i class="fas fa-user"></i>
+                                    <div class="activity-content">
+                                        <p><strong>Profil güncellendi</strong></p>
+                                        <span class="activity-time">1 gün önce</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="widget">
+                            <h3>Hızlı İşlemler</h3>
+                            <div class="quick-actions">
+                                <button class="quick-action-btn" data-action="add-music">
+                                    <i class="fas fa-plus"></i>
+                                    Müzik Ekle
+                                </button>
+                                <button class="quick-action-btn" data-action="add-image">
+                                    <i class="fas fa-image"></i>
+                                    Resim Ekle
+                                </button>
+                                <button class="quick-action-btn" data-action="backup">
+                                    <i class="fas fa-download"></i>
+                                    Yedek Al
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="music" class="admin-section">
+                    <div class="section-header">
+                        <h2>Müzik Yönetimi</h2>
+                        <button class="btn btn-primary" id="addMusicBtn">
+                            <i class="fas fa-plus"></i>
+                            Yeni Müzik Ekle
+                        </button>
+                    </div>
+                    
+                    <div class="music-list">
+                        <div class="music-item">
+                            <div class="music-info">
+                                <img src="assets/images/album-cover-1.jpg" alt="Album Cover" class="music-thumb">
+                                <div class="music-details">
+                                    <h4>Rüya Gibi</h4>
+                                    <p>Pop • 3:45</p>
+                                </div>
+                            </div>
+                            <div class="music-actions">
+                                <button class="btn-icon edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-icon delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="music-item">
+                            <div class="music-info">
+                                <img src="assets/images/album-cover-2.jpg" alt="Album Cover" class="music-thumb">
+                                <div class="music-details">
+                                    <h4>Yıldızlar Altında</h4>
+                                    <p>Alternatif • 4:12</p>
+                                </div>
+                            </div>
+                            <div class="music-actions">
+                                <button class="btn-icon edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-icon delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="gallery" class="admin-section">
+                    <div class="section-header">
+                        <h2>Galeri Yönetimi</h2>
+                        <button class="btn btn-primary" id="addImageBtn">
+                            <i class="fas fa-plus"></i>
+                            Yeni Resim Ekle
+                        </button>
+                    </div>
+                    
+                    <div class="gallery-grid">
+                        <div class="gallery-admin-item">
+                            <img src="assets/images/gallery-1.jpg" alt="Gallery Image">
+                            <div class="gallery-overlay">
+                                <h5>Konser Anı</h5>
+                                <p>İstanbul Konseri - 2024</p>
+                                <div class="gallery-actions">
+                                    <button class="btn-icon edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn-icon delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="content" class="admin-section">
+                    <div class="section-header">
+                        <h2>İçerik Düzenleme</h2>
+                    </div>
+                    
+                    <div class="content-editor">
+                        <div class="editor-section">
+                            <h3>Hakkımda Bölümü</h3>
+                            <textarea class="content-textarea" placeholder="Hakkımda metninizi buraya yazın...">
+Müziğe olan tutkum çocukluk yıllarımda başladı. Her nota, her melodi benim için bir hikaye anlatır. Yıllar boyunca farklı türlerde müzik yaparak kendimi geliştirdim.
+
+Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokunmak. Her eserimde bir parça kalbimi bırakarak, dinleyicilerimle duygusal bir bağ kurmaya çalışıyorum.
+                            </textarea>
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-save"></i>
+                                Kaydet
+                            </button>
+                        </div>
+                        
+                        <div class="editor-section">
+                            <h3>İletişim Bilgileri</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>E-posta</label>
+                                    <input type="email" value="info@muzikportfoyu.com">
+                                </div>
+                                <div class="form-group">
+                                    <label>Telefon</label>
+                                    <input type="tel" value="+90 555 123 45 67">
+                                </div>
+                                <div class="form-group">
+                                    <label>Konum</label>
+                                    <input type="text" value="İstanbul, Türkiye">
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-save"></i>
+                                Kaydet
+                            </button>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="settings" class="admin-section">
+                    <div class="section-header">
+                        <h2>Ayarlar</h2>
+                    </div>
+                    
+                    <div class="settings-grid">
+                        <div class="settings-card">
+                            <h3>Site Ayarları</h3>
+                            <div class="setting-item">
+                                <label>Site Başlığı</label>
+                                <input type="text" value="Müzik Portföyüm">
+                            </div>
+                            <div class="setting-item">
+                                <label>Site Açıklaması</label>
+                                <textarea>Profesyonel müzik portföyü - En yeni müziklerimi keşfedin</textarea>
+                            </div>
+                            <button class="btn btn-primary">Kaydet</button>
+                        </div>
+                        
+                        <div class="settings-card">
+                            <h3>Sosyal Medya</h3>
+                            <div class="setting-item">
+                                <label>Spotify</label>
+                                <input type="url" placeholder="Spotify profil linki">
+                            </div>
+                            <div class="setting-item">
+                                <label>YouTube</label>
+                                <input type="url" placeholder="YouTube kanal linki">
+                            </div>
+                            <div class="setting-item">
+                                <label>Instagram</label>
+                                <input type="url" placeholder="Instagram profil linki">
+                            </div>
+                            <button class="btn btn-primary">Kaydet</button>
+                        </div>
+                        
+                        <div class="settings-card">
+                            <h3>Yedekleme</h3>
+                            <p>Site içeriğini yedekleyebilir ve geri yükleyebilirsiniz.</p>
+                            <div class="backup-actions">
+                                <button class="btn btn-secondary">
+                                    <i class="fas fa-download"></i>
+                                    Yedek İndir
+                                </button>
+                                <input type="file" id="backupFile" accept=".json" style="display: none;">
+                                <button class="btn btn-secondary" onclick="document.getElementById('backupFile').click()">
+                                    <i class="fas fa-upload"></i>
+                                    Yedek Yükle
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    <div class="modal" id="uploadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Dosya Yükle</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Dosyaları buraya sürükleyin veya tıklayın</p>
+                    <input type="file" id="fileInput" multiple accept="image/*,audio/*">
+                </div>
+                <div class="upload-progress" id="uploadProgress" style="display: none;">
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <p class="progress-text">Yükleniyor... 0%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/admin.js"></script>
+</body>
+</html>
