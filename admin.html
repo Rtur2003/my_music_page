@@ -11,7 +11,51 @@
     <link rel="stylesheet" href="assets/css/admin.css">
 </head>
 <body>
-    <div class="admin-container">
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <i class="fas fa-shield-alt"></i>
+                <h2>Admin Login</h2>
+                <p>Secure access to music portfolio admin panel</p>
+            </div>
+            
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i>
+                        Password
+                    </label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <div class="password-strength"></div>
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Login
+                </button>
+                
+                <div id="loginError" class="login-error" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Invalid password. Access denied.</span>
+                </div>
+                
+                <div class="login-attempts">
+                    <span id="attemptsLeft">Attempts remaining: 5</span>
+                </div>
+            </form>
+            
+            <div class="login-footer">
+                <small>
+                    <i class="fas fa-info-circle"></i>
+                    For security purposes, access is logged and monitored.
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel (Hidden by default) -->
+    <div class="admin-container" id="adminPanel" style="display: none;">
         <aside class="admin-sidebar">
             <div class="admin-logo">
                 <i class="fas fa-music"></i>
@@ -74,6 +118,9 @@
                     <div class="admin-user">
                         <img src="assets/images/admin-avatar.jpg" alt="Admin" class="user-avatar">
                         <span class="user-name">Admin</span>
+                        <button id="logoutBtn" class="logout-btn" title="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
                     </div>
                 </div>
             </header>

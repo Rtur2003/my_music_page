@@ -1,7 +1,7 @@
 [build]
   # Static site - no build command needed
-  publish = "."
-  command = "echo 'Static site deployment - no build required'"
+  publish = "/"
+  command = ""
 
 [build.environment]
   NODE_VERSION = "18"
@@ -83,19 +83,7 @@
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
 
-# Force HTTPS
-[[redirects]]
-  from = "http://rtur2003.netlify.app/*"
-  to = "https://rtur2003.netlify.app/:splat"
-  status = 301
-  force = true
-
-# SPA routing for single page application
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-  conditions = {Role = ["admin"]}
+# All redirects handled in _redirects file
 
 # Development settings
 [context.development]
