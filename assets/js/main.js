@@ -528,5 +528,148 @@ window.addEventListener('resize', debounce(() => {
 const vh = window.innerHeight * 0.01;
 document.documentElement.style.setProperty('--vh', `${vh}px`);
 
+// Software Stats Counter Animation
+function animateCounter(element, target, duration = 2000) {
+    const start = parseInt(element.textContent) || 0;
+    const increment = (target - start) / (duration / 16);
+    let current = start;
+    
+    const timer = setInterval(() => {
+        current += increment;
+        element.textContent = Math.floor(current);
+        
+        if (current >= target) {
+            element.textContent = target;
+            clearInterval(timer);
+        }
+    }, 16);
+}
+
+// Intersection Observer for Software Stats
+function initSoftwareStats() {
+    const statsSection = document.querySelector('.software-stats');
+    if (!statsSection) return;
+    
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const statNumbers = entry.target.querySelectorAll('.stat-number');
+                
+                statNumbers.forEach(stat => {
+                    const targetValue = parseInt(stat.dataset.count);
+                    animateCounter(stat, targetValue);
+                });
+                
+                // Only animate once
+                statsObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.5,
+        rootMargin: '0px 0px -50px 0px'
+    });
+    
+    statsObserver.observe(statsSection);
+}
+
+// Real Analytics Tracking
+class RealAnalytics {
+    constructor() {
+        this.sessionStart = Date.now();
+        this.trackPageView();
+        this.bindTrackingEvents();
+    }
+    
+    trackPageView() {
+        const views = parseInt(localStorage.getItem('page_views') || '0') + 1;
+        localStorage.setItem('page_views', views.toString());
+        localStorage.setItem('last_visit', new Date().toISOString());
+    }
+    
+    trackMusicPlay(trackName) {
+        const plays = parseInt(localStorage.getItem('music_plays') || '0') + 1;
+        localStorage.setItem('music_plays', plays.toString());
+        
+        // Store individual track data
+        const trackPlays = JSON.parse(localStorage.getItem('track_analytics') || '{}');
+        trackPlays[trackName] = (trackPlays[trackName] || 0) + 1;
+        localStorage.setItem('track_analytics', JSON.stringify(trackPlays));
+    }
+    
+    trackGalleryInteraction(category) {
+        const clicks = parseInt(localStorage.getItem('gallery_clicks') || '0') + 1;
+        localStorage.setItem('gallery_clicks', clicks.toString());
+        
+        // Store category data
+        const categoryClicks = JSON.parse(localStorage.getItem('gallery_analytics') || '{}');
+        categoryClicks[category] = (categoryClicks[category] || 0) + 1;
+        localStorage.setItem('gallery_analytics', JSON.stringify(categoryClicks));
+    }
+    
+    trackSocialClick(platform) {
+        const clicks = parseInt(localStorage.getItem('social_clicks') || '0') + 1;
+        localStorage.setItem('social_clicks', clicks.toString());
+        
+        // Store platform data
+        const platformClicks = JSON.parse(localStorage.getItem('social_analytics') || '{}');
+        platformClicks[platform] = (platformClicks[platform] || 0) + 1;
+        localStorage.setItem('social_analytics', JSON.stringify(platformClicks));
+    }
+    
+    trackTimeSpent() {
+        const timeSpent = Math.floor((Date.now() - this.sessionStart) / 1000);
+        const totalTime = parseInt(localStorage.getItem('total_time_spent') || '0') + timeSpent;
+        localStorage.setItem('total_time_spent', totalTime.toString());
+    }
+    
+    bindTrackingEvents() {
+        // Track music plays
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.music-card') || e.target.closest('.play-btn')) {
+                const musicCard = e.target.closest('.music-card');
+                const trackName = musicCard?.querySelector('h4')?.textContent || 'Unknown Track';
+                this.trackMusicPlay(trackName);
+            }
+            
+            // Track gallery clicks
+            if (e.target.closest('.gallery-item')) {
+                const galleryItem = e.target.closest('.gallery-item');
+                const category = galleryItem?.dataset.category || 'general';
+                this.trackGalleryInteraction(category);
+            }
+            
+            // Track social clicks
+            if (e.target.closest('.link-card')) {
+                const linkCard = e.target.closest('.link-card');
+                const platform = linkCard.classList.contains('github-card') ? 'github' :
+                               linkCard.classList.contains('linkedin-card') ? 'linkedin' :
+                               linkCard.classList.contains('email-card') ? 'email' : 'other';
+                this.trackSocialClick(platform);
+            }
+        });
+        
+        // Track page leave
+        window.addEventListener('beforeunload', () => {
+            this.trackTimeSpent();
+        });
+        
+        // Track visibility change (tab switching)
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                this.trackTimeSpent();
+                this.sessionStart = Date.now(); // Reset for next visible session
+            }
+        });
+    }
+}
+
+// Initialize analytics
+const analytics = new RealAnalytics();
+
+// Initialize stats animation
+document.addEventListener('DOMContentLoaded', () => {
+    initSoftwareStats();
+});
+
 console.log('%c🎵 Müzik Portföyü', 'color: #6c5ce7; font-size: 20px; font-weight: bold;');
 console.log('%cTüm sistemler aktif ve hazır!', 'color: #00cec9; font-size: 14px;');

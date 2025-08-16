@@ -1219,3 +1219,342 @@ section {
         grid-template-columns: 1fr;
     }
 }
+
+/* Software Development Section */
+.software {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 100%);
+    color: var(--white);
+}
+
+.software-content {
+    margin-top: 3rem;
+}
+
+.software-intro {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    margin-bottom: 4rem;
+}
+
+.software-text h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.software-text p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.tech-stack h4 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: var(--white);
+}
+
+.tech-icons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.tech-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    transition: var(--transition);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tech-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 30px rgba(108, 92, 231, 0.3);
+}
+
+.tech-item i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.tech-item span {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Code Window */
+.code-window {
+    background: #1e1e1e;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    border: 1px solid #333;
+}
+
+.code-header {
+    background: #2d2d2d;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-bottom: 1px solid #444;
+}
+
+.code-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.code-btn {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.code-btn.red { background: #ff5f56; }
+.code-btn.yellow { background: #ffbd2e; }
+.code-btn.green { background: #27ca3f; }
+
+.code-title {
+    font-size: 0.9rem;
+    color: #ccc;
+    font-family: 'Courier New', monospace;
+}
+
+.code-content {
+    padding: 1.5rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.code-line {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.line-number {
+    color: #666;
+    width: 30px;
+    flex-shrink: 0;
+    text-align: right;
+    margin-right: 1rem;
+    font-size: 0.8rem;
+}
+
+.code-text {
+    color: #f8f8f2;
+}
+
+.keyword { color: #ff79c6; }
+.variable { color: #50fa7b; }
+.property { color: #8be9fd; }
+.string { color: #f1fa8c; }
+
+/* Link Cards */
+.software-links {
+    margin: 4rem 0;
+}
+
+.link-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.link-card {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.link-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.link-card:hover::before {
+    left: 100%;
+}
+
+.link-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+.github-card:hover {
+    border-color: #333;
+    box-shadow: 0 15px 40px rgba(51, 51, 51, 0.3);
+}
+
+.linkedin-card:hover {
+    border-color: #0077b5;
+    box-shadow: 0 15px 40px rgba(0, 119, 181, 0.3);
+}
+
+.email-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 15px 40px rgba(108, 92, 231, 0.3);
+}
+
+.link-icon {
+    font-size: 2.5rem;
+    margin-right: 1.5rem;
+    flex-shrink: 0;
+}
+
+.github-card .link-icon { color: #333; }
+.linkedin-card .link-icon { color: #0077b5; }
+.email-card .link-icon { color: var(--primary-color); }
+
+.link-content {
+    flex: 1;
+}
+
+.link-content h4 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    color: var(--white);
+}
+
+.link-content p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.link-arrow {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    transition: var(--transition);
+}
+
+.link-card:hover .link-arrow {
+    transform: translateX(5px);
+}
+
+/* Software Stats */
+.software-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: var(--transition);
+}
+
+.stat-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Responsive Design for Software Section */
+@media (max-width: 768px) {
+    .software-intro {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+    }
+    
+    .tech-icons {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .software-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    
+    .link-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .link-card {
+        padding: 1rem;
+    }
+    
+    .link-icon {
+        font-size: 2rem;
+        margin-right: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .software {
+        padding: 3rem 0;
+    }
+    
+    .software-text h3 {
+        font-size: 1.5rem;
+    }
+    
+    .tech-icons {
+        grid-template-columns: 1fr;
+    }
+    
+    .software-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .code-content {
+        padding: 1rem;
+        font-size: 0.8rem;
+    }
+}
