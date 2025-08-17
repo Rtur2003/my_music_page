@@ -81,6 +81,8 @@ class AdminAuth {
         
         const password = passwordInput.value.trim();
         
+        console.log('Login attempt with password:', password); // Debug
+        
         if (!password) {
             this.showError('Please enter a password.');
             return;
@@ -98,11 +100,13 @@ class AdminAuth {
         // Simulate network delay for security
         await new Promise(resolve => setTimeout(resolve, 1000));
         
-        const hashedInput = await this.hashPassword(password);
+        console.log('Verifying password:', password === 'H1a2s3a4n5+'); // Debug
         
         if (this.verifyPassword(password)) {
+            console.log('Password correct, logging in...'); // Debug
             this.loginSuccess();
         } else {
+            console.log('Password incorrect'); // Debug
             this.loginFailed();
         }
         
@@ -196,15 +200,22 @@ class AdminAuth {
     }
     
     showAdminPanel() {
+        console.log('Showing admin panel...'); // Debug
+        
         const loginScreen = document.getElementById('loginScreen');
         const adminPanel = document.getElementById('adminPanel');
         
+        console.log('Login screen element:', loginScreen); // Debug
+        console.log('Admin panel element:', adminPanel); // Debug
+        
         if (loginScreen) {
             loginScreen.style.display = 'none';
+            console.log('Login screen hidden'); // Debug
         }
         
         if (adminPanel) {
             adminPanel.style.display = 'block';
+            console.log('Admin panel shown'); // Debug
         } else {
             console.error('Admin panel element not found!');
         }
