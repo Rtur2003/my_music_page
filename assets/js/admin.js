@@ -1096,21 +1096,29 @@ Site düzenli olarak güncellenmekte ve yeni içerikler eklenmektedir.
     }
     
     loadUploadedContent() {
+        console.log('🔄 Loading uploaded content from localStorage...');
+        
         // Load uploaded music
         const musicList = JSON.parse(localStorage.getItem('uploaded_music') || '[]');
-        musicList.forEach(musicData => {
+        console.log('🎵 Found music in localStorage:', musicList);
+        
+        musicList.forEach((musicData, index) => {
+            console.log(`🎵 Recreating music item ${index + 1}:`, musicData.title);
             this.recreateMusicItem(musicData);
             this.addMusicToMainSite(musicData);
         });
         
         // Load uploaded gallery
         const galleryList = JSON.parse(localStorage.getItem('uploaded_gallery') || '[]');
-        galleryList.forEach(galleryData => {
+        console.log('🖼️ Found gallery items in localStorage:', galleryList);
+        
+        galleryList.forEach((galleryData, index) => {
+            console.log(`🖼️ Recreating gallery item ${index + 1}:`, galleryData.title);
             this.recreateGalleryItem(galleryData);
             this.addImageToMainSite(galleryData);
         });
         
-        console.log(`📂 Loaded ${musicList.length} music items and ${galleryList.length} gallery items from localStorage`);
+        console.log(`📂 Successfully loaded ${musicList.length} music items and ${galleryList.length} gallery items from localStorage`);
     }
     
     recreateMusicItem(musicData) {
