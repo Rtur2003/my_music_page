@@ -1168,34 +1168,59 @@ function applyContactChangesToMainSite(email, phone, location) {
     if (locationEl) locationEl.textContent = location;
 }
 
+let currentEditingMusicItem = null;
+
 function editMusicItem(button) {
     const musicItem = button.closest('.music-item');
+    currentEditingMusicItem = musicItem;
+    
+    // Extract current data
     const title = musicItem.querySelector('h4').textContent;
     const info = musicItem.querySelector('p').textContent;
+    const albumCover = musicItem.querySelector('img').src;
     
-    const newTitle = prompt('Şarkı adını düzenleyin:', title);
-    if (newTitle && newTitle !== title) {
-        musicItem.querySelector('h4').textContent = newTitle;
-        showNotification('Müzik başlığı güncellendi!', 'success');
-    }
+    // Parse info (format: "Genre • Duration")
+    const infoParts = info.split(' • ');
+    const genre = infoParts[0] || '';
+    const duration = infoParts[1] || '';
+    
+    // Fill modal form
+    document.getElementById('musicTitle').value = title;
+    document.getElementById('musicArtist').value = 'Hasan Arthur'; // Default artist
+    document.getElementById('musicGenre').value = genre;
+    document.getElementById('musicDuration').value = duration;
+    document.getElementById('musicDescription').value = '';
+    document.getElementById('musicAlbumCover').value = albumCover;
+    
+    // Show modal
+    openMusicEditModal();
 }
+
+let currentEditingGalleryItem = null;
 
 function editGalleryItem(button) {
     const galleryItem = button.closest('.gallery-admin-item');
+    currentEditingGalleryItem = galleryItem;
+    
+    // Extract current data
     const title = galleryItem.querySelector('h5').textContent;
     const description = galleryItem.querySelector('p').textContent;
+    const imageSrc = galleryItem.querySelector('img').src;
     
-    const newTitle = prompt('Resim başlığını düzenleyin:', title);
-    const newDescription = prompt('Resim açıklamasını düzenleyin:', description);
+    // Fill modal form
+    document.getElementById('galleryTitle').value = title;
+    document.getElementById('galleryDescription').value = description;
+    document.getElementById('galleryCategory').value = 'concerts'; // Default category
+    document.getElementById('galleryDate').value = new Date().toISOString().split('T')[0];
+    document.getElementById('galleryLocation').value = '';
     
-    if (newTitle && newTitle !== title) {
-        galleryItem.querySelector('h5').textContent = newTitle;
-    }
-    if (newDescription && newDescription !== description) {
-        galleryItem.querySelector('p').textContent = newDescription;
-    }
+    // Show current image in preview
+    const preview = document.getElementById('galleryPreview');
+    preview.innerHTML = `<img src="${imageSrc}" alt="Current Image">`;
+    preview.classList.add('show');
     
-    showNotification('Galeri öğesi güncellendi!', 'success');
+    // Show modal
+    openGalleryEditModal();
 }
 
 function saveSiteSettings() {
@@ -1370,5 +1395,205 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Elements still not found after retry');
             }
         }, 1000);
+    }
+});
+
+// Modal Functions
+function openMusicEditModal() {
+    const modal = document.getElementById('musicEditModal');
+    modal.style.display = 'block';
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    
+    // Setup image preview
+    setupImagePreview('coverImageInput', 'coverPreview');
+}
+
+function closeMusicEditModal() {
+    const modal = document.getElementById('musicEditModal');
+    modal.style.display = 'none';
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+    currentEditingMusicItem = null;
+    
+    // Reset form
+    document.getElementById('musicEditForm').reset();
+    document.getElementById('coverPreview').innerHTML = '';
+    document.getElementById('coverPreview').classList.remove('show');
+}
+
+function openGalleryEditModal() {
+    const modal = document.getElementById('galleryEditModal');
+    modal.style.display = 'block';
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    
+    // Setup image preview
+    setupImagePreview('galleryImageInput', 'galleryPreview');
+}
+
+function closeGalleryEditModal() {
+    const modal = document.getElementById('galleryEditModal');
+    modal.style.display = 'none';
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+    currentEditingGalleryItem = null;
+    
+    // Reset form
+    document.getElementById('galleryEditForm').reset();
+    document.getElementById('galleryPreview').innerHTML = '';
+    document.getElementById('galleryPreview').classList.remove('show');
+}
+
+function setupImagePreview(inputId, previewId) {
+    const input = document.getElementById(inputId);
+    const preview = document.getElementById(previewId);
+    
+    input.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                preview.classList.add('show');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+}
+
+function saveMusicEdit() {
+    if (!currentEditingMusicItem) return;
+    
+    const form = document.getElementById('musicEditForm');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+    
+    // Get form data
+    const title = document.getElementById('musicTitle').value;
+    const artist = document.getElementById('musicArtist').value;
+    const genre = document.getElementById('musicGenre').value;
+    const duration = document.getElementById('musicDuration').value;
+    const description = document.getElementById('musicDescription').value;
+    const albumCover = document.getElementById('musicAlbumCover').value;
+    
+    // Check if new image was uploaded
+    const coverInput = document.getElementById('coverImageInput');
+    let newImageSrc = albumCover;
+    
+    if (coverInput.files[0]) {
+        // In a real application, you would upload the file to a server
+        // For demo purposes, we'll use the file URL
+        newImageSrc = URL.createObjectURL(coverInput.files[0]);
+    }
+    
+    // Update the music item
+    currentEditingMusicItem.querySelector('h4').textContent = title;
+    currentEditingMusicItem.querySelector('p').textContent = `${genre} • ${duration}`;
+    currentEditingMusicItem.querySelector('img').src = newImageSrc;
+    currentEditingMusicItem.querySelector('img').alt = title;
+    
+    // Add loading animation
+    const saveBtn = document.querySelector('#musicEditModal .btn-primary');
+    saveBtn.classList.add('loading');
+    saveBtn.innerHTML = '<i class="fas fa-spinner"></i> Saving...';
+    
+    // Simulate save delay
+    setTimeout(() => {
+        saveBtn.classList.remove('loading');
+        saveBtn.innerHTML = '<i class="fas fa-save"></i> Kaydet';
+        
+        closeMusicEditModal();
+        showNotification(`"${title}" successfully updated!`, 'success');
+        
+        // Update stats if needed
+        if (window.adminPanelInstance) {
+            window.adminPanelInstance.updateStats();
+        }
+    }, 1500);
+}
+
+function saveGalleryEdit() {
+    if (!currentEditingGalleryItem) return;
+    
+    const form = document.getElementById('galleryEditForm');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+    
+    // Get form data
+    const title = document.getElementById('galleryTitle').value;
+    const description = document.getElementById('galleryDescription').value;
+    const category = document.getElementById('galleryCategory').value;
+    const date = document.getElementById('galleryDate').value;
+    const location = document.getElementById('galleryLocation').value;
+    
+    // Check if new image was uploaded
+    const imageInput = document.getElementById('galleryImageInput');
+    let newImageSrc = currentEditingGalleryItem.querySelector('img').src;
+    
+    if (imageInput.files[0]) {
+        // In a real application, you would upload the file to a server
+        // For demo purposes, we'll use the file URL
+        newImageSrc = URL.createObjectURL(imageInput.files[0]);
+    }
+    
+    // Update the gallery item
+    currentEditingGalleryItem.querySelector('h5').textContent = title;
+    currentEditingGalleryItem.querySelector('p').textContent = description;
+    currentEditingGalleryItem.querySelector('img').src = newImageSrc;
+    currentEditingGalleryItem.querySelector('img').alt = title;
+    currentEditingGalleryItem.dataset.category = category;
+    
+    // Add location and date info if available
+    if (location || date) {
+        let additionalInfo = [];
+        if (location) additionalInfo.push(location);
+        if (date) additionalInfo.push(new Date(date).getFullYear());
+        
+        const overlay = currentEditingGalleryItem.querySelector('.gallery-overlay');
+        const existingP = overlay.querySelector('p');
+        existingP.textContent = `${description} - ${additionalInfo.join(', ')}`;
+    }
+    
+    // Add loading animation
+    const saveBtn = document.querySelector('#galleryEditModal .btn-primary');
+    saveBtn.classList.add('loading');
+    saveBtn.innerHTML = '<i class="fas fa-spinner"></i> Saving...';
+    
+    // Simulate save delay
+    setTimeout(() => {
+        saveBtn.classList.remove('loading');
+        saveBtn.innerHTML = '<i class="fas fa-save"></i> Kaydet';
+        
+        closeGalleryEditModal();
+        showNotification(`"${title}" gallery item updated!`, 'success');
+        
+        // Update stats if needed
+        if (window.adminPanelInstance) {
+            window.adminPanelInstance.updateStats();
+        }
+    }, 1500);
+}
+
+// Close modals when clicking outside
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('modal')) {
+        if (e.target.id === 'musicEditModal') {
+            closeMusicEditModal();
+        } else if (e.target.id === 'galleryEditModal') {
+            closeGalleryEditModal();
+        }
+    }
+});
+
+// Close modals with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeMusicEditModal();
+        closeGalleryEditModal();
     }
 });
