@@ -671,5 +671,43 @@ document.addEventListener('DOMContentLoaded', () => {
     initSoftwareStats();
 });
 
+// Version and Cache Management
+class CacheManager {
+    constructor() {
+        this.version = '1.2.0';
+        this.checkVersion();
+    }
+    
+    checkVersion() {
+        const storedVersion = localStorage.getItem('site_version');
+        const currentVersion = document.querySelector('meta[name="version"]')?.content || this.version;
+        
+        if (storedVersion && storedVersion !== currentVersion) {
+            console.log(`🔄 Version updated: ${storedVersion} → ${currentVersion}`);
+            this.clearOldCache();
+        }
+        
+        localStorage.setItem('site_version', currentVersion);
+        console.log(`📦 Current version: ${currentVersion}`);
+    }
+    
+    clearOldCache() {
+        // Clear localStorage except user settings
+        const keepKeys = ['admin_session', 'admin_last_activity', 'user_preferences'];
+        const allKeys = Object.keys(localStorage);
+        
+        allKeys.forEach(key => {
+            if (!keepKeys.includes(key)) {
+                localStorage.removeItem(key);
+            }
+        });
+        
+        console.log('🧹 Old cache cleared due to version update');
+    }
+}
+
+// Initialize cache manager
+const cacheManager = new CacheManager();
+
 console.log('%c🎵 Müzik Portföyü', 'color: #6c5ce7; font-size: 20px; font-weight: bold;');
 console.log('%cTüm sistemler aktif ve hazır!', 'color: #00cec9; font-size: 14px;');
