@@ -529,7 +529,21 @@ class AdminPanel {
         });
     }
     
-    uploadFile(file, index, total, progressFill, progressText) {
+    async uploadFile(file, index, total, progressFill, progressText) {
+        // Validate file before upload
+        const fileType = file.type.startsWith('audio/') ? 'music' : 'image';
+        const validationResults = await fileValidator.validateFile(file, fileType);
+        
+        if (!fileValidator.showValidationResults(validationResults, file.name)) {
+            // Validation failed, skip this file
+            if (index === total - 1) {
+                setTimeout(() => {
+                    this.closeUploadModal();
+                }, 500);
+            }
+            return;
+        }
+        
         const formData = new FormData();
         formData.append('file', file);
         
@@ -570,6 +584,15 @@ class AdminPanel {
     
     addMusicToList(file) {
         console.log('🎵 Starting to add music file:', file.name);
+        
+        // Check if file with same name already exists
+        const uploadedMusic = JSON.parse(localStorage.getItem('uploadedMusic') || '[]');
+        const existingMusic = uploadedMusic.find(music => music.title === file.name.replace(/\.[^/.]+$/, ""));
+        if (existingMusic) {
+            console.log('⚠️ Music file already uploaded:', file.name);
+            this.showNotification('Bu müzik dosyası zaten yüklü!', 'warning');
+            return;
+        }
         
         const musicList = document.querySelector('.music-list');
         console.log('🔍 Looking for .music-list container for upload:', musicList);
@@ -646,6 +669,15 @@ class AdminPanel {
     }
     
     addImageToList(file) {
+        // Check if file with same name already exists
+        const uploadedGallery = JSON.parse(localStorage.getItem('uploadedGallery') || '[]');
+        const existingImage = uploadedGallery.find(img => img.title === file.name.replace(/\.[^/.]+$/, ""));
+        if (existingImage) {
+            console.log('⚠️ Image file already uploaded:', file.name);
+            this.showNotification('Bu resim dosyası zaten yüklü!', 'warning');
+            return;
+        }
+        
         const galleryGrid = document.querySelector('.gallery-grid');
         const galleryItem = document.createElement('div');
         galleryItem.className = 'gallery-admin-item';
@@ -720,7 +752,11 @@ class AdminPanel {
         if (deleteBtn) {
             deleteBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                this.deleteItem(item);
+                if (item.classList.contains('music-item')) {
+                    deleteMusicItem(deleteBtn);
+                } else if (item.classList.contains('gallery-admin-item')) {
+                    deleteGalleryItem(deleteBtn);
+                }
             });
         }
     }
@@ -1226,6 +1262,13 @@ Site düzenli olarak güncellenmekte ve yeni içerikler eklenmektedir.
         
         if (!galleryGrid) {
             console.error('❌ .gallery-grid container not found! Cannot recreate gallery item:', galleryData.title);
+            return;
+        }
+        
+        // Check if already exists to prevent duplicates
+        const existingItem = document.querySelector(`[data-gallery-id="${galleryData.id}"]`);
+        if (existingItem) {
+            console.log('⚠️ Gallery item already exists in admin panel:', galleryData.title);
             return;
         }
         
@@ -1934,3 +1977,1510 @@ document.addEventListener('keydown', function(e) {
         closeGalleryEditModal();
     }
 });
+
+// Global modal functions for HTML onclick handlers
+function openMusicEditModal() {
+    const modal = document.getElementById('musicEditModal');
+    if (modal) {
+        modal.style.display = 'block';
+    }
+}
+
+function closeMusicEditModal() {
+    const modal = document.getElementById('musicEditModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+function saveMusicEdit() {
+    if (!currentEditingMusicItem) return;
+    
+    const title = document.getElementById('musicTitle').value;
+    const artist = document.getElementById('musicArtist').value;
+    const genre = document.getElementById('musicGenre').value;
+    const duration = document.getElementById('musicDuration').value;
+    const description = document.getElementById('musicDescription').value;
+    const albumCover = document.getElementById('musicAlbumCover').value;
+    
+    // Update item in DOM
+    const titleEl = currentEditingMusicItem.querySelector('h4');
+    const infoEl = currentEditingMusicItem.querySelector('p');
+    const imgEl = currentEditingMusicItem.querySelector('img');
+    
+    if (titleEl) titleEl.textContent = title;
+    if (infoEl) infoEl.textContent = `${genre} • ${duration}`;
+    if (imgEl && albumCover) imgEl.src = albumCover;
+    
+    // Update localStorage
+    const musicId = currentEditingMusicItem.dataset.musicId;
+    if (musicId) {
+        const uploadedMusic = JSON.parse(localStorage.getItem('uploadedMusic') || '[]');
+        const musicIndex = uploadedMusic.findIndex(m => m.id === musicId);
+        if (musicIndex !== -1) {
+            uploadedMusic[musicIndex] = {
+                ...uploadedMusic[musicIndex],
+                title: title,
+                artist: artist,
+                genre: genre,
+                duration: duration,
+                description: description,
+                albumCover: albumCover
+            };
+            localStorage.setItem('uploadedMusic', JSON.stringify(uploadedMusic));
+        }
+    }
+    
+    adminPanel.showNotification('Müzik başarıyla güncellendi!', 'success');
+    closeMusicEditModal();
+    
+    // Sync to main site
+    adminPanel.syncToMainSite();
+}
+
+function openGalleryEditModal() {
+    const modal = document.getElementById('galleryEditModal');
+    if (modal) {
+        modal.style.display = 'block';
+    }
+}
+
+function closeGalleryEditModal() {
+    const modal = document.getElementById('galleryEditModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+function saveGalleryEdit() {
+    if (!currentEditingGalleryItem) return;
+    
+    const title = document.getElementById('galleryTitle').value;
+    const description = document.getElementById('galleryDescription').value;
+    const category = document.getElementById('galleryCategory').value;
+    const date = document.getElementById('galleryDate').value;
+    const location = document.getElementById('galleryLocation').value;
+    
+    // Update item in DOM
+    const titleEl = currentEditingGalleryItem.querySelector('h5');
+    const descEl = currentEditingGalleryItem.querySelector('p');
+    
+    if (titleEl) titleEl.textContent = title;
+    if (descEl) descEl.textContent = description;
+    
+    // Update localStorage
+    const galleryId = currentEditingGalleryItem.dataset.galleryId;
+    if (galleryId) {
+        const uploadedGallery = JSON.parse(localStorage.getItem('uploadedGallery') || '[]');
+        const galleryIndex = uploadedGallery.findIndex(g => g.id === galleryId);
+        if (galleryIndex !== -1) {
+            uploadedGallery[galleryIndex] = {
+                ...uploadedGallery[galleryIndex],
+                title: title,
+                description: description,
+                category: category,
+                date: date,
+                location: location
+            };
+            localStorage.setItem('uploadedGallery', JSON.stringify(uploadedGallery));
+        }
+    }
+    
+    adminPanel.showNotification('Galeri öğesi başarıyla güncellendi!', 'success');
+    closeGalleryEditModal();
+    
+    // Sync to main site
+    adminPanel.syncToMainSite();
+}
+
+// Tab switching functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const tabId = this.dataset.tab;
+            
+            // Remove active class from all tabs and contents
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            
+            // Add active class to clicked tab and corresponding content
+            this.classList.add('active');
+            const targetContent = document.querySelector(`[data-tab-content="${tabId}"]`);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+        });
+    });
+});
+
+// Delete functions for admin items
+function deleteMusicItem(button) {
+    const musicItem = button.closest('.music-item');
+    const musicId = musicItem.dataset.musicId;
+    const title = musicItem.querySelector('h4').textContent;
+    
+    if (confirm(`"${title}" müziğini silmek istediğinizden emin misiniz?`)) {
+        // Remove from DOM
+        musicItem.remove();
+        
+        // Remove from localStorage
+        if (musicId) {
+            const uploadedMusic = JSON.parse(localStorage.getItem('uploadedMusic') || '[]');
+            const filteredMusic = uploadedMusic.filter(m => m.id !== musicId);
+            localStorage.setItem('uploadedMusic', JSON.stringify(filteredMusic));
+        }
+        
+        // Update stats
+        adminPanel.updateStats();
+        adminPanel.showNotification('Müzik başarıyla silindi!', 'success');
+        
+        // Sync to main site
+        adminPanel.syncToMainSite();
+    }
+}
+
+function deleteGalleryItem(button) {
+    const galleryItem = button.closest('.gallery-admin-item');
+    const galleryId = galleryItem.dataset.galleryId;
+    const title = galleryItem.querySelector('h5').textContent;
+    
+    if (confirm(`"${title}" resmini silmek istediğinizden emin misiniz?`)) {
+        // Remove from DOM
+        galleryItem.remove();
+        
+        // Remove from localStorage
+        if (galleryId) {
+            const uploadedGallery = JSON.parse(localStorage.getItem('uploadedGallery') || '[]');
+            const filteredGallery = uploadedGallery.filter(g => g.id !== galleryId);
+            localStorage.setItem('uploadedGallery', JSON.stringify(filteredGallery));
+        }
+        
+        // Update stats
+        adminPanel.updateStats();
+        adminPanel.showNotification('Resim başarıyla silindi!', 'success');
+        
+        // Sync to main site
+        adminPanel.syncToMainSite();
+    }
+}
+
+// Enhanced Real-time Notification System
+class NotificationManager {
+    constructor() {
+        this.notifications = [];
+        this.container = null;
+        this.init();
+    }
+    
+    init() {
+        // Create notification container if it doesn't exist
+        this.container = document.querySelector('.notification-container');
+        if (!this.container) {
+            this.container = document.createElement('div');
+            this.container.className = 'notification-container';
+            document.body.appendChild(this.container);
+        }
+    }
+    
+    show(message, type = 'info', duration = 4000) {
+        const notification = this.createNotification(message, type);
+        this.container.appendChild(notification);
+        this.notifications.push(notification);
+        
+        // Animate in
+        setTimeout(() => notification.classList.add('show'), 100);
+        
+        // Auto remove
+        setTimeout(() => this.remove(notification), duration);
+        
+        return notification;
+    }
+    
+    createNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        
+        const icon = this.getIcon(type);
+        notification.innerHTML = `
+            <div class="notification-content">
+                <i class="fas ${icon}"></i>
+                <span>${message}</span>
+            </div>
+            <button class="notification-close" onclick="notificationManager.remove(this.parentElement)">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        
+        return notification;
+    }
+    
+    getIcon(type) {
+        const icons = {
+            success: 'fa-check-circle',
+            error: 'fa-exclamation-circle', 
+            warning: 'fa-exclamation-triangle',
+            info: 'fa-info-circle'
+        };
+        return icons[type] || icons.info;
+    }
+    
+    remove(notification) {
+        if (notification && notification.parentElement) {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.parentElement.removeChild(notification);
+                }
+                const index = this.notifications.indexOf(notification);
+                if (index > -1) {
+                    this.notifications.splice(index, 1);
+                }
+            }, 300);
+        }
+    }
+    
+    clear() {
+        this.notifications.forEach(n => this.remove(n));
+    }
+}
+
+// Initialize notification manager
+const notificationManager = new NotificationManager();
+
+// Performance Monitoring System
+class PerformanceMonitor {
+    constructor() {
+        this.metrics = {
+            pageLoadTime: 0,
+            jsExecutionTime: 0,
+            domContentLoaded: 0,
+            totalRequests: 0,
+            failedRequests: 0,
+            localStorage: {
+                size: 0,
+                itemCount: 0
+            },
+            memory: {
+                used: 0,
+                total: 0
+            }
+        };
+        this.init();
+    }
+    
+    init() {
+        this.measurePageLoad();
+        this.measureLocalStorage();
+        this.measureMemory();
+        this.startMonitoring();
+        
+        // Add performance dashboard to admin panel
+        this.createDashboard();
+    }
+    
+    measurePageLoad() {
+        window.addEventListener('load', () => {
+            const perfData = performance.getEntriesByType('navigation')[0];
+            this.metrics.pageLoadTime = Math.round(perfData.loadEventEnd - perfData.loadEventStart);
+            this.metrics.domContentLoaded = Math.round(perfData.domContentLoadedEventEnd - perfData.domContentLoadedEventStart);
+            this.updateDashboard();
+        });
+    }
+    
+    measureLocalStorage() {
+        try {
+            let totalSize = 0;
+            let itemCount = 0;
+            
+            for (let key in localStorage) {
+                if (localStorage.hasOwnProperty(key)) {
+                    totalSize += localStorage[key].length;
+                    itemCount++;
+                }
+            }
+            
+            this.metrics.localStorage.size = Math.round(totalSize / 1024); // KB
+            this.metrics.localStorage.itemCount = itemCount;
+        } catch (e) {
+            console.warn('Could not measure localStorage:', e);
+        }
+    }
+    
+    measureMemory() {
+        if (performance.memory) {
+            this.metrics.memory.used = Math.round(performance.memory.usedJSHeapSize / 1048576); // MB
+            this.metrics.memory.total = Math.round(performance.memory.totalJSHeapSize / 1048576); // MB
+        }
+    }
+    
+    startMonitoring() {
+        // Update metrics every 30 seconds
+        setInterval(() => {
+            this.measureLocalStorage();
+            this.measureMemory();
+            this.updateDashboard();
+        }, 30000);
+    }
+    
+    createDashboard() {
+        const dashboard = document.getElementById('dashboard');
+        if (!dashboard) return;
+        
+        const performanceSection = document.createElement('div');
+        performanceSection.className = 'performance-monitor';
+        performanceSection.innerHTML = `
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-tachometer-alt"></i> Performance Monitor</h3>
+                </div>
+                <div class="card-body">
+                    <div class="performance-grid">
+                        <div class="perf-metric">
+                            <div class="perf-label">Page Load</div>
+                            <div class="perf-value" id="pageLoadTime">-</div>
+                            <div class="perf-unit">ms</div>
+                        </div>
+                        <div class="perf-metric">
+                            <div class="perf-label">DOM Ready</div>
+                            <div class="perf-value" id="domReady">-</div>
+                            <div class="perf-unit">ms</div>
+                        </div>
+                        <div class="perf-metric">
+                            <div class="perf-label">Memory Usage</div>
+                            <div class="perf-value" id="memoryUsage">-</div>
+                            <div class="perf-unit">MB</div>
+                        </div>
+                        <div class="perf-metric">
+                            <div class="perf-label">Storage Size</div>
+                            <div class="perf-value" id="storageSize">-</div>
+                            <div class="perf-unit">KB</div>
+                        </div>
+                    </div>
+                    <div class="performance-actions">
+                        <button class="btn btn-sm btn-secondary" onclick="performanceMonitor.clearStorage()">
+                            <i class="fas fa-broom"></i> Clear Storage
+                        </button>
+                        <button class="btn btn-sm btn-secondary" onclick="performanceMonitor.optimizeStorage()">
+                            <i class="fas fa-magic"></i> Optimize
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Insert after statistics cards
+        const statsGrid = dashboard.querySelector('.stats-grid');
+        if (statsGrid) {
+            statsGrid.parentNode.insertBefore(performanceSection, statsGrid.nextSibling);
+        }
+        
+        this.updateDashboard();
+    }
+    
+    updateDashboard() {
+        const elements = {
+            pageLoadTime: document.getElementById('pageLoadTime'),
+            domReady: document.getElementById('domReady'),
+            memoryUsage: document.getElementById('memoryUsage'),
+            storageSize: document.getElementById('storageSize')
+        };
+        
+        if (elements.pageLoadTime) elements.pageLoadTime.textContent = this.metrics.pageLoadTime || '-';
+        if (elements.domReady) elements.domReady.textContent = this.metrics.domContentLoaded || '-';
+        if (elements.memoryUsage) elements.memoryUsage.textContent = this.metrics.memory.used || '-';
+        if (elements.storageSize) elements.storageSize.textContent = this.metrics.localStorage.size || '-';
+    }
+    
+    clearStorage() {
+        if (confirm('Bu işlem tüm localStorage verilerini silecek. Emin misiniz?')) {
+            const keepKeys = ['admin_session', 'admin_attempts'];
+            const backup = {};
+            
+            keepKeys.forEach(key => {
+                if (localStorage.getItem(key)) {
+                    backup[key] = localStorage.getItem(key);
+                }
+            });
+            
+            localStorage.clear();
+            
+            // Restore essential data
+            Object.keys(backup).forEach(key => {
+                localStorage.setItem(key, backup[key]);
+            });
+            
+            this.measureLocalStorage();
+            this.updateDashboard();
+            notificationManager.show('Storage cleared successfully!', 'success');
+        }
+    }
+    
+    optimizeStorage() {
+        // Remove old temporary data
+        const keysToCheck = Object.keys(localStorage);
+        let optimized = 0;
+        
+        keysToCheck.forEach(key => {
+            const value = localStorage.getItem(key);
+            try {
+                const parsed = JSON.parse(value);
+                if (parsed.timestamp && Date.now() - parsed.timestamp > 7 * 24 * 60 * 60 * 1000) {
+                    localStorage.removeItem(key);
+                    optimized++;
+                }
+            } catch (e) {
+                // Not JSON, skip
+            }
+        });
+        
+        this.measureLocalStorage();
+        this.updateDashboard();
+        notificationManager.show(`Storage optimized! Removed ${optimized} old items.`, 'success');
+    }
+}
+
+// Initialize performance monitor
+const performanceMonitor = new PerformanceMonitor();
+
+// Advanced File Validation System
+class FileValidator {
+    constructor() {
+        this.rules = {
+            music: {
+                maxSize: 50 * 1024 * 1024, // 50MB
+                allowedTypes: ['audio/mp3', 'audio/wav', 'audio/flac', 'audio/aac', 'audio/ogg'],
+                extensions: ['.mp3', '.wav', '.flac', '.aac', '.ogg']
+            },
+            image: {
+                maxSize: 10 * 1024 * 1024, // 10MB
+                allowedTypes: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'],
+                extensions: ['.jpg', '.jpeg', '.png', '.webp', '.gif'],
+                maxDimensions: { width: 4096, height: 4096 }
+            }
+        };
+    }
+    
+    async validateFile(file, type) {
+        const results = {
+            valid: true,
+            errors: [],
+            warnings: [],
+            metadata: {}
+        };
+        
+        // Basic validations
+        this.validateSize(file, type, results);
+        this.validateType(file, type, results);
+        this.validateExtension(file, type, results);
+        
+        // Advanced validations
+        if (type === 'image') {
+            await this.validateImageDimensions(file, results);
+            await this.scanImageMetadata(file, results);
+        } else if (type === 'music') {
+            await this.scanAudioMetadata(file, results);
+        }
+        
+        // Security scan
+        this.scanForSecurity(file, results);
+        
+        return results;
+    }
+    
+    validateSize(file, type, results) {
+        const maxSize = this.rules[type].maxSize;
+        if (file.size > maxSize) {
+            results.valid = false;
+            results.errors.push(`File size (${this.formatFileSize(file.size)}) exceeds maximum allowed (${this.formatFileSize(maxSize)})`);
+        } else if (file.size > maxSize * 0.8) {
+            results.warnings.push(`File size is quite large (${this.formatFileSize(file.size)}). Consider optimizing.`);
+        }
+    }
+    
+    validateType(file, type, results) {
+        if (!this.rules[type].allowedTypes.includes(file.type)) {
+            results.valid = false;
+            results.errors.push(`File type '${file.type}' is not allowed. Allowed types: ${this.rules[type].allowedTypes.join(', ')}`);
+        }
+    }
+    
+    validateExtension(file, type, results) {
+        const extension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
+        if (!this.rules[type].extensions.includes(extension)) {
+            results.valid = false;
+            results.errors.push(`File extension '${extension}' is not allowed. Allowed extensions: ${this.rules[type].extensions.join(', ')}`);
+        }
+    }
+    
+    async validateImageDimensions(file, results) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+                const { width, height } = this.rules.image.maxDimensions;
+                results.metadata.dimensions = { width: img.width, height: img.height };
+                
+                if (img.width > width || img.height > height) {
+                    results.warnings.push(`Image dimensions (${img.width}x${img.height}) exceed recommended maximum (${width}x${height})`);
+                }
+                
+                if (img.width < 300 || img.height < 300) {
+                    results.warnings.push(`Image resolution is quite low (${img.width}x${img.height}). Consider using higher resolution.`);
+                }
+                
+                resolve();
+            };
+            img.onerror = () => {
+                results.errors.push('Could not read image dimensions. File may be corrupted.');
+                resolve();
+            };
+            img.src = URL.createObjectURL(file);
+        });
+    }
+    
+    async scanImageMetadata(file, results) {
+        // Basic metadata extraction
+        results.metadata.type = file.type;
+        results.metadata.size = file.size;
+        results.metadata.lastModified = new Date(file.lastModified);
+        
+        // Check for potential issues
+        if (file.name.includes(' ')) {
+            results.warnings.push('Filename contains spaces. Consider using underscores or hyphens.');
+        }
+        
+        if (file.name.length > 50) {
+            results.warnings.push('Filename is quite long. Consider shortening it.');
+        }
+    }
+    
+    async scanAudioMetadata(file, results) {
+        results.metadata.type = file.type;
+        results.metadata.size = file.size;
+        results.metadata.duration = 'Unknown';
+        
+        // Estimate bitrate based on file size (rough calculation)
+        if (file.type === 'audio/mp3') {
+            const estimatedDuration = file.size / (128 * 1024 / 8); // Assuming 128kbps
+            if (estimatedDuration > 600) { // 10 minutes
+                results.warnings.push('Audio file is quite long. Consider splitting or compressing.');
+            }
+        }
+        
+        if (file.name.includes(' ')) {
+            results.warnings.push('Filename contains spaces. Consider using underscores or hyphens.');
+        }
+    }
+    
+    scanForSecurity(file, results) {
+        const suspiciousExtensions = ['.exe', '.bat', '.cmd', '.scr', '.com', '.pif'];
+        const filename = file.name.toLowerCase();
+        
+        // Check for double extensions
+        const parts = filename.split('.');
+        if (parts.length > 2) {
+            const secondExt = '.' + parts[parts.length - 2];
+            if (suspiciousExtensions.includes(secondExt)) {
+                results.valid = false;
+                results.errors.push('File has suspicious double extension pattern.');
+            }
+        }
+        
+        // Check for suspicious filenames
+        const suspiciousNames = ['autorun', 'desktop.ini', 'thumbs.db'];
+        if (suspiciousNames.some(name => filename.includes(name))) {
+            results.warnings.push('Filename matches common system file patterns.');
+        }
+    }
+    
+    formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+    
+    showValidationResults(results, filename) {
+        if (!results.valid) {
+            let errorMsg = `Validation failed for "${filename}":\n\n`;
+            results.errors.forEach(error => errorMsg += `❌ ${error}\n`);
+            if (results.warnings.length > 0) {
+                errorMsg += '\nWarnings:\n';
+                results.warnings.forEach(warning => errorMsg += `⚠️ ${warning}\n`);
+            }
+            notificationManager.show('File validation failed', 'error', 6000);
+            alert(errorMsg);
+            return false;
+        } else if (results.warnings.length > 0) {
+            let warningMsg = `File "${filename}" passed validation but has warnings:\n\n`;
+            results.warnings.forEach(warning => warningMsg += `⚠️ ${warning}\n`);
+            warningMsg += '\nDo you want to continue uploading?';
+            
+            if (!confirm(warningMsg)) {
+                return false;
+            }
+            notificationManager.show('File uploaded with warnings', 'warning');
+        } else {
+            notificationManager.show('File validation successful', 'success');
+        }
+        return true;
+    }
+}
+
+// Initialize file validator
+const fileValidator = new FileValidator();
+
+// Drag & Drop Reordering System
+class DragDropReorder {
+    constructor() {
+        this.draggedElement = null;
+        this.draggedIndex = null;
+        this.init();
+    }
+    
+    init() {
+        this.enableReorderingForContainer('.music-list');
+        this.enableReorderingForContainer('.gallery-grid');
+    }
+    
+    enableReorderingForContainer(containerSelector) {
+        const container = document.querySelector(containerSelector);
+        if (!container) return;
+        
+        // Add reorder button to header
+        this.addReorderToggle(container);
+        
+        // Set up event delegation for dynamic items
+        container.addEventListener('dragstart', this.handleDragStart.bind(this));
+        container.addEventListener('dragover', this.handleDragOver.bind(this));
+        container.addEventListener('drop', this.handleDrop.bind(this));
+        container.addEventListener('dragend', this.handleDragEnd.bind(this));
+    }
+    
+    addReorderToggle(container) {
+        const header = container.previousElementSibling;
+        if (!header || !header.classList.contains('section-header')) return;
+        
+        const reorderBtn = document.createElement('button');
+        reorderBtn.className = 'btn btn-sm btn-secondary reorder-toggle';
+        reorderBtn.innerHTML = '<i class="fas fa-sort"></i> Reorder Mode';
+        reorderBtn.onclick = () => this.toggleReorderMode(container);
+        
+        header.appendChild(reorderBtn);
+    }
+    
+    toggleReorderMode(container) {
+        const isReorderMode = container.classList.contains('reorder-mode');
+        const btn = container.previousElementSibling.querySelector('.reorder-toggle');
+        
+        if (isReorderMode) {
+            // Exit reorder mode
+            container.classList.remove('reorder-mode');
+            btn.innerHTML = '<i class="fas fa-sort"></i> Reorder Mode';
+            btn.classList.remove('btn-warning');
+            btn.classList.add('btn-secondary');
+            this.disableDragging(container);
+            notificationManager.show('Reorder mode disabled', 'info');
+        } else {
+            // Enter reorder mode
+            container.classList.add('reorder-mode');
+            btn.innerHTML = '<i class="fas fa-check"></i> Done Reordering';
+            btn.classList.remove('btn-secondary');
+            btn.classList.add('btn-warning');
+            this.enableDragging(container);
+            notificationManager.show('Reorder mode enabled. Drag items to reorder.', 'info', 3000);
+        }
+    }
+    
+    enableDragging(container) {
+        const items = container.children;
+        for (let item of items) {
+            if (item.classList.contains('music-item') || item.classList.contains('gallery-admin-item')) {
+                item.draggable = true;
+                item.classList.add('draggable-item');
+                
+                // Add drag handle
+                if (!item.querySelector('.drag-handle')) {
+                    const dragHandle = document.createElement('div');
+                    dragHandle.className = 'drag-handle';
+                    dragHandle.innerHTML = '<i class="fas fa-grip-vertical"></i>';
+                    item.insertBefore(dragHandle, item.firstChild);
+                }
+            }
+        }
+    }
+    
+    disableDragging(container) {
+        const items = container.children;
+        for (let item of items) {
+            item.draggable = false;
+            item.classList.remove('draggable-item');
+            
+            // Remove drag handle
+            const dragHandle = item.querySelector('.drag-handle');
+            if (dragHandle) {
+                dragHandle.remove();
+            }
+        }
+    }
+    
+    handleDragStart(e) {
+        if (!e.target.draggable) return;
+        
+        this.draggedElement = e.target;
+        this.draggedIndex = Array.from(e.target.parentNode.children).indexOf(e.target);
+        
+        e.target.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', e.target.outerHTML);
+    }
+    
+    handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        
+        const container = e.currentTarget;
+        const afterElement = this.getDragAfterElement(container, e.clientY);
+        
+        if (afterElement == null) {
+            container.appendChild(this.draggedElement);
+        } else {
+            container.insertBefore(this.draggedElement, afterElement);
+        }
+    }
+    
+    handleDrop(e) {
+        e.preventDefault();
+        
+        if (!this.draggedElement) return;
+        
+        const newIndex = Array.from(e.currentTarget.children).indexOf(this.draggedElement);
+        
+        // Update order in localStorage
+        this.updateStorageOrder(e.currentTarget, this.draggedIndex, newIndex);
+        
+        notificationManager.show('Item reordered successfully', 'success');
+        
+        // Sync to main site
+        adminPanel.syncToMainSite();
+    }
+    
+    handleDragEnd(e) {
+        if (this.draggedElement) {
+            this.draggedElement.classList.remove('dragging');
+            this.draggedElement = null;
+            this.draggedIndex = null;
+        }
+    }
+    
+    getDragAfterElement(container, y) {
+        const draggableElements = [...container.querySelectorAll('.draggable-item:not(.dragging)')];
+        
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            } else {
+                return closest;
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+    
+    updateStorageOrder(container, oldIndex, newIndex) {
+        const isMusic = container.classList.contains('music-list');
+        const storageKey = isMusic ? 'uploadedMusic' : 'uploadedGallery';
+        
+        const items = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        
+        if (items.length > 0 && oldIndex !== newIndex) {
+            // Move item in array
+            const [movedItem] = items.splice(oldIndex, 1);
+            items.splice(newIndex, 0, movedItem);
+            
+            // Update order property
+            items.forEach((item, index) => {
+                item.order = index;
+            });
+            
+            localStorage.setItem(storageKey, JSON.stringify(items));
+        }
+    }
+}
+
+// Initialize drag & drop reordering
+const dragDropReorder = new DragDropReorder();
+
+// Bulk Operations System
+class BulkOperations {
+    constructor() {
+        this.selectedItems = new Set();
+        this.isSelectionMode = false;
+        this.init();
+    }
+    
+    init() {
+        this.addBulkActionButtons();
+        this.setupSelectionMode();
+    }
+    
+    addBulkActionButtons() {
+        // Add to music section
+        this.addBulkButtonToSection('.music-list', 'music');
+        // Add to gallery section  
+        this.addBulkButtonToSection('.gallery-grid', 'gallery');
+    }
+    
+    addBulkButtonToSection(containerSelector, type) {
+        const container = document.querySelector(containerSelector);
+        if (!container) return;
+        
+        const header = container.previousElementSibling;
+        if (!header || !header.classList.contains('section-header')) return;
+        
+        const bulkBtn = document.createElement('button');
+        bulkBtn.className = 'btn btn-sm btn-secondary bulk-toggle';
+        bulkBtn.innerHTML = '<i class="fas fa-check-square"></i> Bulk Select';
+        bulkBtn.onclick = () => this.toggleSelectionMode(container, type);
+        
+        header.appendChild(bulkBtn);
+        
+        // Add bulk action menu (initially hidden)
+        const bulkMenu = document.createElement('div');
+        bulkMenu.className = 'bulk-actions-menu';
+        bulkMenu.style.display = 'none';
+        bulkMenu.innerHTML = `
+            <div class="bulk-menu-content">
+                <span class="selected-count">0 items selected</span>
+                <div class="bulk-buttons">
+                    <button class="btn btn-sm btn-danger" onclick="bulkOperations.deleteSelected('${type}')">
+                        <i class="fas fa-trash"></i> Delete Selected
+                    </button>
+                    <button class="btn btn-sm btn-secondary" onclick="bulkOperations.selectAll('${type}')">
+                        <i class="fas fa-check-double"></i> Select All
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="bulkOperations.clearSelection('${type}')">
+                        <i class="fas fa-times"></i> Clear Selection
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        header.parentNode.insertBefore(bulkMenu, header.nextSibling);
+    }
+    
+    toggleSelectionMode(container, type) {
+        const btn = container.previousElementSibling.querySelector('.bulk-toggle');
+        const menu = container.parentNode.querySelector('.bulk-actions-menu');
+        
+        if (this.isSelectionMode) {
+            // Exit selection mode
+            this.exitSelectionMode(container, btn, menu);
+        } else {
+            // Enter selection mode
+            this.enterSelectionMode(container, btn, menu, type);
+        }
+    }
+    
+    enterSelectionMode(container, btn, menu, type) {
+        this.isSelectionMode = true;
+        this.currentType = type;
+        this.selectedItems.clear();
+        
+        btn.innerHTML = '<i class="fas fa-times"></i> Exit Selection';
+        btn.classList.remove('btn-secondary');
+        btn.classList.add('btn-warning');
+        
+        menu.style.display = 'block';
+        container.classList.add('selection-mode');
+        
+        this.addSelectionCheckboxes(container);
+        notificationManager.show('Selection mode enabled. Click items to select.', 'info', 3000);
+    }
+    
+    exitSelectionMode(container, btn, menu) {
+        this.isSelectionMode = false;
+        this.selectedItems.clear();
+        
+        btn.innerHTML = '<i class="fas fa-check-square"></i> Bulk Select';
+        btn.classList.remove('btn-warning');
+        btn.classList.add('btn-secondary');
+        
+        menu.style.display = 'none';
+        container.classList.remove('selection-mode');
+        
+        this.removeSelectionCheckboxes(container);
+        notificationManager.show('Selection mode disabled', 'info');
+    }
+    
+    addSelectionCheckboxes(container) {
+        const items = container.children;
+        for (let item of items) {
+            if (item.classList.contains('music-item') || item.classList.contains('gallery-admin-item')) {
+                const checkbox = document.createElement('div');
+                checkbox.className = 'selection-checkbox';
+                checkbox.innerHTML = '<i class="fas fa-square"></i>';
+                checkbox.onclick = (e) => {
+                    e.stopPropagation();
+                    this.toggleItemSelection(item, checkbox);
+                };
+                
+                item.classList.add('selectable-item');
+                item.insertBefore(checkbox, item.firstChild);
+                
+                // Also allow clicking the item itself
+                item.onclick = (e) => {
+                    if (e.target.closest('.btn-icon')) return; // Don't interfere with edit/delete buttons
+                    this.toggleItemSelection(item, checkbox);
+                };
+            }
+        }
+    }
+    
+    removeSelectionCheckboxes(container) {
+        const checkboxes = container.querySelectorAll('.selection-checkbox');
+        checkboxes.forEach(cb => cb.remove());
+        
+        const items = container.children;
+        for (let item of items) {
+            item.classList.remove('selectable-item', 'selected-item');
+            item.onclick = null;
+        }
+    }
+    
+    toggleItemSelection(item, checkbox) {
+        const itemId = item.dataset.musicId || item.dataset.galleryId;
+        
+        if (this.selectedItems.has(itemId)) {
+            // Deselect
+            this.selectedItems.delete(itemId);
+            item.classList.remove('selected-item');
+            checkbox.innerHTML = '<i class="fas fa-square"></i>';
+        } else {
+            // Select
+            this.selectedItems.add(itemId);
+            item.classList.add('selected-item');
+            checkbox.innerHTML = '<i class="fas fa-check-square"></i>';
+        }
+        
+        this.updateSelectionCount();
+    }
+    
+    updateSelectionCount() {
+        const menu = document.querySelector('.bulk-actions-menu');
+        const counter = menu.querySelector('.selected-count');
+        counter.textContent = `${this.selectedItems.size} items selected`;
+    }
+    
+    selectAll(type) {
+        const container = type === 'music' ? document.querySelector('.music-list') : document.querySelector('.gallery-grid');
+        const items = container.children;
+        
+        this.selectedItems.clear();
+        
+        for (let item of items) {
+            if (item.classList.contains('music-item') || item.classList.contains('gallery-admin-item')) {
+                const itemId = item.dataset.musicId || item.dataset.galleryId;
+                this.selectedItems.add(itemId);
+                item.classList.add('selected-item');
+                
+                const checkbox = item.querySelector('.selection-checkbox');
+                if (checkbox) {
+                    checkbox.innerHTML = '<i class="fas fa-check-square"></i>';
+                }
+            }
+        }
+        
+        this.updateSelectionCount();
+        notificationManager.show(`Selected all ${this.selectedItems.size} items`, 'success');
+    }
+    
+    clearSelection(type) {
+        const container = type === 'music' ? document.querySelector('.music-list') : document.querySelector('.gallery-grid');
+        const items = container.children;
+        
+        this.selectedItems.clear();
+        
+        for (let item of items) {
+            item.classList.remove('selected-item');
+            const checkbox = item.querySelector('.selection-checkbox');
+            if (checkbox) {
+                checkbox.innerHTML = '<i class="fas fa-square"></i>';
+            }
+        }
+        
+        this.updateSelectionCount();
+        notificationManager.show('Selection cleared', 'info');
+    }
+    
+    deleteSelected(type) {
+        if (this.selectedItems.size === 0) {
+            notificationManager.show('No items selected', 'warning');
+            return;
+        }
+        
+        const confirmMsg = `Are you sure you want to delete ${this.selectedItems.size} selected ${type} item(s)? This action cannot be undone.`;
+        
+        if (confirm(confirmMsg)) {
+            const storageKey = type === 'music' ? 'uploadedMusic' : 'uploadedGallery';
+            const items = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            
+            // Remove from localStorage
+            const filteredItems = items.filter(item => !this.selectedItems.has(item.id));
+            localStorage.setItem(storageKey, JSON.stringify(filteredItems));
+            
+            // Remove from DOM
+            const container = type === 'music' ? document.querySelector('.music-list') : document.querySelector('.gallery-grid');
+            this.selectedItems.forEach(itemId => {
+                const element = container.querySelector(`[data-${type === 'music' ? 'music' : 'gallery'}-id="${itemId}"]`);
+                if (element) {
+                    element.remove();
+                }
+            });
+            
+            const deletedCount = this.selectedItems.size;
+            this.selectedItems.clear();
+            this.updateSelectionCount();
+            
+            // Update stats and sync
+            adminPanel.updateStats();
+            adminPanel.syncToMainSite();
+            
+            notificationManager.show(`Successfully deleted ${deletedCount} ${type} item(s)`, 'success');
+        }
+    }
+    
+    setupSelectionMode() {
+        // Setup keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (!this.isSelectionMode) return;
+            
+            if (e.key === 'Escape') {
+                const container = this.currentType === 'music' ? document.querySelector('.music-list') : document.querySelector('.gallery-grid');
+                const btn = container.previousElementSibling.querySelector('.bulk-toggle');
+                const menu = container.parentNode.querySelector('.bulk-actions-menu');
+                this.exitSelectionMode(container, btn, menu);
+            } else if (e.ctrlKey && e.key === 'a') {
+                e.preventDefault();
+                this.selectAll(this.currentType);
+            } else if (e.key === 'Delete' && this.selectedItems.size > 0) {
+                this.deleteSelected(this.currentType);
+            }
+        });
+    }
+}
+
+// Initialize bulk operations
+const bulkOperations = new BulkOperations();
+
+// Advanced Analytics Dashboard
+class AnalyticsDashboard {
+    constructor() {
+        this.analytics = {
+            visitors: this.loadVisitorData(),
+            engagement: this.loadEngagementData(),
+            content: this.loadContentData(),
+            performance: this.loadPerformanceData()
+        };
+        this.init();
+    }
+    
+    init() {
+        this.setupVisitorTracking();
+        this.enhanceExistingStats();
+        this.addAdvancedCharts();
+        this.startRealTimeTracking();
+    }
+    
+    setupVisitorTracking() {
+        // Track page views with more detail
+        const sessionId = this.getOrCreateSessionId();
+        const visitData = {
+            timestamp: Date.now(),
+            sessionId: sessionId,
+            userAgent: navigator.userAgent,
+            language: navigator.language,
+            referrer: document.referrer || 'direct',
+            viewport: `${window.innerWidth}x${window.innerHeight}`,
+            device: this.getDeviceType()
+        };
+        
+        this.recordVisit(visitData);
+    }
+    
+    getOrCreateSessionId() {
+        let sessionId = sessionStorage.getItem('session_id');
+        if (!sessionId) {
+            sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            sessionStorage.setItem('session_id', sessionId);
+        }
+        return sessionId;
+    }
+    
+    getDeviceType() {
+        const width = window.innerWidth;
+        if (width <= 768) return 'mobile';
+        if (width <= 1024) return 'tablet';
+        return 'desktop';
+    }
+    
+    recordVisit(visitData) {
+        const visits = JSON.parse(localStorage.getItem('visitor_analytics') || '[]');
+        visits.push(visitData);
+        
+        // Keep only last 1000 visits
+        if (visits.length > 1000) {
+            visits.splice(0, visits.length - 1000);
+        }
+        
+        localStorage.setItem('visitor_analytics', JSON.stringify(visits));
+        this.analytics.visitors = visits;
+    }
+    
+    loadVisitorData() {
+        return JSON.parse(localStorage.getItem('visitor_analytics') || '[]');
+    }
+    
+    loadEngagementData() {
+        return JSON.parse(localStorage.getItem('engagement_analytics') || '{}');
+    }
+    
+    loadContentData() {
+        return {
+            music: JSON.parse(localStorage.getItem('uploadedMusic') || '[]'),
+            gallery: JSON.parse(localStorage.getItem('uploadedGallery') || '[]')
+        };
+    }
+    
+    loadPerformanceData() {
+        return JSON.parse(localStorage.getItem('performance_analytics') || '{}');
+    }
+    
+    enhanceExistingStats() {
+        const dashboard = document.getElementById('dashboard');
+        if (!dashboard) return;
+        
+        // Add advanced analytics section after performance monitor
+        const analyticsSection = document.createElement('div');
+        analyticsSection.className = 'analytics-dashboard';
+        analyticsSection.innerHTML = `
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-line"></i> Advanced Analytics</h3>
+                    <div class="analytics-controls">
+                        <select id="analyticsTimeRange" class="form-select">
+                            <option value="7">Last 7 days</option>
+                            <option value="30">Last 30 days</option>
+                            <option value="90">Last 90 days</option>
+                        </select>
+                        <button class="btn btn-sm btn-secondary" onclick="analyticsDashboard.exportData()">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="analytics-grid">
+                        <div class="analytics-metric">
+                            <div class="metric-icon"><i class="fas fa-users"></i></div>
+                            <div class="metric-content">
+                                <div class="metric-label">Unique Visitors</div>
+                                <div class="metric-value" id="uniqueVisitors">-</div>
+                                <div class="metric-change" id="visitorsChange">-</div>
+                            </div>
+                        </div>
+                        <div class="analytics-metric">
+                            <div class="metric-icon"><i class="fas fa-clock"></i></div>
+                            <div class="metric-content">
+                                <div class="metric-label">Avg. Session Time</div>
+                                <div class="metric-value" id="avgSessionTime">-</div>
+                                <div class="metric-change" id="sessionChange">-</div>
+                            </div>
+                        </div>
+                        <div class="analytics-metric">
+                            <div class="metric-icon"><i class="fas fa-mobile-alt"></i></div>
+                            <div class="metric-content">
+                                <div class="metric-label">Mobile Traffic</div>
+                                <div class="metric-value" id="mobileTraffic">-</div>
+                                <div class="metric-change" id="mobileChange">-</div>
+                            </div>
+                        </div>
+                        <div class="analytics-metric">
+                            <div class="metric-icon"><i class="fas fa-heart"></i></div>
+                            <div class="metric-content">
+                                <div class="metric-label">Engagement Rate</div>
+                                <div class="metric-value" id="engagementRate">-</div>
+                                <div class="metric-change" id="engagementChange">-</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-charts">
+                        <div class="chart-container">
+                            <h4>Visitor Trends</h4>
+                            <canvas id="visitorChart" width="400" height="200"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h4>Device Breakdown</h4>
+                            <canvas id="deviceChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-insights">
+                        <h4>AI Insights</h4>
+                        <div id="analyticsInsights" class="insights-container">
+                            <div class="insight-item">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Analyzing your data...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Insert after performance monitor
+        const performanceMonitor = dashboard.querySelector('.performance-monitor');
+        if (performanceMonitor) {
+            performanceMonitor.parentNode.insertBefore(analyticsSection, performanceMonitor.nextSibling);
+        }
+        
+        this.updateAnalytics();
+    }
+    
+    updateAnalytics() {
+        const timeRange = parseInt(document.getElementById('analyticsTimeRange')?.value || '7');
+        const cutoffDate = Date.now() - (timeRange * 24 * 60 * 60 * 1000);
+        
+        // Filter data by time range
+        const recentVisits = this.analytics.visitors.filter(visit => visit.timestamp > cutoffDate);
+        
+        // Calculate metrics
+        const uniqueVisitors = new Set(recentVisits.map(v => v.sessionId)).size;
+        const avgSessionTime = this.calculateAverageSessionTime(recentVisits);
+        const mobilePercentage = this.calculateMobilePercentage(recentVisits);
+        const engagementRate = this.calculateEngagementRate(recentVisits);
+        
+        // Update UI
+        this.updateMetric('uniqueVisitors', uniqueVisitors);
+        this.updateMetric('avgSessionTime', this.formatDuration(avgSessionTime));
+        this.updateMetric('mobileTraffic', mobilePercentage + '%');
+        this.updateMetric('engagementRate', engagementRate + '%');
+        
+        // Generate insights
+        this.generateInsights(recentVisits);
+    }
+    
+    calculateAverageSessionTime(visits) {
+        if (visits.length === 0) return 0;
+        
+        const sessions = {};
+        visits.forEach(visit => {
+            if (!sessions[visit.sessionId]) {
+                sessions[visit.sessionId] = { start: visit.timestamp, end: visit.timestamp };
+            } else {
+                sessions[visit.sessionId].end = Math.max(sessions[visit.sessionId].end, visit.timestamp);
+            }
+        });
+        
+        const durations = Object.values(sessions).map(s => s.end - s.start);
+        return durations.reduce((a, b) => a + b, 0) / durations.length;
+    }
+    
+    calculateMobilePercentage(visits) {
+        if (visits.length === 0) return 0;
+        const mobileVisits = visits.filter(v => v.device === 'mobile').length;
+        return Math.round((mobileVisits / visits.length) * 100);
+    }
+    
+    calculateEngagementRate(visits) {
+        // Mock engagement calculation based on session duration
+        const avgDuration = this.calculateAverageSessionTime(visits);
+        const engagementThreshold = 30000; // 30 seconds
+        return Math.min(Math.round((avgDuration / engagementThreshold) * 100), 100);
+    }
+    
+    updateMetric(elementId, value) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.textContent = value;
+        }
+    }
+    
+    formatDuration(ms) {
+        const seconds = Math.floor(ms / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        
+        if (minutes > 0) {
+            return `${minutes}m ${remainingSeconds}s`;
+        }
+        return `${remainingSeconds}s`;
+    }
+    
+    generateInsights(visits) {
+        const insights = [];
+        
+        // Peak hours insight
+        const hourCounts = {};
+        visits.forEach(visit => {
+            const hour = new Date(visit.timestamp).getHours();
+            hourCounts[hour] = (hourCounts[hour] || 0) + 1;
+        });
+        
+        const peakHour = Object.keys(hourCounts).reduce((a, b) => hourCounts[a] > hourCounts[b] ? a : b);
+        insights.push(`Peak traffic occurs around ${peakHour}:00`);
+        
+        // Device insight
+        const deviceCounts = {};
+        visits.forEach(visit => {
+            deviceCounts[visit.device] = (deviceCounts[visit.device] || 0) + 1;
+        });
+        
+        const topDevice = Object.keys(deviceCounts).reduce((a, b) => deviceCounts[a] > deviceCounts[b] ? a : b);
+        insights.push(`Most visitors use ${topDevice} devices`);
+        
+        // Growth insight
+        if (visits.length > 0) {
+            const todayVisits = visits.filter(v => v.timestamp > Date.now() - 24 * 60 * 60 * 1000).length;
+            const yesterdayVisits = visits.filter(v => 
+                v.timestamp > Date.now() - 48 * 60 * 60 * 1000 && 
+                v.timestamp <= Date.now() - 24 * 60 * 60 * 1000
+            ).length;
+            
+            if (todayVisits > yesterdayVisits) {
+                insights.push(`Traffic increased by ${Math.round(((todayVisits - yesterdayVisits) / Math.max(yesterdayVisits, 1)) * 100)}% today`);
+            }
+        }
+        
+        this.displayInsights(insights);
+    }
+    
+    displayInsights(insights) {
+        const container = document.getElementById('analyticsInsights');
+        if (!container) return;
+        
+        container.innerHTML = insights.map(insight => `
+            <div class="insight-item">
+                <i class="fas fa-lightbulb"></i>
+                <span>${insight}</span>
+            </div>
+        `).join('');
+    }
+    
+    exportData() {
+        const data = {
+            visitors: this.analytics.visitors,
+            content: this.analytics.content,
+            exportDate: new Date().toISOString(),
+            summary: {
+                totalVisitors: this.analytics.visitors.length,
+                uniqueSessions: new Set(this.analytics.visitors.map(v => v.sessionId)).size,
+                totalMusic: this.analytics.content.music.length,
+                totalGallery: this.analytics.content.gallery.length
+            }
+        };
+        
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `analytics-export-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        notificationManager.show('Analytics data exported successfully', 'success');
+    }
+    
+    startRealTimeTracking() {
+        // Update analytics every 30 seconds
+        setInterval(() => {
+            this.updateAnalytics();
+        }, 30000);
+        
+        // Track time range changes
+        const timeRangeSelect = document.getElementById('analyticsTimeRange');
+        if (timeRangeSelect) {
+            timeRangeSelect.addEventListener('change', () => {
+                this.updateAnalytics();
+            });
+        }
+    }
+    
+    addAdvancedCharts() {
+        // Add simple chart visualization (using CSS-based charts for simplicity)
+        setTimeout(() => {
+            this.renderVisitorChart();
+            this.renderDeviceChart();
+        }, 1000);
+    }
+    
+    renderVisitorChart() {
+        // Simple bar chart using divs for visitor trends
+        const chartContainer = document.querySelector('#visitorChart');
+        if (!chartContainer) return;
+        
+        chartContainer.style.display = 'flex';
+        chartContainer.style.alignItems = 'flex-end';
+        chartContainer.style.height = '200px';
+        chartContainer.style.gap = '5px';
+        
+        const last7Days = [];
+        for (let i = 6; i >= 0; i--) {
+            const date = new Date();
+            date.setDate(date.getDate() - i);
+            const dayVisits = this.analytics.visitors.filter(v => {
+                const visitDate = new Date(v.timestamp);
+                return visitDate.toDateString() === date.toDateString();
+            }).length;
+            
+            const bar = document.createElement('div');
+            bar.style.flex = '1';
+            bar.style.backgroundColor = 'var(--admin-primary)';
+            bar.style.height = `${Math.max(dayVisits * 10, 5)}px`;
+            bar.style.borderRadius = '2px 2px 0 0';
+            bar.title = `${date.toLocaleDateString()}: ${dayVisits} visits`;
+            
+            chartContainer.appendChild(bar);
+        }
+    }
+    
+    renderDeviceChart() {
+        // Simple pie chart representation
+        const chartContainer = document.querySelector('#deviceChart');
+        if (!chartContainer) return;
+        
+        const deviceCounts = { desktop: 0, tablet: 0, mobile: 0 };
+        this.analytics.visitors.forEach(v => {
+            if (deviceCounts.hasOwnProperty(v.device)) {
+                deviceCounts[v.device]++;
+            }
+        });
+        
+        const total = Object.values(deviceCounts).reduce((a, b) => a + b, 0);
+        if (total === 0) return;
+        
+        chartContainer.innerHTML = `
+            <div class="device-stats">
+                <div class="device-stat">
+                    <i class="fas fa-desktop"></i>
+                    <span>Desktop: ${Math.round((deviceCounts.desktop / total) * 100)}%</span>
+                </div>
+                <div class="device-stat">
+                    <i class="fas fa-tablet-alt"></i>
+                    <span>Tablet: ${Math.round((deviceCounts.tablet / total) * 100)}%</span>
+                </div>
+                <div class="device-stat">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Mobile: ${Math.round((deviceCounts.mobile / total) * 100)}%</span>
+                </div>
+            </div>
+        `;
+    }
+}
+
+// Initialize analytics dashboard
+const analyticsDashboard = new AnalyticsDashboard();
