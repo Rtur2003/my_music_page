@@ -111,6 +111,18 @@
                     "sizes": "96x96"
                 }
             ]
+        },
+        {
+            "name": "Admin Panel",
+            "short_name": "Admin",
+            "description": "Admin panel'e git",
+            "url": "/admin.html",
+            "icons": [
+                {
+                    "src": "assets/images/shortcut-admin.png",
+                    "sizes": "96x96"
+                }
+            ]
         }
     ]
 }
