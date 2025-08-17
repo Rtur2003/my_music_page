@@ -995,6 +995,78 @@ body {
     transform: scale(1.05);
 }
 
+/* Content Editor Tabs */
+.editor-tabs {
+    display: flex;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--admin-border);
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: var(--admin-transition);
+    color: #666;
+    font-weight: 500;
+}
+
+.tab-btn.active {
+    color: var(--admin-primary);
+    border-bottom-color: var(--admin-primary);
+}
+
+.tab-btn:hover {
+    color: var(--admin-primary);
+    background: rgba(108, 92, 231, 0.1);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius);
+    font-size: 1rem;
+    transition: var(--admin-transition);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--admin-primary);
+    box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+}
+
+/* Content Editor Enhancements */
+.content-textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.editor-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius);
+    background: var(--admin-white);
+}
+
+.editor-section h3 {
+    margin-bottom: 1rem;
+    color: var(--admin-dark);
+    border-bottom: 1px solid var(--admin-border);
+    padding-bottom: 0.5rem;
+}
+
 /* Responsive Login */
 @media (max-width: 480px) {
     .login-container {
@@ -1004,5 +1076,20 @@ body {
     
     .login-header i {
         font-size: 2.5rem;
+    }
+    
+    .editor-tabs {
+        flex-direction: column;
+    }
+    
+    .tab-btn {
+        text-align: left;
+        border-right: 2px solid transparent;
+        border-bottom: 1px solid var(--admin-border);
+    }
+    
+    .tab-btn.active {
+        border-right-color: var(--admin-primary);
+        border-bottom-color: var(--admin-border);
     }
 }

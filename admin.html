@@ -303,15 +303,51 @@
                     
                     <div class="content-editor">
                         <div class="editor-section">
-                            <h3>Hakkımda Bölümü</h3>
-                            <textarea class="content-textarea" placeholder="Hakkımda metninizi buraya yazın...">
-Müziğe olan tutkum çocukluk yıllarımda başladı. Her nota, her melodi benim için bir hikaye anlatır. Yıllar boyunca farklı türlerde müzik yaparak kendimi geliştirdim.
+                            <h3>About Me Section</h3>
+                            <div class="editor-tabs">
+                                <button class="tab-btn active" data-tab="english">English</button>
+                                <button class="tab-btn" data-tab="turkish">Turkish</button>
+                            </div>
+                            
+                            <div class="tab-content active" id="english">
+                                <textarea id="aboutTextEn" class="content-textarea" placeholder="Write your about text here...">My passion for music began during my childhood years. Every note, every melody tells a story for me. Over the years, I have developed myself by creating music in different genres.
 
-Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokunmak. Her eserimde bir parça kalbimi bırakarak, dinleyicilerimle duygusal bir bağ kurmaya çalışıyorum.
-                            </textarea>
-                            <button class="btn btn-secondary">
+I started playing piano during my high school years and became self-taught, eventually evolving into music production. I now create instrumental melodic music, specializing in cinematic compositions and my own interpretations of film soundtracks.
+
+My goal is not just to make music, but to touch people's hearts and souls. I strive to create an emotional connection with my listeners by leaving a piece of my heart in every composition.</textarea>
+                            </div>
+                            
+                            <div class="tab-content" id="turkish" style="display: none;">
+                                <textarea id="aboutTextTr" class="content-textarea" placeholder="Hakkımda metninizi buraya yazın...">Müziğe olan tutkum çocukluk yıllarımda başladı. Her nota, her melodi benim için bir hikaye anlatır. Yıllar boyunca farklı türlerde müzik yaparak kendimi geliştirdim.
+
+Lise yıllarımda piyano çalmaya başladım ve kendi kendimi geliştirerek müzik prodüksiyonuna yöneldim. Artık enstrümantal melodik müzikler yaratıyorum, özellikle sinematik kompozisyonlar ve film müziklerinin kendi yorumlarımı yapıyorum.
+
+Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokunmak. Her eserimde bir parça kalbimi bırakarak, dinleyicilerimle duygusal bir bağ kurmaya çalışıyorum.</textarea>
+                            </div>
+                            
+                            <button class="btn btn-secondary" onclick="saveAboutText()">
                                 <i class="fas fa-save"></i>
-                                Kaydet
+                                Save Changes
+                            </button>
+                        </div>
+                        
+                        <div class="editor-section">
+                            <h3>Hero Section</h3>
+                            <div class="form-group">
+                                <label>Main Title</label>
+                                <input type="text" id="heroTitle" value="Hasan Arthur" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label>Subtitle</label>
+                                <input type="text" id="heroSubtitle" value="Music Producer & Composer" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea id="heroDescription" class="content-textarea" rows="3">Creating cinematic melodies and instrumental compositions that touch the soul</textarea>
+                            </div>
+                            <button class="btn btn-secondary" onclick="saveHeroContent()">
+                                <i class="fas fa-save"></i>
+                                Save Changes
                             </button>
                         </div>
                         
