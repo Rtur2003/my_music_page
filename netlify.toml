@@ -60,18 +60,28 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# HTML files should not be cached aggressively
+# Main HTML files - short cache with revalidation
 [[headers]]
-  for = "/*.html"
+  for = "/index.html"
   [headers.values]
-    Cache-Control = "public, max-age=3600, must-revalidate"
+    Cache-Control = "public, max-age=300, must-revalidate"
+    Vary = "Accept-Encoding"
 
-# Admin panel additional security
+# Admin panel - no cache for immediate updates
 [[headers]]
   for = "/admin.html"
   [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate, max-age=0"
+    Pragma = "no-cache"
+    Expires = "0"
     X-Robots-Tag = "noindex, nofollow"
-    Cache-Control = "no-cache, no-store, must-revalidate"
+
+# Other HTML files - minimal cache
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=600, must-revalidate"
+    Vary = "Accept-Encoding"
 
 # Block sensitive files
 [[headers]]
