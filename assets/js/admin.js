@@ -137,6 +137,8 @@ class AdminAuth {
             if (!window.adminPanelInstance) {
                 window.adminPanelInstance = new AdminPanel();
             }
+            // Initialize content editor
+            this.initContentEditor();
         }, 100);
     }
     
@@ -274,6 +276,36 @@ class AdminAuth {
         const logs = JSON.parse(localStorage.getItem('security_logs') || '[]');
         logs.unshift(logEntry);
         localStorage.setItem('security_logs', JSON.stringify(logs.slice(0, 100)));
+    }
+    
+    initContentEditor() {
+        this.bindTabEvents();
+        this.loadContentFromSite();
+    }
+    
+    bindTabEvents() {
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetTab = btn.dataset.tab;
+                
+                // Remove active class from all tabs
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                btn.classList.add('active');
+                document.getElementById(targetTab).classList.add('active');
+            });
+        });
+    }
+    
+    loadContentFromSite() {
+        // This would load content from the main site for editing
+        // For now, we'll use the current content
+        console.log('📝 Content editor loaded');
     }
 }
 
@@ -1024,6 +1056,45 @@ if (window.innerWidth <= 768) {
     if (sidebarToggle) {
         sidebarToggle.addEventListener('click', toggleMobileNav);
     }
+}
+
+// Global content editing functions
+function saveAboutText() {
+    const englishText = document.getElementById('aboutTextEn').value;
+    const turkishText = document.getElementById('aboutTextTr').value;
+    
+    // Save to localStorage
+    localStorage.setItem('about_text_en', englishText);
+    localStorage.setItem('about_text_tr', turkishText);
+    
+    showNotification('About text saved successfully!', 'success');
+    console.log('📝 About text saved');
+}
+
+function saveHeroContent() {
+    const title = document.getElementById('heroTitle').value;
+    const subtitle = document.getElementById('heroSubtitle').value;
+    const description = document.getElementById('heroDescription').value;
+    
+    // Save to localStorage
+    localStorage.setItem('hero_title', title);
+    localStorage.setItem('hero_subtitle', subtitle);
+    localStorage.setItem('hero_description', description);
+    
+    showNotification('Hero content saved successfully!', 'success');
+    console.log('📝 Hero content saved');
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type} show`;
+    notification.innerHTML = `<i class="fas fa-check"></i> ${message}`;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
 }
 
 // Initialize authentication system
