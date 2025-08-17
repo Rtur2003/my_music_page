@@ -1069,9 +1069,16 @@ function saveAboutText() {
     const englishText = document.getElementById('aboutTextEn').value;
     const turkishText = document.getElementById('aboutTextTr').value;
     
-    // Save to localStorage
+    // Save to localStorage with event triggering
     localStorage.setItem('about_text_en', englishText);
     localStorage.setItem('about_text_tr', turkishText);
+    
+    // Trigger storage event manually for same-window updates
+    window.dispatchEvent(new StorageEvent('storage', {
+        key: 'about_text_en',
+        newValue: englishText,
+        storageArea: localStorage
+    }));
     
     // Apply changes to main site immediately if in same window
     applyAboutChangesToMainSite(englishText, turkishText);
@@ -1089,6 +1096,13 @@ function saveHeroContent() {
     localStorage.setItem('hero_title', title);
     localStorage.setItem('hero_subtitle', subtitle);
     localStorage.setItem('hero_description', description);
+    
+    // Trigger storage events
+    window.dispatchEvent(new StorageEvent('storage', {
+        key: 'hero_title',
+        newValue: title,
+        storageArea: localStorage
+    }));
     
     // Apply changes to main site immediately
     applyHeroChangesToMainSite(title, subtitle, description);
@@ -1152,6 +1166,13 @@ function saveContactInfo() {
     localStorage.setItem('contact_email', email);
     localStorage.setItem('contact_phone', phone);
     localStorage.setItem('contact_location', location);
+    
+    // Trigger storage events
+    window.dispatchEvent(new StorageEvent('storage', {
+        key: 'contact_email',
+        newValue: email,
+        storageArea: localStorage
+    }));
     
     applyContactChangesToMainSite(email, phone, location);
     showNotification('Contact information saved!', 'success');
@@ -1230,6 +1251,13 @@ function saveSiteSettings() {
     localStorage.setItem('site_title', title);
     localStorage.setItem('site_description', description);
     
+    // Trigger storage events
+    window.dispatchEvent(new StorageEvent('storage', {
+        key: 'site_title',
+        newValue: title,
+        storageArea: localStorage
+    }));
+    
     // Update document title immediately
     document.title = title;
     
@@ -1245,6 +1273,13 @@ function saveSocialMediaSettings() {
     localStorage.setItem('social_spotify', spotify);
     localStorage.setItem('social_youtube', youtube);
     localStorage.setItem('social_instagram', instagram);
+    
+    // Trigger storage events
+    window.dispatchEvent(new StorageEvent('storage', {
+        key: 'social_spotify',
+        newValue: spotify,
+        storageArea: localStorage
+    }));
     
     applySocialMediaToMainSite(spotify, youtube, instagram);
     showNotification('Social media links saved!', 'success');
@@ -1308,12 +1343,16 @@ function loadContentFromLocalStorage() {
     
     if (englishText) {
         const aboutTextEn = document.getElementById('aboutTextEn');
-        if (aboutTextEn) aboutTextEn.value = englishText;
+        if (aboutTextEn && aboutTextEn.value !== englishText) {
+            aboutTextEn.value = englishText;
+        }
     }
     
     if (turkishText) {
         const aboutTextTr = document.getElementById('aboutTextTr');
-        if (aboutTextTr) aboutTextTr.value = turkishText;
+        if (aboutTextTr && aboutTextTr.value !== turkishText) {
+            aboutTextTr.value = turkishText;
+        }
     }
     
     // Load hero content
@@ -1323,17 +1362,23 @@ function loadContentFromLocalStorage() {
     
     if (heroTitle) {
         const titleEl = document.getElementById('heroTitle');
-        if (titleEl) titleEl.value = heroTitle;
+        if (titleEl && titleEl.value !== heroTitle) {
+            titleEl.value = heroTitle;
+        }
     }
     
     if (heroSubtitle) {
         const subtitleEl = document.getElementById('heroSubtitle');
-        if (subtitleEl) subtitleEl.value = heroSubtitle;
+        if (subtitleEl && subtitleEl.value !== heroSubtitle) {
+            subtitleEl.value = heroSubtitle;
+        }
     }
     
     if (heroDescription) {
         const descEl = document.getElementById('heroDescription');
-        if (descEl) descEl.value = heroDescription;
+        if (descEl && descEl.value !== heroDescription) {
+            descEl.value = heroDescription;
+        }
     }
     
     // Load contact info
@@ -1343,17 +1388,67 @@ function loadContentFromLocalStorage() {
     
     if (email) {
         const emailEl = document.querySelector('#content input[type="email"]');
-        if (emailEl) emailEl.value = email;
+        if (emailEl && emailEl.value !== email) {
+            emailEl.value = email;
+        }
     }
     
     if (phone) {
         const phoneEl = document.querySelector('#content input[type="tel"]');
-        if (phoneEl) phoneEl.value = phone;
+        if (phoneEl && phoneEl.value !== phone) {
+            phoneEl.value = phone;
+        }
     }
     
     if (location) {
         const locationEl = document.querySelector('#content input[type="text"]');
-        if (locationEl) locationEl.value = location;
+        if (locationEl && locationEl.value !== location) {
+            locationEl.value = location;
+        }
+    }
+    
+    // Load site settings
+    const siteTitle = localStorage.getItem('site_title');
+    const siteDescription = localStorage.getItem('site_description');
+    
+    if (siteTitle) {
+        const titleEl = document.getElementById('siteTitle');
+        if (titleEl && titleEl.value !== siteTitle) {
+            titleEl.value = siteTitle;
+        }
+    }
+    
+    if (siteDescription) {
+        const descEl = document.getElementById('siteDescription');
+        if (descEl && descEl.value !== siteDescription) {
+            descEl.value = siteDescription;
+        }
+    }
+    
+    // Load social media settings
+    const spotify = localStorage.getItem('social_spotify');
+    const youtube = localStorage.getItem('social_youtube');
+    const instagram = localStorage.getItem('social_instagram');
+    
+    if (spotify) {
+        const spotifyEl = document.getElementById('spotifyUrl');
+        if (spotifyEl && spotifyEl.value !== spotify) {
+            spotifyEl.value = spotify;
+        }
+    }
+    
+    if (youtube) {
+        const youtubeEl = document.getElementById('youtubeUrl');
+        if (youtubeEl && youtubeEl.value !== youtube) {
+            youtubeEl.value = youtube;
+        }
+    }
+    
+    if (instagram) {
+        const instagramEl = document.getElementById('instagramUrl');
+        if (instagramEl && instagramEl.value !== instagram) {
+            instagramEl.value = instagram;
+        }
     }
 }
 
