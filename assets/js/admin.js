@@ -329,12 +329,16 @@ class AdminPanel {
         this.loadContent();
         
         // Load uploaded content FIRST, then update stats
-        this.loadUploadedContent();
-        
-        // Update stats after content is loaded with a small delay
+        // Add delay to ensure DOM is ready
         setTimeout(() => {
-            this.updateStats();
-        }, 100);
+            console.log('⏰ Starting delayed content loading...');
+            this.loadUploadedContent();
+            
+            // Update stats after content is loaded
+            setTimeout(() => {
+                this.updateStats();
+            }, 200);
+        }, 500);
         
         console.log('🔧 Admin panel başarıyla yüklendi!');
     }
@@ -565,7 +569,17 @@ class AdminPanel {
     }
     
     addMusicToList(file) {
+        console.log('🎵 Starting to add music file:', file.name);
+        
         const musicList = document.querySelector('.music-list');
+        console.log('🔍 Looking for .music-list container for upload:', musicList);
+        
+        if (!musicList) {
+            console.error('❌ .music-list container not found! Cannot add music file');
+            this.showNotification('Error: Music container not found!', 'error');
+            return;
+        }
+        
         const musicItem = document.createElement('div');
         musicItem.className = 'music-item';
         
@@ -577,6 +591,8 @@ class AdminPanel {
         // Create unique ID for this music item
         const musicId = 'music_' + Date.now();
         musicItem.dataset.musicId = musicId;
+        
+        console.log('🎵 Creating music item with ID:', musicId);
         
         musicItem.innerHTML = `
             <div class="music-info">
@@ -608,9 +624,12 @@ class AdminPanel {
             dateAdded: new Date().toISOString()
         };
         
+        console.log('💾 Saving music data to localStorage:', musicData);
         this.saveMusicData(musicData);
+        
         this.bindItemEvents(musicItem);
         musicList.appendChild(musicItem);
+        console.log('✅ Music item added to admin panel DOM');
         
         // Add to main site immediately
         this.addMusicToMainSite(musicData);
@@ -622,6 +641,8 @@ class AdminPanel {
             musicItem.style.opacity = '1';
             musicItem.style.transform = 'translateY(0)';
         }, 100);
+        
+        console.log('🎉 Music upload process completed for:', fileName);
     }
     
     addImageToList(file) {
@@ -1156,7 +1177,21 @@ Site düzenli olarak güncellenmekte ve yeni içerikler eklenmektedir.
     
     recreateMusicItem(musicData) {
         const musicList = document.querySelector('.music-list');
-        if (!musicList) return;
+        console.log('🔍 Looking for .music-list container:', musicList);
+        
+        if (!musicList) {
+            console.error('❌ .music-list container not found! Cannot recreate music item:', musicData.title);
+            return;
+        }
+        
+        // Check if already exists
+        const existingItem = document.querySelector(`[data-music-id="${musicData.id}"]`);
+        if (existingItem) {
+            console.log('⚠️ Music item already exists in admin panel:', musicData.title);
+            return;
+        }
+        
+        console.log('✅ Found .music-list container, creating music item for:', musicData.title);
         
         const musicItem = document.createElement('div');
         musicItem.className = 'music-item';
@@ -1182,11 +1217,19 @@ Site düzenli olarak güncellenmekte ve yeni içerikler eklenmektedir.
         
         this.bindItemEvents(musicItem);
         musicList.appendChild(musicItem);
+        console.log('✅ Music item added to admin panel DOM:', musicData.title);
     }
     
     recreateGalleryItem(galleryData) {
         const galleryGrid = document.querySelector('.gallery-grid');
-        if (!galleryGrid) return;
+        console.log('🔍 Looking for .gallery-grid container:', galleryGrid);
+        
+        if (!galleryGrid) {
+            console.error('❌ .gallery-grid container not found! Cannot recreate gallery item:', galleryData.title);
+            return;
+        }
+        
+        console.log('✅ Found .gallery-grid container, creating gallery item for:', galleryData.title);
         
         const galleryItem = document.createElement('div');
         galleryItem.className = 'gallery-admin-item';
@@ -1210,6 +1253,7 @@ Site düzenli olarak güncellenmekte ve yeni içerikler eklenmektedir.
         
         this.bindItemEvents(galleryItem);
         galleryGrid.appendChild(galleryItem);
+        console.log('✅ Gallery item added to DOM:', galleryData.title);
     }
     
     addMusicToMainSite(musicData) {

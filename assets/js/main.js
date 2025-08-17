@@ -994,23 +994,34 @@ window.addEventListener('newImageAdded', (e) => {
 // Functions to add content to main site
 function addMusicToMainSite(musicData) {
     const musicSection = document.querySelector('#music .music-grid');
-    if (!musicSection) return;
+    if (!musicSection) {
+        console.log('❌ Music grid not found on main site');
+        return;
+    }
+    
+    // Check if already exists
+    const existingCard = document.querySelector(`[data-music-id="${musicData.id}"]`);
+    if (existingCard) {
+        console.log('⚠️ Music already exists on main site:', musicData.title);
+        return;
+    }
     
     const musicCard = document.createElement('div');
     musicCard.className = 'music-card';
+    musicCard.dataset.musicId = musicData.id;
+    musicCard.dataset.src = musicData.fileUrl || 'assets/music/sample-track.mp3';
+    
     musicCard.innerHTML = `
-        <div class="music-image">
+        <div class="card-image">
             <img src="${musicData.albumCover}" alt="${musicData.title}">
             <div class="play-overlay">
-                <button class="play-btn">
-                    <i class="fas fa-play"></i>
-                </button>
+                <i class="fas fa-play"></i>
             </div>
         </div>
-        <div class="music-info">
+        <div class="card-content">
             <h4>${musicData.title}</h4>
-            <p>${musicData.artist}</p>
-            <span class="music-genre">${musicData.genre}</span>
+            <p>${musicData.genre} • 2024</p>
+            <div class="card-duration">${musicData.duration || '3:45'}</div>
         </div>
     `;
     
@@ -1020,10 +1031,22 @@ function addMusicToMainSite(musicData) {
 
 function addImageToMainSite(galleryData) {
     const gallerySection = document.querySelector('#gallery .gallery-grid');
-    if (!gallerySection) return;
+    if (!gallerySection) {
+        console.log('❌ Gallery grid not found on main site');
+        return;
+    }
+    
+    // Check if already exists
+    const existingItem = document.querySelector(`[data-gallery-id="${galleryData.id}"]`);
+    if (existingItem) {
+        console.log('⚠️ Gallery item already exists on main site:', galleryData.title);
+        return;
+    }
     
     const galleryItem = document.createElement('div');
     galleryItem.className = 'gallery-item';
+    galleryItem.dataset.galleryId = galleryData.id;
+    
     galleryItem.innerHTML = `
         <img src="${galleryData.imageUrl}" alt="${galleryData.title}">
         <div class="gallery-overlay">
