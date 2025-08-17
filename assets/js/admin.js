@@ -37,6 +37,13 @@ class AdminAuth {
             if (now - lastActiveTime < this.sessionTimeout) {
                 this.showAdminPanel();
                 this.updateLastActivity();
+                
+                // Initialize admin panel if logged in
+                setTimeout(() => {
+                    if (!window.adminPanelInstance) {
+                        window.adminPanelInstance = new AdminPanel();
+                    }
+                }, 100);
                 return;
             }
         }
@@ -120,6 +127,13 @@ class AdminAuth {
         
         this.showAdminPanel();
         this.logSecurityEvent('login_success');
+        
+        // Initialize admin panel after successful login
+        setTimeout(() => {
+            if (!window.adminPanelInstance) {
+                window.adminPanelInstance = new AdminPanel();
+            }
+        }, 100);
     }
     
     loginFailed() {
@@ -182,8 +196,18 @@ class AdminAuth {
     }
     
     showAdminPanel() {
-        document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('adminPanel').style.display = 'block';
+        const loginScreen = document.getElementById('loginScreen');
+        const adminPanel = document.getElementById('adminPanel');
+        
+        if (loginScreen) {
+            loginScreen.style.display = 'none';
+        }
+        
+        if (adminPanel) {
+            adminPanel.style.display = 'block';
+        } else {
+            console.error('Admin panel element not found!');
+        }
     }
     
     updateLastActivity() {
@@ -246,7 +270,6 @@ class AdminPanel {
     constructor() {
         this.currentSection = 'dashboard';
         this.data = this.loadData();
-        this.auth = new AdminAuth();
         
         this.init();
     }
@@ -940,3 +963,8 @@ if (window.innerWidth <= 768) {
         sidebarToggle.addEventListener('click', toggleMobileNav);
     }
 }
+
+// Initialize authentication system
+document.addEventListener('DOMContentLoaded', () => {
+    new AdminAuth();
+});
