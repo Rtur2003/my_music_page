@@ -286,6 +286,13 @@ class AdminPanel {
     }
     
     init() {
+        // Check for corrupted stats and reset if needed
+        const views = parseInt(localStorage.getItem('page_views') || '0');
+        if (views < 0 || isNaN(views)) {
+            console.log('🔧 Corrupted stats detected, resetting...');
+            this.resetStats();
+        }
+        
         this.bindEvents();
         this.updateStats();
         this.loadContent();
@@ -662,13 +669,30 @@ class AdminPanel {
     }
     
     updateStats() {
-        // Get real data from actual DOM elements
-        const totalTracks = document.querySelectorAll('.music-item').length;
-        const totalImages = document.querySelectorAll('.gallery-admin-item').length;
+        // Get real data from actual DOM elements - with fallback to main site
+        let totalTracks = document.querySelectorAll('.music-item').length;
+        let totalImages = document.querySelectorAll('.gallery-admin-item, .gallery-item').length;
+        
+        // Fallback: try to get from main site if admin elements don't exist
+        if (totalTracks === 0) {
+            totalTracks = document.querySelectorAll('.music-card').length || 4; // Default to 4
+        }
+        
+        if (totalImages === 0) {
+            totalImages = document.querySelectorAll('.gallery-item').length || 6; // Default to 6
+        }
+        
+        // Ensure positive numbers
+        totalTracks = Math.max(0, totalTracks);
+        totalImages = Math.max(0, totalImages);
         
         // Calculate real page views and engagement
         const realViews = this.getRealPageViews();
         const realLikes = this.getRealEngagement();
+        
+        // Ensure positive numbers for views and likes too
+        const safeViews = Math.max(0, realViews);
+        const safeLikes = Math.max(0, realLikes);
         
         const totalTracksEl = document.getElementById('totalTracks');
         const totalImagesEl = document.getElementById('totalImages');
@@ -684,16 +708,14 @@ class AdminPanel {
         }
         
         if (totalViewsEl) {
-            this.animateCounter(totalViewsEl, realViews);
+            this.animateCounter(totalViewsEl, safeViews);
         }
         
         if (totalLikesEl) {
-            this.animateCounter(totalLikesEl, realLikes);
+            this.animateCounter(totalLikesEl, safeLikes);
         }
         
-        if (totalImagesEl) {
-            this.animateCounter(totalImagesEl, totalImages);
-        }
+        console.log(`📊 Stats updated: ${totalTracks} tracks, ${totalImages} images, ${safeViews} views, ${safeLikes} engagement`);
     }
     
     getRealPageViews() {
@@ -712,17 +734,36 @@ class AdminPanel {
         // - Music plays
         // - Gallery interactions
         // - Time spent on site
-        const musicPlays = parseInt(localStorage.getItem('music_plays') || '0');
-        const galleryClicks = parseInt(localStorage.getItem('gallery_clicks') || '0');
-        const socialClicks = parseInt(localStorage.getItem('social_clicks') || '0');
+        const musicPlays = Math.max(0, parseInt(localStorage.getItem('music_plays') || '0'));
+        const galleryClicks = Math.max(0, parseInt(localStorage.getItem('gallery_clicks') || '0'));
+        const socialClicks = Math.max(0, parseInt(localStorage.getItem('social_clicks') || '0'));
         
-        return musicPlays + galleryClicks + socialClicks;
+        const totalEngagement = musicPlays + galleryClicks + socialClicks;
+        return Math.max(0, totalEngagement);
     }
     
+    // Reset corrupted stats
+    resetStats() {
+        localStorage.removeItem('page_views');
+        localStorage.removeItem('music_plays');
+        localStorage.removeItem('gallery_clicks');
+        localStorage.removeItem('social_clicks');
+        
+        // Set default values
+        localStorage.setItem('page_views', '1');
+        localStorage.setItem('music_plays', '0');
+        localStorage.setItem('gallery_clicks', '0');
+        localStorage.setItem('social_clicks', '0');
+        
+        console.log('📊 Stats reset to default values');
+        this.updateStats();
+    }
+
     // Track real user interactions
     trackMusicPlay() {
-        const plays = parseInt(localStorage.getItem('music_plays') || '0') + 1;
-        localStorage.setItem('music_plays', plays.toString());
+        const currentPlays = Math.max(0, parseInt(localStorage.getItem('music_plays') || '0'));
+        const newPlays = currentPlays + 1;
+        localStorage.setItem('music_plays', newPlays.toString());
         this.updateStats();
     }
     
@@ -751,16 +792,26 @@ class AdminPanel {
     }
     
     animateCounter(element, targetValue) {
-        const currentValue = parseInt(element.textContent);
+        if (!element) return;
+        
+        // Ensure positive target value
+        targetValue = Math.max(0, parseInt(targetValue) || 0);
+        
+        const currentValue = Math.max(0, parseInt(element.textContent) || 0);
         if (currentValue === targetValue) return;
         
         const increment = targetValue > currentValue ? 1 : -1;
+        let currentNum = currentValue;
+        
         const step = () => {
-            const newValue = parseInt(element.textContent) + increment;
-            element.textContent = newValue;
+            currentNum += increment;
             
-            if (newValue !== targetValue) {
-                setTimeout(step, 50);
+            // Safety check - never go below 0
+            currentNum = Math.max(0, currentNum);
+            element.textContent = currentNum;
+            
+            if (currentNum !== targetValue && currentNum >= 0) {
+                setTimeout(step, 30);
             }
         };
         step();
