@@ -712,6 +712,7 @@ const cacheManager = new CacheManager();
 // Content Synchronization System
 class ContentSync {
     constructor() {
+        this.lastUpdateCache = {}; // Cache son güncelleme değerlerini saklar
         this.initSync();
         this.loadSavedContent();
     }
@@ -731,12 +732,12 @@ class ContentSync {
             }
         });
         
-        // Force sync every 1 second for more responsive updates
+        // Check for updates every 5 seconds (daha az sık kontrol)
         setInterval(() => {
             this.loadSavedContent();
             this.loadSocialMedia(); 
             this.loadSiteSettings();
-        }, 1000);
+        }, 5000);
         
         // Initial load
         this.loadSavedContent();
@@ -837,7 +838,7 @@ class ContentSync {
     
     updateContactInfo(email, phone, location) {
         // Update email in multiple places
-        if (email) {
+        if (email && this.lastUpdateCache.email !== email) {
             const emailSelectors = [
                 '.contact-items .contact-item:nth-child(1) p',
                 '.footer-contact p:first-child',
@@ -855,11 +856,12 @@ class ContentSync {
                     }
                 });
             });
+            this.lastUpdateCache.email = email;
             console.log('✅ Contact email updated from admin panel:', email);
         }
         
         // Update phone in multiple places
-        if (phone) {
+        if (phone && this.lastUpdateCache.phone !== phone) {
             const phoneSelectors = [
                 '.contact-items .contact-item:nth-child(2) p',
                 '.footer-contact p:nth-child(2)'
@@ -873,11 +875,12 @@ class ContentSync {
                     }
                 });
             });
+            this.lastUpdateCache.phone = phone;
             console.log('✅ Contact phone updated from admin panel:', phone);
         }
         
         // Update location in multiple places
-        if (location) {
+        if (location && this.lastUpdateCache.location !== location) {
             const locationSelectors = [
                 '.contact-items .contact-item:nth-child(3) p',
                 '.footer-contact p:last-child'
@@ -891,6 +894,7 @@ class ContentSync {
                     }
                 });
             });
+            this.lastUpdateCache.location = location;
             console.log('✅ Contact location updated from admin panel:', location);
         }
     }
@@ -914,39 +918,42 @@ class ContentSync {
         ];
         
         // Update Spotify links
-        if (spotify && spotify.trim()) {
+        if (spotify && spotify.trim() && this.lastUpdateCache.spotify !== spotify) {
             socialContainers.forEach(container => {
                 container.forEach(link => {
                     if (link.querySelector('.fa-spotify') || link.href.includes('spotify')) {
                         link.href = spotify;
-                        console.log('✅ Spotify link updated:', spotify);
                     }
                 });
             });
+            this.lastUpdateCache.spotify = spotify;
+            console.log('✅ Spotify link updated:', spotify);
         }
         
         // Update YouTube links
-        if (youtube && youtube.trim()) {
+        if (youtube && youtube.trim() && this.lastUpdateCache.youtube !== youtube) {
             socialContainers.forEach(container => {
                 container.forEach(link => {
                     if (link.querySelector('.fa-youtube') || link.href.includes('youtube')) {
                         link.href = youtube;
-                        console.log('✅ YouTube link updated:', youtube);
                     }
                 });
             });
+            this.lastUpdateCache.youtube = youtube;
+            console.log('✅ YouTube link updated:', youtube);
         }
         
         // Update Instagram links
-        if (instagram && instagram.trim()) {
+        if (instagram && instagram.trim() && this.lastUpdateCache.instagram !== instagram) {
             socialContainers.forEach(container => {
                 container.forEach(link => {
                     if (link.querySelector('.fa-instagram') || link.href.includes('instagram')) {
                         link.href = instagram;
-                        console.log('✅ Instagram link updated:', instagram);
                     }
                 });
             });
+            this.lastUpdateCache.instagram = instagram;
+            console.log('✅ Instagram link updated:', instagram);
         }
     }
     
@@ -972,6 +979,62 @@ class ContentSync {
 
 // Initialize content synchronization
 const contentSync = new ContentSync();
+
+// Listen for new content added from admin panel
+window.addEventListener('newMusicAdded', (e) => {
+    const musicData = e.detail;
+    addMusicToMainSite(musicData);
+});
+
+window.addEventListener('newImageAdded', (e) => {
+    const galleryData = e.detail;
+    addImageToMainSite(galleryData);
+});
+
+// Functions to add content to main site
+function addMusicToMainSite(musicData) {
+    const musicSection = document.querySelector('#music .music-grid');
+    if (!musicSection) return;
+    
+    const musicCard = document.createElement('div');
+    musicCard.className = 'music-card';
+    musicCard.innerHTML = `
+        <div class="music-image">
+            <img src="${musicData.albumCover}" alt="${musicData.title}">
+            <div class="play-overlay">
+                <button class="play-btn">
+                    <i class="fas fa-play"></i>
+                </button>
+            </div>
+        </div>
+        <div class="music-info">
+            <h4>${musicData.title}</h4>
+            <p>${musicData.artist}</p>
+            <span class="music-genre">${musicData.genre}</span>
+        </div>
+    `;
+    
+    musicSection.appendChild(musicCard);
+    console.log('✅ Music added to main site:', musicData.title);
+}
+
+function addImageToMainSite(galleryData) {
+    const gallerySection = document.querySelector('#gallery .gallery-grid');
+    if (!gallerySection) return;
+    
+    const galleryItem = document.createElement('div');
+    galleryItem.className = 'gallery-item';
+    galleryItem.innerHTML = `
+        <img src="${galleryData.imageUrl}" alt="${galleryData.title}">
+        <div class="gallery-overlay">
+            <h4>${galleryData.title}</h4>
+            <p>${galleryData.description}</p>
+        </div>
+    `;
+    
+    gallerySection.appendChild(galleryItem);
+    console.log('✅ Image added to main site:', galleryData.title);
+}
 
 console.log('%c🎵 Müzik Portföyü', 'color: #6c5ce7; font-size: 20px; font-weight: bold;');
 console.log('%cTüm sistemler aktif ve hazır!', 'color: #00cec9; font-size: 14px;');

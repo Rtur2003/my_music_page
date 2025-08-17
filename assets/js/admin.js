@@ -328,6 +328,7 @@ class AdminPanel {
         this.bindEvents();
         this.updateStats();
         this.loadContent();
+        this.loadUploadedContent(); // Yüklenen dosyaları geri yükle
         
         console.log('🔧 Admin panel başarıyla yüklendi!');
     }
@@ -552,6 +553,9 @@ class AdminPanel {
         } else if (file.type.startsWith('image/')) {
             this.addImageToList(file);
         }
+        
+        // Save uploaded files to localStorage
+        this.saveUploadedFiles();
     }
     
     addMusicToList(file) {
@@ -561,10 +565,16 @@ class AdminPanel {
         
         const fileName = file.name.replace(/\.[^/.]+$/, "");
         const fileSize = this.formatFileSize(file.size);
+        const fileUrl = URL.createObjectURL(file);
+        const albumCover = 'assets/images/album-cover-1.jpg'; // Default cover
+        
+        // Create unique ID for this music item
+        const musicId = 'music_' + Date.now();
+        musicItem.dataset.musicId = musicId;
         
         musicItem.innerHTML = `
             <div class="music-info">
-                <img src="assets/images/default-album.jpg" alt="Album Cover" class="music-thumb">
+                <img src="${albumCover}" alt="Album Cover" class="music-thumb">
                 <div class="music-details">
                     <h4>${fileName}</h4>
                     <p>Yeni • ${fileSize}</p>
@@ -580,8 +590,24 @@ class AdminPanel {
             </div>
         `;
         
+        // Save music data to localStorage
+        const musicData = {
+            id: musicId,
+            title: fileName,
+            artist: 'Hasan Arthur',
+            genre: 'Yeni',
+            fileSize: fileSize,
+            fileUrl: fileUrl,
+            albumCover: albumCover,
+            dateAdded: new Date().toISOString()
+        };
+        
+        this.saveMusicData(musicData);
         this.bindItemEvents(musicItem);
         musicList.appendChild(musicItem);
+        
+        // Add to main site immediately
+        this.addMusicToMainSite(musicData);
         
         musicItem.style.opacity = '0';
         musicItem.style.transform = 'translateY(20px)';
@@ -597,10 +623,16 @@ class AdminPanel {
         const galleryItem = document.createElement('div');
         galleryItem.className = 'gallery-admin-item';
         
+        // Create unique ID for this gallery item
+        const galleryId = 'gallery_' + Date.now();
+        galleryItem.dataset.galleryId = galleryId;
+        
         const reader = new FileReader();
         reader.onload = (e) => {
+            const imageUrl = e.target.result;
+            
             galleryItem.innerHTML = `
-                <img src="${e.target.result}" alt="Uploaded Image">
+                <img src="${imageUrl}" alt="Uploaded Image">
                 <div class="gallery-overlay">
                     <h5>Yeni Resim</h5>
                     <p>Az önce yüklendi</p>
@@ -615,8 +647,22 @@ class AdminPanel {
                 </div>
             `;
             
+            // Save gallery data to localStorage
+            const galleryData = {
+                id: galleryId,
+                title: 'Yeni Resim',
+                description: 'Az önce yüklendi',
+                category: 'general',
+                imageUrl: imageUrl,
+                dateAdded: new Date().toISOString()
+            };
+            
+            this.saveGalleryData(galleryData);
             this.bindItemEvents(galleryItem);
             galleryGrid.appendChild(galleryItem);
+            
+            // Add to main site immediately
+            this.addImageToMainSite(galleryData);
             
             galleryItem.style.opacity = '0';
             galleryItem.style.transform = 'scale(0.8)';
@@ -1032,6 +1078,117 @@ Site düzenli olarak güncellenmekte ve yeni içerikler eklenmektedir.
         URL.revokeObjectURL(url);
         
         this.showNotification('Rapor başarıyla oluşturuldu!', 'success');
+    }
+    
+    // LocalStorage Management Functions
+    saveMusicData(musicData) {
+        let musicList = JSON.parse(localStorage.getItem('uploaded_music') || '[]');
+        musicList.push(musicData);
+        localStorage.setItem('uploaded_music', JSON.stringify(musicList));
+        console.log('🎵 Music saved to localStorage:', musicData.title);
+    }
+    
+    saveGalleryData(galleryData) {
+        let galleryList = JSON.parse(localStorage.getItem('uploaded_gallery') || '[]');
+        galleryList.push(galleryData);
+        localStorage.setItem('uploaded_gallery', JSON.stringify(galleryList));
+        console.log('🖼️ Gallery image saved to localStorage:', galleryData.title);
+    }
+    
+    loadUploadedContent() {
+        // Load uploaded music
+        const musicList = JSON.parse(localStorage.getItem('uploaded_music') || '[]');
+        musicList.forEach(musicData => {
+            this.recreateMusicItem(musicData);
+            this.addMusicToMainSite(musicData);
+        });
+        
+        // Load uploaded gallery
+        const galleryList = JSON.parse(localStorage.getItem('uploaded_gallery') || '[]');
+        galleryList.forEach(galleryData => {
+            this.recreateGalleryItem(galleryData);
+            this.addImageToMainSite(galleryData);
+        });
+        
+        console.log(`📂 Loaded ${musicList.length} music items and ${galleryList.length} gallery items from localStorage`);
+    }
+    
+    recreateMusicItem(musicData) {
+        const musicList = document.querySelector('.music-list');
+        if (!musicList) return;
+        
+        const musicItem = document.createElement('div');
+        musicItem.className = 'music-item';
+        musicItem.dataset.musicId = musicData.id;
+        
+        musicItem.innerHTML = `
+            <div class="music-info">
+                <img src="${musicData.albumCover}" alt="Album Cover" class="music-thumb">
+                <div class="music-details">
+                    <h4>${musicData.title}</h4>
+                    <p>${musicData.genre} • ${musicData.fileSize}</p>
+                </div>
+            </div>
+            <div class="music-actions">
+                <button class="btn-icon edit">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn-icon delete">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `;
+        
+        this.bindItemEvents(musicItem);
+        musicList.appendChild(musicItem);
+    }
+    
+    recreateGalleryItem(galleryData) {
+        const galleryGrid = document.querySelector('.gallery-grid');
+        if (!galleryGrid) return;
+        
+        const galleryItem = document.createElement('div');
+        galleryItem.className = 'gallery-admin-item';
+        galleryItem.dataset.galleryId = galleryData.id;
+        
+        galleryItem.innerHTML = `
+            <img src="${galleryData.imageUrl}" alt="${galleryData.title}">
+            <div class="gallery-overlay">
+                <h5>${galleryData.title}</h5>
+                <p>${galleryData.description}</p>
+                <div class="gallery-actions">
+                    <button class="btn-icon edit">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-icon delete">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        this.bindItemEvents(galleryItem);
+        galleryGrid.appendChild(galleryItem);
+    }
+    
+    addMusicToMainSite(musicData) {
+        // Ana sayfaya müzik ekle
+        console.log('🎵 Adding music to main site:', musicData.title);
+        
+        // Storage event trigger etmeden direkt ekle
+        window.dispatchEvent(new CustomEvent('newMusicAdded', {
+            detail: musicData
+        }));
+    }
+    
+    addImageToMainSite(galleryData) {
+        // Ana sayfaya resim ekle
+        console.log('🖼️ Adding image to main site:', galleryData.title);
+        
+        // Storage event trigger etmeden direkt ekle
+        window.dispatchEvent(new CustomEvent('newImageAdded', {
+            detail: galleryData
+        }));
     }
 }
 
