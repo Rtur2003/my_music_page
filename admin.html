@@ -327,7 +327,7 @@ Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokun
                             
                             <button class="btn btn-secondary" onclick="saveAboutText()">
                                 <i class="fas fa-save"></i>
-                                Save Changes
+                                Save & Apply to Site
                             </button>
                         </div>
                         
@@ -347,7 +347,7 @@ Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokun
                             </div>
                             <button class="btn btn-secondary" onclick="saveHeroContent()">
                                 <i class="fas fa-save"></i>
-                                Save Changes
+                                Save & Apply to Site
                             </button>
                         </div>
                         
@@ -367,9 +367,9 @@ Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokun
                                     <input type="text" value="İstanbul, Türkiye">
                                 </div>
                             </div>
-                            <button class="btn btn-secondary">
+                            <button class="btn btn-secondary" onclick="saveContactInfo()">
                                 <i class="fas fa-save"></i>
-                                Kaydet
+                                Save & Apply to Site
                             </button>
                         </div>
                     </div>
@@ -385,30 +385,36 @@ Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokun
                             <h3>Site Ayarları</h3>
                             <div class="setting-item">
                                 <label>Site Başlığı</label>
-                                <input type="text" value="Müzik Portföyüm">
+                                <input type="text" id="siteTitle" value="Müzik Portföyüm">
                             </div>
                             <div class="setting-item">
                                 <label>Site Açıklaması</label>
-                                <textarea>Profesyonel müzik portföyü - En yeni müziklerimi keşfedin</textarea>
+                                <textarea id="siteDescription">Profesyonel müzik portföyü - En yeni müziklerimi keşfedin</textarea>
                             </div>
-                            <button class="btn btn-primary">Kaydet</button>
+                            <button class="btn btn-primary" onclick="saveSiteSettings()">
+                                <i class="fas fa-save"></i>
+                                Save Settings
+                            </button>
                         </div>
                         
                         <div class="settings-card">
                             <h3>Sosyal Medya</h3>
                             <div class="setting-item">
                                 <label>Spotify</label>
-                                <input type="url" placeholder="Spotify profil linki">
+                                <input type="url" id="spotifyUrl" placeholder="Spotify profil linki">
                             </div>
                             <div class="setting-item">
                                 <label>YouTube</label>
-                                <input type="url" placeholder="YouTube kanal linki">
+                                <input type="url" id="youtubeUrl" placeholder="YouTube kanal linki">
                             </div>
                             <div class="setting-item">
                                 <label>Instagram</label>
-                                <input type="url" placeholder="Instagram profil linki">
+                                <input type="url" id="instagramUrl" placeholder="Instagram profil linki">
                             </div>
-                            <button class="btn btn-primary">Kaydet</button>
+                            <button class="btn btn-primary" onclick="saveSocialMediaSettings()">
+                                <i class="fas fa-save"></i>
+                                Save Social Media
+                            </button>
                         </div>
                         
                         <div class="settings-card">

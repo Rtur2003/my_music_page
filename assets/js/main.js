@@ -709,5 +709,175 @@ class CacheManager {
 // Initialize cache manager
 const cacheManager = new CacheManager();
 
+// Content Synchronization System
+class ContentSync {
+    constructor() {
+        this.initSync();
+        this.loadSavedContent();
+    }
+    
+    initSync() {
+        // Listen for storage changes (from admin panel)
+        window.addEventListener('storage', (e) => {
+            if (e.key && e.key.startsWith('about_text_') || 
+                e.key && e.key.startsWith('hero_') ||
+                e.key && e.key.startsWith('contact_')) {
+                this.loadSavedContent();
+            }
+        });
+        
+        // Check for updates every 2 seconds
+        setInterval(() => {
+            this.loadSavedContent();
+            this.loadSocialMedia();
+        }, 2000);
+    }
+    
+    loadSavedContent() {
+        // Load about text
+        const englishText = localStorage.getItem('about_text_en');
+        if (englishText) {
+            this.updateAboutSection(englishText);
+        }
+        
+        // Load hero content
+        const heroTitle = localStorage.getItem('hero_title');
+        const heroDescription = localStorage.getItem('hero_description');
+        
+        if (heroTitle) {
+            this.updateHeroTitle(heroTitle);
+        }
+        
+        if (heroDescription) {
+            this.updateHeroDescription(heroDescription);
+        }
+        
+        // Load contact info
+        const email = localStorage.getItem('contact_email');
+        const phone = localStorage.getItem('contact_phone');
+        const location = localStorage.getItem('contact_location');
+        
+        if (email || phone || location) {
+            this.updateContactInfo(email, phone, location);
+        }
+    }
+    
+    updateAboutSection(englishText) {
+        const aboutSection = document.querySelector('#about .about-text');
+        if (aboutSection && englishText) {
+            const paragraphs = englishText.split('\n').filter(p => p.trim());
+            aboutSection.innerHTML = `
+                <h3>My Musical Journey</h3>
+                ${paragraphs.map(p => `<p>${p}</p>`).join('')}
+            `;
+            console.log('✅ About section updated from admin panel');
+        }
+    }
+    
+    updateHeroTitle(title) {
+        const heroTitle = document.querySelector('.hero-title .title-line.highlight');
+        if (heroTitle && title && heroTitle.textContent !== title) {
+            heroTitle.textContent = title;
+            console.log('✅ Hero title updated from admin panel');
+        }
+    }
+    
+    updateHeroDescription(description) {
+        const heroDesc = document.querySelector('.hero-description');
+        if (heroDesc && description && heroDesc.textContent !== description) {
+            heroDesc.textContent = description;
+            console.log('✅ Hero description updated from admin panel');
+        }
+    }
+    
+    updateContactInfo(email, phone, location) {
+        if (email) {
+            const emailEl = document.querySelector('.contact-items .contact-item:nth-child(1) p');
+            if (emailEl && emailEl.textContent !== email) {
+                emailEl.textContent = email;
+                console.log('✅ Contact email updated from admin panel');
+            }
+        }
+        
+        if (phone) {
+            const phoneEl = document.querySelector('.contact-items .contact-item:nth-child(2) p');
+            if (phoneEl && phoneEl.textContent !== phone) {
+                phoneEl.textContent = phone;
+                console.log('✅ Contact phone updated from admin panel');
+            }
+        }
+        
+        if (location) {
+            const locationEl = document.querySelector('.contact-items .contact-item:nth-child(3) p');
+            if (locationEl && locationEl.textContent !== location) {
+                locationEl.textContent = location;
+                console.log('✅ Contact location updated from admin panel');
+            }
+        }
+    }
+    
+    loadSocialMedia() {
+        const spotify = localStorage.getItem('social_spotify');
+        const youtube = localStorage.getItem('social_youtube');
+        const instagram = localStorage.getItem('social_instagram');
+        
+        if (spotify || youtube || instagram) {
+            this.updateSocialLinks(spotify, youtube, instagram);
+        }
+    }
+    
+    updateSocialLinks(spotify, youtube, instagram) {
+        // Update footer social links
+        const footerSocial = document.querySelectorAll('.footer-social a');
+        const socialLinks = document.querySelectorAll('.social-link');
+        
+        // Update Spotify links
+        if (spotify) {
+            footerSocial.forEach(link => {
+                if (link.querySelector('.fa-spotify')) {
+                    link.href = spotify;
+                }
+            });
+            socialLinks.forEach(link => {
+                if (link.querySelector('.fa-spotify')) {
+                    link.href = spotify;
+                }
+            });
+        }
+        
+        // Update YouTube links
+        if (youtube) {
+            footerSocial.forEach(link => {
+                if (link.querySelector('.fa-youtube')) {
+                    link.href = youtube;
+                }
+            });
+            socialLinks.forEach(link => {
+                if (link.querySelector('.fa-youtube')) {
+                    link.href = youtube;
+                }
+            });
+        }
+        
+        // Update Instagram links
+        if (instagram) {
+            footerSocial.forEach(link => {
+                if (link.querySelector('.fa-instagram')) {
+                    link.href = instagram;
+                }
+            });
+            socialLinks.forEach(link => {
+                if (link.querySelector('.fa-instagram')) {
+                    link.href = instagram;
+                }
+            });
+        }
+    }
+}
+
+// Initialize content synchronization
+const contentSync = new ContentSync();
+
 console.log('%c🎵 Müzik Portföyü', 'color: #6c5ce7; font-size: 20px; font-weight: bold;');
 console.log('%cTüm sistemler aktif ve hazır!', 'color: #00cec9; font-size: 14px;');
+console.log('%c🔄 Admin panel senkronizasyonu aktif!', 'color: #fdcb6e; font-size: 12px;');
