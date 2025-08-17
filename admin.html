@@ -438,6 +438,7 @@ Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokun
         </main>
     </div>
     
+    <!-- Upload Modal -->
     <div class="modal" id="uploadModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -456,6 +457,185 @@ Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokun
                     </div>
                     <p class="progress-text">Yükleniyor... 0%</p>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Music Edit Modal -->
+    <div class="modal" id="musicEditModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-music"></i> Müzik Düzenle</h3>
+                <button class="modal-close" onclick="closeMusicEditModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="musicEditForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="musicTitle">
+                                <i class="fas fa-heading"></i>
+                                Şarkı Adı
+                            </label>
+                            <input type="text" id="musicTitle" name="title" placeholder="Şarkı adını girin" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="musicArtist">
+                                <i class="fas fa-user"></i>
+                                Sanatçı
+                            </label>
+                            <input type="text" id="musicArtist" name="artist" placeholder="Sanatçı adı" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="musicGenre">
+                                <i class="fas fa-tags"></i>
+                                Tür
+                            </label>
+                            <select id="musicGenre" name="genre" required>
+                                <option value="">Tür seçin</option>
+                                <option value="Pop">Pop</option>
+                                <option value="Rock">Rock</option>
+                                <option value="Alternatif">Alternatif</option>
+                                <option value="Akustik">Akustik</option>
+                                <option value="Elektronik">Elektronik</option>
+                                <option value="Jazz">Jazz</option>
+                                <option value="Klasik">Klasik</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="musicDuration">
+                                <i class="fas fa-clock"></i>
+                                Süre
+                            </label>
+                            <input type="text" id="musicDuration" name="duration" placeholder="3:45" pattern="[0-9]:[0-5][0-9]">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="musicDescription">
+                            <i class="fas fa-align-left"></i>
+                            Açıklama
+                        </label>
+                        <textarea id="musicDescription" name="description" rows="3" placeholder="Şarkı hakkında kısa açıklama"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="musicAlbumCover">
+                            <i class="fas fa-image"></i>
+                            Albüm Kapağı URL
+                        </label>
+                        <input type="url" id="musicAlbumCover" name="albumCover" placeholder="https://example.com/cover.jpg">
+                        <small>Veya dosya yüklemek için aşağıdaki butonu kullanın</small>
+                    </div>
+                    
+                    <div class="upload-section">
+                        <label>Albüm Kapağı Yükle</label>
+                        <div class="file-upload-area">
+                            <input type="file" id="coverImageInput" accept="image/*" style="display: none;">
+                            <button type="button" class="btn btn-secondary" onclick="document.getElementById('coverImageInput').click()">
+                                <i class="fas fa-upload"></i>
+                                Kapak Resmi Seç
+                            </button>
+                            <div id="coverPreview" class="image-preview"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeMusicEditModal()">
+                    <i class="fas fa-times"></i>
+                    İptal
+                </button>
+                <button type="button" class="btn btn-primary" onclick="saveMusicEdit()">
+                    <i class="fas fa-save"></i>
+                    Kaydet
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Edit Modal -->
+    <div class="modal" id="galleryEditModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-images"></i> Galeri Öğesi Düzenle</h3>
+                <button class="modal-close" onclick="closeGalleryEditModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="galleryEditForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="galleryTitle">
+                                <i class="fas fa-heading"></i>
+                                Başlık
+                            </label>
+                            <input type="text" id="galleryTitle" name="title" placeholder="Resim başlığı" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="galleryCategory">
+                                <i class="fas fa-folder"></i>
+                                Kategori
+                            </label>
+                            <select id="galleryCategory" name="category" required>
+                                <option value="">Kategori seçin</option>
+                                <option value="concerts">Konserler</option>
+                                <option value="studio">Stüdyo</option>
+                                <option value="behind-scenes">Sahne Arkası</option>
+                                <option value="personal">Kişisel</option>
+                                <option value="events">Etkinlikler</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="galleryDescription">
+                            <i class="fas fa-align-left"></i>
+                            Açıklama
+                        </label>
+                        <textarea id="galleryDescription" name="description" rows="3" placeholder="Resim açıklaması" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="galleryDate">
+                            <i class="fas fa-calendar"></i>
+                            Tarih
+                        </label>
+                        <input type="date" id="galleryDate" name="date">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="galleryLocation">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Konum
+                        </label>
+                        <input type="text" id="galleryLocation" name="location" placeholder="Fotoğrafın çekildiği yer">
+                    </div>
+                    
+                    <div class="upload-section">
+                        <label>Yeni Resim Yükle (Opsiyonel)</label>
+                        <div class="file-upload-area">
+                            <input type="file" id="galleryImageInput" accept="image/*" style="display: none;">
+                            <button type="button" class="btn btn-secondary" onclick="document.getElementById('galleryImageInput').click()">
+                                <i class="fas fa-upload"></i>
+                                Yeni Resim Seç
+                            </button>
+                            <div id="galleryPreview" class="image-preview"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeGalleryEditModal()">
+                    <i class="fas fa-times"></i>
+                    İptal
+                </button>
+                <button type="button" class="btn btn-primary" onclick="saveGalleryEdit()">
+                    <i class="fas fa-save"></i>
+                    Kaydet
+                </button>
             </div>
         </div>
     </div>
