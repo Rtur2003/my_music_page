@@ -634,13 +634,19 @@ class AdminPanel {
         const deleteBtn = item.querySelector('.delete');
         
         if (editBtn) {
-            editBtn.addEventListener('click', () => {
-                this.showNotification('Düzenleme özelliği yakında gelecek!', 'info');
+            editBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (item.classList.contains('music-item')) {
+                    editMusicItem(editBtn);
+                } else if (item.classList.contains('gallery-admin-item')) {
+                    editGalleryItem(editBtn);
+                }
             });
         }
         
         if (deleteBtn) {
-            deleteBtn.addEventListener('click', () => {
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 this.deleteItem(item);
             });
         }
@@ -1067,8 +1073,11 @@ function saveAboutText() {
     localStorage.setItem('about_text_en', englishText);
     localStorage.setItem('about_text_tr', turkishText);
     
-    showNotification('About text saved successfully!', 'success');
-    console.log('📝 About text saved');
+    // Apply changes to main site immediately if in same window
+    applyAboutChangesToMainSite(englishText, turkishText);
+    
+    showNotification('About text saved and applied to main site!', 'success');
+    console.log('📝 About text saved and applied');
 }
 
 function saveHeroContent() {
@@ -1081,8 +1090,11 @@ function saveHeroContent() {
     localStorage.setItem('hero_subtitle', subtitle);
     localStorage.setItem('hero_description', description);
     
-    showNotification('Hero content saved successfully!', 'success');
-    console.log('📝 Hero content saved');
+    // Apply changes to main site immediately
+    applyHeroChangesToMainSite(title, subtitle, description);
+    
+    showNotification('Hero content saved and applied to main site!', 'success');
+    console.log('📝 Hero content saved and applied');
 }
 
 function showNotification(message, type = 'info') {
@@ -1095,6 +1107,229 @@ function showNotification(message, type = 'info') {
     setTimeout(() => {
         notification.remove();
     }, 3000);
+}
+
+// Functions to apply changes to main site
+function applyAboutChangesToMainSite(englishText, turkishText) {
+    // Try to find about section in parent window or current window
+    const targetWindow = window.opener || window.parent || window;
+    const aboutSection = targetWindow.document.querySelector('#about .about-text');
+    
+    if (aboutSection) {
+        // Update the about text in the main site
+        const paragraphs = englishText.split('\n').filter(p => p.trim());
+        aboutSection.innerHTML = `
+            <h3>My Musical Journey</h3>
+            ${paragraphs.map(p => `<p>${p}</p>`).join('')}
+        `;
+        console.log('✅ About section updated on main site');
+    } else {
+        console.log('ℹ️ About section not found in main site');
+    }
+}
+
+function applyHeroChangesToMainSite(title, subtitle, description) {
+    const targetWindow = window.opener || window.parent || window;
+    const heroTitle = targetWindow.document.querySelector('.hero-title .title-line.highlight');
+    const heroDesc = targetWindow.document.querySelector('.hero-description');
+    
+    if (heroTitle) {
+        heroTitle.textContent = title;
+        console.log('✅ Hero title updated on main site');
+    }
+    
+    if (heroDesc) {
+        heroDesc.textContent = description;
+        console.log('✅ Hero description updated on main site');
+    }
+}
+
+function saveContactInfo() {
+    const email = document.querySelector('#content input[type="email"]').value;
+    const phone = document.querySelector('#content input[type="tel"]').value;
+    const location = document.querySelector('#content input[type="text"]').value;
+    
+    localStorage.setItem('contact_email', email);
+    localStorage.setItem('contact_phone', phone);
+    localStorage.setItem('contact_location', location);
+    
+    applyContactChangesToMainSite(email, phone, location);
+    showNotification('Contact information saved!', 'success');
+}
+
+function applyContactChangesToMainSite(email, phone, location) {
+    const targetWindow = window.opener || window.parent || window;
+    const emailEl = targetWindow.document.querySelector('.contact-items .contact-item:nth-child(1) p');
+    const phoneEl = targetWindow.document.querySelector('.contact-items .contact-item:nth-child(2) p');
+    const locationEl = targetWindow.document.querySelector('.contact-items .contact-item:nth-child(3) p');
+    
+    if (emailEl) emailEl.textContent = email;
+    if (phoneEl) phoneEl.textContent = phone;
+    if (locationEl) locationEl.textContent = location;
+}
+
+function editMusicItem(button) {
+    const musicItem = button.closest('.music-item');
+    const title = musicItem.querySelector('h4').textContent;
+    const info = musicItem.querySelector('p').textContent;
+    
+    const newTitle = prompt('Şarkı adını düzenleyin:', title);
+    if (newTitle && newTitle !== title) {
+        musicItem.querySelector('h4').textContent = newTitle;
+        showNotification('Müzik başlığı güncellendi!', 'success');
+    }
+}
+
+function editGalleryItem(button) {
+    const galleryItem = button.closest('.gallery-admin-item');
+    const title = galleryItem.querySelector('h5').textContent;
+    const description = galleryItem.querySelector('p').textContent;
+    
+    const newTitle = prompt('Resim başlığını düzenleyin:', title);
+    const newDescription = prompt('Resim açıklamasını düzenleyin:', description);
+    
+    if (newTitle && newTitle !== title) {
+        galleryItem.querySelector('h5').textContent = newTitle;
+    }
+    if (newDescription && newDescription !== description) {
+        galleryItem.querySelector('p').textContent = newDescription;
+    }
+    
+    showNotification('Galeri öğesi güncellendi!', 'success');
+}
+
+function saveSiteSettings() {
+    const title = document.getElementById('siteTitle').value;
+    const description = document.getElementById('siteDescription').value;
+    
+    localStorage.setItem('site_title', title);
+    localStorage.setItem('site_description', description);
+    
+    // Update document title immediately
+    document.title = title;
+    
+    showNotification('Site settings saved!', 'success');
+    console.log('⚙️ Site settings saved');
+}
+
+function saveSocialMediaSettings() {
+    const spotify = document.getElementById('spotifyUrl').value;
+    const youtube = document.getElementById('youtubeUrl').value;
+    const instagram = document.getElementById('instagramUrl').value;
+    
+    localStorage.setItem('social_spotify', spotify);
+    localStorage.setItem('social_youtube', youtube);
+    localStorage.setItem('social_instagram', instagram);
+    
+    applySocialMediaToMainSite(spotify, youtube, instagram);
+    showNotification('Social media links saved!', 'success');
+    console.log('📱 Social media settings saved');
+}
+
+function applySocialMediaToMainSite(spotify, youtube, instagram) {
+    const targetWindow = window.opener || window.parent || window;
+    
+    // Update footer social links
+    const footerSocial = targetWindow.document.querySelectorAll('.footer-social a');
+    const socialLinks = targetWindow.document.querySelectorAll('.social-link');
+    
+    // Update Spotify links
+    if (spotify) {
+        footerSocial.forEach(link => {
+            if (link.querySelector('.fa-spotify')) {
+                link.href = spotify;
+            }
+        });
+        socialLinks.forEach(link => {
+            if (link.querySelector('.fa-spotify')) {
+                link.href = spotify;
+            }
+        });
+    }
+    
+    // Update YouTube links
+    if (youtube) {
+        footerSocial.forEach(link => {
+            if (link.querySelector('.fa-youtube')) {
+                link.href = youtube;
+            }
+        });
+        socialLinks.forEach(link => {
+            if (link.querySelector('.fa-youtube')) {
+                link.href = youtube;
+            }
+        });
+    }
+    
+    // Update Instagram links
+    if (instagram) {
+        footerSocial.forEach(link => {
+            if (link.querySelector('.fa-instagram')) {
+                link.href = instagram;
+            }
+        });
+        socialLinks.forEach(link => {
+            if (link.querySelector('.fa-instagram')) {
+                link.href = instagram;
+            }
+        });
+    }
+}
+
+function loadContentFromLocalStorage() {
+    // Load about text
+    const englishText = localStorage.getItem('about_text_en');
+    const turkishText = localStorage.getItem('about_text_tr');
+    
+    if (englishText) {
+        const aboutTextEn = document.getElementById('aboutTextEn');
+        if (aboutTextEn) aboutTextEn.value = englishText;
+    }
+    
+    if (turkishText) {
+        const aboutTextTr = document.getElementById('aboutTextTr');
+        if (aboutTextTr) aboutTextTr.value = turkishText;
+    }
+    
+    // Load hero content
+    const heroTitle = localStorage.getItem('hero_title');
+    const heroSubtitle = localStorage.getItem('hero_subtitle');
+    const heroDescription = localStorage.getItem('hero_description');
+    
+    if (heroTitle) {
+        const titleEl = document.getElementById('heroTitle');
+        if (titleEl) titleEl.value = heroTitle;
+    }
+    
+    if (heroSubtitle) {
+        const subtitleEl = document.getElementById('heroSubtitle');
+        if (subtitleEl) subtitleEl.value = heroSubtitle;
+    }
+    
+    if (heroDescription) {
+        const descEl = document.getElementById('heroDescription');
+        if (descEl) descEl.value = heroDescription;
+    }
+    
+    // Load contact info
+    const email = localStorage.getItem('contact_email');
+    const phone = localStorage.getItem('contact_phone');
+    const location = localStorage.getItem('contact_location');
+    
+    if (email) {
+        const emailEl = document.querySelector('#content input[type="email"]');
+        if (emailEl) emailEl.value = email;
+    }
+    
+    if (phone) {
+        const phoneEl = document.querySelector('#content input[type="tel"]');
+        if (phoneEl) phoneEl.value = phone;
+    }
+    
+    if (location) {
+        const locationEl = document.querySelector('#content input[type="text"]');
+        if (locationEl) locationEl.value = location;
+    }
 }
 
 // Initialize authentication system
@@ -1110,6 +1345,11 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (loginScreen && adminPanel) {
         new AdminAuth();
+        
+        // Load saved content when admin panel is ready
+        setTimeout(() => {
+            loadContentFromLocalStorage();
+        }, 500);
     } else {
         console.error('Required elements not found!');
         
@@ -1121,6 +1361,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (retryLoginScreen && retryAdminPanel) {
                 console.log('Found elements on retry, initializing auth...');
                 new AdminAuth();
+                
+                // Load saved content
+                setTimeout(() => {
+                    loadContentFromLocalStorage();
+                }, 500);
             } else {
                 console.error('Elements still not found after retry');
             }
