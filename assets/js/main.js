@@ -719,18 +719,29 @@ class ContentSync {
     initSync() {
         // Listen for storage changes (from admin panel)
         window.addEventListener('storage', (e) => {
-            if (e.key && e.key.startsWith('about_text_') || 
-                e.key && e.key.startsWith('hero_') ||
-                e.key && e.key.startsWith('contact_')) {
+            console.log('🔄 Storage change detected:', e.key, e.newValue);
+            if (e.key && (e.key.startsWith('about_text_') || 
+                         e.key.startsWith('hero_') ||
+                         e.key.startsWith('contact_') ||
+                         e.key.startsWith('site_') ||
+                         e.key.startsWith('social_'))) {
                 this.loadSavedContent();
+                this.loadSocialMedia();
+                this.loadSiteSettings();
             }
         });
         
-        // Check for updates every 2 seconds
+        // Force sync every 1 second for more responsive updates
         setInterval(() => {
             this.loadSavedContent();
-            this.loadSocialMedia();
-        }, 2000);
+            this.loadSocialMedia(); 
+            this.loadSiteSettings();
+        }, 1000);
+        
+        // Initial load
+        this.loadSavedContent();
+        this.loadSocialMedia();
+        this.loadSiteSettings();
     }
     
     loadSavedContent() {
@@ -765,54 +776,122 @@ class ContentSync {
     updateAboutSection(englishText) {
         const aboutSection = document.querySelector('#about .about-text');
         if (aboutSection && englishText) {
+            const currentContent = aboutSection.innerHTML;
             const paragraphs = englishText.split('\n').filter(p => p.trim());
-            aboutSection.innerHTML = `
+            const newContent = `
                 <h3>My Musical Journey</h3>
                 ${paragraphs.map(p => `<p>${p}</p>`).join('')}
+                <div class="skills">
+                    <div class="skill-item">
+                        <i class="fas fa-music"></i>
+                        <span>Piano</span>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>Music Production</span>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-film"></i>
+                        <span>Cinematic Music</span>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-headphones"></i>
+                        <span>Composition</span>
+                    </div>
+                </div>
             `;
-            console.log('✅ About section updated from admin panel');
+            
+            if (currentContent !== newContent) {
+                aboutSection.innerHTML = newContent;
+                console.log('✅ About section updated from admin panel');
+            }
         }
     }
     
     updateHeroTitle(title) {
-        const heroTitle = document.querySelector('.hero-title .title-line.highlight');
-        if (heroTitle && title && heroTitle.textContent !== title) {
-            heroTitle.textContent = title;
-            console.log('✅ Hero title updated from admin panel');
+        // Try multiple selectors for hero title
+        const selectors = [
+            '.hero-title .title-line.highlight',
+            '.hero-title .highlight',
+            '.hero-title span:last-child',
+            '.hero-title'
+        ];
+        
+        for (let selector of selectors) {
+            const heroTitle = document.querySelector(selector);
+            if (heroTitle && title && heroTitle.textContent !== title) {
+                heroTitle.textContent = title;
+                console.log('✅ Hero title updated from admin panel:', title);
+                break;
+            }
         }
     }
     
     updateHeroDescription(description) {
         const heroDesc = document.querySelector('.hero-description');
-        if (heroDesc && description && heroDesc.textContent !== description) {
+        if (heroDesc && description && heroDesc.textContent.trim() !== description.trim()) {
             heroDesc.textContent = description;
-            console.log('✅ Hero description updated from admin panel');
+            console.log('✅ Hero description updated from admin panel:', description);
         }
     }
     
     updateContactInfo(email, phone, location) {
+        // Update email in multiple places
         if (email) {
-            const emailEl = document.querySelector('.contact-items .contact-item:nth-child(1) p');
-            if (emailEl && emailEl.textContent !== email) {
-                emailEl.textContent = email;
-                console.log('✅ Contact email updated from admin panel');
-            }
+            const emailSelectors = [
+                '.contact-items .contact-item:nth-child(1) p',
+                '.footer-contact p:first-child',
+                '[href^="mailto:"]'
+            ];
+            
+            emailSelectors.forEach(selector => {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(el => {
+                    if (el && el.textContent !== email) {
+                        if (el.tagName === 'A') {
+                            el.href = `mailto:${email}`;
+                        }
+                        el.textContent = email;
+                    }
+                });
+            });
+            console.log('✅ Contact email updated from admin panel:', email);
         }
         
+        // Update phone in multiple places
         if (phone) {
-            const phoneEl = document.querySelector('.contact-items .contact-item:nth-child(2) p');
-            if (phoneEl && phoneEl.textContent !== phone) {
-                phoneEl.textContent = phone;
-                console.log('✅ Contact phone updated from admin panel');
-            }
+            const phoneSelectors = [
+                '.contact-items .contact-item:nth-child(2) p',
+                '.footer-contact p:nth-child(2)'
+            ];
+            
+            phoneSelectors.forEach(selector => {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(el => {
+                    if (el && el.textContent !== phone) {
+                        el.textContent = phone;
+                    }
+                });
+            });
+            console.log('✅ Contact phone updated from admin panel:', phone);
         }
         
+        // Update location in multiple places
         if (location) {
-            const locationEl = document.querySelector('.contact-items .contact-item:nth-child(3) p');
-            if (locationEl && locationEl.textContent !== location) {
-                locationEl.textContent = location;
-                console.log('✅ Contact location updated from admin panel');
-            }
+            const locationSelectors = [
+                '.contact-items .contact-item:nth-child(3) p',
+                '.footer-contact p:last-child'
+            ];
+            
+            locationSelectors.forEach(selector => {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(el => {
+                    if (el && el.textContent !== location) {
+                        el.textContent = location;
+                    }
+                });
+            });
+            console.log('✅ Contact location updated from admin panel:', location);
         }
     }
     
@@ -827,50 +906,66 @@ class ContentSync {
     }
     
     updateSocialLinks(spotify, youtube, instagram) {
-        // Update footer social links
-        const footerSocial = document.querySelectorAll('.footer-social a');
-        const socialLinks = document.querySelectorAll('.social-link');
+        // Get all social link containers
+        const socialContainers = [
+            document.querySelectorAll('.footer-social a'),
+            document.querySelectorAll('.social-link'),
+            document.querySelectorAll('.social-links a')
+        ];
         
         // Update Spotify links
-        if (spotify) {
-            footerSocial.forEach(link => {
-                if (link.querySelector('.fa-spotify')) {
-                    link.href = spotify;
-                }
-            });
-            socialLinks.forEach(link => {
-                if (link.querySelector('.fa-spotify')) {
-                    link.href = spotify;
-                }
+        if (spotify && spotify.trim()) {
+            socialContainers.forEach(container => {
+                container.forEach(link => {
+                    if (link.querySelector('.fa-spotify') || link.href.includes('spotify')) {
+                        link.href = spotify;
+                        console.log('✅ Spotify link updated:', spotify);
+                    }
+                });
             });
         }
         
         // Update YouTube links
-        if (youtube) {
-            footerSocial.forEach(link => {
-                if (link.querySelector('.fa-youtube')) {
-                    link.href = youtube;
-                }
-            });
-            socialLinks.forEach(link => {
-                if (link.querySelector('.fa-youtube')) {
-                    link.href = youtube;
-                }
+        if (youtube && youtube.trim()) {
+            socialContainers.forEach(container => {
+                container.forEach(link => {
+                    if (link.querySelector('.fa-youtube') || link.href.includes('youtube')) {
+                        link.href = youtube;
+                        console.log('✅ YouTube link updated:', youtube);
+                    }
+                });
             });
         }
         
         // Update Instagram links
-        if (instagram) {
-            footerSocial.forEach(link => {
-                if (link.querySelector('.fa-instagram')) {
-                    link.href = instagram;
-                }
+        if (instagram && instagram.trim()) {
+            socialContainers.forEach(container => {
+                container.forEach(link => {
+                    if (link.querySelector('.fa-instagram') || link.href.includes('instagram')) {
+                        link.href = instagram;
+                        console.log('✅ Instagram link updated:', instagram);
+                    }
+                });
             });
-            socialLinks.forEach(link => {
-                if (link.querySelector('.fa-instagram')) {
-                    link.href = instagram;
-                }
-            });
+        }
+    }
+    
+    loadSiteSettings() {
+        const siteTitle = localStorage.getItem('site_title');
+        const siteDescription = localStorage.getItem('site_description');
+        
+        if (siteTitle && document.title !== siteTitle) {
+            document.title = siteTitle;
+            console.log('✅ Site title updated:', siteTitle);
+        }
+        
+        if (siteDescription) {
+            // Update meta description
+            let metaDesc = document.querySelector('meta[name="description"]');
+            if (metaDesc && metaDesc.content !== siteDescription) {
+                metaDesc.content = siteDescription;
+                console.log('✅ Meta description updated:', siteDescription);
+            }
         }
     }
 }
