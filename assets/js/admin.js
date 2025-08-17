@@ -977,5 +977,31 @@ if (window.innerWidth <= 768) {
 
 // Initialize authentication system
 document.addEventListener('DOMContentLoaded', () => {
-    new AdminAuth();
+    console.log('DOM loaded, initializing auth...'); // Debug
+    
+    // Check if elements exist
+    const loginScreen = document.getElementById('loginScreen');
+    const adminPanel = document.getElementById('adminPanel');
+    
+    console.log('Login screen exists:', !!loginScreen); // Debug
+    console.log('Admin panel exists:', !!adminPanel); // Debug
+    
+    if (loginScreen && adminPanel) {
+        new AdminAuth();
+    } else {
+        console.error('Required elements not found!');
+        
+        // Fallback: try to find admin panel after 1 second
+        setTimeout(() => {
+            const retryLoginScreen = document.getElementById('loginScreen');
+            const retryAdminPanel = document.getElementById('adminPanel');
+            
+            if (retryLoginScreen && retryAdminPanel) {
+                console.log('Found elements on retry, initializing auth...');
+                new AdminAuth();
+            } else {
+                console.error('Elements still not found after retry');
+            }
+        }, 1000);
+    }
 });
