@@ -79,9 +79,12 @@ class AdminAuth {
         const loginBtn = document.querySelector('.login-btn');
         const attemptsSpan = document.getElementById('attemptsLeft');
         
-        const password = passwordInput.value.trim();
+        if (!passwordInput || !loginBtn) {
+            console.error('Required login elements not found');
+            return;
+        }
         
-        console.log('Login attempt with password:', password); // Debug
+        const password = passwordInput.value.trim();
         
         if (!password) {
             this.showError('Please enter a password.');
@@ -100,13 +103,9 @@ class AdminAuth {
         // Simulate network delay for security
         await new Promise(resolve => setTimeout(resolve, 1000));
         
-        console.log('Verifying password:', password === 'H1a2s3a4n5+'); // Debug
-        
         if (this.verifyPassword(password)) {
-            console.log('Password correct, logging in...'); // Debug
             this.loginSuccess();
         } else {
-            console.log('Password incorrect'); // Debug
             this.loginFailed();
         }
         
@@ -202,22 +201,15 @@ class AdminAuth {
     }
     
     showAdminPanel() {
-        console.log('Showing admin panel...'); // Debug
-        
         const loginScreen = document.getElementById('loginScreen');
         const adminPanel = document.getElementById('adminPanel');
         
-        console.log('Login screen element:', loginScreen); // Debug
-        console.log('Admin panel element:', adminPanel); // Debug
-        
         if (loginScreen) {
             loginScreen.style.display = 'none';
-            console.log('Login screen hidden'); // Debug
         }
         
         if (adminPanel) {
             adminPanel.style.display = 'block';
-            console.log('Admin panel shown'); // Debug
         } else {
             console.error('Admin panel element not found!');
         }
@@ -3484,3 +3476,2967 @@ class AnalyticsDashboard {
 
 // Initialize analytics dashboard
 const analyticsDashboard = new AnalyticsDashboard();
+
+// Auto-backup Scheduler System
+class AutoBackupScheduler {
+    constructor() {
+        this.isEnabled = JSON.parse(localStorage.getItem('autoBackup_enabled') || 'false');
+        this.interval = parseInt(localStorage.getItem('autoBackup_interval') || '24'); // hours
+        this.maxBackups = parseInt(localStorage.getItem('autoBackup_maxBackups') || '7');
+        this.lastBackup = parseInt(localStorage.getItem('autoBackup_lastBackup') || '0');
+        this.schedulerInterval = null;
+        this.init();
+    }
+    
+    init() {
+        this.addBackupSettingsToUI();
+        this.startScheduler();
+        this.cleanOldBackups();
+    }
+    
+    addBackupSettingsToUI() {
+        const settingsSection = document.getElementById('settings');
+        if (!settingsSection) return;
+        
+        const backupSettingsHTML = `
+            <div class="editor-section">
+                <h3><i class="fas fa-clock"></i> Auto-backup Settings</h3>
+                <div class="backup-settings">
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="autoBackupEnabled" ${this.isEnabled ? 'checked' : ''}>
+                            <span class="checkmark"></span>
+                            Enable automatic backups
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="backupInterval">Backup Interval (hours):</label>
+                        <select id="backupInterval" class="form-select">
+                            <option value="1" ${this.interval === 1 ? 'selected' : ''}>Every hour</option>
+                            <option value="6" ${this.interval === 6 ? 'selected' : ''}>Every 6 hours</option>
+                            <option value="12" ${this.interval === 12 ? 'selected' : ''}>Every 12 hours</option>
+                            <option value="24" ${this.interval === 24 ? 'selected' : ''}>Daily</option>
+                            <option value="168" ${this.interval === 168 ? 'selected' : ''}>Weekly</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="maxBackups">Maximum backups to keep:</label>
+                        <select id="maxBackups" class="form-select">
+                            <option value="3" ${this.maxBackups === 3 ? 'selected' : ''}>3 backups</option>
+                            <option value="5" ${this.maxBackups === 5 ? 'selected' : ''}>5 backups</option>
+                            <option value="7" ${this.maxBackups === 7 ? 'selected' : ''}>7 backups</option>
+                            <option value="10" ${this.maxBackups === 10 ? 'selected' : ''}>10 backups</option>
+                            <option value="15" ${this.maxBackups === 15 ? 'selected' : ''}>15 backups</option>
+                        </select>
+                    </div>
+                    
+                    <div class="backup-status">
+                        <div class="status-item">
+                            <span class="status-label">Last backup:</span>
+                            <span class="status-value" id="lastBackupTime">${this.formatLastBackupTime()}</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Next backup:</span>
+                            <span class="status-value" id="nextBackupTime">${this.getNextBackupTime()}</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Stored backups:</span>
+                            <span class="status-value" id="storedBackups">${this.getStoredBackupsCount()}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="backup-actions">
+                        <button class="btn btn-primary" onclick="autoBackupScheduler.saveSettings()">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                        <button class="btn btn-secondary" onclick="autoBackupScheduler.createManualBackup()">
+                            <i class="fas fa-backup"></i> Backup Now
+                        </button>
+                        <button class="btn btn-outline-secondary" onclick="autoBackupScheduler.showBackupHistory()">
+                            <i class="fas fa-history"></i> View Backups
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        settingsSection.insertAdjacentHTML('beforeend', backupSettingsHTML);
+    }
+    
+    saveSettings() {
+        const enabled = document.getElementById('autoBackupEnabled').checked;
+        const interval = parseInt(document.getElementById('backupInterval').value);
+        const maxBackups = parseInt(document.getElementById('maxBackups').value);
+        
+        this.isEnabled = enabled;
+        this.interval = interval;
+        this.maxBackups = maxBackups;
+        
+        localStorage.setItem('autoBackup_enabled', JSON.stringify(enabled));
+        localStorage.setItem('autoBackup_interval', interval.toString());
+        localStorage.setItem('autoBackup_maxBackups', maxBackups.toString());
+        
+        this.startScheduler();
+        this.updateStatusDisplay();
+        
+        notificationManager.show('Auto-backup settings saved successfully', 'success');
+    }
+    
+    startScheduler() {
+        // Clear existing scheduler
+        if (this.schedulerInterval) {
+            clearInterval(this.schedulerInterval);
+        }
+        
+        if (!this.isEnabled) return;
+        
+        // Check every minute if backup is needed
+        this.schedulerInterval = setInterval(() => {
+            this.checkAndBackup();
+        }, 60000); // 1 minute
+        
+        console.log(`🔄 Auto-backup scheduler started (${this.interval}h interval)`);
+    }
+    
+    checkAndBackup() {
+        if (!this.isEnabled) return;
+        
+        const now = Date.now();
+        const intervalMs = this.interval * 60 * 60 * 1000; // Convert hours to milliseconds
+        
+        if (now - this.lastBackup >= intervalMs) {
+            this.createAutomaticBackup();
+        }
+    }
+    
+    createAutomaticBackup() {
+        console.log('🔄 Creating automatic backup...');
+        
+        const backupData = this.gatherBackupData();
+        const backupId = 'auto_' + Date.now();
+        const backup = {
+            id: backupId,
+            type: 'automatic',
+            timestamp: Date.now(),
+            data: backupData,
+            size: JSON.stringify(backupData).length
+        };
+        
+        this.saveBackup(backup);
+        this.lastBackup = Date.now();
+        localStorage.setItem('autoBackup_lastBackup', this.lastBackup.toString());
+        
+        this.cleanOldBackups();
+        this.updateStatusDisplay();
+        
+        notificationManager.show('Automatic backup created successfully', 'success');
+        console.log('✅ Automatic backup completed:', backupId);
+    }
+    
+    createManualBackup() {
+        console.log('🔄 Creating manual backup...');
+        
+        const backupData = this.gatherBackupData();
+        const backupId = 'manual_' + Date.now();
+        const backup = {
+            id: backupId,
+            type: 'manual',
+            timestamp: Date.now(),
+            data: backupData,
+            size: JSON.stringify(backupData).length
+        };
+        
+        this.saveBackup(backup);
+        this.updateStatusDisplay();
+        
+        notificationManager.show('Manual backup created successfully', 'success');
+        console.log('✅ Manual backup completed:', backupId);
+    }
+    
+    gatherBackupData() {
+        return {
+            uploadedMusic: JSON.parse(localStorage.getItem('uploadedMusic') || '[]'),
+            uploadedGallery: JSON.parse(localStorage.getItem('uploadedGallery') || '[]'),
+            about_text_en: localStorage.getItem('about_text_en') || '',
+            about_text_tr: localStorage.getItem('about_text_tr') || '',
+            hero_title: localStorage.getItem('hero_title') || '',
+            hero_subtitle: localStorage.getItem('hero_subtitle') || '',
+            hero_description: localStorage.getItem('hero_description') || '',
+            contact_email: localStorage.getItem('contact_email') || '',
+            contact_phone: localStorage.getItem('contact_phone') || '',
+            contact_address: localStorage.getItem('contact_address') || '',
+            site_title: localStorage.getItem('site_title') || '',
+            site_description: localStorage.getItem('site_description') || '',
+            social_spotify: localStorage.getItem('social_spotify') || '',
+            social_youtube: localStorage.getItem('social_youtube') || '',
+            social_instagram: localStorage.getItem('social_instagram') || '',
+            page_views: localStorage.getItem('page_views') || '0',
+            unique_visitors: localStorage.getItem('unique_visitors') || '0',
+            visitor_analytics: JSON.parse(localStorage.getItem('visitor_analytics') || '[]'),
+            timestamp: Date.now(),
+            version: '1.0'
+        };
+    }
+    
+    saveBackup(backup) {
+        const backups = JSON.parse(localStorage.getItem('system_backups') || '[]');
+        backups.push(backup);
+        
+        // Sort by timestamp (newest first)
+        backups.sort((a, b) => b.timestamp - a.timestamp);
+        
+        localStorage.setItem('system_backups', JSON.stringify(backups));
+    }
+    
+    cleanOldBackups() {
+        const backups = JSON.parse(localStorage.getItem('system_backups') || '[]');
+        
+        if (backups.length > this.maxBackups) {
+            const toKeep = backups.slice(0, this.maxBackups);
+            localStorage.setItem('system_backups', JSON.stringify(toKeep));
+            
+            const removed = backups.length - this.maxBackups;
+            console.log(`🧹 Cleaned ${removed} old backup(s)`);
+        }
+    }
+    
+    getStoredBackupsCount() {
+        const backups = JSON.parse(localStorage.getItem('system_backups') || '[]');
+        return backups.length;
+    }
+    
+    formatLastBackupTime() {
+        if (this.lastBackup === 0) return 'Never';
+        return new Date(this.lastBackup).toLocaleString();
+    }
+    
+    getNextBackupTime() {
+        if (!this.isEnabled || this.lastBackup === 0) return 'N/A';
+        const nextBackup = this.lastBackup + (this.interval * 60 * 60 * 1000);
+        return new Date(nextBackup).toLocaleString();
+    }
+    
+    updateStatusDisplay() {
+        const lastBackupEl = document.getElementById('lastBackupTime');
+        const nextBackupEl = document.getElementById('nextBackupTime');
+        const storedBackupsEl = document.getElementById('storedBackups');
+        
+        if (lastBackupEl) lastBackupEl.textContent = this.formatLastBackupTime();
+        if (nextBackupEl) nextBackupEl.textContent = this.getNextBackupTime();
+        if (storedBackupsEl) storedBackupsEl.textContent = this.getStoredBackupsCount();
+    }
+    
+    showBackupHistory() {
+        const backups = JSON.parse(localStorage.getItem('system_backups') || '[]');
+        
+        if (backups.length === 0) {
+            notificationManager.show('No backups found', 'info');
+            return;
+        }
+        
+        const modal = document.createElement('div');
+        modal.className = 'backup-history-modal';
+        modal.innerHTML = `
+            <div class="modal-overlay" onclick="this.parentElement.remove()"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-history"></i> Backup History</h3>
+                    <button class="modal-close" onclick="this.closest('.backup-history-modal').remove()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="backup-list">
+                        ${backups.map(backup => `
+                            <div class="backup-item">
+                                <div class="backup-info">
+                                    <div class="backup-id">${backup.id}</div>
+                                    <div class="backup-meta">
+                                        <span class="backup-type ${backup.type}">${backup.type}</span>
+                                        <span class="backup-date">${new Date(backup.timestamp).toLocaleString()}</span>
+                                        <span class="backup-size">${this.formatFileSize(backup.size)}</span>
+                                    </div>
+                                </div>
+                                <div class="backup-actions">
+                                    <button class="btn btn-sm btn-secondary" onclick="autoBackupScheduler.restoreBackup('${backup.id}')">
+                                        <i class="fas fa-undo"></i> Restore
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="autoBackupScheduler.downloadBackup('${backup.id}')">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="autoBackupScheduler.deleteBackup('${backup.id}')">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+    }
+    
+    restoreBackup(backupId) {
+        if (!confirm('This will restore all data from the selected backup. Current data will be overwritten. Are you sure?')) {
+            return;
+        }
+        
+        const backups = JSON.parse(localStorage.getItem('system_backups') || '[]');
+        const backup = backups.find(b => b.id === backupId);
+        
+        if (!backup) {
+            notificationManager.show('Backup not found', 'error');
+            return;
+        }
+        
+        // Restore all data
+        Object.entries(backup.data).forEach(([key, value]) => {
+            if (typeof value === 'object') {
+                localStorage.setItem(key, JSON.stringify(value));
+            } else {
+                localStorage.setItem(key, value);
+            }
+        });
+        
+        notificationManager.show('Backup restored successfully. Please refresh the page.', 'success');
+        
+        // Close modal and refresh after delay
+        document.querySelector('.backup-history-modal')?.remove();
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
+    }
+    
+    downloadBackup(backupId) {
+        const backups = JSON.parse(localStorage.getItem('system_backups') || '[]');
+        const backup = backups.find(b => b.id === backupId);
+        
+        if (!backup) {
+            notificationManager.show('Backup not found', 'error');
+            return;
+        }
+        
+        const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `backup-${backup.id}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        notificationManager.show('Backup downloaded successfully', 'success');
+    }
+    
+    deleteBackup(backupId) {
+        if (!confirm('Are you sure you want to delete this backup?')) {
+            return;
+        }
+        
+        const backups = JSON.parse(localStorage.getItem('system_backups') || '[]');
+        const filteredBackups = backups.filter(b => b.id !== backupId);
+        
+        localStorage.setItem('system_backups', JSON.stringify(filteredBackups));
+        
+        // Close modal and refresh
+        document.querySelector('.backup-history-modal')?.remove();
+        this.showBackupHistory();
+        this.updateStatusDisplay();
+        
+        notificationManager.show('Backup deleted successfully', 'success');
+    }
+    
+    formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+}
+
+// Initialize auto-backup scheduler
+const autoBackupScheduler = new AutoBackupScheduler();
+
+// Version Control System for Content Changes
+class VersionControl {
+    constructor() {
+        this.maxVersions = 50; // Keep last 50 versions per content item
+        this.init();
+    }
+    
+    init() {
+        this.addVersionControlToUI();
+        this.interceptContentSaves();
+    }
+    
+    addVersionControlToUI() {
+        // Add version control button to content section
+        const contentSection = document.getElementById('content');
+        if (!contentSection) return;
+        
+        const versionControlHTML = `
+            <div class="editor-section">
+                <h3><i class="fas fa-code-branch"></i> Version Control</h3>
+                <div class="version-control-panel">
+                    <div class="version-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Total Versions:</span>
+                            <span class="stat-value" id="totalVersions">${this.getTotalVersionsCount()}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Storage Used:</span>
+                            <span class="stat-value" id="versionsStorage">${this.getVersionsStorageSize()}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="version-actions">
+                        <button class="btn btn-secondary" onclick="versionControl.showVersionHistory()">
+                            <i class="fas fa-history"></i> View History
+                        </button>
+                        <button class="btn btn-outline-secondary" onclick="versionControl.createSnapshot()">
+                            <i class="fas fa-camera"></i> Create Snapshot
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="versionControl.cleanOldVersions()">
+                            <i class="fas fa-broom"></i> Clean Old Versions
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        contentSection.insertAdjacentHTML('beforeend', versionControlHTML);
+    }
+    
+    interceptContentSaves() {
+        // Override existing save functions to track versions
+        this.overrideSaveFunction('saveAboutText', ['about_text_en', 'about_text_tr']);
+        this.overrideSaveFunction('saveHeroContent', ['hero_title', 'hero_subtitle', 'hero_description']);
+        this.overrideSaveFunction('saveContactInfo', ['contact_email', 'contact_phone', 'contact_address']);
+        this.overrideSaveFunction('saveSiteSettings', ['site_title', 'site_description']);
+        this.overrideSaveFunction('saveSocialMediaSettings', ['social_spotify', 'social_youtube', 'social_instagram']);
+    }
+    
+    overrideSaveFunction(functionName, trackedKeys) {
+        const originalFunction = window[functionName];
+        if (!originalFunction) return;
+        
+        window[functionName] = (...args) => {
+            // Save version before making changes
+            this.saveVersion(functionName, trackedKeys);
+            
+            // Call original function
+            const result = originalFunction.apply(this, args);
+            
+            return result;
+        };
+    }
+    
+    saveVersion(actionType, keys) {
+        const version = {
+            id: 'version_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+            actionType: actionType,
+            timestamp: Date.now(),
+            user: 'admin', // In multi-user system, this would be actual user
+            data: {},
+            message: this.generateCommitMessage(actionType)
+        };
+        
+        // Capture current state of tracked keys
+        keys.forEach(key => {
+            version.data[key] = localStorage.getItem(key) || '';
+        });
+        
+        this.storeVersion(version);
+        console.log(`📝 Version saved: ${version.id} (${actionType})`);
+    }
+    
+    storeVersion(version) {
+        const versions = JSON.parse(localStorage.getItem('content_versions') || '[]');
+        versions.push(version);
+        
+        // Sort by timestamp (newest first)
+        versions.sort((a, b) => b.timestamp - a.timestamp);
+        
+        // Keep only max versions
+        if (versions.length > this.maxVersions) {
+            versions.splice(this.maxVersions);
+        }
+        
+        localStorage.setItem('content_versions', JSON.stringify(versions));
+        this.updateVersionStats();
+    }
+    
+    generateCommitMessage(actionType) {
+        const messages = {
+            'saveAboutText': 'Updated about section content',
+            'saveHeroContent': 'Modified hero section content',
+            'saveContactInfo': 'Updated contact information',
+            'saveSiteSettings': 'Changed site settings',
+            'saveSocialMediaSettings': 'Updated social media links'
+        };
+        
+        return messages[actionType] || `Updated ${actionType}`;
+    }
+    
+    createSnapshot() {
+        const snapshotData = {
+            uploadedMusic: JSON.parse(localStorage.getItem('uploadedMusic') || '[]'),
+            uploadedGallery: JSON.parse(localStorage.getItem('uploadedGallery') || '[]'),
+            about_text_en: localStorage.getItem('about_text_en') || '',
+            about_text_tr: localStorage.getItem('about_text_tr') || '',
+            hero_title: localStorage.getItem('hero_title') || '',
+            hero_subtitle: localStorage.getItem('hero_subtitle') || '',
+            hero_description: localStorage.getItem('hero_description') || '',
+            contact_email: localStorage.getItem('contact_email') || '',
+            contact_phone: localStorage.getItem('contact_phone') || '',
+            contact_address: localStorage.getItem('contact_address') || '',
+            site_title: localStorage.getItem('site_title') || '',
+            site_description: localStorage.getItem('site_description') || '',
+            social_spotify: localStorage.getItem('social_spotify') || '',
+            social_youtube: localStorage.getItem('social_youtube') || '',
+            social_instagram: localStorage.getItem('social_instagram') || ''
+        };
+        
+        const snapshot = {
+            id: 'snapshot_' + Date.now(),
+            actionType: 'manual_snapshot',
+            timestamp: Date.now(),
+            user: 'admin',
+            data: snapshotData,
+            message: 'Manual snapshot created'
+        };
+        
+        this.storeVersion(snapshot);
+        notificationManager.show('Snapshot created successfully', 'success');
+    }
+    
+    showVersionHistory() {
+        const versions = JSON.parse(localStorage.getItem('content_versions') || '[]');
+        
+        if (versions.length === 0) {
+            notificationManager.show('No version history found', 'info');
+            return;
+        }
+        
+        const modal = document.createElement('div');
+        modal.className = 'version-history-modal';
+        modal.innerHTML = `
+            <div class="modal-overlay" onclick="this.parentElement.remove()"></div>
+            <div class="modal-content large">
+                <div class="modal-header">
+                    <h3><i class="fas fa-code-branch"></i> Version History</h3>
+                    <button class="modal-close" onclick="this.closest('.version-history-modal').remove()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="version-timeline">
+                        ${versions.map((version, index) => `
+                            <div class="version-item ${version.actionType.includes('snapshot') ? 'snapshot' : ''}">
+                                <div class="version-marker"></div>
+                                <div class="version-content">
+                                    <div class="version-header">
+                                        <div class="version-meta">
+                                            <span class="version-id">${version.id}</span>
+                                            <span class="version-time">${new Date(version.timestamp).toLocaleString()}</span>
+                                            <span class="version-user">by ${version.user}</span>
+                                        </div>
+                                        <div class="version-actions">
+                                            <button class="btn btn-sm btn-secondary" onclick="versionControl.compareVersions('${version.id}')">
+                                                <i class="fas fa-columns"></i> Compare
+                                            </button>
+                                            <button class="btn btn-sm btn-primary" onclick="versionControl.restoreVersion('${version.id}')">
+                                                <i class="fas fa-undo"></i> Restore
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary" onclick="versionControl.exportVersion('${version.id}')">
+                                                <i class="fas fa-download"></i> Export
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="version-message">${version.message}</div>
+                                    <div class="version-changes">
+                                        Changed: ${Object.keys(version.data).length} item(s)
+                                        ${Object.keys(version.data).slice(0, 3).join(', ')}
+                                        ${Object.keys(version.data).length > 3 ? '...' : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+    }
+    
+    compareVersions(versionId) {
+        const versions = JSON.parse(localStorage.getItem('content_versions') || '[]');
+        const version = versions.find(v => v.id === versionId);
+        
+        if (!version) {
+            notificationManager.show('Version not found', 'error');
+            return;
+        }
+        
+        const currentData = {};
+        Object.keys(version.data).forEach(key => {
+            currentData[key] = localStorage.getItem(key) || '';
+        });
+        
+        const modal = document.createElement('div');
+        modal.className = 'version-compare-modal';
+        modal.innerHTML = `
+            <div class="modal-overlay" onclick="this.parentElement.remove()"></div>
+            <div class="modal-content extra-large">
+                <div class="modal-header">
+                    <h3><i class="fas fa-columns"></i> Compare Versions</h3>
+                    <button class="modal-close" onclick="this.closest('.version-compare-modal').remove()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="compare-header">
+                        <div class="compare-column">
+                            <h4>Current Version</h4>
+                            <span class="compare-meta">Live content</span>
+                        </div>
+                        <div class="compare-column">
+                            <h4>Version: ${version.id}</h4>
+                            <span class="compare-meta">${new Date(version.timestamp).toLocaleString()}</span>
+                        </div>
+                    </div>
+                    <div class="compare-content">
+                        ${Object.keys(version.data).map(key => `
+                            <div class="compare-item">
+                                <div class="compare-key">${key}</div>
+                                <div class="compare-values">
+                                    <div class="compare-current">
+                                        <pre>${this.escapeHtml(currentData[key] || 'Empty')}</pre>
+                                    </div>
+                                    <div class="compare-version">
+                                        <pre>${this.escapeHtml(version.data[key] || 'Empty')}</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+    }
+    
+    restoreVersion(versionId) {
+        if (!confirm('This will restore all content to the selected version. Current changes will be lost. Are you sure?')) {
+            return;
+        }
+        
+        const versions = JSON.parse(localStorage.getItem('content_versions') || '[]');
+        const version = versions.find(v => v.id === versionId);
+        
+        if (!version) {
+            notificationManager.show('Version not found', 'error');
+            return;
+        }
+        
+        // Save current state before restoring
+        this.createSnapshot();
+        
+        // Restore version data
+        Object.entries(version.data).forEach(([key, value]) => {
+            if (typeof value === 'object') {
+                localStorage.setItem(key, JSON.stringify(value));
+            } else {
+                localStorage.setItem(key, value);
+            }
+        });
+        
+        notificationManager.show('Version restored successfully. Please refresh the page.', 'success');
+        
+        // Close modal and refresh
+        document.querySelector('.version-history-modal')?.remove();
+        document.querySelector('.version-compare-modal')?.remove();
+        
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
+    }
+    
+    exportVersion(versionId) {
+        const versions = JSON.parse(localStorage.getItem('content_versions') || '[]');
+        const version = versions.find(v => v.id === versionId);
+        
+        if (!version) {
+            notificationManager.show('Version not found', 'error');
+            return;
+        }
+        
+        const blob = new Blob([JSON.stringify(version, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `version-${version.id}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        notificationManager.show('Version exported successfully', 'success');
+    }
+    
+    cleanOldVersions() {
+        if (!confirm('This will remove old versions to free up storage space. Continue?')) {
+            return;
+        }
+        
+        const versions = JSON.parse(localStorage.getItem('content_versions') || '[]');
+        const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+        
+        // Keep snapshots and recent versions (last week)
+        const filteredVersions = versions.filter(v => 
+            v.actionType.includes('snapshot') || v.timestamp > oneWeekAgo
+        );
+        
+        // Keep at least 10 most recent versions
+        if (filteredVersions.length < 10 && versions.length >= 10) {
+            const recentVersions = versions.slice(0, 10);
+            localStorage.setItem('content_versions', JSON.stringify(recentVersions));
+        } else {
+            localStorage.setItem('content_versions', JSON.stringify(filteredVersions));
+        }
+        
+        const removed = versions.length - filteredVersions.length;
+        this.updateVersionStats();
+        
+        notificationManager.show(`Cleaned ${removed} old versions`, 'success');
+    }
+    
+    getTotalVersionsCount() {
+        const versions = JSON.parse(localStorage.getItem('content_versions') || '[]');
+        return versions.length;
+    }
+    
+    getVersionsStorageSize() {
+        const versions = JSON.stringify(localStorage.getItem('content_versions') || '[]');
+        const bytes = new Blob([versions]).size;
+        return this.formatFileSize(bytes);
+    }
+    
+    updateVersionStats() {
+        const totalEl = document.getElementById('totalVersions');
+        const storageEl = document.getElementById('versionsStorage');
+        
+        if (totalEl) totalEl.textContent = this.getTotalVersionsCount();
+        if (storageEl) storageEl.textContent = this.getVersionsStorageSize();
+    }
+    
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+}
+
+// Initialize version control
+const versionControl = new VersionControl();
+
+// Multi-user Admin Support System
+class MultiUserSystem {
+    constructor() {
+        this.currentUser = JSON.parse(localStorage.getItem('current_admin_user') || 'null');
+        this.users = JSON.parse(localStorage.getItem('admin_users') || '[]');
+        this.roles = {
+            'super_admin': {
+                name: 'Super Admin',
+                permissions: ['all'],
+                color: '#e74c3c',
+                icon: 'fa-crown'
+            },
+            'admin': {
+                name: 'Administrator',
+                permissions: ['content_edit', 'file_upload', 'analytics_view', 'backup_manage'],
+                color: '#3498db',
+                icon: 'fa-user-shield'
+            },
+            'editor': {
+                name: 'Content Editor',
+                permissions: ['content_edit', 'file_upload'],
+                color: '#2ecc71',
+                icon: 'fa-edit'
+            },
+            'viewer': {
+                name: 'Viewer',
+                permissions: ['analytics_view'],
+                color: '#95a5a6',
+                icon: 'fa-eye'
+            }
+        };
+        this.init();
+    }
+    
+    init() {
+        this.initializeDefaultUsers();
+        this.addUserManagementUI();
+        this.updateCurrentUserDisplay();
+        this.enforcePermissions();
+    }
+    
+    initializeDefaultUsers() {
+        if (this.users.length === 0) {
+            // Create default super admin
+            const defaultAdmin = {
+                id: 'user_' + Date.now(),
+                username: 'admin',
+                displayName: 'System Administrator',
+                email: 'admin@system.local',
+                role: 'super_admin',
+                avatar: 'https://ui-avatars.com/api/?name=Admin&background=e74c3c&color=fff&size=128',
+                created: Date.now(),
+                lastLogin: Date.now(),
+                isActive: true,
+                preferences: {
+                    theme: 'default',
+                    language: 'en',
+                    notifications: true
+                }
+            };
+            
+            this.users = [defaultAdmin];
+            this.currentUser = defaultAdmin;
+            localStorage.setItem('admin_users', JSON.stringify(this.users));
+            localStorage.setItem('current_admin_user', JSON.stringify(this.currentUser));
+        }
+        
+        if (!this.currentUser) {
+            this.currentUser = this.users.find(u => u.role === 'super_admin') || this.users[0];
+            localStorage.setItem('current_admin_user', JSON.stringify(this.currentUser));
+        }
+    }
+    
+    addUserManagementUI() {
+        const settingsSection = document.getElementById('settings');
+        if (!settingsSection) return;
+        
+        const userManagementHTML = `
+            <div class="editor-section user-management-section">
+                <h3><i class="fas fa-users"></i> User Management</h3>
+                <div class="user-management-panel">
+                    <div class="current-user-info">
+                        <div class="user-avatar-section">
+                            <div class="user-avatar">
+                                <img src="${this.currentUser.avatar}" alt="${this.currentUser.displayName}">
+                                <div class="user-status-indicator ${this.currentUser.isActive ? 'online' : 'offline'}"></div>
+                            </div>
+                            <div class="user-details">
+                                <div class="user-name">${this.currentUser.displayName}</div>
+                                <div class="user-role">
+                                    <i class="fas ${this.roles[this.currentUser.role].icon}"></i>
+                                    <span style="color: ${this.roles[this.currentUser.role].color}">
+                                        ${this.roles[this.currentUser.role].name}
+                                    </span>
+                                </div>
+                                <div class="user-email">${this.currentUser.email}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="user-stats">
+                            <div class="stat-card">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <span class="stat-label">Last Login</span>
+                                    <span class="stat-value">${new Date(this.currentUser.lastLogin).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-calendar"></i>
+                                <div>
+                                    <span class="stat-label">Member Since</span>
+                                    <span class="stat-value">${new Date(this.currentUser.created).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="user-actions-header">
+                        <h4><i class="fas fa-users-cog"></i> Manage Users</h4>
+                        <div class="user-action-buttons">
+                            <button class="btn btn-primary" onclick="multiUserSystem.showAddUserModal()">
+                                <i class="fas fa-user-plus"></i> Add User
+                            </button>
+                            <button class="btn btn-secondary" onclick="multiUserSystem.showUserList()">
+                                <i class="fas fa-list"></i> View All Users
+                            </button>
+                            <button class="btn btn-outline-secondary" onclick="multiUserSystem.showRolePermissions()">
+                                <i class="fas fa-shield-alt"></i> Role Permissions
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="users-quick-overview">
+                        <div class="overview-cards">
+                            <div class="overview-card">
+                                <div class="card-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b)">
+                                    <i class="fas fa-crown"></i>
+                                </div>
+                                <div class="card-content">
+                                    <span class="card-number">${this.getUsersByRole('super_admin').length}</span>
+                                    <span class="card-label">Super Admins</span>
+                                </div>
+                            </div>
+                            <div class="overview-card">
+                                <div class="card-icon" style="background: linear-gradient(135deg, #3498db, #2980b9)">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                                <div class="card-content">
+                                    <span class="card-number">${this.getUsersByRole('admin').length}</span>
+                                    <span class="card-label">Administrators</span>
+                                </div>
+                            </div>
+                            <div class="overview-card">
+                                <div class="card-icon" style="background: linear-gradient(135deg, #2ecc71, #27ae60)">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                                <div class="card-content">
+                                    <span class="card-number">${this.getUsersByRole('editor').length}</span>
+                                    <span class="card-label">Editors</span>
+                                </div>
+                            </div>
+                            <div class="overview-card">
+                                <div class="card-icon" style="background: linear-gradient(135deg, #95a5a6, #7f8c8d)">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                                <div class="card-content">
+                                    <span class="card-number">${this.getUsersByRole('viewer').length}</span>
+                                    <span class="card-label">Viewers</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        settingsSection.insertAdjacentHTML('beforeend', userManagementHTML);
+    }
+    
+    updateCurrentUserDisplay() {
+        // Update header user info
+        const headerUser = document.querySelector('.header-user');
+        if (headerUser) {
+            headerUser.innerHTML = `
+                <div class="user-avatar-mini">
+                    <img src="${this.currentUser.avatar}" alt="${this.currentUser.displayName}">
+                    <div class="user-status-mini online"></div>
+                </div>
+                <span class="user-name-mini">${this.currentUser.displayName}</span>
+                <i class="fas fa-chevron-down"></i>
+            `;
+        }
+    }
+    
+    enforcePermissions() {
+        if (!this.currentUser) return;
+        
+        const userPermissions = this.roles[this.currentUser.role].permissions;
+        
+        // Hide/show elements based on permissions
+        if (!this.hasPermission('content_edit')) {
+            this.hideElements(['.editor-section', '#content']);
+        }
+        
+        if (!this.hasPermission('file_upload')) {
+            this.hideElements(['.upload-modal', '.quick-action-btn[data-action="add-music"]', '.quick-action-btn[data-action="add-image"]']);
+        }
+        
+        if (!this.hasPermission('analytics_view')) {
+            this.hideElements(['.analytics-dashboard', '.performance-monitor']);
+        }
+        
+        if (!this.hasPermission('backup_manage')) {
+            this.hideElements(['.backup-settings', '.version-control-panel']);
+        }
+    }
+    
+    hasPermission(permission) {
+        if (!this.currentUser) return false;
+        const userPermissions = this.roles[this.currentUser.role].permissions;
+        return userPermissions.includes('all') || userPermissions.includes(permission);
+    }
+    
+    hideElements(selectors) {
+        selectors.forEach(selector => {
+            const elements = document.querySelectorAll(selector);
+            elements.forEach(el => {
+                el.style.display = 'none';
+                el.classList.add('permission-restricted');
+            });
+        });
+    }
+    
+    getUsersByRole(role) {
+        return this.users.filter(user => user.role === role);
+    }
+    
+    showAddUserModal() {
+        if (!this.hasPermission('all')) {
+            notificationManager.show('You don\'t have permission to add users', 'error');
+            return;
+        }
+        
+        const modal = document.createElement('div');
+        modal.className = 'add-user-modal';
+        modal.innerHTML = `
+            <div class="modal-overlay" onclick="this.parentElement.remove()"></div>
+            <div class="modal-content professional">
+                <div class="modal-header gradient-header">
+                    <h3><i class="fas fa-user-plus"></i> Add New User</h3>
+                    <button class="modal-close" onclick="this.closest('.add-user-modal').remove()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="addUserForm" class="professional-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="newUsername">Username</label>
+                                <input type="text" id="newUsername" required placeholder="Enter username">
+                            </div>
+                            <div class="form-group">
+                                <label for="newDisplayName">Display Name</label>
+                                <input type="text" id="newDisplayName" required placeholder="Enter display name">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="newEmail">Email</label>
+                                <input type="email" id="newEmail" required placeholder="Enter email address">
+                            </div>
+                            <div class="form-group">
+                                <label for="newRole">Role</label>
+                                <select id="newRole" required>
+                                    ${Object.entries(this.roles).map(([key, role]) => `
+                                        <option value="${key}" style="color: ${role.color}">
+                                            ${role.name}
+                                        </option>
+                                    `).join('')}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="newAvatar">Avatar URL (optional)</label>
+                            <input type="url" id="newAvatar" placeholder="https://example.com/avatar.jpg">
+                        </div>
+                        
+                        <div class="role-preview" id="rolePreview">
+                            <!-- Role permissions will be shown here -->
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="this.closest('.add-user-modal').remove()">
+                                Cancel
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-user-plus"></i> Create User
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Add form submission handler
+        document.getElementById('addUserForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.createUser();
+        });
+        
+        // Add role preview
+        document.getElementById('newRole').addEventListener('change', (e) => {
+            this.updateRolePreview(e.target.value);
+        });
+        
+        // Initial role preview
+        this.updateRolePreview('editor');
+    }
+    
+    updateRolePreview(roleKey) {
+        const role = this.roles[roleKey];
+        const preview = document.getElementById('rolePreview');
+        
+        preview.innerHTML = `
+            <div class="role-preview-card" style="border-left-color: ${role.color}">
+                <div class="role-header">
+                    <i class="fas ${role.icon}" style="color: ${role.color}"></i>
+                    <span class="role-name">${role.name}</span>
+                </div>
+                <div class="role-permissions">
+                    <strong>Permissions:</strong>
+                    <ul>
+                        ${role.permissions.includes('all') ? 
+                            '<li>All Permissions (Full Access)</li>' : 
+                            role.permissions.map(perm => `<li>${this.getPermissionLabel(perm)}</li>`).join('')
+                        }
+                    </ul>
+                </div>
+            </div>
+        `;
+    }
+    
+    getPermissionLabel(permission) {
+        const labels = {
+            'content_edit': 'Edit Content & Settings',
+            'file_upload': 'Upload Files & Media',
+            'analytics_view': 'View Analytics & Reports',
+            'backup_manage': 'Manage Backups & Versions'
+        };
+        return labels[permission] || permission;
+    }
+    
+    createUser() {
+        const username = document.getElementById('newUsername').value;
+        const displayName = document.getElementById('newDisplayName').value;
+        const email = document.getElementById('newEmail').value;
+        const role = document.getElementById('newRole').value;
+        const avatar = document.getElementById('newAvatar').value || 
+                      `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=${this.roles[role].color.substring(1)}&color=fff&size=128`;
+        
+        // Check if username already exists
+        if (this.users.some(user => user.username === username)) {
+            notificationManager.show('Username already exists', 'error');
+            return;
+        }
+        
+        const newUser = {
+            id: 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+            username,
+            displayName,
+            email,
+            role,
+            avatar,
+            created: Date.now(),
+            lastLogin: null,
+            isActive: true,
+            preferences: {
+                theme: 'default',
+                language: 'en',
+                notifications: true
+            }
+        };
+        
+        this.users.push(newUser);
+        localStorage.setItem('admin_users', JSON.stringify(this.users));
+        
+        document.querySelector('.add-user-modal').remove();
+        this.updateUserManagementDisplay();
+        
+        notificationManager.show(`User "${displayName}" created successfully`, 'success');
+    }
+    
+    showUserList() {
+        const modal = document.createElement('div');
+        modal.className = 'user-list-modal';
+        modal.innerHTML = `
+            <div class="modal-overlay" onclick="this.parentElement.remove()"></div>
+            <div class="modal-content large professional">
+                <div class="modal-header gradient-header">
+                    <h3><i class="fas fa-users"></i> All Users</h3>
+                    <button class="modal-close" onclick="this.closest('.user-list-modal').remove()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="users-grid">
+                        ${this.users.map(user => `
+                            <div class="user-card ${user.id === this.currentUser.id ? 'current-user' : ''}">
+                                <div class="user-card-header">
+                                    <div class="user-avatar-large">
+                                        <img src="${user.avatar}" alt="${user.displayName}">
+                                        <div class="user-status-indicator ${user.isActive ? 'online' : 'offline'}"></div>
+                                    </div>
+                                    <div class="user-card-info">
+                                        <h4>${user.displayName}</h4>
+                                        <p class="user-email">${user.email}</p>
+                                        <div class="user-role-badge" style="background: ${this.roles[user.role].color}">
+                                            <i class="fas ${this.roles[user.role].icon}"></i>
+                                            ${this.roles[user.role].name}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="user-card-stats">
+                                    <div class="user-stat">
+                                        <span class="stat-label">Created</span>
+                                        <span class="stat-value">${new Date(user.created).toLocaleDateString()}</span>
+                                    </div>
+                                    <div class="user-stat">
+                                        <span class="stat-label">Last Login</span>
+                                        <span class="stat-value">${user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Never'}</span>
+                                    </div>
+                                </div>
+                                <div class="user-card-actions">
+                                    ${user.id === this.currentUser.id ? 
+                                        '<span class="current-user-badge">Current User</span>' :
+                                        `<button class="btn btn-sm btn-secondary" onclick="multiUserSystem.editUser('${user.id}')">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" onclick="multiUserSystem.deleteUser('${user.id}')">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>`
+                                    }
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+    }
+    
+    showRolePermissions() {
+        const modal = document.createElement('div');
+        modal.className = 'role-permissions-modal';
+        modal.innerHTML = `
+            <div class="modal-overlay" onclick="this.parentElement.remove()"></div>
+            <div class="modal-content large professional">
+                <div class="modal-header gradient-header">
+                    <h3><i class="fas fa-shield-alt"></i> Role Permissions</h3>
+                    <button class="modal-close" onclick="this.closest('.role-permissions-modal').remove()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="roles-grid">
+                        ${Object.entries(this.roles).map(([key, role]) => `
+                            <div class="role-permission-card" style="border-top-color: ${role.color}">
+                                <div class="role-card-header">
+                                    <div class="role-icon" style="background: ${role.color}">
+                                        <i class="fas ${role.icon}"></i>
+                                    </div>
+                                    <div class="role-info">
+                                        <h4>${role.name}</h4>
+                                        <p>${this.getUsersByRole(key).length} user(s)</p>
+                                    </div>
+                                </div>
+                                <div class="role-permissions-list">
+                                    ${role.permissions.includes('all') ? 
+                                        '<div class="permission-item all-permissions"><i class="fas fa-crown"></i> All Permissions</div>' :
+                                        role.permissions.map(perm => `
+                                            <div class="permission-item">
+                                                <i class="fas fa-check"></i>
+                                                ${this.getPermissionLabel(perm)}
+                                            </div>
+                                        `).join('')
+                                    }
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+    }
+    
+    updateUserManagementDisplay() {
+        // Re-render the overview cards
+        const overviewCards = document.querySelector('.overview-cards');
+        if (overviewCards) {
+            overviewCards.innerHTML = `
+                <div class="overview-card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b)">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-number">${this.getUsersByRole('super_admin').length}</span>
+                        <span class="card-label">Super Admins</span>
+                    </div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #3498db, #2980b9)">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-number">${this.getUsersByRole('admin').length}</span>
+                        <span class="card-label">Administrators</span>
+                    </div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #2ecc71, #27ae60)">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-number">${this.getUsersByRole('editor').length}</span>
+                        <span class="card-label">Editors</span>
+                    </div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #95a5a6, #7f8c8d)">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-number">${this.getUsersByRole('viewer').length}</span>
+                        <span class="card-label">Viewers</span>
+                    </div>
+                </div>
+            `;
+        }
+    }
+    
+    editUser(userId) {
+        // Implementation for editing users
+        notificationManager.show('Edit user functionality coming soon', 'info');
+    }
+    
+    deleteUser(userId) {
+        if (!this.hasPermission('all')) {
+            notificationManager.show('You don\'t have permission to delete users', 'error');
+            return;
+        }
+        
+        const user = this.users.find(u => u.id === userId);
+        if (!user) return;
+        
+        if (confirm(`Are you sure you want to delete user "${user.displayName}"?`)) {
+            this.users = this.users.filter(u => u.id !== userId);
+            localStorage.setItem('admin_users', JSON.stringify(this.users));
+            
+            document.querySelector('.user-list-modal').remove();
+            this.updateUserManagementDisplay();
+            
+            notificationManager.show(`User "${user.displayName}" deleted successfully`, 'success');
+        }
+    }
+}
+
+// Initialize multi-user system
+const multiUserSystem = new MultiUserSystem();
+
+// API Endpoint Creation System
+class APIEndpointManager {
+    constructor() {
+        this.endpoints = JSON.parse(localStorage.getItem('api_endpoints') || '[]');
+        this.apiKeys = JSON.parse(localStorage.getItem('api_keys') || '[]');
+        this.requestLogs = JSON.parse(localStorage.getItem('api_request_logs') || '[]');
+        this.init();
+    }
+    
+    init() {
+        this.createAPIEndpointsSection();
+        this.setupEndpointHandlers();
+        this.initializeDefaultEndpoints();
+    }
+    
+    createAPIEndpointsSection() {
+        const settingsSection = document.querySelector('#settings .settings-grid');
+        if (!settingsSection) return;
+        
+        const apiCard = document.createElement('div');
+        apiCard.className = 'settings-card api-endpoints-card';
+        apiCard.innerHTML = `
+            <div class="api-management-header">
+                <h3><i class="fas fa-code"></i> API Endpoint Management</h3>
+                <button class="btn btn-primary" onclick="apiManager.openCreateEndpointModal()">
+                    <i class="fas fa-plus"></i> Create Endpoint
+                </button>
+            </div>
+            
+            <div class="api-stats">
+                <div class="api-stat">
+                    <div class="stat-value" id="totalEndpoints">${this.endpoints.length}</div>
+                    <div class="stat-label">Total Endpoints</div>
+                </div>
+                <div class="api-stat">
+                    <div class="stat-value" id="totalRequests">${this.requestLogs.length}</div>
+                    <div class="stat-label">Total Requests</div>
+                </div>
+                <div class="api-stat">
+                    <div class="stat-value" id="activeKeys">${this.apiKeys.filter(k => k.active).length}</div>
+                    <div class="stat-label">Active API Keys</div>
+                </div>
+            </div>
+            
+            <div class="api-endpoints-list" id="apiEndpointsList">
+                ${this.renderEndpointsList()}
+            </div>
+            
+            <div class="api-actions">
+                <button class="btn btn-secondary" onclick="apiManager.openAPIKeysModal()">
+                    <i class="fas fa-key"></i> Manage API Keys
+                </button>
+                <button class="btn btn-secondary" onclick="apiManager.openRequestLogsModal()">
+                    <i class="fas fa-chart-line"></i> View Request Logs
+                </button>
+                <button class="btn btn-secondary" onclick="apiManager.exportAPIDocumentation()">
+                    <i class="fas fa-file-export"></i> Export Documentation
+                </button>
+            </div>
+        `;
+        
+        settingsSection.appendChild(apiCard);
+        this.createAPIModals();
+    }
+    
+    renderEndpointsList() {
+        if (this.endpoints.length === 0) {
+            return `
+                <div class="empty-state">
+                    <i class="fas fa-code"></i>
+                    <h4>No API Endpoints</h4>
+                    <p>Create your first API endpoint to enable external integrations</p>
+                </div>
+            `;
+        }
+        
+        return this.endpoints.map(endpoint => `
+            <div class="endpoint-item" data-endpoint-id="${endpoint.id}">
+                <div class="endpoint-header">
+                    <div class="endpoint-method ${endpoint.method.toLowerCase()}">${endpoint.method}</div>
+                    <div class="endpoint-path">/api${endpoint.path}</div>
+                    <div class="endpoint-status ${endpoint.active ? 'active' : 'inactive'}">
+                        ${endpoint.active ? 'Active' : 'Inactive'}
+                    </div>
+                </div>
+                <div class="endpoint-description">${endpoint.description}</div>
+                <div class="endpoint-meta">
+                    <span class="endpoint-calls">${endpoint.calls || 0} calls</span>
+                    <span class="endpoint-created">Created: ${new Date(endpoint.created).toLocaleDateString()}</span>
+                </div>
+                <div class="endpoint-actions">
+                    <button class="btn btn-sm btn-secondary" onclick="apiManager.testEndpoint('${endpoint.id}')">
+                        <i class="fas fa-play"></i> Test
+                    </button>
+                    <button class="btn btn-sm btn-secondary" onclick="apiManager.editEndpoint('${endpoint.id}')">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button class="btn btn-sm btn-danger" onclick="apiManager.deleteEndpoint('${endpoint.id}')">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    createAPIModals() {
+        // Create Endpoint Modal
+        const createEndpointModal = document.createElement('div');
+        createEndpointModal.className = 'modal';
+        createEndpointModal.id = 'createEndpointModal';
+        createEndpointModal.innerHTML = `
+            <div class="modal-content large">
+                <div class="modal-header">
+                    <h3><i class="fas fa-plus"></i> Create API Endpoint</h3>
+                    <button class="modal-close" onclick="apiManager.closeCreateEndpointModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="createEndpointForm" class="endpoint-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label><i class="fas fa-tag"></i> Endpoint Name</label>
+                                <input type="text" id="endpointName" required placeholder="e.g., Get Music List">
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-code"></i> HTTP Method</label>
+                                <select id="endpointMethod" required>
+                                    <option value="GET">GET</option>
+                                    <option value="POST">POST</option>
+                                    <option value="PUT">PUT</option>
+                                    <option value="DELETE">DELETE</option>
+                                    <option value="PATCH">PATCH</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-link"></i> Endpoint Path</label>
+                            <div class="path-input">
+                                <span class="path-prefix">/api</span>
+                                <input type="text" id="endpointPath" required placeholder="/music" pattern="^/[a-zA-Z0-9/_-]*$">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-align-left"></i> Description</label>
+                            <textarea id="endpointDescription" required placeholder="Describe what this endpoint does"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-database"></i> Data Source</label>
+                            <select id="endpointDataSource" required onchange="apiManager.onDataSourceChange()">
+                                <option value="">Select data source</option>
+                                <option value="music">Music Collection</option>
+                                <option value="gallery">Gallery Images</option>
+                                <option value="analytics">Analytics Data</option>
+                                <option value="content">Site Content</option>
+                                <option value="custom">Custom Response</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group" id="customResponseGroup" style="display: none;">
+                            <label><i class="fas fa-code"></i> Custom Response (JSON)</label>
+                            <textarea id="customResponse" placeholder='{"message": "Hello World", "status": "success"}'></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="requireAuth" checked>
+                                <span class="checkmark"></span>
+                                Require API Key Authentication
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="enableCORS" checked>
+                                <span class="checkmark"></span>
+                                Enable CORS (Cross-Origin Requests)
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="apiManager.closeCreateEndpointModal()">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="apiManager.createEndpoint()">
+                        <i class="fas fa-plus"></i> Create Endpoint
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        // API Keys Modal
+        const apiKeysModal = document.createElement('div');
+        apiKeysModal.className = 'modal';
+        apiKeysModal.id = 'apiKeysModal';
+        apiKeysModal.innerHTML = `
+            <div class="modal-content large">
+                <div class="modal-header">
+                    <h3><i class="fas fa-key"></i> API Key Management</h3>
+                    <button class="modal-close" onclick="apiManager.closeAPIKeysModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="api-keys-header">
+                        <button class="btn btn-primary" onclick="apiManager.generateNewAPIKey()">
+                            <i class="fas fa-plus"></i> Generate New API Key
+                        </button>
+                    </div>
+                    <div class="api-keys-list" id="apiKeysList">
+                        ${this.renderAPIKeysList()}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Request Logs Modal
+        const requestLogsModal = document.createElement('div');
+        requestLogsModal.className = 'modal';
+        requestLogsModal.id = 'requestLogsModal';
+        requestLogsModal.innerHTML = `
+            <div class="modal-content extra-large">
+                <div class="modal-header">
+                    <h3><i class="fas fa-chart-line"></i> API Request Logs</h3>
+                    <button class="modal-close" onclick="apiManager.closeRequestLogsModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="logs-filters">
+                        <div class="filter-group">
+                            <label>Filter by Endpoint:</label>
+                            <select id="endpointFilter" onchange="apiManager.filterLogs()">
+                                <option value="">All Endpoints</option>
+                                ${this.endpoints.map(e => `<option value="${e.id}">${e.name}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Filter by Status:</label>
+                            <select id="statusFilter" onchange="apiManager.filterLogs()">
+                                <option value="">All Status</option>
+                                <option value="200">Success (200)</option>
+                                <option value="400">Bad Request (400)</option>
+                                <option value="401">Unauthorized (401)</option>
+                                <option value="404">Not Found (404)</option>
+                                <option value="500">Server Error (500)</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-secondary" onclick="apiManager.clearLogs()">
+                            <i class="fas fa-trash"></i> Clear Logs
+                        </button>
+                    </div>
+                    <div class="request-logs-table" id="requestLogsTable">
+                        ${this.renderRequestLogsTable()}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(createEndpointModal);
+        document.body.appendChild(apiKeysModal);
+        document.body.appendChild(requestLogsModal);
+    }
+    
+    renderAPIKeysList() {
+        if (this.apiKeys.length === 0) {
+            return `
+                <div class="empty-state">
+                    <i class="fas fa-key"></i>
+                    <h4>No API Keys</h4>
+                    <p>Generate your first API key to enable endpoint access</p>
+                </div>
+            `;
+        }
+        
+        return this.apiKeys.map(key => `
+            <div class="api-key-item">
+                <div class="api-key-header">
+                    <div class="api-key-name">${key.name}</div>
+                    <div class="api-key-status ${key.active ? 'active' : 'inactive'}">
+                        ${key.active ? 'Active' : 'Inactive'}
+                    </div>
+                </div>
+                <div class="api-key-value">
+                    <code>${key.key}</code>
+                    <button class="btn btn-sm btn-secondary" onclick="apiManager.copyAPIKey('${key.key}')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+                <div class="api-key-meta">
+                    <span>Created: ${new Date(key.created).toLocaleDateString()}</span>
+                    <span>Last Used: ${key.lastUsed ? new Date(key.lastUsed).toLocaleDateString() : 'Never'}</span>
+                    <span>Requests: ${key.requests || 0}</span>
+                </div>
+                <div class="api-key-actions">
+                    <button class="btn btn-sm ${key.active ? 'btn-warning' : 'btn-success'}" onclick="apiManager.toggleAPIKey('${key.id}')">
+                        <i class="fas fa-${key.active ? 'pause' : 'play'}"></i> ${key.active ? 'Deactivate' : 'Activate'}
+                    </button>
+                    <button class="btn btn-sm btn-danger" onclick="apiManager.deleteAPIKey('${key.id}')">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    renderRequestLogsTable() {
+        if (this.requestLogs.length === 0) {
+            return `
+                <div class="empty-state">
+                    <i class="fas fa-chart-line"></i>
+                    <h4>No Request Logs</h4>
+                    <p>API request logs will appear here once endpoints are called</p>
+                </div>
+            `;
+        }
+        
+        const sortedLogs = this.requestLogs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        
+        return `
+            <div class="logs-table">
+                <div class="logs-header">
+                    <div class="log-col">Timestamp</div>
+                    <div class="log-col">Method</div>
+                    <div class="log-col">Endpoint</div>
+                    <div class="log-col">Status</div>
+                    <div class="log-col">Response Time</div>
+                    <div class="log-col">IP Address</div>
+                </div>
+                <div class="logs-body">
+                    ${sortedLogs.map(log => `
+                        <div class="log-row">
+                            <div class="log-col">${new Date(log.timestamp).toLocaleString()}</div>
+                            <div class="log-col">
+                                <span class="method-badge ${log.method.toLowerCase()}">${log.method}</span>
+                            </div>
+                            <div class="log-col">${log.endpoint}</div>
+                            <div class="log-col">
+                                <span class="status-badge status-${Math.floor(log.status / 100)}xx">${log.status}</span>
+                            </div>
+                            <div class="log-col">${log.responseTime}ms</div>
+                            <div class="log-col">${log.ip}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+    
+    initializeDefaultEndpoints() {
+        if (this.endpoints.length === 0) {
+            const defaultEndpoints = [
+                {
+                    id: 'music-list',
+                    name: 'Get Music List',
+                    method: 'GET',
+                    path: '/music',
+                    description: 'Retrieve all uploaded music tracks',
+                    dataSource: 'music',
+                    requireAuth: true,
+                    enableCORS: true,
+                    active: true,
+                    created: Date.now(),
+                    calls: 0
+                },
+                {
+                    id: 'gallery-list',
+                    name: 'Get Gallery Images',
+                    method: 'GET',
+                    path: '/gallery',
+                    description: 'Retrieve all gallery images',
+                    dataSource: 'gallery',
+                    requireAuth: true,
+                    enableCORS: true,
+                    active: true,
+                    created: Date.now(),
+                    calls: 0
+                },
+                {
+                    id: 'analytics-data',
+                    name: 'Get Analytics',
+                    method: 'GET',
+                    path: '/analytics',
+                    description: 'Retrieve site analytics and statistics',
+                    dataSource: 'analytics',
+                    requireAuth: true,
+                    enableCORS: false,
+                    active: true,
+                    created: Date.now(),
+                    calls: 0
+                }
+            ];
+            
+            this.endpoints = defaultEndpoints;
+            this.saveEndpoints();
+        }
+    }
+    
+    onDataSourceChange() {
+        const dataSource = document.getElementById('endpointDataSource').value;
+        const customResponseGroup = document.getElementById('customResponseGroup');
+        
+        if (dataSource === 'custom') {
+            customResponseGroup.style.display = 'block';
+        } else {
+            customResponseGroup.style.display = 'none';
+        }
+    }
+    
+    openCreateEndpointModal() {
+        document.getElementById('createEndpointModal').style.display = 'block';
+    }
+    
+    closeCreateEndpointModal() {
+        document.getElementById('createEndpointModal').style.display = 'none';
+        document.getElementById('createEndpointForm').reset();
+    }
+    
+    openAPIKeysModal() {
+        document.getElementById('apiKeysModal').style.display = 'block';
+        this.refreshAPIKeysList();
+    }
+    
+    closeAPIKeysModal() {
+        document.getElementById('apiKeysModal').style.display = 'none';
+    }
+    
+    openRequestLogsModal() {
+        document.getElementById('requestLogsModal').style.display = 'block';
+        this.refreshRequestLogsTable();
+    }
+    
+    closeRequestLogsModal() {
+        document.getElementById('requestLogsModal').style.display = 'none';
+    }
+    
+    createEndpoint() {
+        const form = document.getElementById('createEndpointForm');
+        const formData = new FormData(form);
+        
+        const endpoint = {
+            id: 'endpoint-' + Date.now(),
+            name: document.getElementById('endpointName').value,
+            method: document.getElementById('endpointMethod').value,
+            path: document.getElementById('endpointPath').value,
+            description: document.getElementById('endpointDescription').value,
+            dataSource: document.getElementById('endpointDataSource').value,
+            customResponse: document.getElementById('customResponse').value || null,
+            requireAuth: document.getElementById('requireAuth').checked,
+            enableCORS: document.getElementById('enableCORS').checked,
+            active: true,
+            created: Date.now(),
+            calls: 0
+        };
+        
+        // Validate required fields
+        if (!endpoint.name || !endpoint.path || !endpoint.description || !endpoint.dataSource) {
+            notificationManager.show('Please fill in all required fields', 'error');
+            return;
+        }
+        
+        // Validate path format
+        if (!endpoint.path.startsWith('/')) {
+            notificationManager.show('Endpoint path must start with /', 'error');
+            return;
+        }
+        
+        // Check for duplicate paths
+        if (this.endpoints.some(e => e.path === endpoint.path && e.method === endpoint.method)) {
+            notificationManager.show('An endpoint with this method and path already exists', 'error');
+            return;
+        }
+        
+        this.endpoints.push(endpoint);
+        this.saveEndpoints();
+        this.refreshEndpointsList();
+        this.closeCreateEndpointModal();
+        
+        notificationManager.show(`API endpoint ${endpoint.name} created successfully!`, 'success');
+    }
+    
+    generateNewAPIKey() {
+        const keyName = prompt('Enter a name for this API key:');
+        if (!keyName) return;
+        
+        const apiKey = {
+            id: 'key-' + Date.now(),
+            name: keyName,
+            key: 'pk_' + this.generateRandomString(32),
+            active: true,
+            created: Date.now(),
+            lastUsed: null,
+            requests: 0
+        };
+        
+        this.apiKeys.push(apiKey);
+        this.saveAPIKeys();
+        this.refreshAPIKeysList();
+        
+        notificationManager.show(`API key "${keyName}" generated successfully!`, 'success');
+    }
+    
+    generateRandomString(length) {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        for (let i = 0; i < length; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
+    }
+    
+    copyAPIKey(key) {
+        navigator.clipboard.writeText(key).then(() => {
+            notificationManager.show('API key copied to clipboard!', 'success');
+        });
+    }
+    
+    toggleAPIKey(keyId) {
+        const key = this.apiKeys.find(k => k.id === keyId);
+        if (key) {
+            key.active = !key.active;
+            this.saveAPIKeys();
+            this.refreshAPIKeysList();
+            notificationManager.show(`API key ${key.active ? 'activated' : 'deactivated'}`, 'info');
+        }
+    }
+    
+    deleteAPIKey(keyId) {
+        if (confirm('Are you sure you want to delete this API key? This action cannot be undone.')) {
+            this.apiKeys = this.apiKeys.filter(k => k.id !== keyId);
+            this.saveAPIKeys();
+            this.refreshAPIKeysList();
+            notificationManager.show('API key deleted successfully', 'success');
+        }
+    }
+    
+    deleteEndpoint(endpointId) {
+        if (confirm('Are you sure you want to delete this endpoint? This action cannot be undone.')) {
+            this.endpoints = this.endpoints.filter(e => e.id !== endpointId);
+            this.saveEndpoints();
+            this.refreshEndpointsList();
+            notificationManager.show('Endpoint deleted successfully', 'success');
+        }
+    }
+    
+    editEndpoint(endpointId) {
+        // Implementation for editing endpoints
+        notificationManager.show('Edit endpoint functionality coming soon', 'info');
+    }
+    
+    testEndpoint(endpointId) {
+        const endpoint = this.endpoints.find(e => e.id === endpointId);
+        if (!endpoint) return;
+        
+        // Simulate API call
+        const testResult = this.simulateAPICall(endpoint);
+        this.logRequest(endpoint, testResult);
+        
+        alert(`Test completed!\n\nEndpoint: ${endpoint.method} /api${endpoint.path}\nStatus: ${testResult.status}\nResponse Time: ${testResult.responseTime}ms\n\nResponse:\n${JSON.stringify(testResult.data, null, 2)}`);
+    }
+    
+    simulateAPICall(endpoint) {
+        const startTime = Date.now();
+        let data = {};
+        let status = 200;
+        
+        try {
+            switch (endpoint.dataSource) {
+                case 'music':
+                    data = JSON.parse(localStorage.getItem('uploaded_music') || '[]');
+                    break;
+                case 'gallery':
+                    data = JSON.parse(localStorage.getItem('uploaded_gallery') || '[]');
+                    break;
+                case 'analytics':
+                    data = {
+                        pageViews: parseInt(localStorage.getItem('page_views') || '0'),
+                        musicPlays: parseInt(localStorage.getItem('music_plays') || '0'),
+                        galleryClicks: parseInt(localStorage.getItem('gallery_clicks') || '0'),
+                        socialClicks: parseInt(localStorage.getItem('social_clicks') || '0')
+                    };
+                    break;
+                case 'content':
+                    data = {
+                        aboutText: localStorage.getItem('about_text_en') || '',
+                        heroTitle: localStorage.getItem('hero_title') || '',
+                        heroDescription: localStorage.getItem('hero_description') || ''
+                    };
+                    break;
+                case 'custom':
+                    data = JSON.parse(endpoint.customResponse || '{}');
+                    break;
+                default:
+                    data = { error: 'Unknown data source' };
+                    status = 400;
+            }
+        } catch (error) {
+            data = { error: 'Data processing error' };
+            status = 500;
+        }
+        
+        const responseTime = Date.now() - startTime;
+        
+        return {
+            status,
+            data,
+            responseTime,
+            timestamp: Date.now()
+        };
+    }
+    
+    logRequest(endpoint, result) {
+        const logEntry = {
+            id: 'log-' + Date.now(),
+            timestamp: Date.now(),
+            method: endpoint.method,
+            endpoint: `/api${endpoint.path}`,
+            status: result.status,
+            responseTime: result.responseTime,
+            ip: '127.0.0.1', // Simulated IP
+            endpointId: endpoint.id
+        };
+        
+        this.requestLogs.push(logEntry);
+        
+        // Keep only last 1000 logs
+        if (this.requestLogs.length > 1000) {
+            this.requestLogs = this.requestLogs.slice(-1000);
+        }
+        
+        // Increment endpoint call count
+        endpoint.calls = (endpoint.calls || 0) + 1;
+        
+        this.saveRequestLogs();
+        this.saveEndpoints();
+    }
+    
+    exportAPIDocumentation() {
+        const documentation = {
+            title: 'Music Portfolio API Documentation',
+            version: '1.0.0',
+            baseUrl: 'https://your-domain.com/api',
+            authentication: 'API Key required in header: X-API-Key',
+            endpoints: this.endpoints.map(endpoint => ({
+                name: endpoint.name,
+                method: endpoint.method,
+                path: endpoint.path,
+                description: endpoint.description,
+                requireAuth: endpoint.requireAuth,
+                enableCORS: endpoint.enableCORS,
+                example: {
+                    request: `${endpoint.method} /api${endpoint.path}`,
+                    headers: endpoint.requireAuth ? { 'X-API-Key': 'your-api-key-here' } : {},
+                    response: this.simulateAPICall(endpoint).data
+                }
+            }))
+        };
+        
+        const blob = new Blob([JSON.stringify(documentation, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'api-documentation.json';
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        notificationManager.show('API documentation exported successfully!', 'success');
+    }
+    
+    filterLogs() {
+        const endpointFilter = document.getElementById('endpointFilter').value;
+        const statusFilter = document.getElementById('statusFilter').value;
+        
+        let filteredLogs = this.requestLogs;
+        
+        if (endpointFilter) {
+            filteredLogs = filteredLogs.filter(log => log.endpointId === endpointFilter);
+        }
+        
+        if (statusFilter) {
+            filteredLogs = filteredLogs.filter(log => log.status.toString() === statusFilter);
+        }
+        
+        // Re-render table with filtered data
+        const tableBody = document.querySelector('.logs-body');
+        if (tableBody) {
+            const sortedLogs = filteredLogs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            tableBody.innerHTML = sortedLogs.map(log => `
+                <div class="log-row">
+                    <div class="log-col">${new Date(log.timestamp).toLocaleString()}</div>
+                    <div class="log-col">
+                        <span class="method-badge ${log.method.toLowerCase()}">${log.method}</span>
+                    </div>
+                    <div class="log-col">${log.endpoint}</div>
+                    <div class="log-col">
+                        <span class="status-badge status-${Math.floor(log.status / 100)}xx">${log.status}</span>
+                    </div>
+                    <div class="log-col">${log.responseTime}ms</div>
+                    <div class="log-col">${log.ip}</div>
+                </div>
+            `).join('');
+        }
+    }
+    
+    clearLogs() {
+        if (confirm('Are you sure you want to clear all request logs? This action cannot be undone.')) {
+            this.requestLogs = [];
+            this.saveRequestLogs();
+            this.refreshRequestLogsTable();
+            notificationManager.show('Request logs cleared successfully', 'success');
+        }
+    }
+    
+    refreshEndpointsList() {
+        const endpointsList = document.getElementById('apiEndpointsList');
+        if (endpointsList) {
+            endpointsList.innerHTML = this.renderEndpointsList();
+        }
+        
+        // Update stats
+        document.getElementById('totalEndpoints').textContent = this.endpoints.length;
+    }
+    
+    refreshAPIKeysList() {
+        const apiKeysList = document.getElementById('apiKeysList');
+        if (apiKeysList) {
+            apiKeysList.innerHTML = this.renderAPIKeysList();
+        }
+        
+        // Update stats
+        document.getElementById('activeKeys').textContent = this.apiKeys.filter(k => k.active).length;
+    }
+    
+    refreshRequestLogsTable() {
+        const requestLogsTable = document.getElementById('requestLogsTable');
+        if (requestLogsTable) {
+            requestLogsTable.innerHTML = this.renderRequestLogsTable();
+        }
+        
+        // Update stats
+        document.getElementById('totalRequests').textContent = this.requestLogs.length;
+    }
+    
+    saveEndpoints() {
+        localStorage.setItem('api_endpoints', JSON.stringify(this.endpoints));
+    }
+    
+    saveAPIKeys() {
+        localStorage.setItem('api_keys', JSON.stringify(this.apiKeys));
+    }
+    
+    saveRequestLogs() {
+        localStorage.setItem('api_request_logs', JSON.stringify(this.requestLogs));
+    }
+    
+    setupEndpointHandlers() {
+        // Setup global API endpoint simulation
+        window.simulateAPIEndpoint = (method, path, apiKey) => {
+            const endpoint = this.endpoints.find(e => 
+                e.method === method && 
+                e.path === path && 
+                e.active
+            );
+            
+            if (!endpoint) {
+                return { status: 404, data: { error: 'Endpoint not found' } };
+            }
+            
+            if (endpoint.requireAuth) {
+                const validKey = this.apiKeys.find(k => k.key === apiKey && k.active);
+                if (!validKey) {
+                    return { status: 401, data: { error: 'Invalid or missing API key' } };
+                }
+                
+                // Update key usage
+                validKey.lastUsed = Date.now();
+                validKey.requests = (validKey.requests || 0) + 1;
+                this.saveAPIKeys();
+            }
+            
+            const result = this.simulateAPICall(endpoint);
+            this.logRequest(endpoint, result);
+            
+            return result;
+        };
+    }
+}
+
+// Initialize all systems when DOM loads
+document.addEventListener('DOMContentLoaded', () => {
+    if (checkAdminSession()) {
+        initializeAdminPanel();
+        initializePerformanceMonitor();
+        initializeFileValidator();
+        initializeDragDropReorder();
+        initializeBulkOperations();
+        initializeAnalyticsDashboard();
+        initializeAutoBackupScheduler();
+        initializeVersionControl();
+        initializeMultiUserSystem();
+        initializeAPIEndpointManager();
+        initializeRealTimeCollaboration();
+    }
+});
+
+// Initialize API Endpoint Manager
+function initializeAPIEndpointManager() {
+    window.apiManager = new APIEndpointManager();
+    console.log('✅ API Endpoint Manager initialized');
+}
+
+// Real-time Collaboration Features
+class RealTimeCollaboration {
+    constructor() {
+        this.isConnected = false;
+        this.connectionId = null;
+        this.activeUsers = new Map();
+        this.collaborationSession = null;
+        this.documentSyncQueue = [];
+        this.cursorPositions = new Map();
+        this.init();
+    }
+    
+    init() {
+        this.createCollaborationInterface();
+        this.simulateWebSocketConnection();
+        this.setupEventListeners();
+        this.initializeDocumentSync();
+    }
+    
+    createCollaborationInterface() {
+        // Add collaboration section to settings
+        const settingsSection = document.querySelector('#settings .settings-grid');
+        if (!settingsSection) return;
+        
+        const collaborationCard = document.createElement('div');
+        collaborationCard.className = 'settings-card collaboration-card';
+        collaborationCard.innerHTML = `
+            <div class="collaboration-header">
+                <h3><i class="fas fa-users"></i> Real-time Collaboration</h3>
+                <div class="connection-status" id="connectionStatus">
+                    <span class="status-indicator offline"></span>
+                    <span class="status-text">Connecting...</span>
+                </div>
+            </div>
+            
+            <div class="collaboration-stats">
+                <div class="collab-stat">
+                    <div class="stat-value" id="activeCollaborators">0</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
+                <div class="collab-stat">
+                    <div class="stat-value" id="liveChanges">0</div>
+                    <div class="stat-label">Live Changes</div>
+                </div>
+                <div class="collab-stat">
+                    <div class="stat-value" id="syncStatus">100%</div>
+                    <div class="stat-label">Sync Status</div>
+                </div>
+            </div>
+            
+            <div class="active-users-list" id="activeUsersList">
+                <h4><i class="fas fa-user-friends"></i> Active Collaborators</h4>
+                <div class="users-container" id="collaboratorsContainer">
+                    <!-- Active users will appear here -->
+                </div>
+            </div>
+            
+            <div class="collaboration-actions">
+                <button class="btn btn-primary" onclick="collaboration.startCollaborationSession()">
+                    <i class="fas fa-play"></i> Start Session
+                </button>
+                <button class="btn btn-secondary" onclick="collaboration.inviteCollaborators()">
+                    <i class="fas fa-user-plus"></i> Invite Users
+                </button>
+                <button class="btn btn-secondary" onclick="collaboration.openActivityFeed()">
+                    <i class="fas fa-history"></i> Activity Feed
+                </button>
+                <button class="btn btn-warning" onclick="collaboration.resolveConflicts()">
+                    <i class="fas fa-exclamation-triangle"></i> Resolve Conflicts
+                </button>
+            </div>
+            
+            <div class="live-cursor-tracking">
+                <h4><i class="fas fa-mouse-pointer"></i> Live Cursor Tracking</h4>
+                <div class="cursor-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="showCursors" checked onchange="collaboration.toggleCursorTracking()">
+                        <span class="checkmark"></span>
+                        Show collaborator cursors
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="showSelections" checked onchange="collaboration.toggleSelectionTracking()">
+                        <span class="checkmark"></span>
+                        Show text selections
+                    </label>
+                </div>
+            </div>
+        `;
+        
+        settingsSection.appendChild(collaborationCard);
+        this.createCollaborationModals();
+    }
+    
+    createCollaborationModals() {
+        // Activity Feed Modal
+        const activityFeedModal = document.createElement('div');
+        activityFeedModal.className = 'modal';
+        activityFeedModal.id = 'activityFeedModal';
+        activityFeedModal.innerHTML = `
+            <div class="modal-content large">
+                <div class="modal-header">
+                    <h3><i class="fas fa-history"></i> Collaboration Activity Feed</h3>
+                    <button class="modal-close" onclick="collaboration.closeActivityFeed()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="activity-filters">
+                        <div class="filter-group">
+                            <label>Filter by User:</label>
+                            <select id="userFilter" onchange="collaboration.filterActivity()">
+                                <option value="">All Users</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Filter by Action:</label>
+                            <select id="actionFilter" onchange="collaboration.filterActivity()">
+                                <option value="">All Actions</option>
+                                <option value="edit">Content Edit</option>
+                                <option value="upload">File Upload</option>
+                                <option value="delete">Delete</option>
+                                <option value="create">Create</option>
+                                <option value="comment">Comment</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Time Range:</label>
+                            <select id="timeFilter" onchange="collaboration.filterActivity()">
+                                <option value="1h">Last Hour</option>
+                                <option value="24h" selected>Last 24 Hours</option>
+                                <option value="7d">Last 7 Days</option>
+                                <option value="30d">Last 30 Days</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="activity-timeline" id="activityTimeline">
+                        ${this.renderActivityFeed()}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Invite Collaborators Modal
+        const inviteModal = document.createElement('div');
+        inviteModal.className = 'modal';
+        inviteModal.id = 'inviteCollaboratorsModal';
+        inviteModal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-user-plus"></i> Invite Collaborators</h3>
+                    <button class="modal-close" onclick="collaboration.closeInviteModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="inviteForm" class="invite-form">
+                        <div class="form-group">
+                            <label><i class="fas fa-envelope"></i> Email Addresses</label>
+                            <textarea id="emailList" placeholder="Enter email addresses (one per line or comma-separated)"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-user-tag"></i> Permission Level</label>
+                            <select id="invitePermission" required>
+                                <option value="editor">Editor - Can edit content</option>
+                                <option value="viewer">Viewer - Read-only access</option>
+                                <option value="admin">Admin - Full access</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-clock"></i> Session Duration</label>
+                            <select id="sessionDuration">
+                                <option value="1h">1 Hour</option>
+                                <option value="4h">4 Hours</option>
+                                <option value="24h" selected>24 Hours</option>
+                                <option value="7d">7 Days</option>
+                                <option value="unlimited">Unlimited</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-comment"></i> Invitation Message</label>
+                            <textarea id="inviteMessage" placeholder="Optional message to include with the invitation"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="allowComments" checked>
+                                <span class="checkmark"></span>
+                                Allow comments and suggestions
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="notifyChanges" checked>
+                                <span class="checkmark"></span>
+                                Notify me of their changes
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="collaboration.closeInviteModal()">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="collaboration.sendInvitations()">
+                        <i class="fas fa-paper-plane"></i> Send Invitations
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        // Conflict Resolution Modal
+        const conflictModal = document.createElement('div');
+        conflictModal.className = 'modal';
+        conflictModal.id = 'conflictResolutionModal';
+        conflictModal.innerHTML = `
+            <div class="modal-content extra-large">
+                <div class="modal-header">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Resolve Collaboration Conflicts</h3>
+                    <button class="modal-close" onclick="collaboration.closeConflictModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="conflict-summary">
+                        <div class="conflict-stats">
+                            <div class="conflict-stat">
+                                <div class="stat-value" id="totalConflicts">0</div>
+                                <div class="stat-label">Total Conflicts</div>
+                            </div>
+                            <div class="conflict-stat">
+                                <div class="stat-value" id="pendingConflicts">0</div>
+                                <div class="stat-label">Pending Resolution</div>
+                            </div>
+                            <div class="conflict-stat">
+                                <div class="stat-value" id="autoResolvedConflicts">0</div>
+                                <div class="stat-label">Auto-Resolved</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="conflicts-list" id="conflictsList">
+                        ${this.renderConflictsList()}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" onclick="collaboration.autoResolveConflicts()">
+                        <i class="fas fa-magic"></i> Auto-Resolve Simple Conflicts
+                    </button>
+                    <button type="button" class="btn btn-success" onclick="collaboration.resolveAllConflicts()">
+                        <i class="fas fa-check"></i> Mark All Resolved
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(activityFeedModal);
+        document.body.appendChild(inviteModal);
+        document.body.appendChild(conflictModal);
+    }
+    
+    simulateWebSocketConnection() {
+        // Simulate WebSocket connection
+        setTimeout(() => {
+            this.isConnected = true;
+            this.connectionId = 'conn_' + Date.now();
+            this.updateConnectionStatus('connected');
+            this.simulateActiveUsers();
+            
+            // Simulate real-time updates
+            setInterval(() => {
+                this.simulateCollaborationActivity();
+            }, 15000); // Every 15 seconds
+            
+        }, 2000);
+    }
+    
+    simulateActiveUsers() {
+        const simulatedUsers = [
+            { id: 'user_1', name: 'Sarah Chen', email: 'sarah@example.com', role: 'editor', color: '#3498db', avatar: '👩‍💻' },
+            { id: 'user_2', name: 'Mike Johnson', email: 'mike@example.com', role: 'admin', color: '#e74c3c', avatar: '👨‍💼' },
+            { id: 'user_3', name: 'Emma Davis', email: 'emma@example.com', role: 'viewer', color: '#2ecc71', avatar: '👩‍🎨' }
+        ];
+        
+        // Randomly add/remove users to simulate activity
+        const activeCount = Math.floor(Math.random() * 3) + 1;
+        const activeUsers = simulatedUsers.slice(0, activeCount);
+        
+        this.activeUsers.clear();
+        activeUsers.forEach(user => {
+            this.activeUsers.set(user.id, {
+                ...user,
+                lastSeen: Date.now(),
+                currentSection: this.getRandomSection(),
+                isTyping: Math.random() > 0.7
+            });
+        });
+        
+        this.updateActiveUsersList();
+        this.updateCollaborationStats();
+    }
+    
+    getRandomSection() {
+        const sections = ['Dashboard', 'Music Management', 'Gallery', 'Content Editing', 'Settings'];
+        return sections[Math.floor(Math.random() * sections.length)];
+    }
+    
+    simulateCollaborationActivity() {
+        const activities = [
+            'edited content in About section',
+            'uploaded a new music track',
+            'modified gallery settings',
+            'updated hero section',
+            'added a comment',
+            'resolved a conflict',
+            'invited new collaborator'
+        ];
+        
+        if (this.activeUsers.size > 0) {
+            const users = Array.from(this.activeUsers.values());
+            const randomUser = users[Math.floor(Math.random() * users.length)];
+            const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+            
+            this.logActivity({
+                id: 'activity_' + Date.now(),
+                userId: randomUser.id,
+                userName: randomUser.name,
+                action: randomActivity,
+                timestamp: Date.now(),
+                section: randomUser.currentSection
+            });
+            
+            // Update live changes counter
+            const liveChangesElement = document.getElementById('liveChanges');
+            if (liveChangesElement) {
+                const currentCount = parseInt(liveChangesElement.textContent) || 0;
+                liveChangesElement.textContent = currentCount + 1;
+            }
+        }
+        
+        // Simulate user activity changes
+        this.simulateActiveUsers();
+    }
+    
+    updateConnectionStatus(status) {
+        const statusElement = document.getElementById('connectionStatus');
+        if (!statusElement) return;
+        
+        const indicator = statusElement.querySelector('.status-indicator');
+        const text = statusElement.querySelector('.status-text');
+        
+        switch (status) {
+            case 'connected':
+                indicator.className = 'status-indicator online';
+                text.textContent = 'Connected';
+                break;
+            case 'connecting':
+                indicator.className = 'status-indicator connecting';
+                text.textContent = 'Connecting...';
+                break;
+            case 'disconnected':
+                indicator.className = 'status-indicator offline';
+                text.textContent = 'Disconnected';
+                break;
+        }
+    }
+    
+    updateActiveUsersList() {
+        const container = document.getElementById('collaboratorsContainer');
+        if (!container) return;
+        
+        if (this.activeUsers.size === 0) {
+            container.innerHTML = `
+                <div class="empty-collaborators">
+                    <i class="fas fa-users"></i>
+                    <p>No active collaborators</p>
+                    <small>Invite team members to start collaborating</small>
+                </div>
+            `;
+            return;
+        }
+        
+        container.innerHTML = Array.from(this.activeUsers.values()).map(user => `
+            <div class="collaborator-item" style="border-left: 4px solid ${user.color}">
+                <div class="collaborator-avatar" style="background: ${user.color}">
+                    ${user.avatar}
+                </div>
+                <div class="collaborator-info">
+                    <div class="collaborator-name">${user.name}</div>
+                    <div class="collaborator-status">
+                        <span class="role-badge ${user.role}">${user.role}</span>
+                        <span class="current-section">in ${user.currentSection}</span>
+                        ${user.isTyping ? '<span class="typing-indicator">typing...</span>' : ''}
+                    </div>
+                </div>
+                <div class="collaborator-actions">
+                    <button class="btn btn-sm btn-secondary" onclick="collaboration.focusOnUser('${user.id}')" title="Follow user">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="btn btn-sm btn-secondary" onclick="collaboration.messageUser('${user.id}')" title="Send message">
+                        <i class="fas fa-comment"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    updateCollaborationStats() {
+        const activeCollaborators = document.getElementById('activeCollaborators');
+        if (activeCollaborators) {
+            activeCollaborators.textContent = this.activeUsers.size;
+        }
+        
+        // Simulate sync status
+        const syncStatus = document.getElementById('syncStatus');
+        if (syncStatus) {
+            const status = Math.random() > 0.9 ? '95%' : '100%';
+            syncStatus.textContent = status;
+        }
+    }
+    
+    startCollaborationSession() {
+        if (!this.isConnected) {
+            notificationManager.show('Please wait for connection to establish', 'warning');
+            return;
+        }
+        
+        this.collaborationSession = {
+            id: 'session_' + Date.now(),
+            startTime: Date.now(),
+            participants: Array.from(this.activeUsers.keys())
+        };
+        
+        notificationManager.show('Collaboration session started! Real-time sync is now active.', 'success');
+        
+        // Enable real-time document sync
+        this.enableDocumentSync();
+        
+        // Show collaboration cursors
+        this.enableCursorTracking();
+    }
+    
+    enableDocumentSync() {
+        // Listen for content changes in text areas and inputs
+        const editableElements = document.querySelectorAll('textarea, input[type="text"], [contenteditable="true"]');
+        
+        editableElements.forEach(element => {
+            element.addEventListener('input', (e) => {
+                this.handleContentChange({
+                    elementId: e.target.id || 'unnamed',
+                    content: e.target.value,
+                    timestamp: Date.now(),
+                    userId: 'current_user'
+                });
+            });
+        });
+    }
+    
+    handleContentChange(change) {
+        // Add to sync queue
+        this.documentSyncQueue.push(change);
+        
+        // Simulate real-time sync with other users
+        setTimeout(() => {
+            this.broadcastChange(change);
+        }, 100);
+    }
+    
+    broadcastChange(change) {
+        // Simulate broadcasting change to other users
+        console.log('📡 Broadcasting change:', change);
+        
+        // Update activity feed
+        this.logActivity({
+            id: 'sync_' + Date.now(),
+            userId: change.userId,
+            userName: 'You',
+            action: `edited ${change.elementId}`,
+            timestamp: change.timestamp,
+            section: 'Content'
+        });
+    }
+    
+    enableCursorTracking() {
+        document.addEventListener('mousemove', (e) => {
+            if (!this.collaborationSession) return;
+            
+            // Simulate showing other users' cursors
+            this.updateCursorPosition('current_user', { x: e.clientX, y: e.clientY });
+        });
+    }
+    
+    updateCursorPosition(userId, position) {
+        this.cursorPositions.set(userId, position);
+        
+        // In a real implementation, this would sync cursor positions with other users
+        // For now, we'll just log it
+        // console.log(`Cursor position for ${userId}:`, position);
+    }
+    
+    inviteCollaborators() {
+        document.getElementById('inviteCollaboratorsModal').style.display = 'block';
+    }
+    
+    closeInviteModal() {
+        document.getElementById('inviteCollaboratorsModal').style.display = 'none';
+        document.getElementById('inviteForm').reset();
+    }
+    
+    sendInvitations() {
+        const emailList = document.getElementById('emailList').value;
+        const permission = document.getElementById('invitePermission').value;
+        const duration = document.getElementById('sessionDuration').value;
+        const message = document.getElementById('inviteMessage').value;
+        
+        if (!emailList.trim()) {
+            notificationManager.show('Please enter at least one email address', 'error');
+            return;
+        }
+        
+        const emails = emailList.split(/[,\n]/).map(e => e.trim()).filter(e => e);
+        
+        // Simulate sending invitations
+        setTimeout(() => {
+            notificationManager.show(`Invitations sent to ${emails.length} collaborator(s)!`, 'success');
+            this.closeInviteModal();
+            
+            // Log activity
+            this.logActivity({
+                id: 'invite_' + Date.now(),
+                userId: 'current_user',
+                userName: 'You',
+                action: `invited ${emails.length} collaborator(s)`,
+                timestamp: Date.now(),
+                section: 'Collaboration'
+            });
+        }, 1000);
+    }
+    
+    openActivityFeed() {
+        document.getElementById('activityFeedModal').style.display = 'block';
+        this.refreshActivityFeed();
+    }
+    
+    closeActivityFeed() {
+        document.getElementById('activityFeedModal').style.display = 'none';
+    }
+    
+    renderActivityFeed() {
+        const activities = JSON.parse(localStorage.getItem('collaboration_activities') || '[]');
+        
+        if (activities.length === 0) {
+            return `
+                <div class="empty-state">
+                    <i class="fas fa-history"></i>
+                    <h4>No Activity Yet</h4>
+                    <p>Collaboration activities will appear here</p>
+                </div>
+            `;
+        }
+        
+        return activities.map(activity => `
+            <div class="activity-item">
+                <div class="activity-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-text">
+                        <strong>${activity.userName}</strong> ${activity.action}
+                    </div>
+                    <div class="activity-meta">
+                        <span class="activity-time">${new Date(activity.timestamp).toLocaleString()}</span>
+                        <span class="activity-section">${activity.section}</span>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    refreshActivityFeed() {
+        const timeline = document.getElementById('activityTimeline');
+        if (timeline) {
+            timeline.innerHTML = this.renderActivityFeed();
+        }
+    }
+    
+    logActivity(activity) {
+        const activities = JSON.parse(localStorage.getItem('collaboration_activities') || '[]');
+        activities.unshift(activity);
+        
+        // Keep only last 100 activities
+        if (activities.length > 100) {
+            activities.splice(100);
+        }
+        
+        localStorage.setItem('collaboration_activities', JSON.stringify(activities));
+    }
+    
+    resolveConflicts() {
+        document.getElementById('conflictResolutionModal').style.display = 'block';
+        this.generateConflictData();
+    }
+    
+    closeConflictModal() {
+        document.getElementById('conflictResolutionModal').style.display = 'none';
+    }
+    
+    generateConflictData() {
+        // Simulate conflict data
+        const conflicts = [
+            {
+                id: 'conflict_1',
+                type: 'content_edit',
+                section: 'About Text',
+                users: ['Sarah Chen', 'Mike Johnson'],
+                timestamp: Date.now() - 300000,
+                status: 'pending'
+            },
+            {
+                id: 'conflict_2',
+                type: 'file_upload',
+                section: 'Gallery',
+                users: ['Emma Davis', 'You'],
+                timestamp: Date.now() - 600000,
+                status: 'pending'
+            }
+        ];
+        
+        document.getElementById('totalConflicts').textContent = conflicts.length;
+        document.getElementById('pendingConflicts').textContent = conflicts.filter(c => c.status === 'pending').length;
+        document.getElementById('autoResolvedConflicts').textContent = '3';
+    }
+    
+    renderConflictsList() {
+        return `
+            <div class="conflict-item">
+                <div class="conflict-header">
+                    <div class="conflict-type">
+                        <i class="fas fa-edit"></i>
+                        <span>Content Edit Conflict</span>
+                    </div>
+                    <div class="conflict-status pending">Pending</div>
+                </div>
+                <div class="conflict-details">
+                    <p><strong>Section:</strong> About Text</p>
+                    <p><strong>Conflicting Users:</strong> Sarah Chen, Mike Johnson</p>
+                    <p><strong>Time:</strong> 5 minutes ago</p>
+                </div>
+                <div class="conflict-actions">
+                    <button class="btn btn-sm btn-success">Accept Sarah's Version</button>
+                    <button class="btn btn-sm btn-warning">Accept Mike's Version</button>
+                    <button class="btn btn-sm btn-secondary">Manual Merge</button>
+                </div>
+            </div>
+            
+            <div class="conflict-item">
+                <div class="conflict-header">
+                    <div class="conflict-type">
+                        <i class="fas fa-upload"></i>
+                        <span>File Upload Conflict</span>
+                    </div>
+                    <div class="conflict-status pending">Pending</div>
+                </div>
+                <div class="conflict-details">
+                    <p><strong>Section:</strong> Gallery</p>
+                    <p><strong>Conflicting Users:</strong> Emma Davis, You</p>
+                    <p><strong>Time:</strong> 10 minutes ago</p>
+                </div>
+                <div class="conflict-actions">
+                    <button class="btn btn-sm btn-success">Keep Both Files</button>
+                    <button class="btn btn-sm btn-warning">Replace with Latest</button>
+                    <button class="btn btn-sm btn-secondary">Manual Review</button>
+                </div>
+            </div>
+        `;
+    }
+    
+    autoResolveConflicts() {
+        notificationManager.show('Auto-resolving simple conflicts...', 'info');
+        
+        setTimeout(() => {
+            document.getElementById('pendingConflicts').textContent = '0';
+            document.getElementById('autoResolvedConflicts').textContent = '5';
+            notificationManager.show('Simple conflicts resolved automatically!', 'success');
+        }, 2000);
+    }
+    
+    resolveAllConflicts() {
+        if (confirm('Mark all conflicts as resolved? This action cannot be undone.')) {
+            document.getElementById('pendingConflicts').textContent = '0';
+            notificationManager.show('All conflicts marked as resolved', 'success');
+            this.closeConflictModal();
+        }
+    }
+    
+    focusOnUser(userId) {
+        const user = this.activeUsers.get(userId);
+        if (user) {
+            notificationManager.show(`Following ${user.name} in ${user.currentSection}`, 'info');
+            // In a real implementation, this would navigate to where the user is working
+        }
+    }
+    
+    messageUser(userId) {
+        const user = this.activeUsers.get(userId);
+        if (user) {
+            const message = prompt(`Send a message to ${user.name}:`);
+            if (message) {
+                notificationManager.show(`Message sent to ${user.name}`, 'success');
+            }
+        }
+    }
+    
+    toggleCursorTracking() {
+        const showCursors = document.getElementById('showCursors').checked;
+        if (showCursors) {
+            notificationManager.show('Cursor tracking enabled', 'info');
+        } else {
+            notificationManager.show('Cursor tracking disabled', 'info');
+        }
+    }
+    
+    toggleSelectionTracking() {
+        const showSelections = document.getElementById('showSelections').checked;
+        if (showSelections) {
+            notificationManager.show('Selection tracking enabled', 'info');
+        } else {
+            notificationManager.show('Selection tracking disabled', 'info');
+        }
+    }
+    
+    filterActivity() {
+        const userFilter = document.getElementById('userFilter').value;
+        const actionFilter = document.getElementById('actionFilter').value;
+        const timeFilter = document.getElementById('timeFilter').value;
+        
+        // In a real implementation, this would filter the activity feed
+        notificationManager.show('Activity feed filtered', 'info');
+        this.refreshActivityFeed();
+    }
+    
+    setupEventListeners() {
+        // Setup window-level collaboration events
+        window.addEventListener('beforeunload', () => {
+            if (this.collaborationSession) {
+                this.endCollaborationSession();
+            }
+        });
+        
+        // Listen for visibility changes to update user status
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                this.updateUserStatus('away');
+            } else {
+                this.updateUserStatus('active');
+            }
+        });
+    }
+    
+    updateUserStatus(status) {
+        // Update current user's status
+        console.log('User status updated:', status);
+    }
+    
+    endCollaborationSession() {
+        if (this.collaborationSession) {
+            this.logActivity({
+                id: 'session_end_' + Date.now(),
+                userId: 'current_user',
+                userName: 'You',
+                action: 'ended collaboration session',
+                timestamp: Date.now(),
+                section: 'Collaboration'
+            });
+            
+            this.collaborationSession = null;
+        }
+    }
+    
+    initializeDocumentSync() {
+        // Initialize document synchronization
+        console.log('📄 Document sync initialized');
+        
+        // Setup periodic sync check
+        setInterval(() => {
+            if (this.documentSyncQueue.length > 0) {
+                this.processSyncQueue();
+            }
+        }, 5000);
+    }
+    
+    processSyncQueue() {
+        const queueLength = this.documentSyncQueue.length;
+        
+        // Process queued changes
+        this.documentSyncQueue.forEach(change => {
+            this.syncChangeToServer(change);
+        });
+        
+        // Clear queue
+        this.documentSyncQueue = [];
+        
+        console.log(`📡 Processed ${queueLength} sync operations`);
+    }
+    
+    syncChangeToServer(change) {
+        // Simulate server sync
+        // In a real implementation, this would send the change to the WebSocket server
+        console.log('Syncing change to server:', change);
+    }
+}
+
+// Initialize Real-time Collaboration
+function initializeRealTimeCollaboration() {
+    window.collaboration = new RealTimeCollaboration();
+    console.log('✅ Real-time Collaboration initialized');
+}
