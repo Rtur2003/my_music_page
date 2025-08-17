@@ -326,9 +326,15 @@ class AdminPanel {
         }
         
         this.bindEvents();
-        this.updateStats();
         this.loadContent();
-        this.loadUploadedContent(); // Yüklenen dosyaları geri yükle
+        
+        // Load uploaded content FIRST, then update stats
+        this.loadUploadedContent();
+        
+        // Update stats after content is loaded with a small delay
+        setTimeout(() => {
+            this.updateStats();
+        }, 100);
         
         console.log('🔧 Admin panel başarıyla yüklendi!');
     }
@@ -700,6 +706,16 @@ class AdminPanel {
     
     deleteItem(item) {
         if (confirm('Bu öğeyi silmek istediğinizden emin misiniz?')) {
+            // Remove from localStorage first
+            const musicId = item.dataset.musicId;
+            const galleryId = item.dataset.galleryId;
+            
+            if (musicId) {
+                this.removeMusicFromStorage(musicId);
+            } else if (galleryId) {
+                this.removeGalleryFromStorage(galleryId);
+            }
+            
             item.style.transition = 'all 0.3s ease';
             item.style.opacity = '0';
             item.style.transform = 'scale(0.8)';
@@ -710,6 +726,20 @@ class AdminPanel {
                 this.showNotification('Öğe başarıyla silindi!', 'success');
             }, 300);
         }
+    }
+    
+    removeMusicFromStorage(musicId) {
+        let musicList = JSON.parse(localStorage.getItem('uploaded_music') || '[]');
+        musicList = musicList.filter(music => music.id !== musicId);
+        localStorage.setItem('uploaded_music', JSON.stringify(musicList));
+        console.log('🗑️ Music removed from localStorage:', musicId);
+    }
+    
+    removeGalleryFromStorage(galleryId) {
+        let galleryList = JSON.parse(localStorage.getItem('uploaded_gallery') || '[]');
+        galleryList = galleryList.filter(gallery => gallery.id !== galleryId);
+        localStorage.setItem('uploaded_gallery', JSON.stringify(galleryList));
+        console.log('🗑️ Gallery item removed from localStorage:', galleryId);
     }
     
     initializeFileHandling() {
@@ -753,28 +783,23 @@ class AdminPanel {
     }
     
     updateStats() {
-        // Get real data from actual DOM elements - with fallback to main site
-        let totalTracks = document.querySelectorAll('.music-item').length;
-        let totalImages = document.querySelectorAll('.gallery-admin-item, .gallery-item').length;
+        // Get counts from localStorage + DOM elements
+        const savedMusicList = JSON.parse(localStorage.getItem('uploaded_music') || '[]');
+        const savedGalleryList = JSON.parse(localStorage.getItem('uploaded_gallery') || '[]');
         
-        // Fallback: try to get from main site if admin elements don't exist
-        if (totalTracks === 0) {
-            totalTracks = document.querySelectorAll('.music-card').length || 4; // Default to 4
-        }
+        // Count DOM elements
+        const domTracks = document.querySelectorAll('.music-item').length;
+        const domImages = document.querySelectorAll('.gallery-admin-item').length;
         
-        if (totalImages === 0) {
-            totalImages = document.querySelectorAll('.gallery-item').length || 6; // Default to 6
-        }
+        // Total = localStorage + default items
+        const totalTracks = Math.max(4 + savedMusicList.length, domTracks); // 4 default + uploaded
+        const totalImages = Math.max(6 + savedGalleryList.length, domImages); // 6 default + uploaded
         
-        // Ensure positive numbers
-        totalTracks = Math.max(0, totalTracks);
-        totalImages = Math.max(0, totalImages);
-        
-        // Calculate real page views and engagement
+        // Calculate real page views and engagement (stable)
         const realViews = this.getRealPageViews();
         const realLikes = this.getRealEngagement();
         
-        // Ensure positive numbers for views and likes too
+        // Ensure positive numbers
         const safeViews = Math.max(0, realViews);
         const safeLikes = Math.max(0, realLikes);
         
@@ -799,16 +824,24 @@ class AdminPanel {
             this.animateCounter(totalLikesEl, safeLikes);
         }
         
-        console.log(`📊 Stats updated: ${totalTracks} tracks, ${totalImages} images, ${safeViews} views, ${safeLikes} engagement`);
+        console.log(`📊 Stats updated: ${totalTracks} tracks (${savedMusicList.length} uploaded), ${totalImages} images (${savedGalleryList.length} uploaded), ${safeViews} views, ${safeLikes} engagement`);
     }
     
     getRealPageViews() {
-        // Get from localStorage if available, otherwise start from 0
-        let views = parseInt(localStorage.getItem('page_views') || '0');
+        // Get from localStorage if available, otherwise start from base value
+        let views = parseInt(localStorage.getItem('page_views') || '75'); // Start from 75
         
-        // Increment view count on each admin panel access
-        views++;
-        localStorage.setItem('page_views', views.toString());
+        // Only increment once per session, not on every stats update
+        const sessionKey = 'admin_session_view_counted';
+        const currentSession = localStorage.getItem('admin_session');
+        const lastCountedSession = localStorage.getItem(sessionKey);
+        
+        if (currentSession && currentSession !== lastCountedSession) {
+            views++;
+            localStorage.setItem('page_views', views.toString());
+            localStorage.setItem(sessionKey, currentSession);
+            console.log('📈 Page view incremented to:', views);
+        }
         
         return views;
     }
