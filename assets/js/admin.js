@@ -9,7 +9,7 @@ class AdminAuth {
         
         this.initAuth();
     }
-    
+    //
     initAuth() {
         this.checkSession();
         this.bindLoginEvents();
