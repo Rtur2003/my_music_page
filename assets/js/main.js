@@ -67,19 +67,45 @@ function initializeNavigation() {
             const targetSection = document.querySelector(targetId);
             
             if (targetSection) {
-                const headerHeight = header.offsetHeight;
-                const targetPosition = targetSection.offsetTop - headerHeight;
+                const headerHeight = header ? header.offsetHeight : 80;
+                const targetPosition = targetSection.offsetTop - headerHeight - 20; // Extra offset
                 
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
+                // Use both smooth scroll methods for better compatibility
+                try {
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                } catch (error) {
+                    // Fallback for older browsers
+                    const start = window.pageYOffset;
+                    const distance = targetPosition - start;
+                    const duration = 800;
+                    let startTime = null;
+                    
+                    function animation(currentTime) {
+                        if (startTime === null) startTime = currentTime;
+                        const timeElapsed = currentTime - startTime;
+                        const run = ease(timeElapsed, start, distance, duration);
+                        window.scrollTo(0, run);
+                        if (timeElapsed < duration) requestAnimationFrame(animation);
+                    }
+                    
+                    function ease(t, b, c, d) {
+                        t /= d / 2;
+                        if (t < 1) return c / 2 * t * t + b;
+                        t--;
+                        return -c / 2 * (t * (t - 2) - 1) + b;
+                    }
+                    
+                    requestAnimationFrame(animation);
+                }
                 
                 // Close mobile menu if open
-                if (navMenu.classList.contains('active')) {
+                if (navMenu && navMenu.classList.contains('active')) {
                     navMenu.classList.remove('active');
-                    navToggle.classList.remove('active');
-                    const lines = navToggle.querySelectorAll('.hamburger-line');
+                    if (navToggle) navToggle.classList.remove('active');
+                    const lines = navToggle ? navToggle.querySelectorAll('.hamburger-line') : [];
                     lines.forEach(line => {
                         line.style.transform = '';
                         line.style.opacity = '';
@@ -89,6 +115,11 @@ function initializeNavigation() {
                 // Update active link
                 navLinks.forEach(l => l.classList.remove('active'));
                 link.classList.add('active');
+                
+                // Update URL hash without jumping
+                history.replaceState(null, null, targetId);
+            } else {
+                logger.warn('Target section not found:', targetId);
             }
         });
     });
@@ -118,33 +149,50 @@ function initializeScrollEffects() {
 }
 
 function initializeAnimations() {
-    // Counter animations
+    // Counter animations with better performance
     const counters = document.querySelectorAll('[data-count]');
     const counterObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const counter = entry.target;
-                const target = parseInt(counter.getAttribute('data-count'));
+                const target = parseInt(counter.getAttribute('data-count')) || 0;
                 let current = 0;
-                const increment = target / 50;
+                const duration = 2000; // 2 seconds
+                const step = target / (duration / 16); // 60fps
                 
                 const updateCounter = () => {
                     if (current < target) {
-                        current += increment;
-                        counter.textContent = Math.floor(current);
+                        current += step;
+                        const displayValue = Math.floor(current);
+                        counter.textContent = displayValue;
                         requestAnimationFrame(updateCounter);
                     } else {
                         counter.textContent = target;
                     }
                 };
                 
+                // Add number formatting for larger numbers
+                const formatNumber = (num) => {
+                    if (num >= 1000) {
+                        return (num / 1000).toFixed(1) + 'K';
+                    }
+                    return num.toString();
+                };
+                
                 updateCounter();
                 counterObserver.unobserve(counter);
             }
         });
+    }, {
+        threshold: 0.5,
+        rootMargin: '0px 0px -50px 0px'
     });
     
-    counters.forEach(counter => counterObserver.observe(counter));
+    counters.forEach(counter => {
+        if (counter) {
+            counterObserver.observe(counter);
+        }
+    });
     
     // Music card animations
     const musicCards = document.querySelectorAll('.music-card');
