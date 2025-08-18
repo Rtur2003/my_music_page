@@ -5951,6 +5951,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+
+// Basit admin oturum kontrolü
+function checkAdminSession() {
+    // Örneğin localStorage’da token veya kullanıcı bilgisi var mı kontrol et
+    const adminToken = localStorage.getItem('adminToken');
+    return adminToken !== null;
+}
+
 // Initialize API Endpoint Manager
 function initializeAPIEndpointManager() {
     window.apiManager = new APIEndpointManager();
