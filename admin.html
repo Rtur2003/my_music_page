@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/admin.css?v=1.2.0">
+    <link rel="stylesheet" href="assets/css/compatibility.css?v=1.2.0">
     <link rel="manifest" href="manifest.json">
 </head>
 <body>
@@ -278,7 +279,7 @@ Lise yıllarımda piyano çalmaya başladım ve kendi kendimi geliştirerek müz
 Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokunmak. Her eserimde bir parça kalbimi bırakarak, dinleyicilerimle duygusal bir bağ kurmaya çalışıyorum.</textarea>
                             </div>
                             
-                            <button class="btn btn-secondary" onclick="saveAboutText()">
+                            <button class="btn btn-secondary" onclick="saveAboutText()" aria-label="Save about text and apply to main site">
                                 <i class="fas fa-save"></i>
                                 Save & Apply to Site
                             </button>
@@ -298,7 +299,7 @@ Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokun
                                 <label>Description</label>
                                 <textarea id="heroDescription" class="content-textarea" rows="3">Creating cinematic melodies and instrumental compositions that touch the soul</textarea>
                             </div>
-                            <button class="btn btn-secondary" onclick="saveHeroContent()">
+                            <button class="btn btn-secondary" onclick="saveHeroContent()" aria-label="Save hero content">
                                 <i class="fas fa-save"></i>
                                 Save & Apply to Site
                             </button>
@@ -320,7 +321,7 @@ Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokun
                                     <input type="text" value="İstanbul, Türkiye">
                                 </div>
                             </div>
-                            <button class="btn btn-secondary" onclick="saveContactInfo()">
+                            <button class="btn btn-secondary" onclick="saveContactInfo()" aria-label="Save contact information">
                                 <i class="fas fa-save"></i>
                                 Save & Apply to Site
                             </button>
@@ -344,7 +345,7 @@ Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokun
                                 <label>Site Açıklaması</label>
                                 <textarea id="siteDescription">Profesyonel müzik portföyü - En yeni müziklerimi keşfedin</textarea>
                             </div>
-                            <button class="btn btn-primary" onclick="saveSiteSettings()">
+                            <button class="btn btn-primary" onclick="saveSiteSettings()" aria-label="Save site settings">
                                 <i class="fas fa-save"></i>
                                 Save Settings
                             </button>
@@ -364,7 +365,7 @@ Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokun
                                 <label>Instagram</label>
                                 <input type="url" id="instagramUrl" placeholder="Instagram profil linki">
                             </div>
-                            <button class="btn btn-primary" onclick="saveSocialMediaSettings()">
+                            <button class="btn btn-primary" onclick="saveSocialMediaSettings()" aria-label="Save social media settings">
                                 <i class="fas fa-save"></i>
                                 Save Social Media
                             </button>
@@ -419,7 +420,7 @@ Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokun
         <div class="modal-content">
             <div class="modal-header">
                 <h3><i class="fas fa-music"></i> Müzik Düzenle</h3>
-                <button class="modal-close" onclick="closeMusicEditModal()">&times;</button>
+                <button class="modal-close" onclick="closeMusicEditModal()" aria-label="Close music edit modal">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="musicEditForm">
@@ -497,7 +498,7 @@ Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokun
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="closeMusicEditModal()">
+                <button type="button" class="btn btn-secondary" onclick="closeMusicEditModal()" aria-label="Close music edit modal">
                     <i class="fas fa-times"></i>
                     İptal
                 </button>
@@ -514,7 +515,7 @@ Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokun
         <div class="modal-content">
             <div class="modal-header">
                 <h3><i class="fas fa-images"></i> Galeri Öğesi Düzenle</h3>
-                <button class="modal-close" onclick="closeGalleryEditModal()">&times;</button>
+                <button class="modal-close" onclick="closeGalleryEditModal()" aria-label="Close gallery edit modal">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="galleryEditForm">
@@ -581,7 +582,7 @@ Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokun
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="closeGalleryEditModal()">
+                <button type="button" class="btn btn-secondary" onclick="closeGalleryEditModal()" aria-label="Close gallery edit modal">
                     <i class="fas fa-times"></i>
                     İptal
                 </button>
@@ -593,6 +594,7 @@ Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokun
         </div>
     </div>
 
+    <script src="assets/js/logger.js?v=1.2.0"></script>
     <script src="assets/js/admin.js?v=1.2.0"></script>
     <script src="assets/js/pwa-manager.js"></script>
 </body>

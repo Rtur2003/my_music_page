@@ -542,45 +542,64 @@ class AdminPanel {
     }
     
     async uploadFile(file, index, total, progressFill, progressText) {
-        // Validate file before upload
-        const fileType = file.type.startsWith('audio/') ? 'music' : 'image';
-        const validationResults = await fileValidator.validateFile(file, fileType);
-        
-        if (!fileValidator.showValidationResults(validationResults, file.name)) {
-            // Validation failed, skip this file
-            if (index === total - 1) {
-                setTimeout(() => {
-                    this.closeUploadModal();
-                }, 500);
+        try {
+            // Validate file before upload
+            const fileType = file.type.startsWith('audio/') ? 'music' : 'image';
+            const validationResults = await fileValidator.validateFile(file, fileType);
+            
+            if (!fileValidator.showValidationResults(validationResults, file.name)) {
+                // Validation failed, skip this file
+                if (index === total - 1) {
+                    setTimeout(() => {
+                        this.closeUploadModal();
+                    }, 500);
+                }
+                return;
             }
+        } catch (error) {
+            console.error('File validation error:', error);
+            this.showAdminNotification('File validation failed: ' + file.name, 'error');
             return;
         }
         
-        const formData = new FormData();
-        formData.append('file', file);
-        
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += Math.random() * 30;
-            if (progress > 100) progress = 100;
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
             
-            const totalProgress = ((index * 100) + progress) / total;
-            progressFill.style.width = totalProgress + '%';
-            progressText.textContent = `Yükleniyor... ${Math.round(totalProgress)}%`;
-            
-            if (progress >= 100) {
-                clearInterval(interval);
-                
-                if (index === total - 1) {
-                    setTimeout(() => {
-                        this.showNotification('Dosyalar başarıyla yüklendi!', 'success');
-                        this.closeUploadModal();
-                        this.addFileToList(file);
-                        this.updateStats();
-                    }, 500);
+            let progress = 0;
+            const interval = setInterval(() => {
+                try {
+                    progress += Math.random() * 30;
+                    if (progress > 100) progress = 100;
+                    
+                    const totalProgress = ((index * 100) + progress) / total;
+                    if (progressFill && progressText) {
+                        progressFill.style.width = totalProgress + '%';
+                        progressText.textContent = `Yükleniyor... ${Math.round(totalProgress)}%`;
+                    }
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        
+                        if (index === total - 1) {
+                            setTimeout(() => {
+                                this.showAdminNotification('Dosyalar başarıyla yüklendi!', 'success');
+                                this.closeUploadModal();
+                                this.addFileToList(file);
+                                this.updateStats();
+                            }, 500);
+                        }
+                    }
+                } catch (progressError) {
+                    console.error('Progress update error:', progressError);
+                    clearInterval(interval);
+                    this.showAdminNotification('Upload progress error', 'error');
                 }
-            }
-        }, 100);
+            }, 100);
+        } catch (uploadError) {
+            console.error('Upload error:', uploadError);
+            this.showAdminNotification('File upload failed: ' + file.name, 'error');
+        }
     }
     
     addFileToList(file) {
@@ -603,13 +622,13 @@ class AdminPanel {
             for (let item of existingItems) {
                 const titleElement = item.querySelector('h4');
                 if (titleElement && titleElement.textContent === file.name.replace(/\.[^/.]+$/, "")) {
-                    this.showNotification('Bu müzik dosyası zaten yüklü!', 'warning');
+                    this.showAdminNotification('Bu müzik dosyası zaten yüklü!', 'warning');
                     return;
                 }
             }
         }
         if (!musicList) {
-            this.showNotification('Error: Music container not found!', 'error');
+            this.showAdminNotification('Error: Music container not found!', 'error');
             return;
         }
         
@@ -682,23 +701,24 @@ class AdminPanel {
     }
     
     addImageToList(file) {
-        // Check if file with same name already exists in DOM first
-        const galleryGrid = document.querySelector('.gallery-grid');
-        if (galleryGrid) {
-            const existingItems = galleryGrid.querySelectorAll('.gallery-admin-item');
-            for (let item of existingItems) {
-                const titleElement = item.querySelector('h4');
-                if (titleElement && titleElement.textContent === file.name.replace(/\.[^/.]+$/, "")) {
-                    this.showNotification('Bu resim dosyası zaten yüklü!', 'warning');
-                    return;
+        try {
+            // Check if file with same name already exists in DOM first
+            const galleryGrid = document.querySelector('.gallery-grid');
+            if (galleryGrid) {
+                const existingItems = galleryGrid.querySelectorAll('.gallery-admin-item');
+                for (let item of existingItems) {
+                    const titleElement = item.querySelector('h4');
+                    if (titleElement && titleElement.textContent === file.name.replace(/\.[^/.]+$/, "")) {
+                        this.showAdminNotification('Bu resim dosyası zaten yüklü!', 'warning');
+                        return;
+                    }
                 }
             }
-        }
-        
-        if (!galleryGrid) {
-            this.showNotification('Error: Gallery container not found!', 'error');
-            return;
-        }
+            
+            if (!galleryGrid) {
+                this.showAdminNotification('Error: Gallery container not found!', 'error');
+                return;
+            }
         
         const galleryItem = document.createElement('div');
         galleryItem.className = 'gallery-admin-item';
@@ -707,9 +727,10 @@ class AdminPanel {
         const galleryId = 'gallery_' + Date.now();
         galleryItem.dataset.galleryId = galleryId;
         
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const imageUrl = e.target.result;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const imageUrl = e.target.result;
             
             galleryItem.innerHTML = `
                 <img src="${imageUrl}" alt="Uploaded Image">
@@ -727,32 +748,46 @@ class AdminPanel {
                 </div>
             `;
             
-            // Save gallery data to localStorage
-            const galleryData = {
-                id: galleryId,
-                title: 'Yeni Resim',
-                description: 'Az önce yüklendi',
-                category: 'general',
-                imageUrl: imageUrl,
-                dateAdded: new Date().toISOString()
+                    // Save gallery data to localStorage
+                    const galleryData = {
+                        id: galleryId,
+                        title: 'Yeni Resim',
+                        description: 'Az önce yüklendi',
+                        category: 'general',
+                        imageUrl: imageUrl,
+                        dateAdded: new Date().toISOString()
+                    };
+                    
+                    this.saveGalleryData(galleryData);
+                    this.bindItemEvents(galleryItem);
+                    galleryGrid.appendChild(galleryItem);
+                    
+                    // Add to main site immediately
+                    this.addImageToMainSite(galleryData);
+            
+                    galleryItem.style.opacity = '0';
+                    galleryItem.style.transform = 'scale(0.8)';
+                    setTimeout(() => {
+                        galleryItem.style.transition = 'all 0.3s ease';
+                        galleryItem.style.opacity = '1';
+                        galleryItem.style.transform = 'scale(1)';
+                    }, 100);
+                } catch (error) {
+                    console.error('Error processing image:', error);
+                    this.showAdminNotification('Resim işlenirken hata oluştu', 'error');
+                }
             };
             
-            this.saveGalleryData(galleryData);
-            this.bindItemEvents(galleryItem);
-            galleryGrid.appendChild(galleryItem);
+            reader.onerror = () => {
+                console.error('FileReader error for file:', file.name);
+                this.showAdminNotification('Dosya okuma hatası', 'error');
+            };
             
-            // Add to main site immediately
-            this.addImageToMainSite(galleryData);
-            
-            galleryItem.style.opacity = '0';
-            galleryItem.style.transform = 'scale(0.8)';
-            setTimeout(() => {
-                galleryItem.style.transition = 'all 0.3s ease';
-                galleryItem.style.opacity = '1';
-                galleryItem.style.transform = 'scale(1)';
-            }, 100);
-        };
-        reader.readAsDataURL(file);
+            reader.readAsDataURL(file);
+        } catch (error) {
+            console.error('Error in addImageToList:', error);
+            this.showAdminNotification('Resim listesine ekleme hatası', 'error');
+        }
     }
     
     bindItemEvents(item) {
@@ -786,41 +821,61 @@ class AdminPanel {
     }
     
     deleteItem(item) {
-        if (confirm('Bu öğeyi silmek istediğinizden emin misiniz?')) {
-            // Remove from localStorage first
-            const musicId = item.dataset.musicId;
-            const galleryId = item.dataset.galleryId;
-            
-            if (musicId) {
-                this.removeMusicFromStorage(musicId);
-            } else if (galleryId) {
-                this.removeGalleryFromStorage(galleryId);
+        try {
+            if (confirm('Bu öğeyi silmek istediğinizden emin misiniz?')) {
+                // Remove from localStorage first
+                const musicId = item.dataset.musicId;
+                const galleryId = item.dataset.galleryId;
+                
+                if (musicId) {
+                    this.removeMusicFromStorage(musicId);
+                } else if (galleryId) {
+                    this.removeGalleryFromStorage(galleryId);
+                }
+                
+                item.style.transition = 'all 0.3s ease';
+                item.style.opacity = '0';
+                item.style.transform = 'scale(0.8)';
+                
+                setTimeout(() => {
+                    try {
+                        item.remove();
+                        this.updateStats();
+                        this.showAdminNotification('Öğe başarıyla silindi!', 'success');
+                    } catch (error) {
+                        console.error('Error removing item from DOM:', error);
+                        this.showAdminNotification('Öğe silinirken hata oluştu', 'error');
+                    }
+                }, 300);
             }
-            
-            item.style.transition = 'all 0.3s ease';
-            item.style.opacity = '0';
-            item.style.transform = 'scale(0.8)';
-            
-            setTimeout(() => {
-                item.remove();
-                this.updateStats();
-                this.showNotification('Öğe başarıyla silindi!', 'success');
-            }, 300);
+        } catch (error) {
+            console.error('Error in deleteItem:', error);
+            this.showAdminNotification('Silme işlemi sırasında hata oluştu', 'error');
         }
     }
     
     removeMusicFromStorage(musicId) {
-        let musicList = JSON.parse(localStorage.getItem('uploadedMusic') || '[]');
-        musicList = musicList.filter(music => music.id !== musicId);
-        localStorage.setItem('uploadedMusic', JSON.stringify(musicList));
-        console.log('🗑️ Music removed from localStorage:', musicId);
+        try {
+            let musicList = JSON.parse(localStorage.getItem('uploadedMusic') || '[]');
+            musicList = musicList.filter(music => music.id !== musicId);
+            localStorage.setItem('uploadedMusic', JSON.stringify(musicList));
+            console.log('🗑️ Music removed from localStorage:', musicId);
+        } catch (error) {
+            console.error('Error removing music from storage:', error);
+            this.showAdminNotification('Müzik verisi silinirken hata oluştu', 'error');
+        }
     }
     
     removeGalleryFromStorage(galleryId) {
-        let galleryList = JSON.parse(localStorage.getItem('uploadedGallery') || '[]');
-        galleryList = galleryList.filter(gallery => gallery.id !== galleryId);
-        localStorage.setItem('uploadedGallery', JSON.stringify(galleryList));
-        console.log('🗑️ Gallery item removed from localStorage:', galleryId);
+        try {
+            let galleryList = JSON.parse(localStorage.getItem('uploadedGallery') || '[]');
+            galleryList = galleryList.filter(gallery => gallery.id !== galleryId);
+            localStorage.setItem('uploadedGallery', JSON.stringify(galleryList));
+            console.log('🗑️ Gallery item removed from localStorage:', galleryId);
+        } catch (error) {
+            console.error('Error removing gallery from storage:', error);
+            this.showAdminNotification('Galeri verisi silinirken hata oluştu', 'error');
+        }
     }
     
     initializeFileHandling() {
@@ -831,56 +886,82 @@ class AdminPanel {
     }
     
     bindFormEvents() {
-        const forms = document.querySelectorAll('form');
-        forms.forEach(form => {
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                this.showNotification('Ayarlar başarıyla kaydedildi!', 'success');
+        try {
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', (e) => {
+                    try {
+                        e.preventDefault();
+                        this.showAdminNotification('Ayarlar başarıyla kaydedildi!', 'success');
+                    } catch (error) {
+                        console.error('Error handling form submit:', error);
+                        this.showAdminNotification('Form gönderilirken hata oluştu', 'error');
+                    }
+                });
             });
-        });
-        
-        const saveButtons = document.querySelectorAll('.btn-secondary');
-        saveButtons.forEach(btn => {
-            if (btn.querySelector('i.fa-save')) {
-                btn.addEventListener('click', () => {
-                    this.showNotification('İçerik başarıyla kaydedildi!', 'success');
+            
+            const saveButtons = document.querySelectorAll('.btn-secondary');
+            saveButtons.forEach(btn => {
+                if (btn.querySelector('i.fa-save')) {
+                    btn.addEventListener('click', () => {
+                        try {
+                            this.showAdminNotification('İçerik başarıyla kaydedildi!', 'success');
+                        } catch (error) {
+                            console.error('Error handling save button click:', error);
+                            this.showAdminNotification('Kaydetme işleminde hata oluştu', 'error');
+                        }
+                    });
+                }
+            });
+            
+            const backupBtn = document.querySelector('[data-action="backup"]');
+            if (backupBtn) {
+                backupBtn.addEventListener('click', () => {
+                    try {
+                        this.createBackup();
+                    } catch (error) {
+                        console.error('Error creating backup:', error);
+                        this.showAdminNotification('Yedekleme işleminde hata oluştu', 'error');
+                    }
                 });
             }
-        });
-        
-        const backupBtn = document.querySelector('[data-action="backup"]');
-        if (backupBtn) {
-            backupBtn.addEventListener('click', () => {
-                this.createBackup();
-            });
-        }
-        
-        const backupFile = document.getElementById('backupFile');
-        if (backupFile) {
-            backupFile.addEventListener('change', (e) => {
-                this.restoreBackup(e.target.files[0]);
-            });
+            
+            const backupFile = document.getElementById('backupFile');
+            if (backupFile) {
+                backupFile.addEventListener('change', (e) => {
+                    try {
+                        this.restoreBackup(e.target.files[0]);
+                    } catch (error) {
+                        console.error('Error restoring backup:', error);
+                        this.showAdminNotification('Yedek yükleme işleminde hata oluştu', 'error');
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Error in bindFormEvents:', error);
+            this.showAdminNotification('Form bağlama işleminde hata oluştu', 'error');
         }
     }
     
     updateStats() {
-        // Get counts from localStorage + DOM elements
-        const savedMusicList = JSON.parse(localStorage.getItem('uploadedMusic') || '[]');
-        const savedGalleryList = JSON.parse(localStorage.getItem('uploadedGallery') || '[]');
-        
-        // Count DOM elements
-        const domTracks = document.querySelectorAll('.music-item').length;
-        const domImages = document.querySelectorAll('.gallery-admin-item').length;
-        
-        // Total = localStorage + default items
-        const totalTracks = Math.max(4 + savedMusicList.length, domTracks); // 4 default + uploaded
-        const totalImages = Math.max(6 + savedGalleryList.length, domImages); // 6 default + uploaded
-        
-        // Calculate real page views and engagement (stable)
-        const realViews = this.getRealPageViews();
-        const realLikes = this.getRealEngagement();
-        
-        // Ensure positive numbers
+        try {
+            // Get counts from localStorage + DOM elements
+            const savedMusicList = JSON.parse(localStorage.getItem('uploadedMusic') || '[]');
+            const savedGalleryList = JSON.parse(localStorage.getItem('uploadedGallery') || '[]');
+            
+            // Count DOM elements
+            const domTracks = document.querySelectorAll('.music-item').length;
+            const domImages = document.querySelectorAll('.gallery-admin-item').length;
+            
+            // Total = localStorage + default items
+            const totalTracks = Math.max(4 + savedMusicList.length, domTracks); // 4 default + uploaded
+            const totalImages = Math.max(6 + savedGalleryList.length, domImages); // 6 default + uploaded
+            
+            // Calculate real page views and engagement (stable)
+            const realViews = this.getRealPageViews();
+            const realLikes = this.getRealEngagement();
+            
+            // Ensure positive numbers
         const safeViews = Math.max(0, realViews);
         const safeLikes = Math.max(0, realLikes);
         
@@ -905,7 +986,11 @@ class AdminPanel {
             this.animateCounter(totalLikesEl, safeLikes);
         }
         
-        console.log(`📊 Stats updated: ${totalTracks} tracks (${savedMusicList.length} uploaded), ${totalImages} images (${savedGalleryList.length} uploaded), ${safeViews} views, ${safeLikes} engagement`);
+            console.log(`📊 Stats updated: ${totalTracks} tracks (${savedMusicList.length} uploaded), ${totalImages} images (${savedGalleryList.length} uploaded), ${safeViews} views, ${safeLikes} engagement`);
+        } catch (error) {
+            console.error('Error updating stats:', error);
+            this.showAdminNotification('İstatistik güncelleme hatası', 'error');
+        }
     }
     
     getRealPageViews() {
@@ -1037,7 +1122,7 @@ class AdminPanel {
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
         
-        this.showNotification('Yedek dosyası başarıyla oluşturuldu!', 'success');
+        this.showAdminNotification('Yedek dosyası başarıyla oluşturuldu!', 'success');
     }
     
     restoreBackup(file) {
@@ -1050,9 +1135,9 @@ class AdminPanel {
                 this.data = backup.data || {};
                 this.saveData();
                 this.updateStats();
-                this.showNotification('Yedek başarıyla geri yüklendi!', 'success');
+                this.showAdminNotification('Yedek başarıyla geri yüklendi!', 'success');
             } catch (error) {
-                this.showNotification('Yedek dosyası geçersiz!', 'error');
+                this.showAdminNotification('Yedek dosyası geçersiz!', 'error');
             }
         };
         reader.readAsText(file);
@@ -1118,7 +1203,7 @@ class AdminPanel {
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
     
-    showNotification(message, type = 'info') {
+    showAdminNotification(message, type = 'info') {
         const notification = document.createElement('div');
         notification.className = `notification ${type}`;
         notification.textContent = message;
@@ -1191,7 +1276,7 @@ Site düzenli olarak güncellenmekte ve yeni içerikler eklenmektedir.
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
         
-        this.showNotification('Rapor başarıyla oluşturuldu!', 'success');
+        this.showAdminNotification('Rapor başarıyla oluşturuldu!', 'success');
     }
     
     // LocalStorage Management Functions
@@ -1359,7 +1444,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('keydown', (e) => {
         if (e.ctrlKey && e.key === 's') {
             e.preventDefault();
-            window.adminPanel.showNotification('Otomatik kayıt aktif!', 'info');
+            window.adminPanel.showAdminNotification('Otomatik kayıt aktif!', 'info');
         }
     });
 });
@@ -1913,7 +1998,7 @@ function saveMusicEdit() {
         saveBtn.innerHTML = '<i class="fas fa-save"></i> Kaydet';
         
         closeMusicEditModal();
-        showNotification(`"${title}" successfully updated!`, 'success');
+        showAdminNotification(`"${title}" successfully updated!`, 'success');
         
         // Update stats if needed
         if (window.adminPanel) {
@@ -1977,7 +2062,7 @@ function saveGalleryEdit() {
         saveBtn.innerHTML = '<i class="fas fa-save"></i> Kaydet';
         
         closeGalleryEditModal();
-        showNotification(`"${title}" gallery item updated!`, 'success');
+        showAdminNotification(`"${title}" gallery item updated!`, 'success');
         
         // Update stats if needed
         if (window.adminPanel) {
@@ -2046,7 +2131,7 @@ function saveMusicEdit() {
         }
     }
     
-    adminPanel.showNotification('Müzik başarıyla güncellendi!', 'success');
+    adminPanel.showAdminNotification('Müzik başarıyla güncellendi!', 'success');
     closeMusicEditModal();
     
     // Sync to main site
@@ -2099,7 +2184,7 @@ function deleteMusicItem(button) {
         
         // Update stats
         adminPanel.updateStats();
-        adminPanel.showNotification('Müzik başarıyla silindi!', 'success');
+        adminPanel.showAdminNotification('Müzik başarıyla silindi!', 'success');
         
         // Sync to main site
         adminPanel.syncToMainSite();
@@ -2124,7 +2209,7 @@ function deleteGalleryItem(button) {
         
         // Update stats
         adminPanel.updateStats();
-        adminPanel.showNotification('Resim başarıyla silindi!', 'success');
+        adminPanel.showAdminNotification('Resim başarıyla silindi!', 'success');
         
         // Sync to main site
         adminPanel.syncToMainSite();
@@ -3385,7 +3470,7 @@ class AnalyticsDashboard {
     async requestNotificationPermission() {
         try {
             const permission = await Notification.requestPermission();
-            this.showNotification(
+            this.showAdminNotification(
                 permission === 'granted' ? 'Bildirimler Etkinleştirildi' : 'Bildirim İzni Reddedildi',
                 permission === 'granted' ? 'Artık önemli güncellemeleri alacaksınız' : 'Bildirimler için izin gerekli',
                 permission === 'granted' ? 'success' : 'warning'
@@ -3397,7 +3482,7 @@ class AnalyticsDashboard {
     }
     
     testPWAFeatures() {
-        this.showNotification('PWA Test', 'PWA özellikleri test ediliyor...', 'info');
+        this.showAdminNotification('PWA Test', 'PWA özellikleri test ediliyor...', 'info');
         
         // Test notifications
         if (Notification.permission === 'granted') {
@@ -3428,34 +3513,34 @@ class AnalyticsDashboard {
         
         setTimeout(() => {
             this.updatePWAStatus();
-            this.showNotification('PWA Test Tamamlandı', 'Tüm özellikler test edildi', 'success');
+            this.showAdminNotification('PWA Test Tamamlandı', 'Tüm özellikler test edildi', 'success');
         }, 1000);
     }
     
     async clearPWACache() {
         try {
-            this.showNotification('Cache Temizleniyor', 'PWA cache temizleniyor...', 'info');
+            this.showAdminNotification('Cache Temizleniyor', 'PWA cache temizleniyor...', 'info');
             
             if (typeof pwaManager !== 'undefined' && pwaManager.clearAppCache) {
                 const success = await pwaManager.clearAppCache();
                 if (success) {
-                    this.showNotification('Cache Temizlendi', 'PWA cache başarıyla temizlendi', 'success');
+                    this.showAdminNotification('Cache Temizlendi', 'PWA cache başarıyla temizlendi', 'success');
                 } else {
-                    this.showNotification('Cache Temizlenemedi', 'Cache temizlenirken hata oluştu', 'error');
+                    this.showAdminNotification('Cache Temizlenemedi', 'Cache temizlenirken hata oluştu', 'error');
                 }
             } else {
                 // Fallback cache clearing
                 if ('caches' in window) {
                     const cacheNames = await caches.keys();
                     await Promise.all(cacheNames.map(name => caches.delete(name)));
-                    this.showNotification('Cache Temizlendi', 'Browser cache temizlendi', 'success');
+                    this.showAdminNotification('Cache Temizlendi', 'Browser cache temizlendi', 'success');
                 }
             }
             
             this.updatePWAStatus();
         } catch (error) {
             console.error('Cache clear failed:', error);
-            this.showNotification('Hata', 'Cache temizlenirken hata oluştu', 'error');
+            this.showAdminNotification('Hata', 'Cache temizlenirken hata oluştu', 'error');
         }
     }
     
@@ -3464,11 +3549,11 @@ class AnalyticsDashboard {
         const pendingUploads = JSON.parse(localStorage.getItem('pending_file_uploads') || '[]');
         
         if (pendingActions.length === 0 && pendingUploads.length === 0) {
-            this.showNotification('Senkronizasyon', 'Bekleyen veri bulunamadı', 'info');
+            this.showAdminNotification('Senkronizasyon', 'Bekleyen veri bulunamadı', 'info');
             return;
         }
         
-        this.showNotification('Senkronizasyon Başladı', 'Offline veriler senkronize ediliyor...', 'info');
+        this.showAdminNotification('Senkronizasyon Başladı', 'Offline veriler senkronize ediliyor...', 'info');
         
         // Trigger background sync
         if (typeof pwaManager !== 'undefined' && pwaManager.syncOfflineData) {
@@ -3480,13 +3565,13 @@ class AnalyticsDashboard {
             localStorage.removeItem('pending_admin_actions');
             localStorage.removeItem('pending_file_uploads');
             this.updatePWAStatus();
-            this.showNotification('Senkronizasyon Tamamlandı', 'Tüm veriler başarıyla senkronize edildi', 'success');
+            this.showAdminNotification('Senkronizasyon Tamamlandı', 'Tüm veriler başarıyla senkronize edildi', 'success');
         }, 2000);
     }
     
     refreshPWAStatus() {
         this.updatePWAStatus();
-        this.showNotification('PWA Durumu', 'PWA durumu güncellendi', 'success');
+        this.showAdminNotification('PWA Durumu', 'PWA durumu güncellendi', 'success');
     }
     
     updateAnalytics() {
