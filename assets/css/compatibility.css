@@ -1,0 +1,326 @@
+/* Cross-browser compatibility fixes */
+
+/* CSS Grid fallback for older browsers */
+@supports not (display: grid) {
+    .stats-grid,
+    .dashboard-widgets,
+    .settings-grid,
+    .gallery-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .stat-card,
+    .widget,
+    .settings-card,
+    .gallery-item {
+        flex: 1 1 calc(50% - 0.5rem);
+        min-width: 300px;
+    }
+}
+
+/* Flexbox gap fallback for older browsers */
+@supports not (gap: 1rem) {
+    .stats-grid > *,
+    .dashboard-widgets > *,
+    .settings-grid > *,
+    .gallery-grid > * {
+        margin-right: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .stats-grid > *:nth-child(2n),
+    .dashboard-widgets > *:nth-child(2n),
+    .settings-grid > *:nth-child(2n),
+    .gallery-grid > *:nth-child(2n) {
+        margin-right: 0;
+    }
+}
+
+/* CSS custom properties fallback */
+@supports not (color: var(--primary-color)) {
+    :root {
+        /* Fallback colors for browsers that don't support CSS variables */
+    }
+    
+    .btn-primary {
+        background-color: #6c5ce7;
+        border-color: #6c5ce7;
+    }
+    
+    .btn-secondary {
+        background-color: #74b9ff;
+        border-color: #74b9ff;
+    }
+    
+    .btn-success {
+        background-color: #00b894;
+        border-color: #00b894;
+    }
+    
+    .btn-warning {
+        background-color: #fdcb6e;
+        border-color: #fdcb6e;
+    }
+    
+    .btn-danger {
+        background-color: #e17055;
+        border-color: #e17055;
+    }
+}
+
+/* Backdrop-filter fallback */
+@supports not (backdrop-filter: blur(10px)) {
+    .modal,
+    .notification,
+    .tooltip {
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+    
+    .admin-sidebar {
+        background-color: rgba(45, 52, 54, 0.95);
+    }
+}
+
+/* Position sticky fallback */
+@supports not (position: sticky) {
+    .admin-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 500;
+    }
+    
+    .admin-main {
+        padding-top: 70px;
+    }
+}
+
+/* CSS transforms fallback */
+@supports not (transform: translateX(-100%)) {
+    .admin-sidebar {
+        left: -250px;
+        transition: left 0.3s ease;
+    }
+    
+    .admin-sidebar.mobile-open {
+        left: 0;
+    }
+}
+
+/* Clip-path fallback */
+@supports not (clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%)) {
+    .hero-shape::before,
+    .hero-shape::after {
+        display: none;
+    }
+}
+
+/* Object-fit fallback */
+@supports not (object-fit: cover) {
+    .gallery-item img,
+    .music-card img,
+    .user-avatar {
+        width: 100%;
+        height: auto;
+        max-height: 200px;
+    }
+}
+
+/* CSS filters fallback */
+@supports not (filter: blur(5px)) {
+    .hero-bg::before {
+        opacity: 0.7;
+        background: linear-gradient(45deg, rgba(108, 92, 231, 0.3), rgba(253, 121, 168, 0.3));
+    }
+}
+
+/* Browser-specific fixes */
+
+/* Internet Explorer 11 fixes */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    .admin-container {
+        display: block;
+    }
+    
+    .admin-sidebar {
+        float: left;
+        width: 250px;
+    }
+    
+    .admin-main {
+        margin-left: 250px;
+    }
+    
+    .stats-grid {
+        display: block;
+    }
+    
+    .stat-card {
+        display: inline-block;
+        width: 23%;
+        margin-right: 2%;
+        vertical-align: top;
+    }
+}
+
+/* Edge specific fixes */
+@supports (-ms-ime-align: auto) {
+    .modal-content {
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}
+
+/* Safari specific fixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    .admin-sidebar {
+        -webkit-transform: translateX(-100%);
+        transform: translateX(-100%);
+    }
+    
+    .admin-sidebar.mobile-open {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+    }
+    
+    .btn {
+        -webkit-appearance: none;
+        appearance: none;
+    }
+    
+    input[type="file"] {
+        -webkit-appearance: none;
+        appearance: none;
+    }
+}
+
+/* Firefox specific fixes */
+@-moz-document url-prefix() {
+    .progress-bar {
+        background: -moz-linear-gradient(left, #6c5ce7 0%, #fd79a8 100%);
+    }
+    
+    .btn {
+        -moz-appearance: none;
+        appearance: none;
+    }
+    
+    input[type="range"] {
+        -moz-appearance: none;
+        appearance: none;
+    }
+}
+
+/* Chrome/Webkit specific fixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    .scrollbar-custom::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    
+    .scrollbar-custom::-webkit-scrollbar-track {
+        background: var(--admin-border, #dee2e6);
+        border-radius: 4px;
+    }
+    
+    .scrollbar-custom::-webkit-scrollbar-thumb {
+        background: var(--admin-primary, #6c5ce7);
+        border-radius: 4px;
+    }
+    
+    .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+        background: var(--admin-secondary, #74b9ff);
+    }
+}
+
+/* Mobile browser fixes */
+@media screen and (max-width: 768px) {
+    /* iOS Safari fixes */
+    @supports (-webkit-overflow-scrolling: touch) {
+        .admin-content,
+        .modal-body {
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .admin-sidebar {
+            position: fixed;
+            height: 100vh;
+            height: -webkit-fill-available;
+        }
+    }
+    
+    /* Android Chrome fixes */
+    @media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
+        .admin-header {
+            position: fixed;
+        }
+        
+        .admin-main {
+            padding-top: 60px;
+        }
+    }
+}
+
+/* Print styles for compatibility */
+@media print {
+    .admin-sidebar,
+    .modal,
+    .notification,
+    .btn,
+    .admin-header {
+        display: none !important;
+    }
+    
+    .admin-main {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+    
+    .admin-content {
+        background: white !important;
+        color: black !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .btn {
+        border: 2px solid;
+    }
+    
+    .modal-content {
+        border: 2px solid;
+    }
+    
+    .admin-sidebar {
+        border-right: 2px solid;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Dark mode support for older browsers */
+@media (prefers-color-scheme: dark) {
+    .admin-bg {
+        background-color: #1a1a1a;
+        color: #ffffff;
+    }
+    
+    .modal-content {
+        background-color: #2d2d2d;
+        color: #ffffff;
+    }
+}
