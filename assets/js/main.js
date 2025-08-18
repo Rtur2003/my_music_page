@@ -230,26 +230,146 @@ function initializeAnimations() {
 function initializeContactForm() {
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
+        // Add real-time validation
+        const inputs = contactForm.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('blur', validateField);
+            input.addEventListener('input', clearFieldError);
+        });
+        
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
             const formData = new FormData(this);
-            const name = formData.get('name');
-            const email = formData.get('email');
-            const message = formData.get('message');
+            const name = formData.get('name')?.trim();
+            const email = formData.get('email')?.trim();
+            const subject = formData.get('subject')?.trim();
+            const message = formData.get('message')?.trim();
             
-            if (name && email && message) {
-                // Simulate form submission
-                showNotification('Mesajınız başarıyla gönderildi! En kısa sürede size dönüş yapacağım.', 'success');
-                this.reset();
+            // Clear previous errors
+            clearAllErrors();
+            
+            let isValid = true;
+            
+            // Validate name
+            if (!name || name.length < 2) {
+                showFieldError('name', 'Ad soyad en az 2 karakter olmalıdır');
+                isValid = false;
+            }
+            
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email || !emailRegex.test(email)) {
+                showFieldError('email', 'Geçerli bir e-posta adresi girin');
+                isValid = false;
+            }
+            
+            // Validate subject
+            if (!subject || subject.length < 3) {
+                showFieldError('subject', 'Konu en az 3 karakter olmalıdır');
+                isValid = false;
+            }
+            
+            // Validate message
+            if (!message || message.length < 10) {
+                showFieldError('message', 'Mesaj en az 10 karakter olmalıdır');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                // Show loading state
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gönderiliyor...';
+                submitBtn.disabled = true;
                 
-                // Track form submissions
-                const submissions = parseInt(localStorage.getItem('form_submissions') || '0') + 1;
-                localStorage.setItem('form_submissions', submissions.toString());
+                // Simulate form submission with delay
+                setTimeout(() => {
+                    showNotification('Mesajınız başarıyla gönderildi! En kısa sürede size dönüş yapacağım.', 'success');
+                    this.reset();
+                    
+                    // Track form submissions
+                    const submissions = parseInt(localStorage.getItem('form_submissions') || '0') + 1;
+                    localStorage.setItem('form_submissions', submissions.toString());
+                    
+                    // Reset button
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }, 1500);
             } else {
-                showNotification('Lütfen tüm alanları doldurun.', 'error');
+                showNotification('Lütfen form hatalarını düzeltin.', 'error');
             }
         });
+    }
+    
+    function validateField(e) {
+        const field = e.target;
+        const value = field.value.trim();
+        
+        switch (field.name) {
+            case 'name':
+                if (!value || value.length < 2) {
+                    showFieldError(field.name, 'Ad soyad en az 2 karakter olmalıdır');
+                } else {
+                    clearFieldError(field.name);
+                }
+                break;
+            case 'email':
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!value || !emailRegex.test(value)) {
+                    showFieldError(field.name, 'Geçerli bir e-posta adresi girin');
+                } else {
+                    clearFieldError(field.name);
+                }
+                break;
+            case 'subject':
+                if (!value || value.length < 3) {
+                    showFieldError(field.name, 'Konu en az 3 karakter olmalıdır');
+                } else {
+                    clearFieldError(field.name);
+                }
+                break;
+            case 'message':
+                if (!value || value.length < 10) {
+                    showFieldError(field.name, 'Mesaj en az 10 karakter olmalıdır');
+                } else {
+                    clearFieldError(field.name);
+                }
+                break;
+        }
+    }
+    
+    function showFieldError(fieldName, message) {
+        const field = document.getElementById(fieldName);
+        if (field) {
+            field.classList.add('error');
+            let errorElement = field.parentNode.querySelector('.field-error');
+            if (!errorElement) {
+                errorElement = document.createElement('div');
+                errorElement.className = 'field-error';
+                field.parentNode.appendChild(errorElement);
+            }
+            errorElement.textContent = message;
+        }
+    }
+    
+    function clearFieldError(fieldName) {
+        const field = typeof fieldName === 'string' ? document.getElementById(fieldName) : fieldName.target;
+        if (field) {
+            field.classList.remove('error');
+            const errorElement = field.parentNode.querySelector('.field-error');
+            if (errorElement) {
+                errorElement.remove();
+            }
+        }
+    }
+    
+    function clearAllErrors() {
+        const form = document.getElementById('contactForm');
+        if (form) {
+            form.querySelectorAll('.error').forEach(field => field.classList.remove('error'));
+            form.querySelectorAll('.field-error').forEach(error => error.remove());
+        }
     }
     
     // Social media link tracking
