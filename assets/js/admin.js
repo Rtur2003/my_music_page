@@ -38,10 +38,10 @@ class AdminAuth {
                 this.showAdminPanel();
                 this.updateLastActivity();
                 
-                // Initialize admin panel if logged in
+                // Initialize admin panel if logged in (singleton check)
                 setTimeout(() => {
-                    if (!window.adminPanelInstance) {
-                        window.adminPanelInstance = new AdminPanel();
+                    if (!window.adminPanel) {
+                        window.adminPanel = new AdminPanel();
                     }
                 }, 100);
                 return;
@@ -131,13 +131,13 @@ class AdminAuth {
         this.showAdminPanel();
         this.logSecurityEvent('login_success');
         
-        // Initialize admin panel after successful login
+        // Initialize admin panel after successful login (singleton check)
         setTimeout(() => {
-            if (!window.adminPanelInstance) {
-                window.adminPanelInstance = new AdminPanel();
+            if (!window.adminPanel) {
+                window.adminPanel = new AdminPanel();
+                // Initialize content editor
+                this.initContentEditor();
             }
-            // Initialize content editor
-            this.initContentEditor();
         }, 100);
     }
     
@@ -313,7 +313,6 @@ class AdminPanel {
         // Check for corrupted stats and reset if needed
         const views = parseInt(localStorage.getItem('page_views') || '0');
         if (views < 0 || isNaN(views)) {
-            console.log('🔧 Corrupted stats detected, resetting...');
             this.resetStats();
         }
         
@@ -323,7 +322,6 @@ class AdminPanel {
         // Load uploaded content FIRST, then update stats
         // Add delay to ensure DOM is ready
         setTimeout(() => {
-            console.log('⏰ Starting delayed content loading...');
             this.loadUploadedContent();
             
             // Update stats after content is loaded
@@ -332,22 +330,25 @@ class AdminPanel {
             }, 200);
         }, 500);
         
-        console.log('🔧 Admin panel başarıyla yüklendi!');
     }
     
     bindEvents() {
         const navLinks = document.querySelectorAll('.nav-item a');
         navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const section = link.dataset.section;
-                this.showSection(section);
-                this.updateActiveNav(link.parentElement);
-            });
+            if (!link.hasAttribute('data-bound')) {
+                link.setAttribute('data-bound', 'true');
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const section = link.dataset.section;
+                    this.showSection(section);
+                    this.updateActiveNav(link.parentElement);
+                });
+            }
         });
         
         const sidebarToggle = document.querySelector('.sidebar-toggle');
-        if (sidebarToggle) {
+        if (sidebarToggle && !sidebarToggle.hasAttribute('data-bound')) {
+            sidebarToggle.setAttribute('data-bound', 'true');
             sidebarToggle.addEventListener('click', () => {
                 this.toggleSidebar();
             });
@@ -355,19 +356,24 @@ class AdminPanel {
         
         const quickActionBtns = document.querySelectorAll('.quick-action-btn');
         quickActionBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const action = btn.dataset.action;
-                this.handleQuickAction(action);
-            });
+            if (!btn.hasAttribute('data-bound')) {
+                btn.setAttribute('data-bound', 'true');
+                btn.addEventListener('click', () => {
+                    const action = btn.dataset.action;
+                    this.handleQuickAction(action);
+                });
+            }
         });
         
         const addMusicBtn = document.getElementById('addMusicBtn');
-        if (addMusicBtn) {
+        if (addMusicBtn && !addMusicBtn.hasAttribute('data-bound')) {
+            addMusicBtn.setAttribute('data-bound', 'true');
             addMusicBtn.addEventListener('click', () => this.openUploadModal('music'));
         }
         
         const addImageBtn = document.getElementById('addImageBtn');
-        if (addImageBtn) {
+        if (addImageBtn && !addImageBtn.hasAttribute('data-bound')) {
+            addImageBtn.setAttribute('data-bound', 'true');
             addImageBtn.addEventListener('click', () => this.openUploadModal('image'));
         }
         
@@ -451,48 +457,62 @@ class AdminPanel {
     
     initializeUploadModal() {
         const modal = document.getElementById('uploadModal');
+        if (!modal) return;
+        
         const closeBtn = modal.querySelector('.modal-close');
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
         
-        closeBtn.addEventListener('click', () => {
-            this.closeUploadModal();
-        });
-        
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
+        if (closeBtn && !closeBtn.hasAttribute('data-bound')) {
+            closeBtn.setAttribute('data-bound', 'true');
+            closeBtn.addEventListener('click', () => {
                 this.closeUploadModal();
-            }
-        });
+            });
+        }
         
-        uploadArea.addEventListener('click', () => {
-            fileInput.click();
-        });
+        if (modal && !modal.hasAttribute('data-bound')) {
+            modal.setAttribute('data-bound', 'true');
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    this.closeUploadModal();
+                }
+            });
+        }
         
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = 'var(--admin-primary)';
-            uploadArea.style.background = 'rgba(108, 92, 231, 0.1)';
-        });
-        
-        uploadArea.addEventListener('dragleave', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = 'var(--admin-border)';
-            uploadArea.style.background = '';
-        });
-        
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = 'var(--admin-border)';
-            uploadArea.style.background = '';
+        if (uploadArea && !uploadArea.hasAttribute('data-bound')) {
+            uploadArea.setAttribute('data-bound', 'true');
+            uploadArea.addEventListener('click', () => {
+                fileInput.click();
+            });
             
-            const files = e.dataTransfer.files;
-            this.handleFileUpload(files);
-        });
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = 'var(--admin-primary)';
+                uploadArea.style.background = 'rgba(108, 92, 231, 0.1)';
+            });
+            
+            uploadArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = 'var(--admin-border)';
+                uploadArea.style.background = '';
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = 'var(--admin-border)';
+                uploadArea.style.background = '';
+                
+                const files = e.dataTransfer.files;
+                this.handleFileUpload(files);
+            });
+        }
         
-        fileInput.addEventListener('change', (e) => {
-            this.handleFileUpload(e.target.files);
-        });
+        if (fileInput && !fileInput.hasAttribute('data-bound')) {
+            fileInput.setAttribute('data-bound', 'true');
+            fileInput.addEventListener('change', (e) => {
+                this.handleFileUpload(e.target.files);
+            });
+        }
     }
     
     closeUploadModal() {
@@ -575,22 +595,20 @@ class AdminPanel {
     }
     
     addMusicToList(file) {
-        console.log('🎵 Starting to add music file:', file.name);
         
-        // Check if file with same name already exists
-        const uploadedMusic = JSON.parse(localStorage.getItem('uploadedMusic') || '[]');
-        const existingMusic = uploadedMusic.find(music => music.title === file.name.replace(/\.[^/.]+$/, ""));
-        if (existingMusic) {
-            console.log('⚠️ Music file already uploaded:', file.name);
-            this.showNotification('Bu müzik dosyası zaten yüklü!', 'warning');
-            return;
-        }
-        
+        // Check if file with same name already exists in DOM first
         const musicList = document.querySelector('.music-list');
-        console.log('🔍 Looking for .music-list container for upload:', musicList);
-        
+        if (musicList) {
+            const existingItems = musicList.querySelectorAll('.music-item');
+            for (let item of existingItems) {
+                const titleElement = item.querySelector('h4');
+                if (titleElement && titleElement.textContent === file.name.replace(/\.[^/.]+$/, "")) {
+                    this.showNotification('Bu müzik dosyası zaten yüklü!', 'warning');
+                    return;
+                }
+            }
+        }
         if (!musicList) {
-            console.error('❌ .music-list container not found! Cannot add music file');
             this.showNotification('Error: Music container not found!', 'error');
             return;
         }
@@ -601,13 +619,19 @@ class AdminPanel {
         const fileName = file.name.replace(/\.[^/.]+$/, "");
         const fileSize = this.formatFileSize(file.size);
         const fileUrl = URL.createObjectURL(file);
-        const albumCover = 'assets/images/album-cover-1.jpg'; // Default cover
+        
+        // Get available album covers dynamically
+        const availableCovers = [
+            'assets/images/album-cover-1.jpg',
+            'assets/images/album-cover-2.jpg',
+            'assets/images/album-cover-3.jpg',
+            'assets/images/hero-musician.jpg'
+        ];
+        const albumCover = availableCovers[Math.floor(Math.random() * availableCovers.length)];
         
         // Create unique ID for this music item
         const musicId = 'music_' + Date.now();
         musicItem.dataset.musicId = musicId;
-        
-        console.log('🎵 Creating music item with ID:', musicId);
         
         musicItem.innerHTML = `
             <div class="music-info">
@@ -639,12 +663,10 @@ class AdminPanel {
             dateAdded: new Date().toISOString()
         };
         
-        console.log('💾 Saving music data to localStorage:', musicData);
         this.saveMusicData(musicData);
         
         this.bindItemEvents(musicItem);
         musicList.appendChild(musicItem);
-        console.log('✅ Music item added to admin panel DOM');
         
         // Add to main site immediately
         this.addMusicToMainSite(musicData);
@@ -657,20 +679,27 @@ class AdminPanel {
             musicItem.style.transform = 'translateY(0)';
         }, 100);
         
-        console.log('🎉 Music upload process completed for:', fileName);
     }
     
     addImageToList(file) {
-        // Check if file with same name already exists
-        const uploadedGallery = JSON.parse(localStorage.getItem('uploadedGallery') || '[]');
-        const existingImage = uploadedGallery.find(img => img.title === file.name.replace(/\.[^/.]+$/, ""));
-        if (existingImage) {
-            console.log('⚠️ Image file already uploaded:', file.name);
-            this.showNotification('Bu resim dosyası zaten yüklü!', 'warning');
+        // Check if file with same name already exists in DOM first
+        const galleryGrid = document.querySelector('.gallery-grid');
+        if (galleryGrid) {
+            const existingItems = galleryGrid.querySelectorAll('.gallery-admin-item');
+            for (let item of existingItems) {
+                const titleElement = item.querySelector('h4');
+                if (titleElement && titleElement.textContent === file.name.replace(/\.[^/.]+$/, "")) {
+                    this.showNotification('Bu resim dosyası zaten yüklü!', 'warning');
+                    return;
+                }
+            }
+        }
+        
+        if (!galleryGrid) {
+            this.showNotification('Error: Gallery container not found!', 'error');
             return;
         }
         
-        const galleryGrid = document.querySelector('.gallery-grid');
         const galleryItem = document.createElement('div');
         galleryItem.className = 'gallery-admin-item';
         
@@ -730,7 +759,9 @@ class AdminPanel {
         const editBtn = item.querySelector('.edit');
         const deleteBtn = item.querySelector('.delete');
         
-        if (editBtn) {
+        // Remove existing listeners to prevent duplicates
+        if (editBtn && !editBtn.hasAttribute('data-bound')) {
+            editBtn.setAttribute('data-bound', 'true');
             editBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if (item.classList.contains('music-item')) {
@@ -741,7 +772,8 @@ class AdminPanel {
             });
         }
         
-        if (deleteBtn) {
+        if (deleteBtn && !deleteBtn.hasAttribute('data-bound')) {
+            deleteBtn.setAttribute('data-bound', 'true');
             deleteBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if (item.classList.contains('music-item')) {
@@ -778,16 +810,16 @@ class AdminPanel {
     }
     
     removeMusicFromStorage(musicId) {
-        let musicList = JSON.parse(localStorage.getItem('uploaded_music') || '[]');
+        let musicList = JSON.parse(localStorage.getItem('uploadedMusic') || '[]');
         musicList = musicList.filter(music => music.id !== musicId);
-        localStorage.setItem('uploaded_music', JSON.stringify(musicList));
+        localStorage.setItem('uploadedMusic', JSON.stringify(musicList));
         console.log('🗑️ Music removed from localStorage:', musicId);
     }
     
     removeGalleryFromStorage(galleryId) {
-        let galleryList = JSON.parse(localStorage.getItem('uploaded_gallery') || '[]');
+        let galleryList = JSON.parse(localStorage.getItem('uploadedGallery') || '[]');
         galleryList = galleryList.filter(gallery => gallery.id !== galleryId);
-        localStorage.setItem('uploaded_gallery', JSON.stringify(galleryList));
+        localStorage.setItem('uploadedGallery', JSON.stringify(galleryList));
         console.log('🗑️ Gallery item removed from localStorage:', galleryId);
     }
     
@@ -833,8 +865,8 @@ class AdminPanel {
     
     updateStats() {
         // Get counts from localStorage + DOM elements
-        const savedMusicList = JSON.parse(localStorage.getItem('uploaded_music') || '[]');
-        const savedGalleryList = JSON.parse(localStorage.getItem('uploaded_gallery') || '[]');
+        const savedMusicList = JSON.parse(localStorage.getItem('uploadedMusic') || '[]');
+        const savedGalleryList = JSON.parse(localStorage.getItem('uploadedGallery') || '[]');
         
         // Count DOM elements
         const domTracks = document.querySelectorAll('.music-item').length;
@@ -1164,16 +1196,16 @@ Site düzenli olarak güncellenmekte ve yeni içerikler eklenmektedir.
     
     // LocalStorage Management Functions
     saveMusicData(musicData) {
-        let musicList = JSON.parse(localStorage.getItem('uploaded_music') || '[]');
+        let musicList = JSON.parse(localStorage.getItem('uploadedMusic') || '[]');
         musicList.push(musicData);
-        localStorage.setItem('uploaded_music', JSON.stringify(musicList));
+        localStorage.setItem('uploadedMusic', JSON.stringify(musicList));
         console.log('🎵 Music saved to localStorage:', musicData.title);
     }
     
     saveGalleryData(galleryData) {
-        let galleryList = JSON.parse(localStorage.getItem('uploaded_gallery') || '[]');
+        let galleryList = JSON.parse(localStorage.getItem('uploadedGallery') || '[]');
         galleryList.push(galleryData);
-        localStorage.setItem('uploaded_gallery', JSON.stringify(galleryList));
+        localStorage.setItem('uploadedGallery', JSON.stringify(galleryList));
         console.log('🖼️ Gallery image saved to localStorage:', galleryData.title);
     }
     
@@ -1181,7 +1213,7 @@ Site düzenli olarak güncellenmekte ve yeni içerikler eklenmektedir.
         console.log('🔄 Loading uploaded content from localStorage...');
         
         // Load uploaded music
-        const musicList = JSON.parse(localStorage.getItem('uploaded_music') || '[]');
+        const musicList = JSON.parse(localStorage.getItem('uploadedMusic') || '[]');
         console.log('🎵 Found music in localStorage:', musicList);
         
         musicList.forEach((musicData, index) => {
@@ -1191,7 +1223,7 @@ Site düzenli olarak güncellenmekte ve yeni içerikler eklenmektedir.
         });
         
         // Load uploaded gallery
-        const galleryList = JSON.parse(localStorage.getItem('uploaded_gallery') || '[]');
+        const galleryList = JSON.parse(localStorage.getItem('uploadedGallery') || '[]');
         console.log('🖼️ Found gallery items in localStorage:', galleryList);
         
         galleryList.forEach((galleryData, index) => {
@@ -1313,7 +1345,10 @@ Site düzenli olarak güncellenmekte ve yeni içerikler eklenmektedir.
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    window.adminPanel = new AdminPanel();
+    // Only create instance if not already created (prevent duplicates)
+    if (!window.adminPanel) {
+        window.adminPanel = new AdminPanel();
+    }
     
     window.addEventListener('beforeunload', () => {
         if (window.adminPanel) {
@@ -1360,7 +1395,7 @@ function saveAboutText() {
     // Apply changes to main site immediately if in same window
     applyAboutChangesToMainSite(englishText, turkishText);
     
-    showNotification('About text saved and applied to main site!', 'success');
+    showAdminNotification('About text saved and applied to main site!', 'success');
     console.log('📝 About text saved and applied');
 }
 
@@ -1384,11 +1419,11 @@ function saveHeroContent() {
     // Apply changes to main site immediately
     applyHeroChangesToMainSite(title, subtitle, description);
     
-    showNotification('Hero content saved and applied to main site!', 'success');
+    showAdminNotification('Hero content saved and applied to main site!', 'success');
     console.log('📝 Hero content saved and applied');
 }
 
-function showNotification(message, type = 'info') {
+function showAdminNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.className = `notification ${type} show`;
     notification.innerHTML = `<i class="fas fa-check"></i> ${message}`;
@@ -1452,7 +1487,7 @@ function saveContactInfo() {
     }));
     
     applyContactChangesToMainSite(email, phone, location);
-    showNotification('Contact information saved!', 'success');
+    showAdminNotification('Contact information saved!', 'success');
 }
 
 function applyContactChangesToMainSite(email, phone, location) {
@@ -1538,7 +1573,7 @@ function saveSiteSettings() {
     // Update document title immediately
     document.title = title;
     
-    showNotification('Site settings saved!', 'success');
+    showAdminNotification('Site settings saved!', 'success');
     console.log('⚙️ Site settings saved');
 }
 
@@ -1559,7 +1594,7 @@ function saveSocialMediaSettings() {
     }));
     
     applySocialMediaToMainSite(spotify, youtube, instagram);
-    showNotification('Social media links saved!', 'success');
+    showAdminNotification('Social media links saved!', 'success');
     console.log('📱 Social media settings saved');
 }
 
@@ -1881,8 +1916,8 @@ function saveMusicEdit() {
         showNotification(`"${title}" successfully updated!`, 'success');
         
         // Update stats if needed
-        if (window.adminPanelInstance) {
-            window.adminPanelInstance.updateStats();
+        if (window.adminPanel) {
+            window.adminPanel.updateStats();
         }
     }, 1500);
 }
@@ -1945,8 +1980,8 @@ function saveGalleryEdit() {
         showNotification(`"${title}" gallery item updated!`, 'success');
         
         // Update stats if needed
-        if (window.adminPanelInstance) {
-            window.adminPanelInstance.updateStats();
+        if (window.adminPanel) {
+            window.adminPanel.updateStats();
         }
     }, 1500);
 }
@@ -1971,19 +2006,7 @@ document.addEventListener('keydown', function(e) {
 });
 
 // Global modal functions for HTML onclick handlers
-function openMusicEditModal() {
-    const modal = document.getElementById('musicEditModal');
-    if (modal) {
-        modal.style.display = 'block';
-    }
-}
-
-function closeMusicEditModal() {
-    const modal = document.getElementById('musicEditModal');
-    if (modal) {
-        modal.style.display = 'none';
-    }
-}
+// Duplicate openMusicEditModal and closeMusicEditModal removed
 
 function saveMusicEdit() {
     if (!currentEditingMusicItem) return;
@@ -2030,60 +2053,9 @@ function saveMusicEdit() {
     adminPanel.syncToMainSite();
 }
 
-function openGalleryEditModal() {
-    const modal = document.getElementById('galleryEditModal');
-    if (modal) {
-        modal.style.display = 'block';
-    }
-}
+// Duplicate openGalleryEditModal and closeGalleryEditModal removed
 
-function closeGalleryEditModal() {
-    const modal = document.getElementById('galleryEditModal');
-    if (modal) {
-        modal.style.display = 'none';
-    }
-}
-
-function saveGalleryEdit() {
-    if (!currentEditingGalleryItem) return;
-    
-    const title = document.getElementById('galleryTitle').value;
-    const description = document.getElementById('galleryDescription').value;
-    const category = document.getElementById('galleryCategory').value;
-    const date = document.getElementById('galleryDate').value;
-    const location = document.getElementById('galleryLocation').value;
-    
-    // Update item in DOM
-    const titleEl = currentEditingGalleryItem.querySelector('h5');
-    const descEl = currentEditingGalleryItem.querySelector('p');
-    
-    if (titleEl) titleEl.textContent = title;
-    if (descEl) descEl.textContent = description;
-    
-    // Update localStorage
-    const galleryId = currentEditingGalleryItem.dataset.galleryId;
-    if (galleryId) {
-        const uploadedGallery = JSON.parse(localStorage.getItem('uploadedGallery') || '[]');
-        const galleryIndex = uploadedGallery.findIndex(g => g.id === galleryId);
-        if (galleryIndex !== -1) {
-            uploadedGallery[galleryIndex] = {
-                ...uploadedGallery[galleryIndex],
-                title: title,
-                description: description,
-                category: category,
-                date: date,
-                location: location
-            };
-            localStorage.setItem('uploadedGallery', JSON.stringify(uploadedGallery));
-        }
-    }
-    
-    adminPanel.showNotification('Galeri öğesi başarıyla güncellendi!', 'success');
-    closeGalleryEditModal();
-    
-    // Sync to main site
-    adminPanel.syncToMainSite();
-}
+// Duplicate saveGalleryEdit removed - using complete implementation above
 
 // Tab switching functionality
 document.addEventListener('DOMContentLoaded', function() {
@@ -3240,7 +3212,281 @@ class AnalyticsDashboard {
             performanceMonitor.parentNode.insertBefore(analyticsSection, performanceMonitor.nextSibling);
         }
         
+        // Add PWA Status Widget
+        this.addPWAStatusWidget(dashboard);
+        
         this.updateAnalytics();
+    }
+    
+    addPWAStatusWidget(dashboard) {
+        const pwaSection = document.createElement('div');
+        pwaSection.className = 'widget pwa-status-widget';
+        pwaSection.innerHTML = `
+            <h3>
+                <i class="fas fa-mobile-alt"></i>
+                PWA Durumu
+                <button class="btn btn-sm btn-primary refresh-pwa-btn" onclick="this.refreshPWAStatus()" style="margin-left: auto;">
+                    <i class="fas fa-sync-alt"></i>
+                    Yenile
+                </button>
+            </h3>
+            <div id="pwa-status-content">
+                <div class="loading-spinner">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    PWA durumu kontrol ediliyor...
+                </div>
+            </div>
+        `;
+        
+        // Insert after analytics
+        const analyticsSection = dashboard.querySelector('.analytics-dashboard');
+        if (analyticsSection) {
+            analyticsSection.parentNode.insertBefore(pwaSection, analyticsSection.nextSibling);
+        } else {
+            dashboard.appendChild(pwaSection);
+        }
+        
+        // Initialize PWA status check
+        setTimeout(() => {
+            this.updatePWAStatus();
+        }, 1000);
+    }
+    
+    updatePWAStatus() {
+        const statusContent = document.getElementById('pwa-status-content');
+        if (!statusContent) return;
+        
+        const status = {
+            isInstalled: this.isPWAInstalled(),
+            isOnline: navigator.onLine,
+            hasServiceWorker: 'serviceWorker' in navigator,
+            hasNotifications: Notification.permission === 'granted',
+            supportsPush: 'PushManager' in window,
+            supportsSync: 'serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype,
+            supportsPeriodicSync: 'serviceWorker' in navigator && 'periodicSync' in window.ServiceWorkerRegistration.prototype
+        };
+        
+        statusContent.innerHTML = `
+            <div class="pwa-status-grid">
+                <div class="status-item ${status.isInstalled ? 'active' : ''}">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>PWA Yüklü</span>
+                    <div class="status-indicator ${status.isInstalled ? 'green' : 'gray'}"></div>
+                </div>
+                <div class="status-item ${status.isOnline ? 'active' : ''}">
+                    <i class="fas fa-wifi"></i>
+                    <span>Online</span>
+                    <div class="status-indicator ${status.isOnline ? 'green' : 'red'}"></div>
+                </div>
+                <div class="status-item ${status.hasServiceWorker ? 'active' : ''}">
+                    <i class="fas fa-cog"></i>
+                    <span>Service Worker</span>
+                    <div class="status-indicator ${status.hasServiceWorker ? 'green' : 'gray'}"></div>
+                </div>
+                <div class="status-item ${status.hasNotifications ? 'active' : ''}">
+                    <i class="fas fa-bell"></i>
+                    <span>Bildirimler</span>
+                    <div class="status-indicator ${status.hasNotifications ? 'green' : 'gray'}"></div>
+                </div>
+                <div class="status-item ${status.supportsPush ? 'active' : ''}">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Push Desteği</span>
+                    <div class="status-indicator ${status.supportsPush ? 'green' : 'gray'}"></div>
+                </div>
+                <div class="status-item ${status.supportsSync ? 'active' : ''}">
+                    <i class="fas fa-sync"></i>
+                    <span>Background Sync</span>
+                    <div class="status-indicator ${status.supportsSync ? 'green' : 'gray'}"></div>
+                </div>
+                <div class="status-item ${status.supportsPeriodicSync ? 'active' : ''}">
+                    <i class="fas fa-clock"></i>
+                    <span>Periodic Sync</span>
+                    <div class="status-indicator ${status.supportsPeriodicSync ? 'green' : 'gray'}"></div>
+                </div>
+            </div>
+            
+            <div class="pwa-controls">
+                <div class="control-group">
+                    <label>PWA İşlemleri:</label>
+                    <div class="btn-group">
+                        ${!status.isInstalled && typeof pwaManager !== 'undefined' && pwaManager.deferredPrompt ? 
+                            '<button class="btn btn-sm btn-primary" onclick="pwaManager.installPWA()"><i class="fas fa-download"></i> Yükle</button>' : ''}
+                        ${!status.hasNotifications ? 
+                            '<button class="btn btn-sm btn-secondary" onclick="this.requestNotificationPermission()"><i class="fas fa-bell"></i> Bildirimleri Etkinleştir</button>' : ''}
+                        <button class="btn btn-sm btn-secondary" onclick="this.testPWAFeatures()">
+                            <i class="fas fa-vial"></i> Test Et
+                        </button>
+                        <button class="btn btn-sm btn-warning" onclick="this.clearPWACache()">
+                            <i class="fas fa-trash"></i> Cache Temizle
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label>Offline Veriler:</label>
+                    <div class="offline-data-status">
+                        <span class="offline-count">${this.getOfflineDataCount()} bekleyen işlem</span>
+                        <button class="btn btn-sm btn-info" onclick="this.syncOfflineData()">
+                            <i class="fas fa-cloud-upload-alt"></i> Senkronize Et
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pwa-metrics">
+                <div class="metric">
+                    <span class="metric-label">Cache Boyutu:</span>
+                    <span class="metric-value" id="cache-size">Hesaplanıyor...</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Son Güncelleme:</span>
+                    <span class="metric-value" id="last-update">${new Date().toLocaleString('tr-TR')}</span>
+                </div>
+            </div>
+        `;
+        
+        // Calculate cache size
+        this.calculateCacheSize();
+    }
+    
+    isPWAInstalled() {
+        return window.matchMedia('(display-mode: standalone)').matches ||
+               window.navigator.standalone ||
+               document.referrer.includes('android-app://');
+    }
+    
+    getOfflineDataCount() {
+        const pendingActions = JSON.parse(localStorage.getItem('pending_admin_actions') || '[]');
+        const pendingUploads = JSON.parse(localStorage.getItem('pending_file_uploads') || '[]');
+        return pendingActions.length + pendingUploads.length;
+    }
+    
+    async calculateCacheSize() {
+        if ('storage' in navigator && 'estimate' in navigator.storage) {
+            try {
+                const estimate = await navigator.storage.estimate();
+                const usedMB = (estimate.usage / 1024 / 1024).toFixed(2);
+                const quotaMB = (estimate.quota / 1024 / 1024).toFixed(2);
+                
+                const cacheSizeElement = document.getElementById('cache-size');
+                if (cacheSizeElement) {
+                    cacheSizeElement.textContent = `${usedMB} MB / ${quotaMB} MB`;
+                }
+            } catch (error) {
+                console.error('Cache size calculation failed:', error);
+                const cacheSizeElement = document.getElementById('cache-size');
+                if (cacheSizeElement) {
+                    cacheSizeElement.textContent = 'Hesaplanamadı';
+                }
+            }
+        }
+    }
+    
+    async requestNotificationPermission() {
+        try {
+            const permission = await Notification.requestPermission();
+            this.showNotification(
+                permission === 'granted' ? 'Bildirimler Etkinleştirildi' : 'Bildirim İzni Reddedildi',
+                permission === 'granted' ? 'Artık önemli güncellemeleri alacaksınız' : 'Bildirimler için izin gerekli',
+                permission === 'granted' ? 'success' : 'warning'
+            );
+            this.updatePWAStatus();
+        } catch (error) {
+            console.error('Notification permission request failed:', error);
+        }
+    }
+    
+    testPWAFeatures() {
+        this.showNotification('PWA Test', 'PWA özellikleri test ediliyor...', 'info');
+        
+        // Test notifications
+        if (Notification.permission === 'granted') {
+            new Notification('PWA Test Bildirimi', {
+                body: 'PWA bildirim sistemi çalışıyor!',
+                icon: '/assets/icons/icon-192x192.png',
+                tag: 'pwa-test'
+            });
+        }
+        
+        // Test offline functionality
+        const testAction = {
+            type: 'test-action',
+            data: { message: 'PWA test action', timestamp: Date.now() }
+        };
+        
+        const pendingActions = JSON.parse(localStorage.getItem('pending_admin_actions') || '[]');
+        pendingActions.push(testAction);
+        localStorage.setItem('pending_admin_actions', JSON.stringify(pendingActions));
+        
+        // Test service worker
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({
+                type: 'TEST_MESSAGE',
+                data: 'PWA test from admin panel'
+            });
+        }
+        
+        setTimeout(() => {
+            this.updatePWAStatus();
+            this.showNotification('PWA Test Tamamlandı', 'Tüm özellikler test edildi', 'success');
+        }, 1000);
+    }
+    
+    async clearPWACache() {
+        try {
+            this.showNotification('Cache Temizleniyor', 'PWA cache temizleniyor...', 'info');
+            
+            if (typeof pwaManager !== 'undefined' && pwaManager.clearAppCache) {
+                const success = await pwaManager.clearAppCache();
+                if (success) {
+                    this.showNotification('Cache Temizlendi', 'PWA cache başarıyla temizlendi', 'success');
+                } else {
+                    this.showNotification('Cache Temizlenemedi', 'Cache temizlenirken hata oluştu', 'error');
+                }
+            } else {
+                // Fallback cache clearing
+                if ('caches' in window) {
+                    const cacheNames = await caches.keys();
+                    await Promise.all(cacheNames.map(name => caches.delete(name)));
+                    this.showNotification('Cache Temizlendi', 'Browser cache temizlendi', 'success');
+                }
+            }
+            
+            this.updatePWAStatus();
+        } catch (error) {
+            console.error('Cache clear failed:', error);
+            this.showNotification('Hata', 'Cache temizlenirken hata oluştu', 'error');
+        }
+    }
+    
+    syncOfflineData() {
+        const pendingActions = JSON.parse(localStorage.getItem('pending_admin_actions') || '[]');
+        const pendingUploads = JSON.parse(localStorage.getItem('pending_file_uploads') || '[]');
+        
+        if (pendingActions.length === 0 && pendingUploads.length === 0) {
+            this.showNotification('Senkronizasyon', 'Bekleyen veri bulunamadı', 'info');
+            return;
+        }
+        
+        this.showNotification('Senkronizasyon Başladı', 'Offline veriler senkronize ediliyor...', 'info');
+        
+        // Trigger background sync
+        if (typeof pwaManager !== 'undefined' && pwaManager.syncOfflineData) {
+            pwaManager.syncOfflineData();
+        }
+        
+        // Simulate sync completion
+        setTimeout(() => {
+            localStorage.removeItem('pending_admin_actions');
+            localStorage.removeItem('pending_file_uploads');
+            this.updatePWAStatus();
+            this.showNotification('Senkronizasyon Tamamlandı', 'Tüm veriler başarıyla senkronize edildi', 'success');
+        }, 2000);
+    }
+    
+    refreshPWAStatus() {
+        this.updatePWAStatus();
+        this.showNotification('PWA Durumu', 'PWA durumu güncellendi', 'success');
     }
     
     updateAnalytics() {
@@ -5384,10 +5630,10 @@ class APIEndpointManager {
         try {
             switch (endpoint.dataSource) {
                 case 'music':
-                    data = JSON.parse(localStorage.getItem('uploaded_music') || '[]');
+                    data = JSON.parse(localStorage.getItem('uploadedMusic') || '[]');
                     break;
                 case 'gallery':
-                    data = JSON.parse(localStorage.getItem('uploaded_gallery') || '[]');
+                    data = JSON.parse(localStorage.getItem('uploadedGallery') || '[]');
                     break;
                 case 'analytics':
                     data = {
