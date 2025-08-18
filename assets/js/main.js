@@ -10,8 +10,9 @@ function initializeApp() {
     initializeContactForm();
     initializeImageModal();
     initializeScrollToTop();
+    loadDynamicContent();
     
-    console.log('🎵 Müzik portföyü başarıyla yüklendi!');
+    logger.log('🎵 Müzik portföyü başarıyla yüklendi!');
 }
 
 function hidePageLoader() {
@@ -66,15 +67,15 @@ function initializeNavigation() {
             const targetSection = document.querySelector(targetId);
             
             if (targetSection) {
-                const offsetTop = targetSection.offsetTop - 80;
+                const headerHeight = header.offsetHeight;
+                const targetPosition = targetSection.offsetTop - headerHeight;
+                
                 window.scrollTo({
-                    top: offsetTop,
+                    top: targetPosition,
                     behavior: 'smooth'
                 });
                 
-                navLinks.forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-                
+                // Close mobile menu if open
                 if (navMenu.classList.contains('active')) {
                     navMenu.classList.remove('active');
                     navToggle.classList.remove('active');
@@ -84,33 +85,12 @@ function initializeNavigation() {
                         line.style.opacity = '';
                     });
                 }
+                
+                // Update active link
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
             }
         });
-    });
-    
-    updateActiveNavLink();
-    window.addEventListener('scroll', updateActiveNavLink);
-}
-
-function updateActiveNavLink() {
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    const scrollY = window.pageYOffset;
-    
-    sections.forEach(section => {
-        const sectionHeight = section.offsetHeight;
-        const sectionTop = section.offsetTop - 100;
-        const sectionId = section.getAttribute('id');
-        
-        if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${sectionId}`) {
-                    link.classList.add('active');
-                }
-            });
-        }
     });
 }
 
@@ -123,234 +103,170 @@ function initializeScrollEffects() {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('animated');
+                entry.target.classList.add('animate-in');
             }
         });
     }, observerOptions);
     
-    const elementsToAnimate = document.querySelectorAll('.animate-on-scroll');
-    elementsToAnimate.forEach(el => {
-        observer.observe(el);
-    });
+    const animatedElements = document.querySelectorAll('.fade-in, .slide-up, .slide-left, .slide-right');
+    animatedElements.forEach(el => observer.observe(el));
     
-    const heroSection = document.querySelector('.hero');
-    if (heroSection) {
-        const heroTitle = heroSection.querySelector('.hero-title');
-        const heroDescription = heroSection.querySelector('.hero-description');
-        const heroButtons = heroSection.querySelector('.hero-buttons');
-        const heroImage = heroSection.querySelector('.hero-image');
-        
-        if (heroTitle) {
-            heroTitle.classList.add('animate-on-scroll');
-            setTimeout(() => heroTitle.classList.add('animated'), 500);
-        }
-        if (heroDescription) {
-            heroDescription.classList.add('animate-on-scroll');
-            setTimeout(() => heroDescription.classList.add('animated'), 700);
-        }
-        if (heroButtons) {
-            heroButtons.classList.add('animate-on-scroll');
-            setTimeout(() => heroButtons.classList.add('animated'), 900);
-        }
-        if (heroImage) {
-            heroImage.classList.add('animate-on-scroll');
-            setTimeout(() => heroImage.classList.add('animated'), 1100);
-        }
-    }
+    // Page views tracking
+    const views = parseInt(localStorage.getItem('page_views') || '0') + 1;
+    localStorage.setItem('page_views', views.toString());
+    localStorage.setItem('last_visit', new Date().toISOString());
 }
 
 function initializeAnimations() {
-    const cards = document.querySelectorAll('.music-card, .gallery-item, .skill-item');
-    cards.forEach(card => {
-        card.addEventListener('mouseenter', () => {
-            card.style.transform = 'translateY(-10px)';
-        });
-        
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = '';
-        });
-    });
-    
-    const buttons = document.querySelectorAll('.btn');
-    buttons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            const ripple = document.createElement('span');
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-            
-            ripple.style.width = ripple.style.height = size + 'px';
-            ripple.style.left = x + 'px';
-            ripple.style.top = y + 'px';
-            ripple.classList.add('ripple-effect');
-            
-            this.appendChild(ripple);
-            
-            setTimeout(() => {
-                ripple.remove();
-            }, 600);
+    // Counter animations
+    const counters = document.querySelectorAll('[data-count]');
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const counter = entry.target;
+                const target = parseInt(counter.getAttribute('data-count'));
+                let current = 0;
+                const increment = target / 50;
+                
+                const updateCounter = () => {
+                    if (current < target) {
+                        current += increment;
+                        counter.textContent = Math.floor(current);
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target;
+                    }
+                };
+                
+                updateCounter();
+                counterObserver.unobserve(counter);
+            }
         });
     });
     
-    const socialLinks = document.querySelectorAll('.social-link');
-    socialLinks.forEach(link => {
-        link.addEventListener('mouseenter', () => {
-            link.style.transform = 'translateY(-3px) scale(1.1)';
-        });
+    counters.forEach(counter => counterObserver.observe(counter));
+    
+    // Music card animations
+    const musicCards = document.querySelectorAll('.music-card');
+    musicCards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
         
-        link.addEventListener('mouseleave', () => {
-            link.style.transform = '';
+        card.addEventListener('click', function() {
+            const plays = parseInt(localStorage.getItem('music_plays') || '0') + 1;
+            localStorage.setItem('music_plays', plays.toString());
+            
+            const trackTitle = this.querySelector('h4').textContent;
+            const trackPlays = JSON.parse(localStorage.getItem('track_analytics') || '{}');
+            trackPlays[trackTitle] = (trackPlays[trackTitle] || 0) + 1;
+            localStorage.setItem('track_analytics', JSON.stringify(trackPlays));
+        });
+    });
+    
+    // Gallery animations
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    galleryItems.forEach((item, index) => {
+        item.style.animationDelay = `${index * 0.15}s`;
+        
+        item.addEventListener('click', function() {
+            const clicks = parseInt(localStorage.getItem('gallery_clicks') || '0') + 1;
+            localStorage.setItem('gallery_clicks', clicks.toString());
+            
+            const category = this.getAttribute('data-category');
+            const categoryClicks = JSON.parse(localStorage.getItem('gallery_analytics') || '{}');
+            categoryClicks[category] = (categoryClicks[category] || 0) + 1;
+            localStorage.setItem('gallery_analytics', JSON.stringify(categoryClicks));
         });
     });
 }
 
 function initializeContactForm() {
     const contactForm = document.getElementById('contactForm');
-    
     if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
+        contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const formData = new FormData(contactForm);
+            const formData = new FormData(this);
             const name = formData.get('name');
             const email = formData.get('email');
-            const subject = formData.get('subject');
             const message = formData.get('message');
             
-            if (!name || !email || !subject || !message) {
-                showNotification('Lütfen tüm alanları doldurun.', 'error');
-                return;
-            }
-            
-            if (!isValidEmail(email)) {
-                showNotification('Lütfen geçerli bir e-posta adresi girin.', 'error');
-                return;
-            }
-            
-            const submitButton = contactForm.querySelector('button[type="submit"]');
-            const originalText = submitButton.innerHTML;
-            
-            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gönderiliyor...';
-            submitButton.disabled = true;
-            
-            setTimeout(() => {
+            if (name && email && message) {
+                // Simulate form submission
                 showNotification('Mesajınız başarıyla gönderildi! En kısa sürede size dönüş yapacağım.', 'success');
-                contactForm.reset();
+                this.reset();
                 
-                submitButton.innerHTML = originalText;
-                submitButton.disabled = false;
-            }, 2000);
+                // Track form submissions
+                const submissions = parseInt(localStorage.getItem('form_submissions') || '0') + 1;
+                localStorage.setItem('form_submissions', submissions.toString());
+            } else {
+                showNotification('Lütfen tüm alanları doldurun.', 'error');
+            }
         });
     }
-}
-
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.innerHTML = `
-        <div class="notification-content">
-            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-            <span>${message}</span>
-            <button class="notification-close">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-    `;
     
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${type === 'success' ? '#00cec9' : type === 'error' ? '#e74c3c' : '#6c5ce7'};
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 12px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-        z-index: 10000;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-        max-width: 400px;
-        backdrop-filter: blur(10px);
-    `;
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 100);
-    
-    const closeBtn = notification.querySelector('.notification-close');
-    closeBtn.addEventListener('click', () => {
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 300);
+    // Social media link tracking
+    const socialLinks = document.querySelectorAll('.social-link');
+    socialLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            const clicks = parseInt(localStorage.getItem('social_clicks') || '0') + 1;
+            localStorage.setItem('social_clicks', clicks.toString());
+            
+            const platform = this.href.includes('spotify') ? 'spotify' : 
+                           this.href.includes('youtube') ? 'youtube' : 
+                           this.href.includes('instagram') ? 'instagram' : 'other';
+            
+            const platformClicks = JSON.parse(localStorage.getItem('social_analytics') || '{}');
+            platformClicks[platform] = (platformClicks[platform] || 0) + 1;
+            localStorage.setItem('social_analytics', JSON.stringify(platformClicks));
+        });
     });
-    
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.style.transform = 'translateX(100%)';
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.parentNode.removeChild(notification);
-                }
-            }, 300);
-        }
-    }, 5000);
 }
 
 function initializeImageModal() {
     const modal = document.getElementById('imageModal');
-    const modalImg = document.getElementById('modalImage');
+    const modalImage = document.getElementById('modalImage');
     const modalCaption = document.getElementById('modalCaption');
-    const closeBtn = document.querySelector('.modal-close');
-    const galleryItems = document.querySelectorAll('.gallery-item');
+    const closeBtn = modal.querySelector('.modal-close');
     
-    galleryItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const img = item.querySelector('img');
-            const title = item.querySelector('h4').textContent;
-            const description = item.querySelector('p').textContent;
+    const galleryImages = document.querySelectorAll('.gallery-item img, .gallery-item .view-btn');
+    galleryImages.forEach(element => {
+        element.addEventListener('click', function() {
+            const galleryItem = this.closest('.gallery-item');
+            const img = galleryItem.querySelector('img');
+            const title = galleryItem.querySelector('h4').textContent;
             
-            modal.style.display = 'block';
-            modalImg.src = img.src;
-            modalImg.alt = img.alt;
-            modalCaption.innerHTML = `<h4>${title}</h4><p>${description}</p>`;
+            modalImage.src = img.src;
+            modalImage.alt = title;
+            modalCaption.textContent = title;
+            modal.style.display = 'flex';
             
-            document.body.style.overflow = 'hidden';
+            // Add fade in animation
+            setTimeout(() => {
+                modal.classList.add('active');
+            }, 10);
         });
     });
     
-    if (closeBtn) {
-        closeBtn.addEventListener('click', closeModal);
+    function closeModal() {
+        modal.classList.remove('active');
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
     }
     
-    if (modal) {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeModal();
-            }
-        });
-    }
+    closeBtn.addEventListener('click', closeModal);
     
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.style.display === 'block') {
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
             closeModal();
         }
     });
     
-    function closeModal() {
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.style.display === 'flex') {
+            closeModal();
+        }
+    });
 }
 
 function initializeScrollToTop() {
@@ -358,7 +274,7 @@ function initializeScrollToTop() {
     
     if (scrollTopBtn) {
         window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 300) {
+            if (window.scrollY > 300) {
                 scrollTopBtn.classList.add('visible');
             } else {
                 scrollTopBtn.classList.remove('visible');
@@ -374,327 +290,75 @@ function initializeScrollToTop() {
     }
 }
 
-function createParticleEffect(element, particleCount = 10) {
-    for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.cssText = `
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--primary-color);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: particleFloat 2s ease-out forwards;
-        `;
-        
-        const rect = element.getBoundingClientRect();
-        particle.style.left = rect.left + Math.random() * rect.width + 'px';
-        particle.style.top = rect.top + Math.random() * rect.height + 'px';
-        
-        document.body.appendChild(particle);
-        
-        setTimeout(() => {
-            if (particle.parentNode) {
-                particle.parentNode.removeChild(particle);
-            }
-        }, 2000);
-    }
-}
-
-const particleAnimationCSS = `
-@keyframes particleFloat {
-    0% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(-100px) scale(0);
-    }
-}
-`;
-
-if (!document.querySelector('#particle-animation-styles')) {
-    const style = document.createElement('style');
-    style.id = 'particle-animation-styles';
-    style.textContent = particleAnimationCSS;
-    document.head.appendChild(style);
-}
-
-function addRippleEffect(element) {
-    element.addEventListener('click', function(e) {
-        const ripple = document.createElement('span');
-        const rect = this.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        const x = e.clientX - rect.left - size / 2;
-        const y = e.clientY - rect.top - size / 2;
-        
-        ripple.style.cssText = `
-            position: absolute;
-            width: ${size}px;
-            height: ${size}px;
-            left: ${x}px;
-            top: ${y}px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            transform: scale(0);
-            animation: ripple 0.6s linear;
-            pointer-events: none;
-        `;
-        
-        this.style.position = 'relative';
-        this.style.overflow = 'hidden';
-        this.appendChild(ripple);
-        
-        setTimeout(() => {
-            if (ripple.parentNode) {
-                ripple.parentNode.removeChild(ripple);
-            }
-        }, 600);
-    });
-}
-
-const rippleCSS = `
-@keyframes ripple {
-    to {
-        transform: scale(4);
-        opacity: 0;
-    }
-}
-`;
-
-if (!document.querySelector('#ripple-styles')) {
-    const style = document.createElement('style');
-    style.id = 'ripple-styles';
-    style.textContent = rippleCSS;
-    document.head.appendChild(style);
-}
-
-document.querySelectorAll('.btn, .control-btn, .social-link').forEach(addRippleEffect);
-
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const parallax = document.querySelectorAll('.parallax');
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+            <span>${message}</span>
+        </div>
+    `;
     
-    parallax.forEach(element => {
-        const speed = element.dataset.speed || 0.5;
-        const yPos = -(scrolled * speed);
-        element.style.transform = `translateY(${yPos}px)`;
-    });
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 100);
+    
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 4000);
+}
+
+// Performance tracking
+let startTime = Date.now();
+window.addEventListener('load', function() {
+    const loadTime = Date.now() - startTime;
+    localStorage.setItem('last_load_time', loadTime.toString());
 });
 
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
+// Time tracking
+let timeSpent = 0;
+let lastActive = Date.now();
 
-const debouncedScrollHandler = debounce(() => {
-    updateActiveNavLink();
-}, 10);
-
-window.addEventListener('scroll', debouncedScrollHandler);
-
-function lazyLoadImages() {
-    const images = document.querySelectorAll('img[data-src]');
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src;
-                img.classList.remove('lazy');
-                imageObserver.unobserve(img);
-            }
-        });
-    });
-    
-    images.forEach(img => imageObserver.observe(img));
-}
-
-lazyLoadImages();
-
-window.addEventListener('resize', debounce(() => {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-}, 250));
-
-const vh = window.innerHeight * 0.01;
-document.documentElement.style.setProperty('--vh', `${vh}px`);
-
-// Software Stats Counter Animation
-function animateCounter(element, target, duration = 2000) {
-    const start = parseInt(element.textContent) || 0;
-    const increment = (target - start) / (duration / 16);
-    let current = start;
-    
-    const timer = setInterval(() => {
-        current += increment;
-        element.textContent = Math.floor(current);
-        
-        if (current >= target) {
-            element.textContent = target;
-            clearInterval(timer);
-        }
-    }, 16);
-}
-
-// Intersection Observer for Software Stats
-function initSoftwareStats() {
-    const statsSection = document.querySelector('.software-stats');
-    if (!statsSection) return;
-    
-    const statsObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const statNumbers = entry.target.querySelectorAll('.stat-number');
-                
-                statNumbers.forEach(stat => {
-                    const targetValue = parseInt(stat.dataset.count);
-                    animateCounter(stat, targetValue);
-                });
-                
-                // Only animate once
-                statsObserver.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.5,
-        rootMargin: '0px 0px -50px 0px'
-    });
-    
-    statsObserver.observe(statsSection);
-}
-
-// Real Analytics Tracking
-class RealAnalytics {
-    constructor() {
-        this.sessionStart = Date.now();
-        this.trackPageView();
-        this.bindTrackingEvents();
+setInterval(() => {
+    if (document.visibilityState === 'visible') {
+        timeSpent += Date.now() - lastActive;
+        lastActive = Date.now();
     }
-    
-    trackPageView() {
-        const views = parseInt(localStorage.getItem('page_views') || '0') + 1;
-        localStorage.setItem('page_views', views.toString());
-        localStorage.setItem('last_visit', new Date().toISOString());
-    }
-    
-    trackMusicPlay(trackName) {
-        const plays = parseInt(localStorage.getItem('music_plays') || '0') + 1;
-        localStorage.setItem('music_plays', plays.toString());
-        
-        // Store individual track data
-        const trackPlays = JSON.parse(localStorage.getItem('track_analytics') || '{}');
-        trackPlays[trackName] = (trackPlays[trackName] || 0) + 1;
-        localStorage.setItem('track_analytics', JSON.stringify(trackPlays));
-    }
-    
-    trackGalleryInteraction(category) {
-        const clicks = parseInt(localStorage.getItem('gallery_clicks') || '0') + 1;
-        localStorage.setItem('gallery_clicks', clicks.toString());
-        
-        // Store category data
-        const categoryClicks = JSON.parse(localStorage.getItem('gallery_analytics') || '{}');
-        categoryClicks[category] = (categoryClicks[category] || 0) + 1;
-        localStorage.setItem('gallery_analytics', JSON.stringify(categoryClicks));
-    }
-    
-    trackSocialClick(platform) {
-        const clicks = parseInt(localStorage.getItem('social_clicks') || '0') + 1;
-        localStorage.setItem('social_clicks', clicks.toString());
-        
-        // Store platform data
-        const platformClicks = JSON.parse(localStorage.getItem('social_analytics') || '{}');
-        platformClicks[platform] = (platformClicks[platform] || 0) + 1;
-        localStorage.setItem('social_analytics', JSON.stringify(platformClicks));
-    }
-    
-    trackTimeSpent() {
-        const timeSpent = Math.floor((Date.now() - this.sessionStart) / 1000);
-        const totalTime = parseInt(localStorage.getItem('total_time_spent') || '0') + timeSpent;
-        localStorage.setItem('total_time_spent', totalTime.toString());
-    }
-    
-    bindTrackingEvents() {
-        // Track music plays
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('.music-card') || e.target.closest('.play-btn')) {
-                const musicCard = e.target.closest('.music-card');
-                const trackName = musicCard?.querySelector('h4')?.textContent || 'Unknown Track';
-                this.trackMusicPlay(trackName);
-            }
-            
-            // Track gallery clicks
-            if (e.target.closest('.gallery-item')) {
-                const galleryItem = e.target.closest('.gallery-item');
-                const category = galleryItem?.dataset.category || 'general';
-                this.trackGalleryInteraction(category);
-            }
-            
-            // Track social clicks
-            if (e.target.closest('.link-card')) {
-                const linkCard = e.target.closest('.link-card');
-                const platform = linkCard.classList.contains('github-card') ? 'github' :
-                               linkCard.classList.contains('linkedin-card') ? 'linkedin' :
-                               linkCard.classList.contains('email-card') ? 'email' : 'other';
-                this.trackSocialClick(platform);
-            }
-        });
-        
-        // Track page leave
-        window.addEventListener('beforeunload', () => {
-            this.trackTimeSpent();
-        });
-        
-        // Track visibility change (tab switching)
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                this.trackTimeSpent();
-                this.sessionStart = Date.now(); // Reset for next visible session
-            }
-        });
-    }
-}
+}, 1000);
 
-// Initialize analytics
-const analytics = new RealAnalytics();
-
-// Initialize stats animation
-document.addEventListener('DOMContentLoaded', () => {
-    initSoftwareStats();
+window.addEventListener('beforeunload', function() {
+    const totalTime = parseInt(localStorage.getItem('total_time_spent') || '0') + timeSpent;
+    localStorage.setItem('total_time_spent', totalTime.toString());
 });
 
-// Version and Cache Management
-class CacheManager {
-    constructor() {
-        this.version = '1.2.0';
-        this.checkVersion();
-    }
-    
-    checkVersion() {
-        const storedVersion = localStorage.getItem('site_version');
-        const currentVersion = document.querySelector('meta[name="version"]')?.content || this.version;
-        
-        if (storedVersion && storedVersion !== currentVersion) {
-            console.log(`🔄 Version updated: ${storedVersion} → ${currentVersion}`);
-            this.clearOldCache();
-        }
-        
+// Version check and cache management
+const currentVersion = '1.2.0';
+function checkVersion() {
+    const storedVersion = localStorage.getItem('site_version');
+    if (storedVersion !== currentVersion) {
         localStorage.setItem('site_version', currentVersion);
-        console.log(`📦 Current version: ${currentVersion}`);
+        
+        if (storedVersion) {
+            logger.log('🔄 Site updated to version ' + currentVersion);
+        }
     }
+}
+
+// Clear old cache data
+function clearOldCache() {
+    const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+    const lastClear = localStorage.getItem('last_cache_clear');
     
-    clearOldCache() {
+    if (!lastClear || parseInt(lastClear) < oneWeekAgo) {
         // Clear localStorage except user settings
-        const keepKeys = ['admin_session', 'admin_last_activity', 'user_preferences'];
         const allKeys = Object.keys(localStorage);
+        const keepKeys = ['site_version', 'user_preferences', 'form_submissions', 'uploadedMusic', 'uploadedGallery'];
         
         allKeys.forEach(key => {
             if (!keepKeys.includes(key)) {
@@ -702,66 +366,249 @@ class CacheManager {
             }
         });
         
-        console.log('🧹 Old cache cleared due to version update');
+        localStorage.setItem('last_cache_clear', Date.now().toString());
+        logger.log('🧹 Cache cleared');
     }
 }
 
-// Initialize cache manager
-const cacheManager = new CacheManager();
-
-// Content Synchronization System
-class ContentSync {
-    constructor() {
-        this.lastUpdateCache = {}; // Cache son güncelleme değerlerini saklar
-        this.initSync();
-        this.loadSavedContent();
+// Content management functions
+function updateContentFromAdmin() {
+    const englishText = localStorage.getItem('about_text_en');
+    const heroTitle = localStorage.getItem('hero_title');
+    const heroDescription = localStorage.getItem('hero_description');
+    const email = localStorage.getItem('contact_email');
+    const phone = localStorage.getItem('contact_phone');
+    const location = localStorage.getItem('contact_location');
+    const spotify = localStorage.getItem('social_spotify');
+    const youtube = localStorage.getItem('social_youtube');
+    const instagram = localStorage.getItem('social_instagram');
+    const siteTitle = localStorage.getItem('site_title');
+    const siteDescription = localStorage.getItem('site_description');
+    
+    if (englishText) {
+        const aboutTexts = document.querySelectorAll('.about-text');
+        aboutTexts.forEach(text => {
+            text.innerHTML = englishText.replace(/\n/g, '<br>');
+        });
     }
     
-    initSync() {
-        // Listen for storage changes (from admin panel)
-        window.addEventListener('storage', (e) => {
-            console.log('🔄 Storage change detected:', e.key, e.newValue);
-            if (e.key && (e.key.startsWith('about_text_') || 
-                         e.key.startsWith('hero_') ||
-                         e.key.startsWith('contact_') ||
-                         e.key.startsWith('site_') ||
-                         e.key.startsWith('social_'))) {
-                this.loadSavedContent();
-                this.loadSocialMedia();
-                this.loadSiteSettings();
+    if (heroTitle) {
+        const heroTitles = document.querySelectorAll('.hero-title');
+        heroTitles.forEach(title => title.textContent = heroTitle);
+    }
+    
+    if (heroDescription) {
+        const heroDescs = document.querySelectorAll('.hero-description');
+        heroDescs.forEach(desc => desc.textContent = heroDescription);
+    }
+    
+    if (siteTitle) {
+        document.title = siteTitle;
+        const titleElements = document.querySelectorAll('.site-title');
+        titleElements.forEach(el => el.textContent = siteTitle);
+    }
+}
+
+// Add music to main site from admin
+function addMusicToMainSite(musicData) {
+    const musicGrid = document.querySelector('.music-grid');
+    if (!musicGrid) return;
+    
+    const musicCard = document.createElement('div');
+    musicCard.className = 'music-card uploaded-music';
+    musicCard.dataset.src = musicData.audioUrl || '#';
+    
+    musicCard.innerHTML = `
+        <div class="card-image">
+            <img src="${musicData.albumCover || 'assets/images/default-cover.jpg'}" alt="${musicData.title}">
+            <div class="play-overlay">
+                <i class="fas fa-play"></i>
+            </div>
+        </div>
+        <div class="card-content">
+            <h4>${musicData.title}</h4>
+            <p>${musicData.genre || 'Unknown'} • ${musicData.artist || 'Artist'}</p>
+            <div class="card-duration">${musicData.duration || '0:00'}</div>
+        </div>
+    `;
+    
+    // Add event listeners
+    const playOverlay = musicCard.querySelector('.play-overlay');
+    if (playOverlay) {
+        playOverlay.addEventListener('click', () => {
+            if (window.musicPlayer && musicData.audioUrl) {
+                window.musicPlayer.loadTrack(musicData.audioUrl, musicData.title);
             }
         });
-        
-        // Check for updates every 5 seconds (daha az sık kontrol)
-        setInterval(() => {
-            this.loadSavedContent();
-            this.loadSocialMedia(); 
-            this.loadSiteSettings();
-        }, 5000);
-        
-        // Initial load
-        this.loadSavedContent();
-        this.loadSocialMedia();
-        this.loadSiteSettings();
     }
     
-    loadSavedContent() {
+    musicGrid.appendChild(musicCard);
+    logger.log('✅ Music added to main site:', musicData.title);
+}
+
+// Add gallery item to main site from admin
+function addImageToMainSite(galleryData) {
+    const galleryGrid = document.querySelector('.gallery-grid');
+    if (!galleryGrid) return;
+    
+    const galleryItem = document.createElement('div');
+    galleryItem.className = 'gallery-item uploaded-gallery';
+    galleryItem.dataset.category = galleryData.category || 'general';
+    
+    galleryItem.innerHTML = `
+        <img src="${galleryData.imageUrl}" alt="${galleryData.title}">
+        <div class="gallery-overlay">
+            <h4>${galleryData.title}</h4>
+            <p>${galleryData.description}</p>
+            <button class="view-btn">
+                <i class="fas fa-eye"></i>
+            </button>
+        </div>
+    `;
+    
+    // Add event listeners
+    const viewBtn = galleryItem.querySelector('.view-btn');
+    if (viewBtn) {
+        viewBtn.addEventListener('click', () => {
+            openImageModal(galleryData.imageUrl, galleryData.title);
+        });
+    }
+    
+    galleryGrid.appendChild(galleryItem);
+    logger.log('✅ Image added to main site:', galleryData.title);
+}
+
+// Load admin panel uploaded content to main site
+function loadDynamicContent() {
+    try {
+        loadUploadedMusic();
+        loadUploadedGallery();
+        loadContentFromAdmin();
+        checkVersion();
+        clearOldCache();
+        logger.log('🔄 Dynamic content loaded from admin panel');
+    } catch (error) {
+        logger.error('Error loading dynamic content:', error);
+    }
+}
+
+function loadUploadedMusic() {
+    try {
+        const uploadedMusic = JSON.parse(localStorage.getItem('uploadedMusic') || '[]');
+        const musicGrid = document.querySelector('.music-grid');
+        
+        if (!musicGrid || uploadedMusic.length === 0) return;
+        
+        uploadedMusic.forEach(music => {
+            const musicCard = document.createElement('div');
+            musicCard.className = 'music-card uploaded-music';
+            musicCard.dataset.src = music.audioUrl || '#';
+            
+            musicCard.innerHTML = `
+                <div class="card-image">
+                    <img src="${music.albumCover || 'assets/images/default-cover.jpg'}" alt="${music.title}">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h4>${music.title}</h4>
+                    <p>${music.genre || 'Bilinmeyen'} • ${music.artist || 'Sanatçı'}</p>
+                    <div class="card-duration">${music.duration || '0:00'}</div>
+                </div>
+            `;
+            
+            // Add event listeners for play functionality
+            const playOverlay = musicCard.querySelector('.play-overlay');
+            if (playOverlay) {
+                playOverlay.addEventListener('click', () => {
+                    // Trigger music player if available
+                    if (window.musicPlayer && music.audioUrl) {
+                        window.musicPlayer.loadTrack(music.audioUrl, music.title);
+                    }
+                });
+            }
+            
+            musicGrid.appendChild(musicCard);
+        });
+        
+        logger.log(`✅ Loaded ${uploadedMusic.length} uploaded music tracks`);
+    } catch (error) {
+        logger.error('Error loading uploaded music:', error);
+    }
+}
+
+function loadUploadedGallery() {
+    try {
+        const uploadedGallery = JSON.parse(localStorage.getItem('uploadedGallery') || '[]');
+        const galleryGrid = document.querySelector('.gallery-grid');
+        
+        if (!galleryGrid || uploadedGallery.length === 0) return;
+        
+        uploadedGallery.forEach(gallery => {
+            const galleryItem = document.createElement('div');
+            galleryItem.className = 'gallery-item uploaded-gallery';
+            galleryItem.dataset.category = gallery.category || 'general';
+            
+            galleryItem.innerHTML = `
+                <img src="${gallery.imageUrl}" alt="${gallery.title}">
+                <div class="gallery-overlay">
+                    <h4>${gallery.title}</h4>
+                    <p>${gallery.description}</p>
+                    <button class="view-btn">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            `;
+            
+            // Add event listeners for view functionality
+            const viewBtn = galleryItem.querySelector('.view-btn');
+            if (viewBtn) {
+                viewBtn.addEventListener('click', () => {
+                    openImageModal(gallery.imageUrl, gallery.title);
+                });
+            }
+            
+            galleryGrid.appendChild(galleryItem);
+        });
+        
+        logger.log(`✅ Loaded ${uploadedGallery.length} uploaded gallery items`);
+    } catch (error) {
+        logger.error('Error loading uploaded gallery:', error);
+    }
+}
+
+function loadContentFromAdmin() {
+    try {
         // Load about text
-        const englishText = localStorage.getItem('about_text_en');
-        if (englishText) {
-            this.updateAboutSection(englishText);
+        const aboutTextEn = localStorage.getItem('about_text_en');
+        const aboutTextTr = localStorage.getItem('about_text_tr');
+        
+        if (aboutTextEn) {
+            const aboutSection = document.querySelector('#about .about-text');
+            if (aboutSection) {
+                aboutSection.innerHTML = `<p>${aboutTextEn}</p>`;
+            }
         }
         
         // Load hero content
         const heroTitle = localStorage.getItem('hero_title');
+        const heroSubtitle = localStorage.getItem('hero_subtitle');
         const heroDescription = localStorage.getItem('hero_description');
         
         if (heroTitle) {
-            this.updateHeroTitle(heroTitle);
+            const titleElement = document.querySelector('.hero-title');
+            if (titleElement) titleElement.textContent = heroTitle;
+        }
+        
+        if (heroSubtitle) {
+            const subtitleElement = document.querySelector('.hero-subtitle');
+            if (subtitleElement) subtitleElement.textContent = heroSubtitle;
         }
         
         if (heroDescription) {
-            this.updateHeroDescription(heroDescription);
+            const descElement = document.querySelector('.hero-description');
+            if (descElement) descElement.textContent = heroDescription;
         }
         
         // Load contact info
@@ -769,296 +616,54 @@ class ContentSync {
         const phone = localStorage.getItem('contact_phone');
         const location = localStorage.getItem('contact_location');
         
-        if (email || phone || location) {
-            this.updateContactInfo(email, phone, location);
-        }
-    }
-    
-    updateAboutSection(englishText) {
-        const aboutSection = document.querySelector('#about .about-text');
-        if (aboutSection && englishText) {
-            const currentContent = aboutSection.innerHTML;
-            const paragraphs = englishText.split('\n').filter(p => p.trim());
-            const newContent = `
-                <h3>My Musical Journey</h3>
-                ${paragraphs.map(p => `<p>${p}</p>`).join('')}
-                <div class="skills">
-                    <div class="skill-item">
-                        <i class="fas fa-music"></i>
-                        <span>Piano</span>
-                    </div>
-                    <div class="skill-item">
-                        <i class="fas fa-sliders-h"></i>
-                        <span>Music Production</span>
-                    </div>
-                    <div class="skill-item">
-                        <i class="fas fa-film"></i>
-                        <span>Cinematic Music</span>
-                    </div>
-                    <div class="skill-item">
-                        <i class="fas fa-headphones"></i>
-                        <span>Composition</span>
-                    </div>
-                </div>
-            `;
-            
-            if (currentContent !== newContent) {
-                aboutSection.innerHTML = newContent;
-                console.log('✅ About section updated from admin panel');
-            }
-        }
-    }
-    
-    updateHeroTitle(title) {
-        // Try multiple selectors for hero title
-        const selectors = [
-            '.hero-title .title-line.highlight',
-            '.hero-title .highlight',
-            '.hero-title span:last-child',
-            '.hero-title'
-        ];
-        
-        for (let selector of selectors) {
-            const heroTitle = document.querySelector(selector);
-            if (heroTitle && title && heroTitle.textContent !== title) {
-                heroTitle.textContent = title;
-                console.log('✅ Hero title updated from admin panel:', title);
-                break;
-            }
-        }
-    }
-    
-    updateHeroDescription(description) {
-        const heroDesc = document.querySelector('.hero-description');
-        if (heroDesc && description && heroDesc.textContent.trim() !== description.trim()) {
-            heroDesc.textContent = description;
-            console.log('✅ Hero description updated from admin panel:', description);
-        }
-    }
-    
-    updateContactInfo(email, phone, location) {
-        // Update email in multiple places
-        if (email && this.lastUpdateCache.email !== email) {
-            const emailSelectors = [
-                '.contact-items .contact-item:nth-child(1) p',
-                '.footer-contact p:first-child',
-                '[href^="mailto:"]'
-            ];
-            
-            emailSelectors.forEach(selector => {
-                const elements = document.querySelectorAll(selector);
-                elements.forEach(el => {
-                    if (el && el.textContent !== email) {
-                        if (el.tagName === 'A') {
-                            el.href = `mailto:${email}`;
-                        }
-                        el.textContent = email;
-                    }
-                });
-            });
-            this.lastUpdateCache.email = email;
-            console.log('✅ Contact email updated from admin panel:', email);
+        if (email) {
+            const emailLinks = document.querySelectorAll('a[href^="mailto:"]');
+            emailLinks.forEach(link => link.href = `mailto:${email}`);
         }
         
-        // Update phone in multiple places
-        if (phone && this.lastUpdateCache.phone !== phone) {
-            const phoneSelectors = [
-                '.contact-items .contact-item:nth-child(2) p',
-                '.footer-contact p:nth-child(2)'
-            ];
-            
-            phoneSelectors.forEach(selector => {
-                const elements = document.querySelectorAll(selector);
-                elements.forEach(el => {
-                    if (el && el.textContent !== phone) {
-                        el.textContent = phone;
-                    }
-                });
-            });
-            this.lastUpdateCache.phone = phone;
-            console.log('✅ Contact phone updated from admin panel:', phone);
-        }
-        
-        // Update location in multiple places
-        if (location && this.lastUpdateCache.location !== location) {
-            const locationSelectors = [
-                '.contact-items .contact-item:nth-child(3) p',
-                '.footer-contact p:last-child'
-            ];
-            
-            locationSelectors.forEach(selector => {
-                const elements = document.querySelectorAll(selector);
-                elements.forEach(el => {
-                    if (el && el.textContent !== location) {
-                        el.textContent = location;
-                    }
-                });
-            });
-            this.lastUpdateCache.location = location;
-            console.log('✅ Contact location updated from admin panel:', location);
-        }
-    }
-    
-    loadSocialMedia() {
+        // Load social media links
         const spotify = localStorage.getItem('social_spotify');
         const youtube = localStorage.getItem('social_youtube');
         const instagram = localStorage.getItem('social_instagram');
         
-        if (spotify || youtube || instagram) {
-            this.updateSocialLinks(spotify, youtube, instagram);
-        }
-    }
-    
-    updateSocialLinks(spotify, youtube, instagram) {
-        // Get all social link containers
-        const socialContainers = [
-            document.querySelectorAll('.footer-social a'),
-            document.querySelectorAll('.social-link'),
-            document.querySelectorAll('.social-links a')
-        ];
-        
-        // Update Spotify links
-        if (spotify && spotify.trim() && this.lastUpdateCache.spotify !== spotify) {
-            socialContainers.forEach(container => {
-                container.forEach(link => {
-                    if (link.querySelector('.fa-spotify') || link.href.includes('spotify')) {
-                        link.href = spotify;
-                    }
-                });
-            });
-            this.lastUpdateCache.spotify = spotify;
-            console.log('✅ Spotify link updated:', spotify);
+        if (spotify) {
+            const spotifyLinks = document.querySelectorAll('.social-link[href*="spotify"]');
+            spotifyLinks.forEach(link => link.href = spotify);
         }
         
-        // Update YouTube links
-        if (youtube && youtube.trim() && this.lastUpdateCache.youtube !== youtube) {
-            socialContainers.forEach(container => {
-                container.forEach(link => {
-                    if (link.querySelector('.fa-youtube') || link.href.includes('youtube')) {
-                        link.href = youtube;
-                    }
-                });
-            });
-            this.lastUpdateCache.youtube = youtube;
-            console.log('✅ YouTube link updated:', youtube);
+        if (youtube) {
+            const youtubeLinks = document.querySelectorAll('.social-link[href*="youtube"]');
+            youtubeLinks.forEach(link => link.href = youtube);
         }
         
-        // Update Instagram links
-        if (instagram && instagram.trim() && this.lastUpdateCache.instagram !== instagram) {
-            socialContainers.forEach(container => {
-                container.forEach(link => {
-                    if (link.querySelector('.fa-instagram') || link.href.includes('instagram')) {
-                        link.href = instagram;
-                    }
-                });
-            });
-            this.lastUpdateCache.instagram = instagram;
-            console.log('✅ Instagram link updated:', instagram);
-        }
-    }
-    
-    loadSiteSettings() {
-        const siteTitle = localStorage.getItem('site_title');
-        const siteDescription = localStorage.getItem('site_description');
-        
-        if (siteTitle && document.title !== siteTitle) {
-            document.title = siteTitle;
-            console.log('✅ Site title updated:', siteTitle);
+        if (instagram) {
+            const instagramLinks = document.querySelectorAll('.social-link[href*="instagram"]');
+            instagramLinks.forEach(link => link.href = instagram);
         }
         
-        if (siteDescription) {
-            // Update meta description
-            let metaDesc = document.querySelector('meta[name="description"]');
-            if (metaDesc && metaDesc.content !== siteDescription) {
-                metaDesc.content = siteDescription;
-                console.log('✅ Meta description updated:', siteDescription);
-            }
-        }
+        logger.log('✅ Content loaded from admin panel');
+    } catch (error) {
+        logger.error('Error loading content from admin:', error);
     }
 }
 
-// Initialize content synchronization
-const contentSync = new ContentSync();
-
-// Listen for new content added from admin panel
-window.addEventListener('newMusicAdded', (e) => {
-    const musicData = e.detail;
-    addMusicToMainSite(musicData);
-});
-
-window.addEventListener('newImageAdded', (e) => {
-    const galleryData = e.detail;
-    addImageToMainSite(galleryData);
-});
-
-// Functions to add content to main site
-function addMusicToMainSite(musicData) {
-    const musicSection = document.querySelector('#music .music-grid');
-    if (!musicSection) {
-        console.log('❌ Music grid not found on main site');
-        return;
+function openImageModal(imageSrc, title) {
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalCaption = document.getElementById('modalCaption');
+    
+    if (modal && modalImage) {
+        modalImage.src = imageSrc;
+        modalImage.alt = title;
+        if (modalCaption) modalCaption.textContent = title;
+        modal.style.display = 'flex';
+        
+        setTimeout(() => {
+            modal.classList.add('active');
+        }, 10);
     }
-    
-    // Check if already exists
-    const existingCard = document.querySelector(`[data-music-id="${musicData.id}"]`);
-    if (existingCard) {
-        console.log('⚠️ Music already exists on main site:', musicData.title);
-        return;
-    }
-    
-    const musicCard = document.createElement('div');
-    musicCard.className = 'music-card';
-    musicCard.dataset.musicId = musicData.id;
-    musicCard.dataset.src = musicData.fileUrl || 'assets/music/sample-track.mp3';
-    
-    musicCard.innerHTML = `
-        <div class="card-image">
-            <img src="${musicData.albumCover}" alt="${musicData.title}">
-            <div class="play-overlay">
-                <i class="fas fa-play"></i>
-            </div>
-        </div>
-        <div class="card-content">
-            <h4>${musicData.title}</h4>
-            <p>${musicData.genre} • 2024</p>
-            <div class="card-duration">${musicData.duration || '3:45'}</div>
-        </div>
-    `;
-    
-    musicSection.appendChild(musicCard);
-    console.log('✅ Music added to main site:', musicData.title);
 }
 
-function addImageToMainSite(galleryData) {
-    const gallerySection = document.querySelector('#gallery .gallery-grid');
-    if (!gallerySection) {
-        console.log('❌ Gallery grid not found on main site');
-        return;
-    }
-    
-    // Check if already exists
-    const existingItem = document.querySelector(`[data-gallery-id="${galleryData.id}"]`);
-    if (existingItem) {
-        console.log('⚠️ Gallery item already exists on main site:', galleryData.title);
-        return;
-    }
-    
-    const galleryItem = document.createElement('div');
-    galleryItem.className = 'gallery-item';
-    galleryItem.dataset.galleryId = galleryData.id;
-    
-    galleryItem.innerHTML = `
-        <img src="${galleryData.imageUrl}" alt="${galleryData.title}">
-        <div class="gallery-overlay">
-            <h4>${galleryData.title}</h4>
-            <p>${galleryData.description}</p>
-        </div>
-    `;
-    
-    gallerySection.appendChild(galleryItem);
-    console.log('✅ Image added to main site:', galleryData.title);
-}
-
-console.log('%c🎵 Müzik Portföyü', 'color: #6c5ce7; font-size: 20px; font-weight: bold;');
-console.log('%cTüm sistemler aktif ve hazır!', 'color: #00cec9; font-size: 14px;');
-console.log('%c🔄 Admin panel senkronizasyonu aktif!', 'color: #fdcb6e; font-size: 12px;');
+logger.log('%c🎵 Müzik Portföyü', 'color: #6c5ce7; font-size: 20px; font-weight: bold;');
+logger.log('%cTüm sistemler aktif ve hazır!', 'color: #00cec9; font-size: 14px;');
+logger.log('%c🔄 Admin panel senkronizasyonu aktif!', 'color: #fdcb6e; font-size: 12px;');
