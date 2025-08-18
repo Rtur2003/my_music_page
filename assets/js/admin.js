@@ -3292,9 +3292,9 @@ class AnalyticsDashboard {
         `;
         
         // Insert after performance monitor
-        const performanceMonitor = dashboard.querySelector('.performance-monitor');
-        if (performanceMonitor) {
-            performanceMonitor.parentNode.insertBefore(analyticsSection, performanceMonitor.nextSibling);
+        const performanceMonitorEl = dashboard.querySelector('.performance-monitor');
+        if (performanceMonitorEl) {
+            performanceMonitorEl.parentNode.insertBefore(analyticsSection, performanceMonitorEl.nextSibling);
         }
         
         // Add PWA Status Widget
