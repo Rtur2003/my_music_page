@@ -1429,24 +1429,7 @@ Site düzenli olarak güncellenmekte ve yeni içerikler eklenmektedir.
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Only create instance if not already created (prevent duplicates)
-    if (!window.adminPanel) {
-        window.adminPanel = new AdminPanel();
-    }
-    
-    window.addEventListener('beforeunload', () => {
-        if (window.adminPanel) {
-            window.adminPanel.saveData();
-        }
-    });
-    
-    document.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.key === 's') {
-            e.preventDefault();
-            window.adminPanel.showAdminNotification('Otomatik kayıt aktif!', 'info');
-        }
-    });
+// Moved to main initialization function
 });
 
 function toggleMobileNav() {
@@ -1849,24 +1832,7 @@ function loadContentFromLocalStorage() {
     }
 }
 
-// Initialize authentication system
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM loaded, initializing auth...'); // Debug
-    
-    // Check if elements exist
-    const loginScreen = document.getElementById('loginScreen');
-    const adminPanel = document.getElementById('adminPanel');
-    
-    console.log('Login screen exists:', !!loginScreen); // Debug
-    console.log('Admin panel exists:', !!adminPanel); // Debug
-    
-    if (loginScreen && adminPanel) {
-        new AdminAuth();
-        
-        // Load saved content when admin panel is ready
-        setTimeout(() => {
-            loadContentFromLocalStorage();
-        }, 500);
+// Moved to main initialization function
     } else {
         console.error('Required elements not found!');
         
@@ -2142,21 +2108,7 @@ function saveMusicEdit() {
 
 // Duplicate saveGalleryEdit removed - using complete implementation above
 
-// Tab switching functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
-    
-    tabBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const tabId = this.dataset.tab;
-            
-            // Remove active class from all tabs and contents
-            tabBtns.forEach(b => b.classList.remove('active'));
-            tabContents.forEach(c => c.classList.remove('active'));
-            
-            // Add active class to clicked tab and corresponding content
-            this.classList.add('active');
+// Moved to main initialization function
             const targetContent = document.querySelector(`[data-tab-content="${tabId}"]`);
             if (targetContent) {
                 targetContent.classList.add('active');
@@ -5934,20 +5886,87 @@ class APIEndpointManager {
     }
 }
 
-// Initialize all systems when DOM loads
+// Main initialization - consolidated all DOMContentLoaded listeners
 document.addEventListener('DOMContentLoaded', () => {
-    if (checkAdminSession()) {
-        initializeAdminPanel();
-        initializePerformanceMonitor();
-        initializeFileValidator();
-        initializeDragDropReorder();
-        initializeBulkOperations();
-        initializeAnalyticsDashboard();
-        initializeAutoBackupScheduler();
-        initializeVersionControl();
-        initializeMultiUserSystem();
-        initializeAPIEndpointManager();
-        initializeRealTimeCollaboration();
+    console.log('DOM loaded, initializing admin system...'); // Debug
+    
+    // Initialize authentication system first
+    const loginScreen = document.getElementById('loginScreen');
+    const adminPanel = document.getElementById('adminPanel');
+    
+    console.log('Login screen exists:', !!loginScreen); // Debug
+    console.log('Admin panel exists:', !!adminPanel); // Debug
+    
+    if (loginScreen && adminPanel) {
+        // Initialize AdminAuth
+        new AdminAuth();
+        
+        // Load saved content when admin panel is ready
+        setTimeout(() => {
+            if (typeof loadContentFromLocalStorage === 'function') {
+                loadContentFromLocalStorage();
+            }
+        }, 500);
+    }
+    
+    // Initialize tab switching functionality
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const tabId = this.dataset.tab;
+            
+            // Remove active class from all tabs and contents
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            
+            // Add active class to clicked tab and corresponding content
+            this.classList.add('active');
+            const targetContent = document.getElementById(tabId);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+        });
+    });
+    
+    // Initialize AdminPanel instance
+    if (!window.adminPanel) {
+        window.adminPanel = new AdminPanel();
+    }
+    
+    // Setup beforeunload event
+    window.addEventListener('beforeunload', () => {
+        if (window.adminPanel) {
+            window.adminPanel.saveData();
+        }
+    });
+    
+    // Setup keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 's') {
+            e.preventDefault();
+            if (window.adminPanel) {
+                window.adminPanel.showAdminNotification('Otomatik kayıt aktif!', 'info');
+            }
+        }
+    });
+    
+    // Initialize additional systems if session exists
+    if (typeof checkAdminSession === 'function' && checkAdminSession()) {
+        setTimeout(() => {
+            if (typeof initializeAdminPanel === 'function') initializeAdminPanel();
+            if (typeof initializePerformanceMonitor === 'function') initializePerformanceMonitor();
+            if (typeof initializeFileValidator === 'function') initializeFileValidator();
+            if (typeof initializeDragDropReorder === 'function') initializeDragDropReorder();
+            if (typeof initializeBulkOperations === 'function') initializeBulkOperations();
+            if (typeof initializeAnalyticsDashboard === 'function') initializeAnalyticsDashboard();
+            if (typeof initializeAutoBackupScheduler === 'function') initializeAutoBackupScheduler();
+            if (typeof initializeVersionControl === 'function') initializeVersionControl();
+            if (typeof initializeMultiUserSystem === 'function') initializeMultiUserSystem();
+            if (typeof initializeAPIEndpointManager === 'function') initializeAPIEndpointManager();
+            if (typeof initializeRealTimeCollaboration === 'function') initializeRealTimeCollaboration();
+        }, 100);
     }
 });
 
