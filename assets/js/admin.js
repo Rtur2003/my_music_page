@@ -1832,27 +1832,6 @@ function loadContentFromLocalStorage() {
 }
 
 // Moved to main initialization function
-    } else {
-        console.error('Required elements not found!');
-        
-        // Fallback: try to find admin panel after 1 second
-        setTimeout(() => {
-            const retryLoginScreen = document.getElementById('loginScreen');
-            const retryAdminPanel = document.getElementById('adminPanel');
-            
-            if (retryLoginScreen && retryAdminPanel) {
-                console.log('Found elements on retry, initialization skipped - handled by main DOMContentLoaded');
-                
-                // Load saved content
-                setTimeout(() => {
-                    loadContentFromLocalStorage();
-                }, 500);
-            } else {
-                console.error('Elements still not found after retry');
-            }
-        }, 1000);
-    }
-});
 
 // Modal Functions
 function openMusicEditModal() {
@@ -2107,13 +2086,6 @@ function saveMusicEdit() {
 // Duplicate saveGalleryEdit removed - using complete implementation above
 
 // Moved to main initialization function
-            const targetContent = document.querySelector(`[data-tab-content="${tabId}"]`);
-            if (targetContent) {
-                targetContent.classList.add('active');
-            }
-        });
-    });
-});
 
 // Delete functions for admin items
 function deleteMusicItem(button) {
