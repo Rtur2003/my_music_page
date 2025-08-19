@@ -60,7 +60,7 @@
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: var(--admin-bg);
     color: var(--admin-dark);
     line-height: 1.6;
