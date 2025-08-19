@@ -1430,7 +1430,6 @@ Site düzenli olarak güncellenmekte ve yeni içerikler eklenmektedir.
 }
 
 // Moved to main initialization function
-});
 
 function toggleMobileNav() {
     const sidebar = document.querySelector('.admin-sidebar');
