@@ -5872,6 +5872,31 @@ class APIEndpointManager {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, initializing admin system...'); // Debug
     
+    // Force clear all caches and unregister service worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+            console.log('🔧 Unregistering service workers...');
+            registrations.forEach(registration => {
+                registration.unregister();
+                console.log('Service worker unregistered');
+            });
+        });
+    }
+    
+    if ('caches' in window) {
+        caches.keys().then(cacheNames => {
+            console.log('🧹 Clearing all caches...');
+            return Promise.all(
+                cacheNames.map(cacheName => {
+                    console.log('Deleting cache:', cacheName);
+                    return caches.delete(cacheName);
+                })
+            );
+        }).then(() => {
+            console.log('✅ All caches cleared');
+        });
+    }
+    
     // Check CSS loading
     const loginScreen = document.getElementById('loginScreen');
     const adminPanel = document.getElementById('adminPanel');
