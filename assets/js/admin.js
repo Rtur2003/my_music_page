@@ -103,9 +103,12 @@ class AdminAuth {
         // Simulate network delay for security
         await new Promise(resolve => setTimeout(resolve, 1000));
         
+        console.log('🔍 Verifying password...');
         if (this.verifyPassword(password)) {
+            console.log('✅ Password verified');
             this.loginSuccess();
         } else {
+            console.log('❌ Password verification failed');
             this.loginFailed();
         }
         
@@ -120,6 +123,7 @@ class AdminAuth {
     }
     
     loginSuccess() {
+        console.log('🔓 Login successful! Processing...');
         const sessionId = this.generateSessionId();
         const now = new Date().getTime();
         
@@ -128,6 +132,7 @@ class AdminAuth {
         localStorage.removeItem('login_attempts');
         localStorage.removeItem('lockout_time');
         
+        console.log('📝 Session data saved');
         this.showAdminPanel();
         this.logSecurityEvent('login_success');
         
@@ -201,17 +206,24 @@ class AdminAuth {
     }
     
     showAdminPanel() {
+        console.log('🔐 showAdminPanel called');
         const loginScreen = document.getElementById('loginScreen');
         const adminPanel = document.getElementById('adminPanel');
         
+        console.log('Login screen found:', !!loginScreen);
+        console.log('Admin panel found:', !!adminPanel);
+        
         if (loginScreen) {
             loginScreen.style.display = 'none';
+            console.log('✅ Login screen hidden');
         }
         
         if (adminPanel) {
             adminPanel.style.display = 'block';
+            console.log('✅ Admin panel displayed');
+            console.log('Admin panel computed style:', window.getComputedStyle(adminPanel).display);
         } else {
-            console.error('Admin panel element not found!');
+            console.error('❌ Admin panel element not found!');
         }
     }
     
