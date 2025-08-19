@@ -1,7 +1,7 @@
 // Service Worker for PWA Admin Panel
 // Version 1.2.0 - Enterprise PWA Features
 
-const CACHE_NAME = 'music-portfolio-admin-v1.2.0';
+const CACHE_NAME = 'music-portfolio-admin-v1.3.0';
 const CACHE_STRATEGY = {
     CACHE_FIRST: 'cache-first',
     NETWORK_FIRST: 'network-first',
@@ -20,18 +20,14 @@ const CRITICAL_CACHE_URLS = [
     '/assets/js/music-player.js',
     '/assets/js/gallery.js',
     '/assets/icons/icon-192x192.png',
-    '/assets/icons/icon-512x512.png',
-    'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap',
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css'
+    '/assets/icons/icon-512x512.png'
 ];
 
-// Runtime cache strategies
+// Runtime cache strategies - only local resources
 const RUNTIME_CACHE_STRATEGIES = {
     '/admin.html': CACHE_STRATEGY.CACHE_FIRST,
     '/index.html': CACHE_STRATEGY.CACHE_FIRST,
-    '/assets/': CACHE_STRATEGY.CACHE_FIRST,
-    'https://fonts.googleapis.com/': CACHE_STRATEGY.CACHE_FIRST,
-    'https://cdnjs.cloudflare.com/': CACHE_STRATEGY.CACHE_FIRST
+    '/assets/': CACHE_STRATEGY.CACHE_FIRST
 };
 
 // Install Event - Cache critical resources
