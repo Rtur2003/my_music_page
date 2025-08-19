@@ -5973,9 +5973,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Basit admin oturum kontrolü
 function checkAdminSession() {
-    // Örneğin localStorage’da token veya kullanıcı bilgisi var mı kontrol et
-    const adminToken = localStorage.getItem('adminToken');
-    return adminToken !== null;
+    // AdminAuth ile uyumlu session kontrolü
+    const session = localStorage.getItem('admin_session');
+    const lastActivity = localStorage.getItem('admin_last_activity');
+    
+    if (session && lastActivity) {
+        const now = new Date().getTime();
+        const lastActiveTime = parseInt(lastActivity);
+        
+        // 24 saat = 24 * 60 * 60 * 1000 ms
+        if (now - lastActiveTime < 24 * 60 * 60 * 1000) {
+            return true;
+        }
+    }
+    return false;
 }
 
 // Initialize API Endpoint Manager
