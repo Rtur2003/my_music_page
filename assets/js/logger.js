@@ -70,7 +70,7 @@ class Logger {
 window.logger = new Logger();
 
 // Performance monitoring
-class PerformanceMonitora {
+class PerformanceMonitorLogger {
     constructor() {
         this.metrics = {};
         this.isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -118,7 +118,7 @@ class PerformanceMonitora {
 }
 
 // Global performance monitor instance
-window.perfMonitor = new PerformanceMonitora();
+window.perfMonitor = new PerformanceMonitorLogger();
 
 // Initialize performance monitoring
 document.addEventListener('DOMContentLoaded', () => {
