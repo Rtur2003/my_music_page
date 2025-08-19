@@ -1075,32 +1075,7 @@ body {
     padding-bottom: 0.5rem;
 }
 
-/* Responsive Login */
-@media (max-width: 480px) {
-    .login-container {
-        margin: 1rem;
-        padding: 2rem;
-    }
-    
-    .login-header i {
-        font-size: 2.5rem;
-    }
-    
-    .editor-tabs {
-        flex-direction: column;
-    }
-    
-    .tab-btn {
-        text-align: left;
-        border-right: 2px solid transparent;
-        border-bottom: 1px solid var(--admin-border);
-    }
-    
-    .tab-btn.active {
-        border-right-color: var(--admin-primary);
-        border-bottom-color: var(--admin-border);
-    }
-}
+
 
 /* Enhanced Modal Styles */
 .modal-content {
@@ -4082,31 +4057,3 @@ body {
     }
 }
 
-/* Critical fallback styles to ensure login screen is always visible */
-#loginScreen {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    background: linear-gradient(135deg, #6c5ce7, #74b9ff) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    z-index: 9999 !important;
-    font-family: 'Poppins', Arial, sans-serif !important;
-}
-
-#adminPanel {
-    display: none !important;
-}
-
-.login-container {
-    background: rgba(255, 255, 255, 0.95) !important;
-    padding: 2rem !important;
-    border-radius: 10px !important;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
-    min-width: 300px !important;
-    text-align: center !important;
-}
-}
