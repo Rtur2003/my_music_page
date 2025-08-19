@@ -1842,8 +1842,7 @@ function loadContentFromLocalStorage() {
             const retryAdminPanel = document.getElementById('adminPanel');
             
             if (retryLoginScreen && retryAdminPanel) {
-                console.log('Found elements on retry, initializing auth...');
-                new AdminAuth();
+                console.log('Found elements on retry, initialization skipped - handled by main DOMContentLoaded');
                 
                 // Load saved content
                 setTimeout(() => {
@@ -5898,8 +5897,10 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Admin panel exists:', !!adminPanel); // Debug
     
     if (loginScreen && adminPanel) {
-        // Initialize AdminAuth
-        new AdminAuth();
+        // Initialize AdminAuth (singleton)
+        if (!window.adminAuth) {
+            window.adminAuth = new AdminAuth();
+        }
         
         // Load saved content when admin panel is ready
         setTimeout(() => {
