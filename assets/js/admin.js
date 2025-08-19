@@ -5872,12 +5872,36 @@ class APIEndpointManager {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, initializing admin system...'); // Debug
     
-    // Initialize authentication system first
+    // Check CSS loading
     const loginScreen = document.getElementById('loginScreen');
     const adminPanel = document.getElementById('adminPanel');
     
     console.log('Login screen exists:', !!loginScreen); // Debug
     console.log('Admin panel exists:', !!adminPanel); // Debug
+    
+    if (loginScreen) {
+        const computedStyle = window.getComputedStyle(loginScreen);
+        console.log('Login screen display:', computedStyle.display);
+        console.log('Login screen visibility:', computedStyle.visibility);
+        console.log('Login screen background:', computedStyle.backgroundColor);
+        
+        // Fallback CSS if styles not loaded
+        if (computedStyle.display === 'none' || computedStyle.backgroundColor === 'rgba(0, 0, 0, 0)') {
+            console.log('⚠️ CSS not fully loaded, applying fallback styles');
+            loginScreen.style.cssText = `
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 100% !important;
+                height: 100vh !important;
+                background: linear-gradient(135deg, #6c5ce7, #74b9ff) !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                z-index: 1200 !important;
+            `;
+        }
+    }
     
     if (loginScreen && adminPanel) {
         // Initialize AdminAuth (singleton)
