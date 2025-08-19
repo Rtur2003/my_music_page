@@ -306,61 +306,11 @@
                     </audio>
                 </div>
                 
-                <div class="music-grid">
-                    <div class="music-card active" data-src="assets/music/sample-track.mp3">
-                        <div class="card-image">
-                            <img src="assets/images/album-cover-1.jpg" alt="Rüya Gibi">
-                            <div class="play-overlay">
-                                <i class="fas fa-play"></i>
-                            </div>
-                        </div>
-                        <div class="card-content">
-                            <h4>Rüya Gibi</h4>
-                            <p>Pop • 2024</p>
-                            <div class="card-duration">3:45</div>
-                        </div>
-                    </div>
-                    
-                    <div class="music-card" data-src="assets/music/sample-track-2.mp3">
-                        <div class="card-image">
-                            <img src="assets/images/album-cover-2.jpg" alt="Yıldızlar Altında">
-                            <div class="play-overlay">
-                                <i class="fas fa-play"></i>
-                            </div>
-                        </div>
-                        <div class="card-content">
-                            <h4>Yıldızlar Altında</h4>
-                            <p>Alternatif • 2024</p>
-                            <div class="card-duration">4:12</div>
-                        </div>
-                    </div>
-                    
-                    <div class="music-card" data-src="assets/music/sample-track-3.mp3">
-                        <div class="card-image">
-                            <img src="assets/images/album-cover-3.jpg" alt="Sessiz Gece">
-                            <div class="play-overlay">
-                                <i class="fas fa-play"></i>
-                            </div>
-                        </div>
-                        <div class="card-content">
-                            <h4>Sessiz Gece</h4>
-                            <p>Akustik • 2023</p>
-                            <div class="card-duration">3:28</div>
-                        </div>
-                    </div>
-                    
-                    <div class="music-card" data-src="assets/music/sample-track-4.mp3">
-                        <div class="card-image">
-                            <img src="assets/images/album-cover-4.jpg" alt="Umut">
-                            <div class="play-overlay">
-                                <i class="fas fa-play"></i>
-                            </div>
-                        </div>
-                        <div class="card-content">
-                            <h4>Umut</h4>
-                            <p>Rock • 2023</p>
-                            <div class="card-duration">5:03</div>
-                        </div>
+                <div class="music-grid" id="musicGrid">
+                    <div class="empty-state">
+                        <i class="fas fa-music"></i>
+                        <h3>Henüz müzik eklenmedi</h3>
+                        <p>Admin panelinden müzik ekleyebilirsiniz</p>
                     </div>
                 </div>
             </div>
@@ -526,71 +476,11 @@
                     <button class="filter-btn" data-filter="behind-scenes">Sahne Arkası</button>
                 </div>
                 
-                <div class="gallery-grid">
-                    <div class="gallery-item" data-category="concerts">
-                        <img src="assets/images/gallery-1.jpg" alt="Konser Anı">
-                        <div class="gallery-overlay">
-                            <h4>Konser Anı</h4>
-                            <p>İstanbul Konseri - 2024</p>
-                            <button class="view-btn">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="gallery-item" data-category="studio">
-                        <img src="assets/images/gallery-2.jpg" alt="Stüdyo Çalışması">
-                        <div class="gallery-overlay">
-                            <h4>Stüdyo Çalışması</h4>
-                            <p>Yeni Albüm Kayıtları</p>
-                            <button class="view-btn">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="gallery-item" data-category="behind-scenes">
-                        <img src="assets/images/gallery-3.jpg" alt="Sahne Arkası">
-                        <div class="gallery-overlay">
-                            <h4>Sahne Arkası</h4>
-                            <p>Video Çekimi</p>
-                            <button class="view-btn">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="gallery-item" data-category="concerts">
-                        <img src="assets/images/gallery-4.jpg" alt="Sahne Performansı">
-                        <div class="gallery-overlay">
-                            <h4>Sahne Performansı</h4>
-                            <p>Ankara Konseri - 2024</p>
-                            <button class="view-btn">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="gallery-item" data-category="studio">
-                        <img src="assets/images/gallery-5.jpg" alt="Kayıt Anı">
-                        <div class="gallery-overlay">
-                            <h4>Kayıt Anı</h4>
-                            <p>Single Kaydı</p>
-                            <button class="view-btn">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="gallery-item" data-category="behind-scenes">
-                        <img src="assets/images/gallery-6.jpg" alt="Backstage">
-                        <div class="gallery-overlay">
-                            <h4>Backstage</h4>
-                            <p>Konser Hazırlığı</p>
-                            <button class="view-btn">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
+                <div class="gallery-grid" id="galleryGrid">
+                    <div class="empty-state">
+                        <i class="fas fa-images"></i>
+                        <h3>Henüz fotoğraf eklenmedi</h3>
+                        <p>Admin panelinden galeri resimlerini ekleyebilirsiniz</p>
                     </div>
                 </div>
             </div>
