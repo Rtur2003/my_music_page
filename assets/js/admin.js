@@ -5910,20 +5910,32 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Login screen visibility:', computedStyle.visibility);
         console.log('Login screen background:', computedStyle.backgroundColor);
         
-        // Fallback CSS if styles not loaded
-        if (computedStyle.display === 'none' || computedStyle.backgroundColor === 'rgba(0, 0, 0, 0)') {
-            console.log('⚠️ CSS not fully loaded, applying fallback styles');
-            loginScreen.style.cssText = `
-                position: fixed !important;
-                top: 0 !important;
-                left: 0 !important;
-                width: 100% !important;
-                height: 100vh !important;
-                background: linear-gradient(135deg, #6c5ce7, #74b9ff) !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                z-index: 1200 !important;
+        // Force fallback CSS always (CSS loading issue)
+        console.log('⚠️ Applying strong fallback styles');
+        loginScreen.style.cssText = `
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background: linear-gradient(135deg, #6c5ce7, #74b9ff) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            z-index: 9999 !important;
+            font-family: Arial, sans-serif !important;
+        `;
+        
+        // Also apply styles to login container
+        const loginContainer = loginScreen.querySelector('.login-container');
+        if (loginContainer) {
+            loginContainer.style.cssText = `
+                background: rgba(255, 255, 255, 0.95) !important;
+                padding: 2rem !important;
+                border-radius: 10px !important;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+                min-width: 300px !important;
+                text-align: center !important;
             `;
         }
     }
