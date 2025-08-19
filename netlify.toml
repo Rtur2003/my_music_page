@@ -44,7 +44,7 @@
 
 
 
-# Cache optimization for static assets
+# Cache optimization for static assets - Updated 2025-01-19
 [[headers]]
   for = "/assets/css/*"
   [headers.values]
@@ -74,7 +74,7 @@
 [[headers]]
   for = "/index.html"
   [headers.values]
-    Cache-Control = "public, max-age=300, must-revalidate"
+    Cache-Control = "no-cache, no-store, must-revalidate, max-age=0"
     Vary = "Accept-Encoding"
 
 # Admin panel - no cache for immediate updates
