@@ -1439,6 +1439,36 @@ Site düzenli olarak güncellenmekte ve yeni içerikler eklenmektedir.
             detail: galleryData
         }));
     }
+    
+    // Sync data to main site
+    syncToMainSite() {
+        try {
+            // Get all data from localStorage
+            const musicData = JSON.parse(localStorage.getItem('uploadedMusic') || '[]');
+            const aboutTextEn = localStorage.getItem('aboutTextEn');
+            const aboutTextTr = localStorage.getItem('aboutTextTr');
+            const heroTitle = localStorage.getItem('heroTitle');
+            const heroSubtitle = localStorage.getItem('heroSubtitle');
+            
+            // Save in adminTracks format for main site
+            localStorage.setItem('adminTracks', JSON.stringify(musicData));
+            
+            // Save individual content items
+            if (aboutTextEn) localStorage.setItem('aboutTextEn', aboutTextEn);
+            if (aboutTextTr) localStorage.setItem('aboutTextTr', aboutTextTr);
+            if (heroTitle) localStorage.setItem('heroTitle', heroTitle);
+            if (heroSubtitle) localStorage.setItem('heroSubtitle', heroSubtitle);
+            
+            console.log('✅ Data synced to main site', {
+                tracks: musicData.length,
+                aboutText: !!aboutTextEn,
+                heroTitle: !!heroTitle
+            });
+            
+        } catch (error) {
+            console.error('❌ Sync to main site failed:', error);
+        }
+    }
 }
 
 // Moved to main initialization function
@@ -1460,13 +1490,22 @@ function saveAboutText() {
     const englishText = document.getElementById('aboutTextEn').value;
     const turkishText = document.getElementById('aboutTextTr').value;
     
-    // Save to localStorage with event triggering
+    // Save to localStorage with new keys for main site compatibility
+    localStorage.setItem('aboutTextEn', englishText);
+    localStorage.setItem('aboutTextTr', turkishText);
+    
+    // Also save with old keys for backward compatibility
     localStorage.setItem('about_text_en', englishText);
     localStorage.setItem('about_text_tr', turkishText);
     
+    // Sync to main site
+    if (window.adminPanel) {
+        window.adminPanel.syncToMainSite();
+    }
+    
     // Trigger storage event manually for same-window updates
     window.dispatchEvent(new StorageEvent('storage', {
-        key: 'about_text_en',
+        key: 'aboutTextEn',
         newValue: englishText,
         storageArea: localStorage
     }));
@@ -1483,10 +1522,20 @@ function saveHeroContent() {
     const subtitle = document.getElementById('heroSubtitle').value;
     const description = document.getElementById('heroDescription').value;
     
-    // Save to localStorage
+    // Save to localStorage with new keys for main site compatibility
+    localStorage.setItem('heroTitle', title);
+    localStorage.setItem('heroSubtitle', subtitle);
+    localStorage.setItem('heroDescription', description);
+    
+    // Also save with old keys for backward compatibility
     localStorage.setItem('hero_title', title);
     localStorage.setItem('hero_subtitle', subtitle);
     localStorage.setItem('hero_description', description);
+    
+    // Sync to main site
+    if (window.adminPanel) {
+        window.adminPanel.syncToMainSite();
+    }
     
     // Trigger storage events
     window.dispatchEvent(new StorageEvent('storage', {
@@ -3328,8 +3377,7 @@ class AnalyticsDashboard {
                 <div class="control-group">
                     <label>PWA İşlemleri:</label>
                     <div class="btn-group">
-                        ${!status.isInstalled && typeof pwaManager !== 'undefined' && pwaManager.deferredPrompt ? 
-                            '<button class="btn btn-sm btn-primary" onclick="pwaManager.installPWA()"><i class="fas fa-download"></i> Yükle</button>' : ''}
+                        <!-- PWA Install disabled for admin panel -->
                         ${!status.hasNotifications ? 
                             '<button class="btn btn-sm btn-secondary" onclick="this.requestNotificationPermission()"><i class="fas fa-bell"></i> Bildirimleri Etkinleştir</button>' : ''}
                         <button class="btn btn-sm btn-secondary" onclick="this.testPWAFeatures()">
