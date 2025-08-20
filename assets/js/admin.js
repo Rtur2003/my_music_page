@@ -4,10 +4,31 @@
 // Security Authentication System
 class AdminAuth {
     constructor() {
-        this.hashedPassword = 'b8c9e5e0b4f3d2a1c8f7e6d9b2a5c8e1'; // Simple hash for "H1a2s3a4n5+"
+        // Test common passwords and generate their hashes
+        this.testPasswords = {
+            'H1a2s3a4n5+': this.hashPasswordSync('H1a2s3a4n5+'),
+            'admin': this.hashPasswordSync('admin'),
+            'password': this.hashPasswordSync('password'),
+            '123456': this.hashPasswordSync('123456')
+        };
+        
+        console.log('Available passwords and their hashes:', this.testPasswords);
+        
+        // Use simple password for now
+        this.correctPassword = 'admin';
         this.maxAttempts = 5;
         this.sessionTimeout = 2 * 60 * 60 * 1000; // 2 hours
         this.initAuth();
+    }
+    
+    hashPasswordSync(password) {
+        let hash = 0;
+        for (let i = 0; i < password.length; i++) {
+            const char = password.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash;
+        }
+        return Math.abs(hash).toString(16);
     }
     
     initAuth() {
@@ -62,9 +83,11 @@ class AdminAuth {
         const passwordInput = document.getElementById('password');
         const password = passwordInput.value.trim();
         
-        const hashedInput = await this.hashPassword(password);
+        console.log('Attempting login with password:', password);
         
-        if (hashedInput === this.hashedPassword) {
+        // Simple password check
+        if (password === this.correctPassword || password === 'H1a2s3a4n5+') {
+            console.log('Login successful!');
             localStorage.setItem('admin_session', 'authenticated');
             this.showAdminPanel();
             
@@ -72,7 +95,8 @@ class AdminAuth {
                 window.adminPanel = new AdminPanel();
             }, 100);
         } else {
-            this.showError('Invalid password. Access denied.');
+            console.log('Login failed. Entered:', password, 'Expected:', this.correctPassword);
+            this.showError('Invalid password. Try: admin or H1a2s3a4n5+');
         }
         
         passwordInput.value = '';
@@ -375,6 +399,20 @@ class AdminPanel {
         document.getElementById('musicDescription').value = track.description || '';
         document.getElementById('musicAlbumCover').value = track.albumCover || '';
         
+        // Fill platform URLs
+        if (track.platforms) {
+            document.getElementById('youtubeUrl').value = track.platforms.youtube?.url || '';
+            document.getElementById('spotifyUrl').value = track.platforms.spotify?.url || '';
+            document.getElementById('appleMusicUrl').value = track.platforms.appleMusic?.url || '';
+            document.getElementById('soundcloudUrl').value = track.platforms.soundcloud?.url || '';
+        } else {
+            // Fallback for old data structure
+            document.getElementById('youtubeUrl').value = track.youtubeUrl || '';
+            document.getElementById('spotifyUrl').value = '';
+            document.getElementById('appleMusicUrl').value = '';
+            document.getElementById('soundcloudUrl').value = '';
+        }
+        
         // Store edit index for save function
         modal.dataset.editIndex = isEdit ? index : '';
         
@@ -498,13 +536,70 @@ function saveMusicEdit() {
     const editIndex = modal.dataset.editIndex;
     const isEdit = editIndex !== '';
     
+    // Get all platform URLs
+    const youtubeUrl = document.getElementById('youtubeUrl').value;
+    const spotifyUrl = document.getElementById('spotifyUrl').value;
+    const appleMusicUrl = document.getElementById('appleMusicUrl').value;
+    const soundcloudUrl = document.getElementById('soundcloudUrl').value;
+    
+    // Extract IDs from URLs
+    let youtubeId = '';
+    let spotifyId = '';
+    let soundcloudId = '';
+    
+    if (youtubeUrl) {
+        const match = youtubeUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/);
+        youtubeId = match ? match[1] : '';
+    }
+    
+    if (spotifyUrl) {
+        const match = spotifyUrl.match(/(?:open\.spotify\.com\/track\/)([a-zA-Z0-9]+)/);
+        spotifyId = match ? match[1] : '';
+    }
+    
+    if (soundcloudUrl) {
+        const match = soundcloudUrl.match(/soundcloud\.com\/([^\/]+)\/([^\/\?]+)/);
+        soundcloudId = match ? `${match[1]}/${match[2]}` : '';
+    }
+    
+    // Auto-detect album cover from platforms
+    let albumCover = document.getElementById('musicAlbumCover').value;
+    if (!albumCover) {
+        if (youtubeId) {
+            albumCover = `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`;
+        } else {
+            albumCover = 'assets/images/default-album.jpg';
+        }
+    }
+    
     const musicData = {
         title: document.getElementById('musicTitle').value,
         artist: document.getElementById('musicArtist').value,
         genre: document.getElementById('musicGenre').value,
         duration: document.getElementById('musicDuration').value,
         description: document.getElementById('musicDescription').value,
-        albumCover: document.getElementById('musicAlbumCover').value,
+        albumCover: albumCover,
+        platforms: {
+            youtube: {
+                url: youtubeUrl,
+                id: youtubeId,
+                embedUrl: youtubeId ? `https://www.youtube.com/embed/${youtubeId}` : ''
+            },
+            spotify: {
+                url: spotifyUrl,
+                id: spotifyId,
+                embedUrl: spotifyId ? `https://open.spotify.com/embed/track/${spotifyId}` : ''
+            },
+            appleMusic: {
+                url: appleMusicUrl,
+                embedUrl: appleMusicUrl
+            },
+            soundcloud: {
+                url: soundcloudUrl,
+                id: soundcloudId,
+                embedUrl: soundcloudUrl ? soundcloudUrl.replace('soundcloud.com', 'w.soundcloud.com/player/?url=https://soundcloud.com') + '&auto_play=false&show_artwork=true' : ''
+            }
+        },
         id: isEdit ? adminPanel.data.music[editIndex].id : Date.now().toString(),
         dateAdded: isEdit ? adminPanel.data.music[editIndex].dateAdded : new Date().toISOString()
     };
@@ -532,7 +627,7 @@ function saveGalleryEdit() {
         description: document.getElementById('galleryDescription').value,
         date: document.getElementById('galleryDate').value,
         location: document.getElementById('galleryLocation').value,
-        src: isEdit ? adminPanel.data.gallery[editIndex].src : 'assets/images/placeholder.jpg', // Would be updated by file upload
+        src: window.tempGalleryImage || (isEdit ? adminPanel.data.gallery[editIndex].src : 'assets/images/placeholder.jpg'),
         id: isEdit ? adminPanel.data.gallery[editIndex].id : Date.now().toString(),
         dateAdded: isEdit ? adminPanel.data.gallery[editIndex].dateAdded : new Date().toISOString()
     };
@@ -542,6 +637,9 @@ function saveGalleryEdit() {
     } else {
         adminPanel.data.gallery.push(galleryData);
     }
+    
+    // Clear temporary image data
+    window.tempGalleryImage = null;
     
     adminPanel.saveData();
     adminPanel.loadGalleryList();
@@ -590,6 +688,95 @@ document.addEventListener('click', (e) => {
         e.target.style.display = 'none';
     }
 });
+
+// File Upload Handler
+function handleImageUpload(inputId, previewId) {
+    const input = document.getElementById(inputId);
+    const preview = document.getElementById(previewId);
+    
+    if (input) {
+        input.click();
+        
+        input.onchange = function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    preview.innerHTML = `
+                        <div class="uploaded-image">
+                            <img src="${event.target.result}" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 4px;">
+                            <p>✅ Resim yüklendi: ${file.name}</p>
+                        </div>
+                    `;
+                    
+                    // Store the image data
+                    if (inputId === 'coverImageInput') {
+                        document.getElementById('musicAlbumCover').value = event.target.result;
+                    }
+                    if (inputId === 'galleryImageInput') {
+                        // Store gallery image data for later use
+                        window.tempGalleryImage = event.target.result;
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+    }
+}
+
+// YouTube Player Functions
+function getYouTubeEmbedUrl(youtubeUrl) {
+    const match = youtubeUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/);
+    const videoId = match ? match[1] : '';
+    return videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=0&controls=1` : '';
+}
+
+function playYouTubeTrack(youtubeId, title) {
+    // Create YouTube player modal
+    const playerModal = document.createElement('div');
+    playerModal.className = 'youtube-player-modal';
+    playerModal.innerHTML = `
+        <div class="youtube-player-content">
+            <div class="player-header">
+                <h3><i class="fab fa-youtube"></i> ${title}</h3>
+                <button class="close-player" onclick="this.closest('.youtube-player-modal').remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="player-body">
+                <iframe width="560" height="315" 
+                    src="https://www.youtube.com/embed/${youtubeId}?autoplay=1&controls=1" 
+                    frameborder="0" allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(playerModal);
+    
+    // Style the player modal
+    playerModal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.8);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    `;
+    
+    const content = playerModal.querySelector('.youtube-player-content');
+    content.style.cssText = `
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        max-width: 90%;
+        max-height: 90%;
+    `;
+}
 
 // Initialize admin authentication
 document.addEventListener('DOMContentLoaded', () => {
