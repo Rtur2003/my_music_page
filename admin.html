@@ -121,7 +121,7 @@
                 
                 <div class="admin-header-right">
                     <div class="admin-user">
-                        <img src="assets/images/admin-avatar.jpg" alt="Admin" class="user-avatar">
+                        <img src="assets/images/admin-avatar.svg" alt="Admin" class="user-avatar">
                         <span class="user-name">Admin</span>
                         <button id="logoutBtn" class="logout-btn" title="Logout">
                             <i class="fas fa-sign-out-alt"></i>
@@ -594,8 +594,25 @@ Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokun
         </div>
     </div>
 
-    <!-- <script src="assets/js/logger.js?v=1.2.0"></script> -->
+    <!-- Disable Service Worker for Admin Panel -->
+    <script>
+        // Prevent Service Worker registration on admin panel
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for(let registration of registrations) {
+                    if (registration.scope.includes('/admin')) {
+                        registration.unregister();
+                    }
+                }
+            });
+        }
+        
+        // Block PWA Manager if it tries to load
+        window.PWAManager = null;
+        window.pwaManager = null;
+    </script>
+    
     <script src="assets/js/admin.js?v=1.3.1"></script>
-    <!-- PWA disabled for admin panel -->
+    <!-- All PWA and Service Worker functionality disabled for admin panel -->
 </body>
 </html>

@@ -1,7 +1,13 @@
-// Service Worker for PWA Admin Panel
-// Version 1.2.0 - Enterprise PWA Features
+// Service Worker for PWA Main Site Only
+// Version 1.2.0 - Admin Panel Excluded
 
-const CACHE_NAME = 'music-portfolio-admin-v1.3.0';
+// Skip admin panel entirely
+if (location.pathname.includes('/admin.html') || location.pathname.includes('/admin')) {
+    // Do nothing for admin panel
+    return;
+}
+
+const CACHE_NAME = 'music-portfolio-main-v1.3.0';
 const CACHE_STRATEGY = {
     CACHE_FIRST: 'cache-first',
     NETWORK_FIRST: 'network-first',
