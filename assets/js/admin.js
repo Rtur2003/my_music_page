@@ -119,6 +119,8 @@ class AdminPanel {
     init() {
         this.bindNavigationEvents();
         this.bindButtonEvents();
+        this.bindSidebarToggle();
+        this.bindModalEvents();
         this.updateStats();
         this.loadMusicList();
         this.loadGalleryList();
@@ -141,11 +143,51 @@ class AdminPanel {
     
     syncToMainSite() {
         try {
+            // Sync music data
             localStorage.setItem('adminTracks', JSON.stringify(this.data.music));
-            console.log('✅ Music data synced to main site');
+            
+            // Sync gallery data
+            localStorage.setItem('adminGallery', JSON.stringify(this.data.gallery));
+            
+            // Trigger main site to reload content
+            if (window.opener && !window.opener.closed) {
+                window.opener.postMessage({
+                    type: 'ADMIN_DATA_UPDATED',
+                    data: {
+                        music: this.data.music,
+                        gallery: this.data.gallery
+                    }
+                }, '*');
+            }
+            
+            console.log('✅ All data synced to main site');
+            this.showNotification('Veriler ana sayfaya başarıyla aktarıldı!', 'success');
         } catch (error) {
             console.error('❌ Sync to main site failed:', error);
+            this.showNotification('Ana sayfaya aktarımda hata oluştu!', 'error');
         }
+    }
+    
+    showNotification(message, type = 'info') {
+        // Create notification element if not exists
+        let notification = document.querySelector('.admin-notification');
+        if (!notification) {
+            notification = document.createElement('div');
+            notification.className = 'admin-notification';
+            document.body.appendChild(notification);
+        }
+        
+        notification.className = `admin-notification ${type}`;
+        notification.innerHTML = `
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+            ${message}
+        `;
+        notification.style.display = 'block';
+        
+        // Auto hide after 3 seconds
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000);
     }
     
     bindNavigationEvents() {
@@ -215,6 +257,35 @@ class AdminPanel {
                 const action = btn.dataset.action;
                 this.handleQuickAction(action);
             });
+        });
+    }
+    
+    bindSidebarToggle() {
+        const sidebarToggle = document.querySelector('.sidebar-toggle');
+        const sidebar = document.querySelector('.admin-sidebar');
+        
+        if (sidebarToggle && sidebar) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+                document.querySelector('.admin-main').classList.toggle('sidebar-collapsed');
+            });
+        }
+    }
+    
+    bindModalEvents() {
+        // Close modal buttons
+        document.querySelectorAll('.modal-close').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const modal = e.target.closest('.modal');
+                if (modal) modal.style.display = 'none';
+            });
+        });
+        
+        // Close modals when clicking outside
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
         });
     }
     
