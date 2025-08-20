@@ -679,12 +679,26 @@
                 
                 // Create music grid with all tracks
                 if (musicGrid) {
-                    musicGrid.innerHTML = savedTracks.map((track, index) => `
+                    musicGrid.innerHTML = savedTracks.map((track, index) => {
+                        const platforms = track.platforms || {
+                            youtube: { url: track.youtubeUrl, id: track.youtubeId },
+                            spotify: {},
+                            appleMusic: {},
+                            soundcloud: {}
+                        };
+                        
+                        const platformLinks = [];
+                        if (platforms.youtube?.url) platformLinks.push(`<a href="${platforms.youtube.url}" target="_blank" class="platform-link youtube" title="YouTube'da dinle"><i class="fab fa-youtube"></i></a>`);
+                        if (platforms.spotify?.url) platformLinks.push(`<a href="${platforms.spotify.url}" target="_blank" class="platform-link spotify" title="Spotify'da dinle"><i class="fab fa-spotify"></i></a>`);
+                        if (platforms.appleMusic?.url) platformLinks.push(`<a href="${platforms.appleMusic.url}" target="_blank" class="platform-link apple" title="Apple Music'te dinle"><i class="fab fa-apple"></i></a>`);
+                        if (platforms.soundcloud?.url) platformLinks.push(`<a href="${platforms.soundcloud.url}" target="_blank" class="platform-link soundcloud" title="SoundCloud'da dinle"><i class="fab fa-soundcloud"></i></a>`);
+                        
+                        return `
                         <div class="music-card" data-track-index="${index}">
                             <div class="music-cover">
                                 <img src="${track.albumCover || 'assets/images/album-cover-1.jpg'}" alt="${track.title}">
                                 <div class="play-overlay">
-                                    <button class="play-btn" onclick="playTrack(${index})">
+                                    <button class="play-btn" onclick="openMusicPlayer(${index})" title="Oynatıcıyı aç">
                                         <i class="fas fa-play"></i>
                                     </button>
                                 </div>
@@ -696,9 +710,17 @@
                                     <span class="genre">${track.genre}</span>
                                     <span class="duration">${track.duration}</span>
                                 </div>
+                                ${track.description ? `<p class="track-description">${track.description}</p>` : ''}
+                                ${platformLinks.length > 0 ? `
+                                    <div class="platform-links">
+                                        <span class="platform-label">Dinle:</span>
+                                        ${platformLinks.join('')}
+                                    </div>
+                                ` : ''}
                             </div>
                         </div>
-                    `).join('');
+                    `;
+                    }).join('');
                 }
             } else if (musicGrid) {
                 musicGrid.innerHTML = `
@@ -768,8 +790,8 @@
             }
         });
         
-        // Simple track player function
-        function playTrack(index) {
+        // Enhanced multi-platform music player
+        function openMusicPlayer(index) {
             const savedTracks = JSON.parse(localStorage.getItem('adminTracks') || '[]');
             if (savedTracks[index]) {
                 const track = savedTracks[index];
@@ -782,8 +804,92 @@
                     playBtn.innerHTML = '<i class="fas fa-pause"></i>';
                 }
                 
-                console.log(`🎵 Playing: ${track.title} by ${track.artist}`);
+                createMultiPlatformPlayer(track);
+                console.log(`🎵 Opening player: ${track.title} by ${track.artist}`);
             }
+        }
+        
+        // Legacy function for backward compatibility
+        function playTrack(index) {
+            openMusicPlayer(index);
+        }
+        
+        // YouTube Player for main site
+        function createYouTubePlayer(youtubeId, title, artist) {
+            // Remove existing player
+            const existingPlayer = document.getElementById('youtubePlayer');
+            if (existingPlayer) {
+                existingPlayer.remove();
+            }
+            
+            // Create new player
+            const playerDiv = document.createElement('div');
+            playerDiv.id = 'youtubePlayer';
+            playerDiv.innerHTML = `
+                <div class="youtube-player-overlay">
+                    <div class="youtube-player-container">
+                        <div class="player-header">
+                            <h3><i class="fab fa-youtube"></i> ${title} - ${artist}</h3>
+                            <button class="close-player" onclick="document.getElementById('youtubePlayer').remove()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="player-iframe-container">
+                            <iframe width="100%" height="315" 
+                                src="https://www.youtube.com/embed/${youtubeId}?autoplay=1&controls=1" 
+                                frameborder="0" allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add styles
+            playerDiv.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.9);
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+            
+            const container = playerDiv.querySelector('.youtube-player-container');
+            container.style.cssText = `
+                background: white;
+                border-radius: 12px;
+                padding: 20px;
+                max-width: 800px;
+                width: 90%;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            `;
+            
+            const header = playerDiv.querySelector('.player-header');
+            header.style.cssText = `
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 15px;
+                padding-bottom: 15px;
+                border-bottom: 2px solid #eee;
+            `;
+            
+            const closeBtn = playerDiv.querySelector('.close-player');
+            closeBtn.style.cssText = `
+                background: #ff4757;
+                color: white;
+                border: none;
+                padding: 8px 12px;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 14px;
+            `;
+            
+            document.body.appendChild(playerDiv);
         }
     </script>
 </body>
