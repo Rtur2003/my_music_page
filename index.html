@@ -666,35 +666,123 @@
         function loadDynamicContent() {
             // Load tracks from localStorage (added via admin panel)
             const savedTracks = JSON.parse(localStorage.getItem('adminTracks') || '[]');
+            const musicGrid = document.getElementById('musicGrid');
             
             if (savedTracks.length > 0) {
+                // Update current track info
                 const firstTrack = savedTracks[0];
-                document.getElementById('currentTrackTitle').textContent = firstTrack.title || 'Şarkı Başlığı';
-                document.getElementById('currentTrackArtist').textContent = firstTrack.artist || 'Sanatçı';
+                const currentTrackTitle = document.getElementById('currentTrackTitle');
+                const currentTrackArtist = document.getElementById('currentTrackArtist');
+                
+                if (currentTrackTitle) currentTrackTitle.textContent = firstTrack.title || 'Şarkı Başlığı';
+                if (currentTrackArtist) currentTrackArtist.textContent = firstTrack.artist || 'Sanatçı';
+                
+                // Create music grid with all tracks
+                if (musicGrid) {
+                    musicGrid.innerHTML = savedTracks.map((track, index) => `
+                        <div class="music-card" data-track-index="${index}">
+                            <div class="music-cover">
+                                <img src="${track.albumCover || 'assets/images/album-cover-1.jpg'}" alt="${track.title}">
+                                <div class="play-overlay">
+                                    <button class="play-btn" onclick="playTrack(${index})">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="music-info">
+                                <h3 class="track-title">${track.title}</h3>
+                                <p class="track-artist">${track.artist}</p>
+                                <div class="track-meta">
+                                    <span class="genre">${track.genre}</span>
+                                    <span class="duration">${track.duration}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } else if (musicGrid) {
+                musicGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-music"></i>
+                        <h3>Henüz müzik eklenmedi</h3>
+                        <p>Admin panelinden müzik ekleyebilirsiniz</p>
+                    </div>
+                `;
+            }
+            
+            // Load gallery from admin panel
+            const savedGallery = JSON.parse(localStorage.getItem('adminGallery') || '[]');
+            const galleryGrid = document.querySelector('#gallery .gallery-grid');
+            
+            if (savedGallery.length > 0 && galleryGrid) {
+                galleryGrid.innerHTML = savedGallery.map(item => `
+                    <div class="gallery-item" data-category="${item.category}">
+                        <img src="${item.src}" alt="${item.title}">
+                        <div class="gallery-overlay">
+                            <h3>${item.title}</h3>
+                            <p>${item.description}</p>
+                            <span class="category-tag">${item.category}</span>
+                        </div>
+                    </div>
+                `).join('');
+            } else if (galleryGrid) {
+                galleryGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-images"></i>
+                        <h3>Henüz fotoğraf eklenmedi</h3>
+                        <p>Admin panelinden galeri resimlerini ekleyebilirsiniz</p>
+                    </div>
+                `;
             }
             
             // Load about text from admin panel
             const aboutTextEn = localStorage.getItem('aboutTextEn');
             if (aboutTextEn) {
-                // Update about section if exists
-                const aboutText = document.querySelector('.about-text p');
-                if (aboutText) {
-                    aboutText.textContent = aboutTextEn;
+                const aboutTexts = document.querySelectorAll('.about-text p');
+                if (aboutTexts.length > 0) {
+                    aboutTexts[0].textContent = aboutTextEn;
                 }
             }
             
             // Load hero content
             const heroTitle = localStorage.getItem('heroTitle');
-            const heroSubtitle = localStorage.getItem('heroSubtitle'); 
+            const heroSubtitle = localStorage.getItem('heroSubtitle');
+            const heroDescription = localStorage.getItem('heroDescription');
             
             if (heroTitle) {
-                const titleEl = document.querySelector('.hero-title, h1');
+                const titleEl = document.querySelector('.hero-title .title-line.highlight');
                 if (titleEl) titleEl.textContent = heroTitle;
             }
             
-            if (heroSubtitle) {
-                const subtitleEl = document.querySelector('.hero-subtitle');
-                if (subtitleEl) subtitleEl.textContent = heroSubtitle;
+            if (heroDescription) {
+                const descEl = document.querySelector('.hero-description');
+                if (descEl) descEl.textContent = heroDescription;
+            }
+        }
+        
+        // Listen for admin panel updates
+        window.addEventListener('message', function(event) {
+            if (event.data.type === 'ADMIN_DATA_UPDATED') {
+                loadDynamicContent();
+                console.log('✅ Content updated from admin panel');
+            }
+        });
+        
+        // Simple track player function
+        function playTrack(index) {
+            const savedTracks = JSON.parse(localStorage.getItem('adminTracks') || '[]');
+            if (savedTracks[index]) {
+                const track = savedTracks[index];
+                document.getElementById('currentTrackTitle').textContent = track.title;
+                document.getElementById('currentTrackArtist').textContent = track.artist;
+                
+                // Update play button state
+                const playBtn = document.getElementById('playPauseBtn');
+                if (playBtn) {
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                }
+                
+                console.log(`🎵 Playing: ${track.title} by ${track.artist}`);
             }
         }
     </script>

@@ -50,6 +50,77 @@ body {
     width: 70px;
 }
 
+.admin-sidebar.collapsed .admin-logo span,
+.admin-sidebar.collapsed .admin-nav span {
+    display: none;
+}
+
+.admin-main.sidebar-collapsed {
+    margin-left: 70px;
+}
+
+/* Notification Styles */
+.admin-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--admin-white);
+    padding: 1rem 1.5rem;
+    border-radius: var(--admin-radius);
+    box-shadow: var(--admin-shadow-lg);
+    z-index: 9999;
+    display: none;
+    min-width: 300px;
+    border-left: 4px solid var(--admin-primary);
+    animation: slideInRight 0.3s ease;
+}
+
+.admin-notification.success {
+    border-left-color: var(--admin-success);
+    color: var(--admin-success);
+}
+
+.admin-notification.error {
+    border-left-color: var(--admin-danger);
+    color: var(--admin-danger);
+}
+
+.admin-notification.warning {
+    border-left-color: var(--admin-warning);
+    color: var(--admin-warning);
+}
+
+.admin-notification i {
+    margin-right: 0.5rem;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Sidebar Toggle Button */
+.sidebar-toggle {
+    background: none;
+    border: none;
+    color: var(--admin-dark);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: var(--admin-radius);
+    transition: var(--admin-transition);
+}
+
+.sidebar-toggle:hover {
+    background: var(--admin-light);
+}
+
 .admin-logo {
     padding: 1.5rem;
     border-bottom: 1px solid var(--admin-sidebar-hover);
