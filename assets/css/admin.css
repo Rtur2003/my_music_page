@@ -121,6 +121,49 @@ body {
     background: var(--admin-light);
 }
 
+/* Platform Links Section */
+.platform-links-section {
+    margin: 20px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: var(--admin-radius);
+    border-left: 4px solid var(--admin-primary);
+}
+
+.platform-links-section h4 {
+    margin-bottom: 15px;
+    color: var(--admin-primary);
+    font-weight: 600;
+}
+
+.platform-links-section .form-group {
+    margin-bottom: 15px;
+}
+
+.platform-links-section .form-group:last-child {
+    margin-bottom: 0;
+}
+
+.platform-links-section label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.platform-links-section label i {
+    width: 16px;
+    text-align: center;
+}
+
+.platform-links-section small {
+    display: block;
+    color: #6c757d;
+    font-style: italic;
+    margin-top: 10px;
+}
+
 .admin-logo {
     padding: 1.5rem;
     border-bottom: 1px solid var(--admin-sidebar-hover);
