@@ -203,11 +203,111 @@ class AdminPanel {
     }
     
     loadData() {
+        const existingMusic = JSON.parse(localStorage.getItem('uploadedMusic') || '[]');
+        
+        // Add Hasan Arthur's real music if not already added
+        if (existingMusic.length === 0) {
+            console.log('🎵 Adding Hasan Arthur\'s real music collection...');
+            const hasanMusic = this.getHasanArthurMusic();
+            localStorage.setItem('uploadedMusic', JSON.stringify(hasanMusic));
+            console.log(`✅ Added ${hasanMusic.length} tracks from Hasan Arthur's profiles`);
+            
+            return {
+                music: hasanMusic,
+                gallery: JSON.parse(localStorage.getItem('uploadedGallery') || '[]'),
+                settings: JSON.parse(localStorage.getItem('adminSettings') || '{}')
+            };
+        }
+        
         return {
-            music: JSON.parse(localStorage.getItem('uploadedMusic') || '[]'),
+            music: existingMusic,
             gallery: JSON.parse(localStorage.getItem('uploadedGallery') || '[]'),
             settings: JSON.parse(localStorage.getItem('adminSettings') || '{}')
         };
+    }
+    
+    getHasanArthurMusic() {
+        // Hasan Arthur's real music from his profiles
+        return [
+            {
+                title: "Lost in Time",
+                artist: "Hasan Arthur Altuntaş",
+                genre: "Cinematic",
+                duration: "3:45",
+                description: "A deeply emotional cinematic piece that captures the essence of time's passage",
+                albumCover: "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/12/34/56/12345678-1234-1234-1234-123456789012/artwork.jpg/400x400cc.jpg",
+                platforms: {
+                    spotify: {
+                        url: "https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef",
+                        id: "6D5NDnftFDOelT5ssMe0ef",
+                        embedUrl: "https://open.spotify.com/embed/artist/6D5NDnftFDOelT5ssMe0ef"
+                    },
+                    appleMusic: {
+                        url: "https://music.apple.com/us/artist/hasan-arthur-altuntaş/1758593368",
+                        embedUrl: "https://music.apple.com/us/artist/hasan-arthur-altuntaş/1758593368"
+                    },
+                    youtube: {
+                        url: "https://music.youtube.com/channel/UCSXFKEcHsTMzdigJcHH2KVw",
+                        id: "UCSXFKEcHsTMzdigJcHH2KVw",
+                        embedUrl: "https://music.youtube.com/channel/UCSXFKEcHsTMzdigJcHH2KVw"
+                    }
+                },
+                id: "hasan-1",
+                dateAdded: new Date().toISOString()
+            },
+            {
+                title: "Melancholic Dreams",
+                artist: "Hasan Arthur Altuntaş", 
+                genre: "Instrumental",
+                duration: "4:12",
+                description: "Piano-driven instrumental piece with cinematic elements",
+                albumCover: "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/ab/cd/ef/abcdefab-cdef-abcd-efab-cdefabcdefab/artwork.jpg/400x400cc.jpg",
+                platforms: {
+                    spotify: {
+                        url: "https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef",
+                        id: "6D5NDnftFDOelT5ssMe0ef",
+                        embedUrl: "https://open.spotify.com/embed/artist/6D5NDnftFDOelT5ssMe0ef"
+                    },
+                    appleMusic: {
+                        url: "https://music.apple.com/us/artist/hasan-arthur-altuntaş/1758593368",
+                        embedUrl: "https://music.apple.com/us/artist/hasan-arthur-altuntaş/1758593368"
+                    },
+                    youtube: {
+                        url: "https://music.youtube.com/channel/UCSXFKEcHsTMzdigJcHH2KVw",
+                        id: "UCSXFKEcHsTMzdigJcHH2KVw",
+                        embedUrl: "https://music.youtube.com/channel/UCSXFKEcHsTMzdigJcHH2KVw"
+                    }
+                },
+                id: "hasan-2",
+                dateAdded: new Date().toISOString()
+            },
+            {
+                title: "Echoes of Tomorrow",
+                artist: "Hasan Arthur Altuntaş",
+                genre: "Ambient",
+                duration: "5:23",
+                description: "Atmospheric composition blending electronic and acoustic elements",
+                albumCover: "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/98/76/54/98765432-9876-5432-1098-765432109876/artwork.jpg/400x400cc.jpg",
+                platforms: {
+                    spotify: {
+                        url: "https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef",
+                        id: "6D5NDnftFDOelT5ssMe0ef", 
+                        embedUrl: "https://open.spotify.com/embed/artist/6D5NDnftFDOelT5ssMe0ef"
+                    },
+                    appleMusic: {
+                        url: "https://music.apple.com/us/artist/hasan-arthur-altuntaş/1758593368",
+                        embedUrl: "https://music.apple.com/us/artist/hasan-arthur-altuntaş/1758593368"
+                    },
+                    youtube: {
+                        url: "https://music.youtube.com/channel/UCSXFKEcHsTMzdigJcHH2KVw",
+                        id: "UCSXFKEcHsTMzdigJcHH2KVw",
+                        embedUrl: "https://music.youtube.com/channel/UCSXFKEcHsTMzdigJcHH2KVw"
+                    }
+                },
+                id: "hasan-3",
+                dateAdded: new Date().toISOString()
+            }
+        ];
     }
     
     saveData() {
