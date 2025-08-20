@@ -267,9 +267,9 @@
                             <img src="assets/images/album-cover-1.jpg" alt="Şu an çalan şarkı">
                             <div class="play-pulse"></div>
                         </div>
-                        <div class="track-info">
-                            <h3 class="track-title">Rüya Gibi</h3>
-                            <p class="track-artist">Müzik Sanatçısı</p>
+                        <div class="track-info" id="currentTrackInfo">
+                            <h3 class="track-title" id="currentTrackTitle">Şarkı seçin...</h3>
+                            <p class="track-artist" id="currentTrackArtist">Sanatçı</p>
                         </div>
                     </div>
                     
@@ -655,5 +655,48 @@
     <!-- <script src="assets/js/pwa-manager.js"></script> PWA disabled temporarily -->
     <script src="assets/js/music-player.js?v=1.3.1"></script>
     <script src="assets/js/gallery.js?v=1.3.1"></script>
+    
+    <!-- Dynamic Content Loading -->
+    <script>
+        // Load content from admin panel
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDynamicContent();
+        });
+        
+        function loadDynamicContent() {
+            // Load tracks from localStorage (added via admin panel)
+            const savedTracks = JSON.parse(localStorage.getItem('adminTracks') || '[]');
+            
+            if (savedTracks.length > 0) {
+                const firstTrack = savedTracks[0];
+                document.getElementById('currentTrackTitle').textContent = firstTrack.title || 'Şarkı Başlığı';
+                document.getElementById('currentTrackArtist').textContent = firstTrack.artist || 'Sanatçı';
+            }
+            
+            // Load about text from admin panel
+            const aboutTextEn = localStorage.getItem('aboutTextEn');
+            if (aboutTextEn) {
+                // Update about section if exists
+                const aboutText = document.querySelector('.about-text p');
+                if (aboutText) {
+                    aboutText.textContent = aboutTextEn;
+                }
+            }
+            
+            // Load hero content
+            const heroTitle = localStorage.getItem('heroTitle');
+            const heroSubtitle = localStorage.getItem('heroSubtitle'); 
+            
+            if (heroTitle) {
+                const titleEl = document.querySelector('.hero-title, h1');
+                if (titleEl) titleEl.textContent = heroTitle;
+            }
+            
+            if (heroSubtitle) {
+                const subtitleEl = document.querySelector('.hero-subtitle');
+                if (subtitleEl) subtitleEl.textContent = heroSubtitle;
+            }
+        }
+    </script>
 </body>
 </html>
