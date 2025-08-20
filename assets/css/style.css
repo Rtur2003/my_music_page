@@ -168,9 +168,9 @@
     background: white;
     border-radius: 15px;
     padding: 0;
-    max-width: 900px;
-    width: 95%;
-    max-height: 90vh;
+    max-width: 700px;
+    width: 90%;
+    max-height: 80vh;
     box-shadow: 0 25px 50px rgba(0,0,0,0.5);
     overflow: hidden;
 }
@@ -213,8 +213,8 @@
 
 .platform-player {
     display: none;
-    padding: 20px;
-    min-height: 400px;
+    padding: 15px;
+    min-height: 300px;
 }
 
 .platform-player.active {

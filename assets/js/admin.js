@@ -179,12 +179,16 @@ class AdminAuth {
 // Main Admin Panel Class
 class AdminPanel {
     constructor() {
+        console.log('🎯 AdminPanel constructor called');
         this.currentSection = 'dashboard';
         this.data = this.loadData();
+        console.log('📊 Loaded data:', this.data);
         this.init();
+        console.log('✅ AdminPanel fully initialized');
     }
     
     init() {
+        console.log('🚀 AdminPanel init started');
         this.bindNavigationEvents();
         this.bindButtonEvents();
         this.bindSidebarToggle();
@@ -192,6 +196,10 @@ class AdminPanel {
         this.updateStats();
         this.loadMusicList();
         this.loadGalleryList();
+        
+        // Ensure dashboard is visible
+        this.showSection('dashboard');
+        console.log('✅ AdminPanel init completed');
     }
     
     loadData() {
@@ -270,6 +278,8 @@ class AdminPanel {
     }
     
     showSection(sectionName) {
+        console.log(`🔄 Switching to section: ${sectionName}`);
+        
         // Hide all sections
         document.querySelectorAll('.admin-section').forEach(section => {
             section.classList.remove('active');
@@ -279,15 +289,19 @@ class AdminPanel {
         const targetSection = document.getElementById(sectionName);
         if (targetSection) {
             targetSection.classList.add('active');
+            console.log(`✅ Section ${sectionName} made active`);
+        } else {
+            console.error(`❌ Section ${sectionName} not found!`);
         }
         
         // Update navigation
         document.querySelectorAll('.nav-item').forEach(item => {
             item.classList.remove('active');
         });
-        const activeNavItem = document.querySelector(`a[data-section="${sectionName}"]`).parentElement;
-        if (activeNavItem) {
-            activeNavItem.classList.add('active');
+        const activeNavItem = document.querySelector(`a[data-section="${sectionName}"]`);
+        if (activeNavItem && activeNavItem.parentElement) {
+            activeNavItem.parentElement.classList.add('active');
+            console.log(`✅ Navigation updated for ${sectionName}`);
         }
         
         // Update page title
@@ -301,31 +315,56 @@ class AdminPanel {
                 'settings': 'Ayarlar'
             };
             pageTitle.textContent = titles[sectionName] || 'Admin Panel';
+            console.log(`✅ Title updated to: ${titles[sectionName]}`);
         }
         
         this.currentSection = sectionName;
     }
     
     bindButtonEvents() {
+        console.log('🔘 Binding button events...');
+        
         // Music management buttons
         const addMusicBtn = document.getElementById('addMusicBtn');
         if (addMusicBtn) {
-            addMusicBtn.addEventListener('click', () => this.openMusicEditModal());
+            addMusicBtn.addEventListener('click', (e) => {
+                console.log('🎵 Add Music button clicked');
+                e.preventDefault();
+                this.openMusicEditModal();
+            });
+            console.log('✅ Add Music button bound');
+        } else {
+            console.error('❌ addMusicBtn not found');
         }
         
-        // Gallery management buttons
+        // Gallery management buttons  
         const addImageBtn = document.getElementById('addImageBtn');
         if (addImageBtn) {
-            addImageBtn.addEventListener('click', () => this.openGalleryEditModal());
+            addImageBtn.addEventListener('click', (e) => {
+                console.log('🖼️ Add Image button clicked');
+                e.preventDefault();
+                this.openGalleryEditModal();
+            });
+            console.log('✅ Add Image button bound');
+        } else {
+            console.error('❌ addImageBtn not found');
         }
         
         // Quick action buttons
-        document.querySelectorAll('.quick-action-btn').forEach(btn => {
+        const quickActionBtns = document.querySelectorAll('.quick-action-btn');
+        console.log(`🚀 Found ${quickActionBtns.length} quick action buttons`);
+        
+        quickActionBtns.forEach((btn, index) => {
             btn.addEventListener('click', (e) => {
+                e.preventDefault();
                 const action = btn.dataset.action;
+                console.log(`⚡ Quick action clicked: ${action}`);
                 this.handleQuickAction(action);
             });
+            console.log(`✅ Quick action button ${index + 1} bound`);
         });
+        
+        console.log('✅ All button events bound successfully');
     }
     
     bindSidebarToggle() {
@@ -429,38 +468,72 @@ class AdminPanel {
     }
     
     openMusicEditModal(index = null) {
+        console.log('🎵 Opening music edit modal, index:', index);
+        
         const modal = document.getElementById('musicEditModal');
-        if (!modal) return;
+        if (!modal) {
+            console.error('❌ musicEditModal not found!');
+            alert('Modal bulunamadı! HTML yapısında sorun var.');
+            return;
+        }
         
         const isEdit = index !== null;
         const track = isEdit ? this.data.music[index] : {};
         
-        // Fill form with existing data
-        document.getElementById('musicTitle').value = track.title || '';
-        document.getElementById('musicArtist').value = track.artist || '';
-        document.getElementById('musicGenre').value = track.genre || '';
-        document.getElementById('musicDuration').value = track.duration || '';
-        document.getElementById('musicDescription').value = track.description || '';
-        document.getElementById('musicAlbumCover').value = track.albumCover || '';
+        console.log('📝 Track data:', track);
         
-        // Fill platform URLs
-        if (track.platforms) {
-            document.getElementById('youtubeUrl').value = track.platforms.youtube?.url || '';
-            document.getElementById('spotifyUrl').value = track.platforms.spotify?.url || '';
-            document.getElementById('appleMusicUrl').value = track.platforms.appleMusic?.url || '';
-            document.getElementById('soundcloudUrl').value = track.platforms.soundcloud?.url || '';
-        } else {
-            // Fallback for old data structure
-            document.getElementById('youtubeUrl').value = track.youtubeUrl || '';
-            document.getElementById('spotifyUrl').value = '';
-            document.getElementById('appleMusicUrl').value = '';
-            document.getElementById('soundcloudUrl').value = '';
+        try {
+            // Fill form with existing data
+            const titleInput = document.getElementById('musicTitle');
+            const artistInput = document.getElementById('musicArtist');
+            const genreInput = document.getElementById('musicGenre');
+            const durationInput = document.getElementById('musicDuration');
+            const descriptionInput = document.getElementById('musicDescription');
+            const albumCoverInput = document.getElementById('musicAlbumCover');
+            
+            if (!titleInput) {
+                console.error('❌ Form inputs not found!');
+                alert('Form elemanları bulunamadı!');
+                return;
+            }
+            
+            titleInput.value = track.title || '';
+            artistInput.value = track.artist || '';
+            genreInput.value = track.genre || '';
+            durationInput.value = track.duration || '';
+            descriptionInput.value = track.description || '';
+            albumCoverInput.value = track.albumCover || '';
+            
+            // Fill platform URLs
+            const youtubeInput = document.getElementById('youtubeUrl');
+            const spotifyInput = document.getElementById('spotifyUrl');
+            const appleMusicInput = document.getElementById('appleMusicUrl');
+            const soundcloudInput = document.getElementById('soundcloudUrl');
+            
+            if (track.platforms) {
+                if (youtubeInput) youtubeInput.value = track.platforms.youtube?.url || '';
+                if (spotifyInput) spotifyInput.value = track.platforms.spotify?.url || '';
+                if (appleMusicInput) appleMusicInput.value = track.platforms.appleMusic?.url || '';
+                if (soundcloudInput) soundcloudInput.value = track.platforms.soundcloud?.url || '';
+            } else {
+                // Clear all platform inputs
+                if (youtubeInput) youtubeInput.value = '';
+                if (spotifyInput) spotifyInput.value = '';
+                if (appleMusicInput) appleMusicInput.value = '';
+                if (soundcloudInput) soundcloudInput.value = '';
+            }
+            
+            // Store edit index for save function
+            modal.dataset.editIndex = isEdit ? index : '';
+            
+            // Show modal
+            modal.style.display = 'flex';
+            console.log('✅ Music modal opened successfully');
+            
+        } catch (error) {
+            console.error('❌ Error opening music modal:', error);
+            alert('Modal açılırken hata oluştu: ' + error.message);
         }
-        
-        // Store edit index for save function
-        modal.dataset.editIndex = isEdit ? index : '';
-        
-        modal.style.display = 'flex';
     }
     
     editMusic(index) {

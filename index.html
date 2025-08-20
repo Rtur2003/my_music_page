@@ -831,10 +831,27 @@
             
             // Determine available platforms and preferred order
             const availablePlatforms = [];
-            if (platforms.spotify?.id) availablePlatforms.push({type: 'spotify', ...platforms.spotify, name: 'Spotify', icon: 'fab fa-spotify'});
-            if (platforms.youtube?.id) availablePlatforms.push({type: 'youtube', ...platforms.youtube, name: 'YouTube', icon: 'fab fa-youtube'});
-            if (platforms.soundcloud?.id) availablePlatforms.push({type: 'soundcloud', ...platforms.soundcloud, name: 'SoundCloud', icon: 'fab fa-soundcloud'});
-            if (platforms.appleMusic?.url) availablePlatforms.push({type: 'appleMusic', ...platforms.appleMusic, name: 'Apple Music', icon: 'fab fa-apple'});
+            
+            console.log('🎵 Available platforms data:', platforms);
+            
+            if (platforms.spotify?.url) {
+                console.log('✅ Adding Spotify platform');
+                availablePlatforms.push({type: 'spotify', ...platforms.spotify, name: 'Spotify', icon: 'fab fa-spotify'});
+            }
+            if (platforms.youtube?.url) {
+                console.log('✅ Adding YouTube platform'); 
+                availablePlatforms.push({type: 'youtube', ...platforms.youtube, name: 'YouTube', icon: 'fab fa-youtube'});
+            }
+            if (platforms.soundcloud?.url) {
+                console.log('✅ Adding SoundCloud platform');
+                availablePlatforms.push({type: 'soundcloud', ...platforms.soundcloud, name: 'SoundCloud', icon: 'fab fa-soundcloud'});
+            }
+            if (platforms.appleMusic?.url) {
+                console.log('✅ Adding Apple Music platform');
+                availablePlatforms.push({type: 'appleMusic', ...platforms.appleMusic, name: 'Apple Music', icon: 'fab fa-apple'});
+            }
+            
+            console.log('🎭 Total available platforms:', availablePlatforms.length, availablePlatforms);
             
             if (availablePlatforms.length === 0) {
                 alert('Bu şarkı için oynatılabilir platform bulunamadı.');
@@ -900,19 +917,19 @@
             switch (platform.type) {
                 case 'spotify':
                     return `<iframe src="https://open.spotify.com/embed/track/${platform.id}" 
-                            width="100%" height="380" frameBorder="0" allowtransparency="true" 
+                            width="100%" height="280" frameBorder="0" allowtransparency="true" 
                             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
                             </iframe>`;
                             
                 case 'youtube':
-                    return `<iframe width="100%" height="380" 
+                    return `<iframe width="100%" height="280" 
                             src="https://www.youtube.com/embed/${platform.id}?autoplay=0&controls=1" 
                             frameborder="0" allowfullscreen>
                             </iframe>`;
                             
                 case 'soundcloud':
-                    return `<iframe width="100%" height="380" scrolling="no" frameborder="no" 
-                            src="https://w.soundcloud.com/player/?url=${encodeURIComponent(platform.url)}&auto_play=false&show_artwork=true&visual=true">
+                    return `<iframe width="100%" height="200" scrolling="no" frameborder="no" 
+                            src="https://w.soundcloud.com/player/?url=${encodeURIComponent(platform.url)}&auto_play=false&show_artwork=true&visual=false">
                             </iframe>`;
                             
                 case 'appleMusic':
