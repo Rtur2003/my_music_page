@@ -4,20 +4,12 @@
 // Security Authentication System
 class AdminAuth {
     constructor() {
-        // Test common passwords and generate their hashes
-        this.testPasswords = {
-            'H1a2s3a4n5+': this.hashPasswordSync('H1a2s3a4n5+'),
-            'admin': this.hashPasswordSync('admin'),
-            'password': this.hashPasswordSync('password'),
-            '123456': this.hashPasswordSync('123456')
-        };
-        
-        console.log('Available passwords and their hashes:', this.testPasswords);
-        
-        // Use simple password for now
-        this.correctPassword = 'admin';
+        // Simple and reliable password system
+        this.validPasswords = ['admin', 'H1a2s3a4n5+', 'password'];
         this.maxAttempts = 5;
         this.sessionTimeout = 2 * 60 * 60 * 1000; // 2 hours
+        
+        console.log('🔑 Admin Auth initialized. Valid passwords:', this.validPasswords);
         this.initAuth();
     }
     
@@ -83,20 +75,32 @@ class AdminAuth {
         const passwordInput = document.getElementById('password');
         const password = passwordInput.value.trim();
         
-        console.log('Attempting login with password:', password);
+        console.log('🔐 Login attempt with password:', password);
+        console.log('🔐 Valid passwords:', this.validPasswords);
         
-        // Simple password check
-        if (password === this.correctPassword || password === 'H1a2s3a4n5+') {
-            console.log('Login successful!');
+        // Simple and reliable password check
+        if (this.validPasswords.includes(password)) {
+            console.log('✅ Login successful!');
             localStorage.setItem('admin_session', 'authenticated');
+            localStorage.setItem('admin_last_activity', new Date().getTime().toString());
+            
+            // Hide login screen and show admin panel
             this.showAdminPanel();
             
+            // Initialize admin panel
             setTimeout(() => {
-                window.adminPanel = new AdminPanel();
-            }, 100);
+                if (!window.adminPanel) {
+                    window.adminPanel = new AdminPanel();
+                    console.log('✅ Admin Panel initialized');
+                }
+            }, 200);
+            
+            // Show success notification
+            this.showSuccessMessage('Giriş başarılı! Admin paneline hoş geldiniz.');
+            
         } else {
-            console.log('Login failed. Entered:', password, 'Expected:', this.correctPassword);
-            this.showError('Invalid password. Try: admin or H1a2s3a4n5+');
+            console.log('❌ Login failed. Entered:', password);
+            this.showError(`Geçersiz şifre. Geçerli şifreler: ${this.validPasswords.join(', ')}`);
         }
         
         passwordInput.value = '';
@@ -107,7 +111,47 @@ class AdminAuth {
         if (errorDiv) {
             errorDiv.style.display = 'block';
             errorDiv.querySelector('span').textContent = message;
+            
+            // Auto hide after 5 seconds
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
         }
+    }
+    
+    showSuccessMessage(message) {
+        // Create or update success message
+        let successDiv = document.getElementById('loginSuccess');
+        if (!successDiv) {
+            successDiv = document.createElement('div');
+            successDiv.id = 'loginSuccess';
+            successDiv.className = 'login-success';
+            successDiv.innerHTML = '<i class="fas fa-check-circle"></i><span></span>';
+            successDiv.style.cssText = `
+                display: none;
+                color: #00b894;
+                background: rgba(0, 184, 148, 0.1);
+                padding: 15px;
+                border-radius: 8px;
+                margin-top: 15px;
+                border: 1px solid rgba(0, 184, 148, 0.3);
+            `;
+            
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.appendChild(successDiv);
+            }
+        }
+        
+        successDiv.style.display = 'flex';
+        successDiv.style.alignItems = 'center';
+        successDiv.style.gap = '10px';
+        successDiv.querySelector('span').textContent = message;
+        
+        // Auto hide after 3 seconds
+        setTimeout(() => {
+            successDiv.style.display = 'none';
+        }, 3000);
     }
     
     showLoginScreen() {
