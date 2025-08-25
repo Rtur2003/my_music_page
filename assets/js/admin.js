@@ -547,7 +547,7 @@ class AdminPanel {
         musicList.innerHTML = this.data.music.map((track, index) => `
             <div class="music-item">
                 <div class="music-info">
-                    <img src="${track.albumCover || 'assets/images/default-album.jpg'}" alt="${track.title}" class="album-cover">
+                    <img src="${track.albumCover || 'https://via.placeholder.com/200x200/6c5ce7/ffffff?text=Album'}" alt="${track.title}" class="album-cover">
                     <div class="track-details">
                         <h3>${track.title}</h3>
                         <p><strong>Artist:</strong> ${track.artist}</p>
@@ -785,7 +785,7 @@ function saveMusicEdit() {
         if (youtubeId) {
             albumCover = `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`;
         } else {
-            albumCover = 'assets/images/default-album.jpg';
+            albumCover = 'https://via.placeholder.com/400x400/6c5ce7/ffffff?text=Album+Cover';
         }
     }
     
@@ -844,7 +844,7 @@ function saveGalleryEdit() {
         description: document.getElementById('galleryDescription').value,
         date: document.getElementById('galleryDate').value,
         location: document.getElementById('galleryLocation').value,
-        src: window.tempGalleryImage || (isEdit ? adminPanel.data.gallery[editIndex].src : 'assets/images/placeholder.jpg'),
+        src: window.tempGalleryImage || (isEdit ? adminPanel.data.gallery[editIndex].src : 'https://via.placeholder.com/400x300/6c5ce7/ffffff?text=Gallery+Image'),
         id: isEdit ? adminPanel.data.gallery[editIndex].id : Date.now().toString(),
         dateAdded: isEdit ? adminPanel.data.gallery[editIndex].dateAdded : new Date().toISOString()
     };
