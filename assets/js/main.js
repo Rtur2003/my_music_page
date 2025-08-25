@@ -11,6 +11,7 @@ function initializeApp() {
     initializeImageModal();
     initializeScrollToTop();
     loadDynamicContent();
+    initializeAdvancedAnimations();
     
     logger.log('🎵 Müzik portföyü başarıyla yüklendi!');
 }
@@ -588,7 +589,7 @@ function addMusicToMainSite(musicData) {
     
     musicCard.innerHTML = `
         <div class="card-image">
-            <img src="${musicData.albumCover || 'assets/images/default-cover.jpg'}" alt="${musicData.title}">
+            <img src="${musicData.albumCover || 'https://via.placeholder.com/300x300/6c5ce7/ffffff?text=Album+Cover'}" alt="${musicData.title}">
             <div class="play-overlay">
                 <i class="fas fa-play"></i>
             </div>
@@ -674,7 +675,7 @@ function loadUploadedMusic() {
             
             musicCard.innerHTML = `
                 <div class="card-image">
-                    <img src="${music.albumCover || 'assets/images/default-cover.jpg'}" alt="${music.title}">
+                    <img src="${music.albumCover || 'https://via.placeholder.com/300x300/6c5ce7/ffffff?text=Album+Cover'}" alt="${music.title}">
                     <div class="play-overlay">
                         <i class="fas fa-play"></i>
                     </div>

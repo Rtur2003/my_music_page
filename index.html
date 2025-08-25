@@ -16,7 +16,7 @@
     <meta property="og:description" content="Profesyonel müzik portföyü - En yeni müziklerimi keşfedin ve dinleyin">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://rtur2003.github.io/MYPAGE/">
-    <meta property="og:image" content="https://rtur2003.github.io/MYPAGE/assets/images/og-image.jpg">
+    <meta property="og:image" content="https://rtur2003.github.io/MYPAGE/assets/images/hero-musician.jpg">
     
     <!-- Basic Security Meta Tags (CSP handled by Netlify) -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
@@ -31,13 +31,13 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Müzik Portföyüm | Profesyonel Müzik Sanatçısı">
     <meta name="twitter:description" content="Profesyonel müzik portföyü - En yeni müziklerimi keşfedin ve dinleyin">
-    <meta name="twitter:image" content="https://rtur2003.github.io/MYPAGE/assets/images/og-image.jpg">
+    <meta name="twitter:image" content="https://rtur2003.github.io/MYPAGE/assets/images/hero-musician.jpg">
     <meta name="twitter:creator" content="@hasanarthur">
     
     <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon.ico">
     
     <!-- PWA Manifest -->
     <!-- <link rel="manifest" href="manifest.json"> PWA disabled temporarily -->
@@ -91,7 +91,7 @@
     <link rel="stylesheet" href="assets/css/style.css?v=1.3.1">
     <link rel="stylesheet" href="assets/css/animations.css?v=1.3.1">
     <link rel="stylesheet" href="assets/css/compatibility.css?v=1.3.1">
-    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
     <div class="page-loader">
@@ -181,7 +181,7 @@
                     
                     <div class="hero-image">
                         <div class="image-container">
-                            <img src="assets/images/hero-musician.jpg" alt="Müzik Sanatçısı" class="hero-img">
+                            <img src="https://via.placeholder.com/800x600/6c5ce7/ffffff?text=Hero+Musician" alt="Müzik Sanatçısı" class="hero-img">
                             <div class="image-glow"></div>
                         </div>
                     </div>
@@ -204,15 +204,15 @@
                 </div>
                 
                 <div class="about-content">
-                    <div class="about-image">
-                        <img src="assets/images/about-me.jpg" alt="About Me" class="about-img">
-                        <div class="experience-badge">
+                    <div class="about-image slide-from-left animate-on-scroll">
+                        <img src="https://via.placeholder.com/600x400/6c5ce7/ffffff?text=About+Me" alt="About Me" class="about-img professional-hover">
+                        <div class="experience-badge stagger-animation stagger-3">
                             <span class="years">5+</span>
                             <span class="text">Years Experience</span>
                         </div>
                     </div>
                     
-                    <div class="about-text">
+                    <div class="about-text slide-from-right animate-on-scroll">
                         <h3>My Musical Journey</h3>
                         <p>
                             My passion for music began during my childhood years. Every note, every melody 
@@ -262,9 +262,9 @@
                 </div>
                 
                 <div class="music-player-main">
-                    <div class="current-track">
+                    <div class="current-track professional-hover">
                         <div class="track-image">
-                            <img src="assets/images/album-cover-1.jpg" alt="Şu an çalan şarkı">
+                            <img src="https://via.placeholder.com/300x300/6c5ce7/ffffff?text=Now+Playing" alt="Şu an çalan şarkı">
                             <div class="play-pulse"></div>
                         </div>
                         <div class="track-info" id="currentTrackInfo">
@@ -696,7 +696,7 @@
                         return `
                         <div class="music-card" data-track-index="${index}">
                             <div class="music-cover">
-                                <img src="${track.albumCover || 'assets/images/album-cover-1.jpg'}" alt="${track.title}">
+                                <img src="${track.albumCover || 'https://via.placeholder.com/300x300/6c5ce7/ffffff?text=Album+Cover'}" alt="${track.title}">
                                 <div class="play-overlay">
                                     <button class="play-btn" onclick="openMusicPlayer(${index})" title="Oynatıcıyı aç">
                                         <i class="fas fa-play"></i>
