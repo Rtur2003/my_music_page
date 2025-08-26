@@ -121,3 +121,10 @@
 # Form submissions (if you have contact forms)
 [forms]
   # Enable Netlify Forms for contact form
+  
+# Force HTTP → HTTPS redirection
+[[redirects]]
+  from = "http://*hasanarthuraltuntas.com.tr/*"
+  to = "https://hasanarthuraltuntas.com.tr/:splat"
+  status = 301
+  force = true
