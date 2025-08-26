@@ -1,6 +1,6 @@
 :root {
-    --primary-color: #6c5ce7;
-    --secondary-color: #fd79a8;
+    --primary-color: #242e36;
+    --secondary-color: #b6c4f1;
     --accent-color: #00cec9;
     --dark-bg: #0f0f23;
     --darker-bg: #08081a;
@@ -10,7 +10,7 @@
     --text-secondary: #b8b8d4;
     --text-muted: #74799e;
     --border-color: #2d3561;
-    --gradient-primary: linear-gradient(135deg, #6c5ce7 0%, #fd79a8 100%);
+    --gradient-primary: linear-gradient(135deg, #77a592 0%, #fffb00 100%);
     --gradient-secondary: linear-gradient(135deg, #00cec9 0%, #0984e3 100%);
     --gradient-dark: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
     --shadow-light: 0 4px 20px rgba(108, 92, 231, 0.15);

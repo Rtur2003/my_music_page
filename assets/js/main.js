@@ -663,7 +663,11 @@ function loadDynamicContent() {
 
 function loadUploadedMusic() {
     try {
-        const uploadedMusic = JSON.parse(localStorage.getItem('uploadedMusic') || '[]');
+        // Load music from both old and new admin panel
+        const uploadedMusic = [
+            ...JSON.parse(localStorage.getItem('uploadedMusic') || '[]'),
+            ...JSON.parse(localStorage.getItem('music_catalog') || '[]')
+        ];
         const musicGrid = document.querySelector('.music-grid');
         
         if (!musicGrid || uploadedMusic.length === 0) return;
@@ -709,7 +713,11 @@ function loadUploadedMusic() {
 
 function loadUploadedGallery() {
     try {
-        const uploadedGallery = JSON.parse(localStorage.getItem('uploadedGallery') || '[]');
+        // Load gallery from both old and new admin panel
+        const uploadedGallery = [
+            ...JSON.parse(localStorage.getItem('uploadedGallery') || '[]'),
+            ...JSON.parse(localStorage.getItem('media_gallery') || '[]')
+        ];
         const galleryGrid = document.querySelector('.gallery-grid');
         
         if (!galleryGrid || uploadedGallery.length === 0) return;
