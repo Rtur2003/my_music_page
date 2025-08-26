@@ -530,12 +530,13 @@ body {
 }
 
 .nav-logo .logo-image {
-    filter: brightness(0) invert(1);
     transition: var(--transition-fast);
+    border-radius: 8px;
 }
 
 .nav-logo:hover .logo-image {
-    filter: brightness(0) invert(1) drop-shadow(0 0 8px var(--primary-color));
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 8px var(--primary-color));
 }
 
 .nav-menu {
@@ -1397,12 +1398,13 @@ section {
 }
 
 .footer-logo .footer-logo-image {
-    filter: brightness(0) invert(1);
     transition: var(--transition-fast);
+    border-radius: 8px;
 }
 
 .footer-logo:hover .footer-logo-image {
-    filter: brightness(0) invert(1) drop-shadow(0 0 8px var(--primary-color));
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 8px var(--primary-color));
 }
 
 .footer-section p {
