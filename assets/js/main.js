@@ -13,7 +13,7 @@ function initializeApp() {
     loadDynamicContent();
     initializeAdvancedAnimations();
     
-    logger.log('🎵 Müzik portföyü başarıyla yüklendi!');
+    console.log('🎵 Müzik portföyü başarıyla yüklendi!');
 }
 
 function hidePageLoader() {
@@ -120,7 +120,7 @@ function initializeNavigation() {
                 // Update URL hash without jumping
                 history.replaceState(null, null, targetId);
             } else {
-                logger.warn('Target section not found:', targetId);
+                console.warn('Target section not found:', targetId);
             }
         });
     });
@@ -514,7 +514,7 @@ function checkVersion() {
         localStorage.setItem('site_version', currentVersion);
         
         if (storedVersion) {
-            logger.log('🔄 Site updated to version ' + currentVersion);
+            console.log('🔄 Site updated to version ' + currentVersion);
         }
     }
 }
@@ -536,7 +536,7 @@ function clearOldCache() {
         });
         
         localStorage.setItem('last_cache_clear', Date.now().toString());
-        logger.log('🧹 Cache cleared');
+        console.log('🧹 Cache cleared');
     }
 }
 
@@ -612,7 +612,7 @@ function addMusicToMainSite(musicData) {
     }
     
     musicGrid.appendChild(musicCard);
-    logger.log('✅ Music added to main site:', musicData.title);
+    console.log('✅ Music added to main site:', musicData.title);
 }
 
 // Add gallery item to main site from admin
@@ -644,7 +644,7 @@ function addImageToMainSite(galleryData) {
     }
     
     galleryGrid.appendChild(galleryItem);
-    logger.log('✅ Image added to main site:', galleryData.title);
+    console.log('✅ Image added to main site:', galleryData.title);
 }
 
 // Load admin panel uploaded content to main site
@@ -655,9 +655,9 @@ function loadDynamicContent() {
         loadContentFromAdmin();
         checkVersion();
         clearOldCache();
-        logger.log('🔄 Dynamic content loaded from admin panel');
+        console.log('🔄 Dynamic content loaded from admin panel');
     } catch (error) {
-        logger.error('Error loading dynamic content:', error);
+        console.error('Error loading dynamic content:', error);
     }
 }
 
@@ -701,9 +701,9 @@ function loadUploadedMusic() {
             musicGrid.appendChild(musicCard);
         });
         
-        logger.log(`✅ Loaded ${uploadedMusic.length} uploaded music tracks`);
+        console.log(`✅ Loaded ${uploadedMusic.length} uploaded music tracks`);
     } catch (error) {
-        logger.error('Error loading uploaded music:', error);
+        console.error('Error loading uploaded music:', error);
     }
 }
 
@@ -741,9 +741,9 @@ function loadUploadedGallery() {
             galleryGrid.appendChild(galleryItem);
         });
         
-        logger.log(`✅ Loaded ${uploadedGallery.length} uploaded gallery items`);
+        console.log(`✅ Loaded ${uploadedGallery.length} uploaded gallery items`);
     } catch (error) {
-        logger.error('Error loading uploaded gallery:', error);
+        console.error('Error loading uploaded gallery:', error);
     }
 }
 
@@ -810,9 +810,9 @@ function loadContentFromAdmin() {
             instagramLinks.forEach(link => link.href = instagram);
         }
         
-        logger.log('✅ Content loaded from admin panel');
+        console.log('✅ Content loaded from admin panel');
     } catch (error) {
-        logger.error('Error loading content from admin:', error);
+        console.error('Error loading content from admin:', error);
     }
 }
 
@@ -833,6 +833,6 @@ function openImageModal(imageSrc, title) {
     }
 }
 
-logger.log('%c🎵 Müzik Portföyü', 'color: #6c5ce7; font-size: 20px; font-weight: bold;');
-logger.log('%cTüm sistemler aktif ve hazır!', 'color: #00cec9; font-size: 14px;');
-logger.log('%c🔄 Admin panel senkronizasyonu aktif!', 'color: #fdcb6e; font-size: 12px;');
+console.log('%c🎵 Müzik Portföyü', 'color: #6c5ce7; font-size: 20px; font-weight: bold;');
+console.log('%cTüm sistemler aktif ve hazır!', 'color: #00cec9; font-size: 14px;');
+console.log('%c🔄 Admin panel senkronizasyonu aktif!', 'color: #fdcb6e; font-size: 12px;');
