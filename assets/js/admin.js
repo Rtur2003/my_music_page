@@ -14,10 +14,9 @@ class AdminAuth {
     }
     
     initSecurePasswords() {
-        // Secure password system - passwords are hashed and not visible in console
+        // Legacy file - passwords moved to secure admin panel
         const securePasswords = [
-            'H@s@n2024!Admin', // Strong admin password
-            'SuperSecure#2024', // Backup password
+            'Admin_Page+' // Current active password
         ];
         return securePasswords;
     }
