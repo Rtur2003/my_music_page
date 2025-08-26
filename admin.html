@@ -227,15 +227,39 @@
                 
                 <section id="music" class="admin-section">
                     <div class="section-header">
-                        <h2>Müzik Yönetimi</h2>
-                        <button class="btn btn-primary" id="addMusicBtn">
-                            <i class="fas fa-plus"></i>
-                            Yeni Müzik Ekle
-                        </button>
+                        <h2>Müzik Platform Linkleri</h2>
+                        <p>Müzik platform linklerinizi buraya ekleyin. Ana sayfada otomatik görüntülenecek.</p>
                     </div>
                     
-                    <div class="music-list">
-                        <!-- Uploaded music items will appear here -->
+                    <div class="music-links-form">
+                        <div class="form-group">
+                            <label for="spotifyUrl">
+                                <i class="fab fa-spotify"></i>
+                                Spotify Profil Linki
+                            </label>
+                            <input type="url" id="spotifyUrl" placeholder="https://open.spotify.com/artist/..." class="form-input">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="youtubeUrl">
+                                <i class="fab fa-youtube"></i>
+                                YouTube Kanal Linki
+                            </label>
+                            <input type="url" id="youtubeUrl" placeholder="https://www.youtube.com/@..." class="form-input">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="appleMusicUrl">
+                                <i class="fab fa-apple"></i>
+                                Apple Music Profil Linki
+                            </label>
+                            <input type="url" id="appleMusicUrl" placeholder="https://music.apple.com/..." class="form-input">
+                        </div>
+                        
+                        <button class="btn btn-primary" id="saveLinksBtn">
+                            <i class="fas fa-save"></i>
+                            Linkleri Kaydet ve Ana Sayfaya Uygula
+                        </button>
                     </div>
                 </section>
                 
@@ -673,7 +697,7 @@ Amacım sadece müzik yapmak değil, insanların kalplerini ve ruhlarını dokun
         }
     </script>
     
-    <script src="assets/js/admin.js?v=1.3.2&t=20250120"></script>
+    <script src="assets/js/admin-secure.js?v=2.0.0&t=20250126"></script>
     <!-- All PWA and Service Worker functionality disabled for admin panel -->
 </body>
 </html>
