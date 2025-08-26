@@ -2,8 +2,8 @@
 
 A modern, responsive, and completely free portfolio website designed for professional musicians and artists.
 
-## 🌐 **Live Demo**
-**[https://hasan-arthur-altuntash.netlify.app](https://hasan-arthur-altuntash.netlify.app)**
+## 🌐 **Live**
+**[https://hasanarthuraltuntas.com.tr](https://hasanarthuraltuntas.com.tr)**
 
 *Click the link above to see the live website in action.*
 
