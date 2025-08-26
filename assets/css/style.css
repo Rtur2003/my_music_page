@@ -529,9 +529,13 @@ body {
     gap: 0.5rem;
 }
 
-.nav-logo i {
-    color: var(--primary-color);
-    font-size: 1.8rem;
+.nav-logo .logo-image {
+    filter: brightness(0) invert(1);
+    transition: var(--transition-fast);
+}
+
+.nav-logo:hover .logo-image {
+    filter: brightness(0) invert(1) drop-shadow(0 0 8px var(--primary-color));
 }
 
 .nav-menu {
@@ -1392,8 +1396,13 @@ section {
     margin-bottom: 1rem;
 }
 
-.footer-logo i {
-    color: var(--primary-color);
+.footer-logo .footer-logo-image {
+    filter: brightness(0) invert(1);
+    transition: var(--transition-fast);
+}
+
+.footer-logo:hover .footer-logo-image {
+    filter: brightness(0) invert(1) drop-shadow(0 0 8px var(--primary-color));
 }
 
 .footer-section p {

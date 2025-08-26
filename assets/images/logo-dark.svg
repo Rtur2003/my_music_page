@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Transparent background -->
+  
+  <!-- Crown and R Logo - Black version for light backgrounds -->
+  <g fill="#1a1a1a" transform="translate(128, 128) scale(2)">
+    <!-- Crown shape -->
+    <path d="M32 64 L32 96 L160 96 L160 64 L144 32 L128 48 L96 48 L96 32 L64 48 L48 32 Z"/>
+    
+    <!-- Face/Shield outline -->
+    <path d="M48 96 L48 144 Q48 160 64 160 L128 160 Q144 160 144 144 L144 96 Z"/>
+    
+    <!-- R letter -->
+    <path d="M72 112 L72 144 M72 112 L96 112 Q104 112 104 120 Q104 128 96 128 L72 128 M96 128 L104 144"/>
+    
+    <!-- Eye dot -->
+    <circle cx="120" cy="120" r="3"/>
+    
+    <!-- Mouth/Beard area -->
+    <path d="M80 136 L80 144 L112 144 L112 136"/>
+  </g>
+</svg>
