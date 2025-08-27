@@ -460,6 +460,8 @@ body {
     color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
+    padding-top: 80px; /* Space for sticky navbar */
+    scroll-behavior: smooth;
 }
 
 .container {
@@ -518,7 +520,16 @@ body {
 }
 
 .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-color);
     padding: 1rem 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-container {
@@ -607,6 +618,8 @@ body {
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    padding-top: 0; /* Override body padding for hero */
+    margin-top: -80px; /* Compensate for body padding-top */
 }
 
 .hero-background {
