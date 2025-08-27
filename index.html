@@ -16,7 +16,7 @@
     <meta property="og:description" content="Profesyonel müzik portföyü - En yeni müziklerimi keşfedin ve dinleyin">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://hasanarthuraltuntas.com.tr/">
-    <meta property="og:image" content="https://hasanarthuraltuntas.com.tr/assets/images/hero-musician.jpg">
+    <meta property="og:image" content="https://hasanarthuraltuntas.com.tr/assets/images/og-image.jpg">
     
     <!-- Basic Security Meta Tags (CSP handled by Netlify) -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
@@ -24,15 +24,16 @@
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:site_name" content="Müzik Portföyü">
+    <meta property="og:site_name" content="Hasan Arthur Altuntaş - Müzik Portföyü">
     <meta property="og:locale" content="tr_TR">
     
-    <!-- Twitter Card Meta Tags -->
+    <!-- Enhanced Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Hasan Arthur Altuntaş - Profesyonel Müzisyen">
-    <meta name="twitter:description" content="Profesyonel müzik portföyü - En yeni müziklerimi keşfedin ve dinleyin">
-    <meta name="twitter:image" content="https://hasanarthuraltuntas.com.tr/assets/images/hero-musician.jpg">
+    <meta name="twitter:title" content="Hasan Arthur Altuntaş - Profesyonel Müzisyen ve Prodüktör">
+    <meta name="twitter:description" content="Sinematik müzik ve enstrümantal eserler - Tutkuyla yarattığım müziklerle duyguları harmanlıyor, her notada hikayeler anlatıyorum.">
+    <meta name="twitter:image" content="https://hasanarthuraltuntas.com.tr/assets/images/og-image.jpg">
     <meta name="twitter:creator" content="@hasanarthur">
+    <meta name="twitter:site" content="@hasanarthur">
     
     <!-- Favicon and Icons -->
     <link rel="icon" type="image/png" href="assets/images/logo-transparent.png">
@@ -51,33 +52,62 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://hasanarthuraltuntas.com.tr/">
     
-    <!-- Structured Data -->
+    <!-- Enhanced Structured Data for SEO -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "MusicGroup",
+        "@type": "Person",
         "name": "Hasan Arthur Altuntaş",
         "url": "https://hasanarthuraltuntas.com.tr/",
-        "image": "https://hasanarthuraltuntas.com.tr/assets/images/hero-musician.jpg",
-        "description": "Profesyonel müzisyen, prodüktör ve piyanist. Sinematik müzik ve enstrümantal eserler konusunda uzman.",
-        "genre": ["Instrumental Music", "Cinematic Music", "Electronic Music", "Piano Music"],
-        "foundingLocation": {
-            "@type": "Place",
-            "name": "İstanbul, Türkiye"
+        "image": "https://hasanarthuraltuntas.com.tr/assets/images/hasan-arthur-profile.jpg",
+        "description": "Profesyonel müzisyen, prodüktör ve piyanist. Sinematik müzik ve enstrümantal eserler konusunda uzman. Tutkuyla yarattığım müziklerle duyguları harmanlıyor, her notada hikayeler anlatıyorum.",
+        "jobTitle": "Müzisyen ve Prodüktör",
+        "worksFor": {
+            "@type": "Organization",
+            "name": "Hasan Arthur Music"
+        },
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "İstanbul",
+            "@country": "TR"
         },
         "sameAs": [
             "https://open.spotify.com/artist/hasanarthuraltuntas",
             "https://www.youtube.com/@hasanarthuraltuntas",
-            "https://music.apple.com/artist/hasan-arthur-altuntas"
+            "https://music.apple.com/artist/hasan-arthur-altuntas",
+            "https://www.instagram.com/hasan_arthur_altuntas",
+            "https://soundcloud.com/hasanarthuraltuntas"
         ],
-        "album": [
-            {
-                "@type": "MusicAlbum",
-                "name": "Rüya Gibi",
-                "datePublished": "2024",
-                "genre": "Pop"
-            }
-        ]
+        "knowsAbout": ["Piano", "Music Production", "Cinematic Music", "Composition", "Music Arrangement"],
+        "award": ["Müzik Prodüktörü"],
+        "alumniOf": {
+            "@type": "Organization",
+            "name": "Müzik Akademisi"
+        }
+    }
+    </script>
+    
+    <!-- Website Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Hasan Arthur Altuntaş - Müzik Portföyü",
+        "url": "https://hasanarthuraltuntas.com.tr/",
+        "description": "Profesyonel müzik portföyü - En yeni müziklerimi keşfedin ve dinleyin",
+        "inLanguage": "tr-TR",
+        "author": {
+            "@type": "Person",
+            "name": "Hasan Arthur Altuntaş"
+        },
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://hasanarthuraltuntas.com.tr/?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+        }
     }
     </script>
     
@@ -87,11 +117,28 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/style.css?v=1.3.1">
-    <link rel="stylesheet" href="assets/css/animations.css?v=1.3.1">
-    <link rel="stylesheet" href="assets/css/compatibility.css?v=1.3.1">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    
+    <!-- Critical CSS - inline small styles and preload others -->
+    <link rel="preload" href="assets/css/style.css?v=1.4.0" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="assets/css/style.css?v=1.4.0"></noscript>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
+    
+    <link rel="stylesheet" href="assets/css/animations.css?v=1.4.0" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="assets/css/animations.css?v=1.4.0"></noscript>
+    
+    <link rel="stylesheet" href="assets/css/compatibility.css?v=1.4.0" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="assets/css/compatibility.css?v=1.4.0"></noscript>
+    
+    <!-- Prefetch critical images -->
+    <link rel="preload" href="assets/images/logo-transparent.png" as="image">
+    <link rel="preload" href="assets/images/hero-musician-bg.jpg" as="image">
+    
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>

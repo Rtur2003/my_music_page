@@ -493,24 +493,60 @@
                         
                         <div class="field-row">
                             <div class="input-group">
-                                <label for="spotifyLink" class="input-label">
-                                    <i class="fab fa-spotify"></i> Spotify Bağlantısı
-                                </label>
-                                <input type="url" id="spotifyLink" class="input-field" placeholder="https://open.spotify.com/artist/...">
+                                <label for="trackGenre" class="input-label">Müzik Türü</label>
+                                <select id="trackGenre" class="input-field">
+                                    <option value="Pop">Pop</option>
+                                    <option value="Rock">Rock</option>
+                                    <option value="Electronic">Electronic</option>
+                                    <option value="Cinematic">Cinematic</option>
+                                    <option value="Piano">Piano</option>
+                                    <option value="Instrumental">Instrumental</option>
+                                </select>
                             </div>
                             <div class="input-group">
-                                <label for="youtubeLink" class="input-label">
-                                    <i class="fab fa-youtube"></i> YouTube Müzik
-                                </label>
-                                <input type="url" id="youtubeLink" class="input-field" placeholder="https://music.youtube.com/channel/...">
+                                <label for="trackDuration" class="input-label">Süre</label>
+                                <input type="text" id="trackDuration" class="input-field" placeholder="3:45" pattern="[0-9]:[0-5][0-9]">
                             </div>
                         </div>
                         
                         <div class="input-group">
-                            <label for="appleMusicLink" class="input-label">
-                                <i class="fab fa-apple"></i> Apple Music
-                            </label>
-                            <input type="url" id="appleMusicLink" class="input-field" placeholder="https://music.apple.com/artist/...">
+                            <label for="albumCover" class="input-label">Album Kapağı URL</label>
+                            <input type="url" id="albumCover" class="input-field" placeholder="https://example.com/album-cover.jpg">
+                        </div>
+                        
+                        <div class="field-row">
+                            <div class="input-group">
+                                <label for="spotifyLink" class="input-label">
+                                    <i class="fab fa-spotify"></i> Spotify Bağlantısı
+                                </label>
+                                <input type="url" id="spotifyLink" class="input-field" placeholder="https://open.spotify.com/track/...">
+                            </div>
+                            <div class="input-group">
+                                <label for="youtubeLink" class="input-label">
+                                    <i class="fab fa-youtube"></i> YouTube Video
+                                </label>
+                                <input type="url" id="youtubeLink" class="input-field" placeholder="https://www.youtube.com/watch?v=...">
+                            </div>
+                        </div>
+                        
+                        <div class="field-row">
+                            <div class="input-group">
+                                <label for="appleMusicLink" class="input-label">
+                                    <i class="fab fa-apple"></i> Apple Music
+                                </label>
+                                <input type="url" id="appleMusicLink" class="input-field" placeholder="https://music.apple.com/album/...">
+                            </div>
+                            <div class="input-group">
+                                <label for="soundcloudLink" class="input-label">
+                                    <i class="fab fa-soundcloud"></i> SoundCloud
+                                </label>
+                                <input type="url" id="soundcloudLink" class="input-field" placeholder="https://soundcloud.com/...">
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="trackDescription" class="input-label">Açıklama (İsteğe bağlı)</label>
+                            <textarea id="trackDescription" class="input-field" rows="3" placeholder="Bu şarkı hakkında kısa bir açıklama..."></textarea>
                         </div>
                         
                         <button type="submit" class="submit-button">
@@ -781,10 +817,15 @@
                 const trackData = {
                     title: document.getElementById('trackTitle').value,
                     artist: document.getElementById('artistName').value,
+                    genre: document.getElementById('trackGenre').value,
+                    duration: document.getElementById('trackDuration').value || '3:45',
+                    albumCover: document.getElementById('albumCover').value,
+                    description: document.getElementById('trackDescription').value,
                     platforms: {
                         spotify: document.getElementById('spotifyLink').value,
                         youtube: document.getElementById('youtubeLink').value,
-                        appleMusic: document.getElementById('appleMusicLink').value
+                        appleMusic: document.getElementById('appleMusicLink').value,
+                        soundcloud: document.getElementById('soundcloudLink').value
                     },
                     timestamp: new Date().toISOString()
                 };
@@ -837,19 +878,104 @@
             
             // Data persistence methods
             saveMusicData(data) {
-                const existing = JSON.parse(localStorage.getItem('music_catalog') || '[]');
-                existing.push(data);
+                const existing = JSON.parse(localStorage.getItem('adminTracks') || '[]');
+                
+                // Transform data to match frontend expectations
+                const trackData = {
+                    title: data.title,
+                    artist: data.artist,
+                    genre: data.genre || 'Pop',
+                    duration: data.duration || '3:45',
+                    albumCover: data.albumCover || 'https://via.placeholder.com/300x300/6c5ce7/ffffff?text=Album+Cover',
+                    description: data.description || '',
+                    platforms: {
+                        spotify: { url: data.platforms.spotify || '', id: this.extractSpotifyId(data.platforms.spotify) },
+                        youtube: { url: data.platforms.youtube || '', id: this.extractYouTubeId(data.platforms.youtube) },
+                        appleMusic: { url: data.platforms.appleMusic || '', id: '' },
+                        soundcloud: { url: data.platforms.soundcloud || '', id: this.extractSoundCloudId(data.platforms.soundcloud) }
+                    },
+                    timestamp: data.timestamp
+                };
+                
+                existing.push(trackData);
+                localStorage.setItem('adminTracks', JSON.stringify(existing));
+                
+                // Also update music_catalog for backward compatibility
                 localStorage.setItem('music_catalog', JSON.stringify(existing));
+                
+                // Notify main page
+                this.notifyMainPage();
             }
             
             saveMediaData(data) {
-                const existing = JSON.parse(localStorage.getItem('media_gallery') || '[]');
-                existing.push(data);
+                const existing = JSON.parse(localStorage.getItem('adminGallery') || '[]');
+                
+                // Transform data to match frontend expectations
+                const mediaData = {
+                    title: data.title,
+                    category: data.category,
+                    description: data.title,
+                    src: data.url,
+                    timestamp: data.timestamp
+                };
+                
+                existing.push(mediaData);
+                localStorage.setItem('adminGallery', JSON.stringify(existing));
+                
+                // Also update media_gallery for backward compatibility
                 localStorage.setItem('media_gallery', JSON.stringify(existing));
+                
+                // Notify main page
+                this.notifyMainPage();
             }
             
             saveContentData(data) {
+                // Save content data in the format expected by the main page
+                localStorage.setItem('heroTitle', data.mainTitle);
+                localStorage.setItem('heroDescription', data.aboutContent);
+                localStorage.setItem('aboutTextEn', data.aboutContent);
                 localStorage.setItem('site_content', JSON.stringify(data));
+                
+                // Notify main page
+                this.notifyMainPage();
+            }
+            
+            // Extract Spotify track ID from URL
+            extractSpotifyId(url) {
+                if (!url) return '';
+                const match = url.match(/track\/([a-zA-Z0-9]+)/);
+                return match ? match[1] : '';
+            }
+            
+            // Extract YouTube video ID from URL
+            extractYouTubeId(url) {
+                if (!url) return '';
+                const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/);
+                return match ? match[1] : '';
+            }
+            
+            // Extract SoundCloud track ID from URL
+            extractSoundCloudId(url) {
+                if (!url) return '';
+                // SoundCloud URLs are more complex, just return the full URL for now
+                return url;
+            }
+            
+            // Notify main page of updates
+            notifyMainPage() {
+                // Try to communicate with main page if in iframe or same origin
+                try {
+                    if (window.parent && window.parent !== window) {
+                        window.parent.postMessage({ type: 'ADMIN_DATA_UPDATED' }, '*');
+                    }
+                    
+                    // Also dispatch a custom event
+                    window.dispatchEvent(new CustomEvent('adminDataUpdated', {
+                        detail: { timestamp: Date.now() }
+                    }));
+                } catch (e) {
+                    console.log('Cross-origin communication not available');
+                }
             }
             
             // Refresh dashboard metrics
