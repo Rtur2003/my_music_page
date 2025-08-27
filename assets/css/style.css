@@ -1,29 +1,37 @@
 :root {
-    /* Ultra-refined minimal color palette */
-    --primary-color: #6366f1; /* Soft indigo */
-    --secondary-color: #8b5cf6; /* Muted purple */
-    --accent-color: #ec4899; /* Elegant pink */
-    --tertiary-color: #06b6d4; /* Soft cyan */
-    --dark-bg: #0f172a; /* Deep slate */
-    --darker-bg: #020617; /* Ultra dark slate */
-    --light-bg: #1e293b; /* Slate 800 */
-    --card-bg: #334155; /* Slate 700 */
-    --text-primary: #f8fafc; /* Slate 50 */
-    --text-secondary: #e2e8f0; /* Slate 200 */
-    --text-muted: #94a3b8; /* Slate 400 */
-    --border-color: #475569; /* Slate 600 */
+    /* ROYAL THEME - Based on crown logo colors */
+    --primary-color: #d4af37; /* Royal gold */
+    --secondary-color: #1a1a1a; /* Rich black */
+    --accent-color: #f5f5f5; /* Pure white */
+    --tertiary-color: #8b7355; /* Muted bronze */
     
-    /* Minimalist sophisticated gradients */
-    --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-    --gradient-secondary: linear-gradient(135deg, #06b6d4 0%, #6366f1 100%);
-    --gradient-accent: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
-    --gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    --gradient-card: linear-gradient(145deg, #334155 0%, #1e293b 100%);
+    /* Background layers */
+    --dark-bg: #0a0a0a; /* Deep black */
+    --darker-bg: #000000; /* Pure black */
+    --light-bg: #1a1a1a; /* Dark charcoal */
+    --card-bg: #222222; /* Card background */
     
-    /* Ultra-subtle shadows */
-    --shadow-light: 0 4px 20px rgba(99, 102, 241, 0.08);
-    --shadow-medium: 0 8px 40px rgba(139, 92, 246, 0.12);
-    --shadow-heavy: 0 12px 60px rgba(236, 72, 153, 0.1);
+    /* Text colors */
+    --text-primary: #ffffff; /* Pure white */
+    --text-secondary: #f5f5f5; /* Off white */
+    --text-muted: #cccccc; /* Light gray */
+    --text-gold: #d4af37; /* Gold text */
+    
+    /* Border and accents */
+    --border-color: #333333; /* Subtle border */
+    --border-gold: #d4af37; /* Gold border */
+    
+    /* Royal gradients */
+    --gradient-primary: linear-gradient(135deg, #d4af37 0%, #f1c40f 100%);
+    --gradient-secondary: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+    --gradient-accent: linear-gradient(135deg, #d4af37 0%, #8b7355 100%);
+    --gradient-dark: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+    --gradient-card: linear-gradient(145deg, #222222 0%, #1a1a1a 100%);
+    
+    /* Elegant shadows with gold tint */
+    --shadow-light: 0 4px 20px rgba(212, 175, 55, 0.1);
+    --shadow-medium: 0 8px 40px rgba(212, 175, 55, 0.15);
+    --shadow-heavy: 0 12px 60px rgba(0, 0, 0, 0.8);
     --border-radius: 12px;
     --border-radius-lg: 20px;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

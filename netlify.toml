@@ -122,10 +122,28 @@
 [forms]
   # Enable Netlify Forms for contact form
 
-# DOMAIN REDIRECTS - FIXED FOR STABILITY
-# Only redirect when necessary, avoid loops
+# ALL REDIRECTS IN ONE PLACE
+# Netlify subdomain redirects to custom domain
+[[redirects]]
+  from = "https://hasan-arthur-altuntash.netlify.app/*"
+  to = "https://hasanarthuraltuntas.com.tr/:splat"
+  status = 301
+  force = true
 
-# Force HTTP to HTTPS (only non-HTTPS)
+[[redirects]]
+  from = "https://rtur2003.netlify.app/*"
+  to = "https://hasanarthuraltuntas.com.tr/:splat"
+  status = 301
+  force = true
+
+# Force www to non-www
+[[redirects]]
+  from = "https://www.hasanarthuraltuntas.com.tr/*"
+  to = "https://hasanarthuraltuntas.com.tr/:splat"
+  status = 301
+  force = true
+
+# Force HTTP to HTTPS
 [[redirects]]
   from = "http://hasanarthuraltuntas.com.tr/*"
   to = "https://hasanarthuraltuntas.com.tr/:splat"
@@ -134,13 +152,6 @@
 
 [[redirects]]
   from = "http://www.hasanarthuraltuntas.com.tr/*"
-  to = "https://hasanarthuraltuntas.com.tr/:splat"
-  status = 301
-  force = true
-
-# Force www to non-www (HTTPS only)
-[[redirects]]
-  from = "https://www.hasanarthuraltuntas.com.tr/*"
   to = "https://hasanarthuraltuntas.com.tr/:splat"
   status = 301
   force = true
@@ -192,4 +203,8 @@
   to = "/index.html#about"
   status = 301
 
-# No SPA fallback needed for static site
+# SPA fallback - MUST BE LAST
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
