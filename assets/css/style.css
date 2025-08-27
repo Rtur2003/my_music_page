@@ -532,6 +532,13 @@ body {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Navbar scroll effect */
+.navbar.scrolled {
+    background: rgba(15, 23, 42, 0.98);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    padding: 0.75rem 0;
+}
+
 .nav-container {
     display: flex;
     align-items: center;
@@ -2684,6 +2691,15 @@ section {
 
 /* Responsive Design for Modern Player */
 @media (max-width: 768px) {
+    body {
+        padding-top: 70px; /* Reduce padding on mobile */
+    }
+    
+    .hero {
+        margin-top: -70px; /* Adjust for smaller header */
+        background-attachment: scroll; /* Better mobile performance */
+    }
+    
     .modern-player-card {
         padding: 1.5rem;
     }
@@ -2719,9 +2735,25 @@ section {
     .platform-links {
         justify-content: center;
     }
+    
+    .navbar {
+        padding: 0.75rem 0; /* Smaller header on mobile */
+    }
 }
 
 @media (max-width: 480px) {
+    body {
+        padding-top: 60px; /* Even smaller on tiny screens */
+    }
+    
+    .hero {
+        margin-top: -60px;
+    }
+    
+    .navbar {
+        padding: 0.5rem 0; /* Minimal header on tiny screens */
+    }
+    
     .modern-track-title {
         font-size: 1.4rem;
     }
