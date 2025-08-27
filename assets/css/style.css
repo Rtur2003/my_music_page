@@ -1,29 +1,29 @@
 :root {
-    /* Refined elegant color palette */
-    --primary-color: #667eea;
-    --secondary-color: #764ba2;
-    --accent-color: #f093fb;
-    --tertiary-color: #c2e9fb;
-    --dark-bg: #1a1b2e;
-    --darker-bg: #16213e;
-    --light-bg: #2a2d47;
-    --card-bg: #232741;
-    --text-primary: #ffffff;
-    --text-secondary: #e2e8f0;
-    --text-muted: #a0aec0;
-    --border-color: #4a5568;
+    /* Ultra-refined minimal color palette */
+    --primary-color: #6366f1; /* Soft indigo */
+    --secondary-color: #8b5cf6; /* Muted purple */
+    --accent-color: #ec4899; /* Elegant pink */
+    --tertiary-color: #06b6d4; /* Soft cyan */
+    --dark-bg: #0f172a; /* Deep slate */
+    --darker-bg: #020617; /* Ultra dark slate */
+    --light-bg: #1e293b; /* Slate 800 */
+    --card-bg: #334155; /* Slate 700 */
+    --text-primary: #f8fafc; /* Slate 50 */
+    --text-secondary: #e2e8f0; /* Slate 200 */
+    --text-muted: #94a3b8; /* Slate 400 */
+    --border-color: #475569; /* Slate 600 */
     
-    /* Sophisticated gradients */
-    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-    --gradient-secondary: linear-gradient(135deg, #c2e9fb 0%, #a1c4fd 50%, #667eea 100%);
-    --gradient-accent: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%);
-    --gradient-dark: linear-gradient(135deg, #1a1b2e 0%, #232741 50%, #2a2d47 100%);
-    --gradient-card: linear-gradient(145deg, #232741 0%, #2a2d47 100%);
+    /* Minimalist sophisticated gradients */
+    --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --gradient-secondary: linear-gradient(135deg, #06b6d4 0%, #6366f1 100%);
+    --gradient-accent: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+    --gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    --gradient-card: linear-gradient(145deg, #334155 0%, #1e293b 100%);
     
-    /* Elegant shadows with subtle colors */
-    --shadow-light: 0 4px 20px rgba(102, 126, 234, 0.12);
-    --shadow-medium: 0 8px 40px rgba(118, 75, 162, 0.18);
-    --shadow-heavy: 0 12px 60px rgba(240, 147, 251, 0.15);
+    /* Ultra-subtle shadows */
+    --shadow-light: 0 4px 20px rgba(99, 102, 241, 0.08);
+    --shadow-medium: 0 8px 40px rgba(139, 92, 246, 0.12);
+    --shadow-heavy: 0 12px 60px rgba(236, 72, 153, 0.1);
     --border-radius: 12px;
     --border-radius-lg: 20px;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -215,7 +215,7 @@
 
 .platform-tab:hover, 
 .platform-tab.active {
-    background: #6c5ce7;
+    background: var(--primary-color);
     color: white;
 }
 
@@ -603,6 +603,10 @@ body {
     display: flex;
     align-items: center;
     overflow: hidden;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 .hero-background {
@@ -612,6 +616,7 @@ body {
     width: 100%;
     height: 100%;
     background: var(--gradient-dark);
+    opacity: 0.7;
     z-index: -2;
 }
 
@@ -621,7 +626,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(45deg, rgba(108, 92, 231, 0.1) 0%, rgba(253, 121, 168, 0.1) 100%);
+    background: linear-gradient(45deg, rgba(99, 102, 241, 0.3) 0%, rgba(236, 72, 153, 0.2) 100%);
     z-index: -1;
 }
 
