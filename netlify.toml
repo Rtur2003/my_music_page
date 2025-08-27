@@ -122,28 +122,10 @@
 [forms]
   # Enable Netlify Forms for contact form
 
-# ALL REDIRECTS IN ONE PLACE
-# Netlify subdomain redirects to custom domain
-[[redirects]]
-  from = "https://hasan-arthur-altuntash.netlify.app/*"
-  to = "https://hasanarthuraltuntas.com.tr/:splat"
-  status = 301
-  force = true
+# DOMAIN REDIRECTS - FIXED FOR STABILITY
+# Only redirect when necessary, avoid loops
 
-[[redirects]]
-  from = "https://rtur2003.netlify.app/*"
-  to = "https://hasanarthuraltuntas.com.tr/:splat"
-  status = 301
-  force = true
-
-# Force www to non-www
-[[redirects]]
-  from = "https://www.hasanarthuraltuntas.com.tr/*"
-  to = "https://hasanarthuraltuntas.com.tr/:splat"
-  status = 301
-  force = true
-
-# Force HTTP to HTTPS
+# Force HTTP to HTTPS (only non-HTTPS)
 [[redirects]]
   from = "http://hasanarthuraltuntas.com.tr/*"
   to = "https://hasanarthuraltuntas.com.tr/:splat"
@@ -152,6 +134,13 @@
 
 [[redirects]]
   from = "http://www.hasanarthuraltuntas.com.tr/*"
+  to = "https://hasanarthuraltuntas.com.tr/:splat"
+  status = 301
+  force = true
+
+# Force www to non-www (HTTPS only)
+[[redirects]]
+  from = "https://www.hasanarthuraltuntas.com.tr/*"
   to = "https://hasanarthuraltuntas.com.tr/:splat"
   status = 301
   force = true

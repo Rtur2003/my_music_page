@@ -309,43 +309,96 @@
                     <p class="section-subtitle">En sevilen eserlerimi dinleyin</p>
                 </div>
                 
+                <!-- Modern Spotify-Style Music Player -->
                 <div class="music-player-main">
-                    <div class="current-track professional-hover">
-                        <div class="track-image">
-                            <img src="assets/images/logo-main.png" alt="Müzik oynatıcı - Şu an çalan şarkı" width="300" height="300" loading="lazy">
-                            <div class="play-pulse"></div>
+                    <div class="modern-player-card">
+                        <div class="player-artwork-section">
+                            <div class="artwork-container">
+                                <img src="assets/images/logo-main.png" alt="Şu an çalan şarkı" id="currentArtwork" class="artwork-image" width="200" height="200" loading="lazy">
+                                <div class="artwork-overlay">
+                                    <button class="main-play-button" id="mainPlayBtn" aria-label="Oynat/Durdur">
+                                        <i class="fas fa-play" id="mainPlayIcon"></i>
+                                    </button>
+                                </div>
+                                <div class="vinyl-effect"></div>
+                            </div>
+                            
+                            <div class="audio-visualizer" id="audioVisualizer">
+                                <div class="visualizer-bar"></div>
+                                <div class="visualizer-bar"></div>
+                                <div class="visualizer-bar"></div>
+                                <div class="visualizer-bar"></div>
+                                <div class="visualizer-bar"></div>
+                                <div class="visualizer-bar"></div>
+                            </div>
                         </div>
-                        <div class="track-info" id="currentTrackInfo">
-                            <h3 class="track-title" id="currentTrackTitle">Şarkı seçin...</h3>
-                            <p class="track-artist" id="currentTrackArtist">Sanatçı</p>
+                        
+                        <div class="player-info-section">
+                            <div class="track-details">
+                                <h3 class="modern-track-title" id="modernTrackTitle">Bir şarkı seçin</h3>
+                                <p class="modern-track-artist" id="modernTrackArtist">Hasan Arthur Altuntaş</p>
+                                <div class="track-metadata">
+                                    <span class="track-genre" id="trackGenre">Pop</span>
+                                    <span class="track-duration" id="trackDuration">3:45</span>
+                                </div>
+                            </div>
+                            
+                            <div class="platform-links" id="platformLinks">
+                                <a href="#" class="platform-link spotify-link" id="spotifyLink" target="_blank" rel="noopener" title="Spotify'da dinle">
+                                    <i class="fab fa-spotify"></i>
+                                </a>
+                                <a href="#" class="platform-link youtube-link" id="youtubeLink" target="_blank" rel="noopener" title="YouTube'da izle">
+                                    <i class="fab fa-youtube"></i>
+                                </a>
+                                <a href="#" class="platform-link apple-link" id="appleLink" target="_blank" rel="noopener" title="Apple Music'te dinle">
+                                    <i class="fab fa-apple"></i>
+                                </a>
+                                <a href="#" class="platform-link soundcloud-link" id="soundcloudLink" target="_blank" rel="noopener" title="SoundCloud'da dinle">
+                                    <i class="fab fa-soundcloud"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="player-controls">
-                        <button class="control-btn shuffle">
-                            <i class="fas fa-random"></i>
-                        </button>
-                        <button class="control-btn prev">
-                            <i class="fas fa-step-backward"></i>
-                        </button>
-                        <button class="control-btn play-pause" id="playPauseBtn">
-                            <i class="fas fa-play"></i>
-                        </button>
-                        <button class="control-btn next">
-                            <i class="fas fa-step-forward"></i>
-                        </button>
-                        <button class="control-btn repeat">
-                            <i class="fas fa-redo"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="progress-container">
-                        <span class="time current-time">0:00</span>
-                        <div class="progress-bar">
-                            <div class="progress"></div>
-                            <div class="progress-thumb"></div>
+                    <div class="player-controls-section">
+                        <div class="progress-section">
+                            <span class="time current-time" id="currentTime">0:00</span>
+                            <div class="progress-track" id="progressTrack">
+                                <div class="progress-fill" id="progressFill"></div>
+                                <div class="progress-handle" id="progressHandle"></div>
+                            </div>
+                            <span class="time total-time" id="totalTime">3:45</span>
                         </div>
-                        <span class="time total-time">3:45</span>
+                        
+                        <div class="controls-section">
+                            <div class="primary-controls">
+                                <button class="control-button secondary-btn" id="shuffleBtn" aria-label="Karışık çal" title="Karışık çal">
+                                    <i class="fas fa-random"></i>
+                                </button>
+                                <button class="control-button secondary-btn" id="prevBtn" aria-label="Önceki şarkı">
+                                    <i class="fas fa-step-backward"></i>
+                                </button>
+                                <button class="control-button play-pause-btn" id="playPauseBtn" aria-label="Oynat/Durdur">
+                                    <i class="fas fa-play" id="playPauseIcon"></i>
+                                </button>
+                                <button class="control-button secondary-btn" id="nextBtn" aria-label="Sonraki şarkı">
+                                    <i class="fas fa-step-forward"></i>
+                                </button>
+                                <button class="control-button secondary-btn" id="repeatBtn" aria-label="Tekrar oynat" title="Tekrar oynat">
+                                    <i class="fas fa-redo"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="volume-controls">
+                                <button class="volume-button" id="volumeBtn" aria-label="Ses kontrolü">
+                                    <i class="fas fa-volume-up" id="volumeIcon"></i>
+                                </button>
+                                <div class="volume-slider-wrapper">
+                                    <input type="range" id="volumeSlider" min="0" max="100" value="75" class="volume-slider">
+                                    <div class="volume-track"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <audio id="audioPlayer" preload="none" crossorigin="anonymous">
