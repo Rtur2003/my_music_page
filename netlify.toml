@@ -36,7 +36,7 @@
       
       worker-src 'self';
       
-      frame-src 'none';
+      frame-src 'self' https://open.spotify.com https://www.youtube.com https://w.soundcloud.com;
       object-src 'none';
       base-uri 'self';
       form-action 'self';
@@ -121,10 +121,90 @@
 # Form submissions (if you have contact forms)
 [forms]
   # Enable Netlify Forms for contact form
-  
-# Force HTTP → HTTPS redirection
+
+# ALL REDIRECTS IN ONE PLACE
+# Netlify subdomain redirects to custom domain
 [[redirects]]
-  from = "http://*hasanarthuraltuntas.com.tr/*"
+  from = "https://hasan-arthur-altuntash.netlify.app/*"
   to = "https://hasanarthuraltuntas.com.tr/:splat"
   status = 301
   force = true
+
+[[redirects]]
+  from = "https://rtur2003.netlify.app/*"
+  to = "https://hasanarthuraltuntas.com.tr/:splat"
+  status = 301
+  force = true
+
+# Force www to non-www
+[[redirects]]
+  from = "https://www.hasanarthuraltuntas.com.tr/*"
+  to = "https://hasanarthuraltuntas.com.tr/:splat"
+  status = 301
+  force = true
+
+# Force HTTP to HTTPS
+[[redirects]]
+  from = "http://hasanarthuraltuntas.com.tr/*"
+  to = "https://hasanarthuraltuntas.com.tr/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.hasanarthuraltuntas.com.tr/*"
+  to = "https://hasanarthuraltuntas.com.tr/:splat"
+  status = 301
+  force = true
+
+# Block sensitive files
+[[redirects]]
+  from = "/.env*"
+  to = "/404.html"
+  status = 404
+
+[[redirects]]
+  from = "/config.json"
+  to = "/404.html"
+  status = 404
+
+[[redirects]]
+  from = "/*.md"
+  to = "/404.html"
+  status = 404
+
+[[redirects]]
+  from = "/.git/*"
+  to = "/404.html"
+  status = 404
+
+[[redirects]]
+  from = "/node_modules/*"
+  to = "/404.html"
+  status = 404
+
+# Old URL redirects to sections
+[[redirects]]
+  from = "/music/*"
+  to = "/index.html#music"
+  status = 301
+
+[[redirects]]
+  from = "/gallery/*"
+  to = "/index.html#gallery"
+  status = 301
+
+[[redirects]]
+  from = "/contact/*"
+  to = "/index.html#contact"
+  status = 301
+
+[[redirects]]
+  from = "/about/*"
+  to = "/index.html#about"
+  status = 301
+
+# SPA fallback - MUST BE LAST
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
