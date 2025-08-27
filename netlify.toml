@@ -192,8 +192,10 @@
   to = "/index.html#about"
   status = 301
 
-# SPA fallback - MUST BE LAST
+# SPA fallback for client-side routing - MUST BE LAST
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  conditions = {Role = ["admin"], Country = ["*"]}
+  force = false
