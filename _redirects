@@ -1,14 +1,13 @@
-# Force HTTPS redirect for all domains
-http://rtur2003.netlify.app/*  https://rtur2003.netlify.app/:splat  301!
-http://hasan-arthur-altuntash.netlify.app/*  https://hasan-arthur-altuntash.netlify.app/:splat  301!
+# Netlify subdomain redirects to custom domain
+https://hasan-arthur-altuntash.netlify.app/*  https://hasanarthuraltuntas.com.tr/:splat  301!
+https://rtur2003.netlify.app/*  https://hasanarthuraltuntas.com.tr/:splat  301!
+
+# Force www to non-www
+https://www.hasanarthuraltuntas.com.tr/*  https://hasanarthuraltuntas.com.tr/:splat  301!
+
+# Force HTTPS (only for non-HTTPS requests)
 http://hasanarthuraltuntas.com.tr/*  https://hasanarthuraltuntas.com.tr/:splat  301!
-
-# Custom domain redirects - redirect subdomain to main domain
-www.hasanarthuraltuntas.com.tr/*  https://hasanarthuraltuntas.com.tr/:splat  301!
-
-# Backup domain redirects
-hasan-arthur-altuntash.netlify.app/*  https://hasanarthuraltuntas.com.tr/:splat  301
-rtur2003.netlify.app/*  https://hasanarthuraltuntas.com.tr/:splat  301
+http://www.hasanarthuraltuntas.com.tr/*  https://hasanarthuraltuntas.com.tr/:splat  301!
 
 # Block access to sensitive files
 /.env*  /404.html  404
