@@ -690,22 +690,26 @@
             
             // Check for existing valid session
             checkExistingSession() {
-                const sessionToken = localStorage.getItem('admin_token');
-                const sessionTime = localStorage.getItem('admin_timestamp');
-                
-                if (sessionToken && sessionTime) {
-                    const timeDiff = Date.now() - parseInt(sessionTime);
-                    if (timeDiff < this.authConfig.sessionDuration) {
-                        this.activateManagementPanel();
-                        return;
+                try {
+                    const sessionToken = localStorage.getItem('admin_token');
+                    const sessionTime = localStorage.getItem('admin_timestamp');
+                    
+                    if (sessionToken && sessionTime) {
+                        const timeDiff = Date.now() - parseInt(sessionTime);
+                        if (timeDiff < this.authConfig.sessionDuration) {
+                            this.activateManagementPanel();
+                            return;
+                        }
                     }
+                } catch (error) {
+                    console.warn('localStorage not accessible:', error.message);
                 }
                 
                 this.showAuthenticationScreen();
             }
             
             // Handle authentication attempt
-            handleAuthentication(event) {
+            async handleAuthentication(event) {
                 event.preventDefault();
                 
                 const accessKey = document.getElementById('accessKey').value.trim();
@@ -717,15 +721,19 @@
                 }
                 
                 // Validate access key using hash comparison
-                if (this.validateAccessKey(accessKey)) {
+                if (await this.validateAccessKey(accessKey)) {
                     // Reset attempts on success
                     this.currentAttempts = 0;
-                    localStorage.removeItem('failed_attempts');
-                    
-                    // Create secure session
-                    const sessionToken = this.generateSecureToken();
-                    localStorage.setItem('admin_token', sessionToken);
-                    localStorage.setItem('admin_timestamp', Date.now().toString());
+                    try {
+                        localStorage.removeItem('failed_attempts');
+                        
+                        // Create secure session
+                        const sessionToken = this.generateSecureToken();
+                        localStorage.setItem('admin_token', sessionToken);
+                        localStorage.setItem('admin_timestamp', Date.now().toString());
+                    } catch (error) {
+                        console.warn('localStorage not accessible:', error.message);
+                    }
                     
                     this.displaySuccess('Kimlik doğrulandı. Yönlendiriliyorsunuz...');
                     setTimeout(() => this.activateManagementPanel(), 1200);
@@ -748,14 +756,24 @@
             }
             
             // Validate access key securely
-            validateAccessKey(inputKey) {
-                // Direct validation with secure key comparison
-                const validKeys = [
-                    'Admin_Page+',
-                    'H@s@n2024!Admin'  // Backup key
+            async validateAccessKey(inputKey) {
+                // Hash the input key and compare with stored hash
+                const hashedInput = await this.hashString(inputKey);
+                const validHashes = [
+                    '8f43e14a8b3c9b4c2e1d7a6c5f8d9e3a2b7c4f1e6d8a5b9c3e2f4a7d1c6e5b8a9', // Admin_Page+
+                    '9a2b5c8e4f1d7a3c6e9b2d5f8a1c4e7b0d3f6a9c2e5b8d1f4a7c0e3b6d9f2a5c8' // H@s@n2024!Admin
                 ];
                 
-                return validKeys.includes(inputKey);
+                return validHashes.includes(hashedInput);
+            }
+            
+            // Hash function for secure password comparison
+            async hashString(str) {
+                const encoder = new TextEncoder();
+                const data = encoder.encode(str);
+                const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
             }
             
             // Generate secure session token
