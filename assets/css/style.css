@@ -4,29 +4,32 @@
    =============================================== */
 
 :root {
-    /* ROYAL COLOR PALETTE */
-    --royal-gold: #d4af37;
+    /* ELEGANT ROYAL PALETTE - Based on Crown Logo */
+    --primary-black: #000000;
     --royal-black: #1a1a1a;
     --royal-white: #ffffff;
-    --royal-gray: #cccccc;
+    --soft-gray: #f8f9fa;
+    --accent-gold: #c9a96e;
     
     /* BACKGROUNDS */
-    --bg-primary: #0a0a0a;
-    --bg-secondary: #1a1a1a;
-    --bg-card: #222222;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-dark: #000000;
+    --bg-card: #ffffff;
     
-    /* GRADIENTS */
-    --gold-gradient: linear-gradient(135deg, #d4af37 0%, #f1c40f 100%);
+    /* SUBTLE GRADIENTS */
+    --gold-accent: linear-gradient(135deg, #c9a96e 0%, #b8956a 100%);
     --dark-gradient: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
-    --card-gradient: linear-gradient(145deg, #222222 0%, #1a1a1a 100%);
+    --light-gradient: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
     
-    /* SHADOWS */
-    --shadow-gold: 0 4px 20px rgba(212, 175, 55, 0.2);
-    --shadow-dark: 0 8px 40px rgba(0, 0, 0, 0.6);
+    /* REFINED SHADOWS */
+    --shadow-subtle: 0 2px 12px rgba(0, 0, 0, 0.08);
+    --shadow-medium: 0 4px 20px rgba(0, 0, 0, 0.12);
+    --shadow-strong: 0 8px 40px rgba(0, 0, 0, 0.15);
     
     /* SPACING & TRANSITIONS */
-    --radius: 12px;
-    --radius-lg: 20px;
+    --radius: 8px;
+    --radius-lg: 16px;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -43,7 +46,7 @@
 body {
     font-family: 'Poppins', 'Segoe UI', sans-serif;
     background: var(--bg-primary);
-    color: var(--royal-white);
+    color: var(--primary-black);
     line-height: 1.6;
     padding-top: 80px;
     scroll-behavior: smooth;
@@ -65,17 +68,18 @@ body {
     left: 0;
     right: 0;
     z-index: 1000;
-    background: rgba(0, 0, 0, 0.95);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
-    border-bottom: 2px solid var(--royal-gold);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     padding: 1rem 0;
     transition: var(--transition);
+    box-shadow: var(--shadow-subtle);
 }
 
 .navbar.scrolled {
-    background: rgba(0, 0, 0, 0.98);
+    background: rgba(255, 255, 255, 0.98);
     padding: 0.75rem 0;
-    box-shadow: var(--shadow-dark);
+    box-shadow: var(--shadow-medium);
 }
 
 .nav-container {
@@ -87,7 +91,7 @@ body {
 .nav-logo a {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--royal-gold);
+    color: var(--primary-black);
     text-decoration: none;
     display: flex;
     align-items: center;
@@ -97,7 +101,7 @@ body {
 .nav-logo img {
     width: 40px;
     height: 40px;
-    filter: brightness(0) saturate(100%) invert(78%) sepia(75%) saturate(451%) hue-rotate(6deg) brightness(97%) contrast(97%);
+    filter: none;
 }
 
 .nav-menu {
@@ -107,7 +111,7 @@ body {
 }
 
 .nav-link {
-    color: var(--royal-white);
+    color: var(--royal-black);
     text-decoration: none;
     font-weight: 500;
     position: relative;
@@ -116,7 +120,7 @@ body {
 
 .nav-link:hover,
 .nav-link.active {
-    color: var(--royal-gold);
+    color: var(--accent-gold);
 }
 
 .nav-link::after {
@@ -126,7 +130,7 @@ body {
     left: 0;
     width: 0;
     height: 2px;
-    background: var(--gold-gradient);
+    background: var(--gold-accent);
     transition: width 0.3s ease;
 }
 
@@ -140,7 +144,7 @@ body {
     display: none;
     background: none;
     border: none;
-    color: var(--royal-gold);
+    color: var(--primary-black);
     font-size: 1.5rem;
     cursor: pointer;
 }
@@ -151,7 +155,7 @@ body {
 
 .hero {
     min-height: 100vh;
-    background: var(--dark-gradient);
+    background: var(--light-gradient);
     display: flex;
     align-items: center;
     position: relative;
@@ -169,7 +173,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(255, 255, 255, 0.85);
 }
 
 .hero-content {
@@ -184,33 +188,31 @@ body {
     font-size: 3.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
-    background: var(--gold-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--primary-black);
 }
 
 .hero-subtitle {
     font-size: 1.25rem;
-    color: var(--royal-gray);
+    color: var(--royal-black);
     margin-bottom: 2rem;
 }
 
 .hero-cta {
     display: inline-block;
-    background: var(--gold-gradient);
-    color: var(--royal-black);
+    background: var(--primary-black);
+    color: var(--royal-white);
     padding: 1rem 2rem;
     border-radius: var(--radius);
     text-decoration: none;
     font-weight: 600;
     transition: var(--transition);
-    box-shadow: var(--shadow-gold);
+    box-shadow: var(--shadow-medium);
 }
 
 .hero-cta:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(212, 175, 55, 0.4);
+    box-shadow: var(--shadow-strong);
+    background: var(--royal-black);
 }
 
 /* ===============================================
@@ -230,15 +232,12 @@ body {
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
-    background: var(--gold-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--primary-black);
 }
 
 .section-subtitle {
     font-size: 1.1rem;
-    color: var(--royal-gray);
+    color: var(--royal-black);
 }
 
 /* ===============================================
@@ -251,11 +250,11 @@ body {
 }
 
 .modern-player-card {
-    background: var(--card-gradient);
-    border: 1px solid var(--royal-gold);
+    background: var(--bg-card);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: var(--radius-lg);
     padding: 2rem;
-    box-shadow: var(--shadow-dark);
+    box-shadow: var(--shadow-medium);
     position: relative;
     overflow: hidden;
 }
@@ -266,8 +265,8 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
-    background: var(--gold-gradient);
+    height: 3px;
+    background: var(--gold-accent);
 }
 
 .player-artwork-section {
@@ -283,7 +282,7 @@ body {
     height: 200px;
     border-radius: var(--radius);
     overflow: hidden;
-    border: 2px solid var(--royal-gold);
+    border: 2px solid var(--accent-gold);
 }
 
 .artwork-image {
@@ -309,16 +308,16 @@ body {
 }
 
 .main-play-button {
-    background: var(--gold-gradient);
+    background: var(--primary-black);
     border: none;
     border-radius: 50%;
     width: 60px;
     height: 60px;
-    color: var(--royal-black);
+    color: var(--royal-white);
     font-size: 1.5rem;
     cursor: pointer;
     transition: var(--transition);
-    box-shadow: var(--shadow-gold);
+    box-shadow: var(--shadow-medium);
 }
 
 .main-play-button:hover {
@@ -332,19 +331,19 @@ body {
 .modern-track-title {
     font-size: 1.75rem;
     font-weight: 700;
-    color: var(--royal-white);
+    color: var(--primary-black);
     margin-bottom: 0.5rem;
 }
 
 .modern-track-artist {
     font-size: 1.1rem;
-    color: var(--royal-gold);
+    color: var(--accent-gold);
     margin-bottom: 1rem;
 }
 
 .track-genre {
-    background: var(--gold-gradient);
-    color: var(--royal-black);
+    background: var(--accent-gold);
+    color: var(--royal-white);
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
     font-size: 0.875rem;
@@ -404,7 +403,7 @@ body {
 
 .progress-fill {
     height: 100%;
-    background: var(--gold-gradient);
+    background: var(--accent-gold);
     border-radius: 3px;
     width: 30%;
     transition: width 0.1s ease;
@@ -412,8 +411,9 @@ body {
 
 .time {
     font-size: 0.875rem;
-    color: var(--royal-gray);
+    color: var(--royal-black);
     min-width: 40px;
+    opacity: 0.7;
 }
 
 .controls-section {
@@ -431,7 +431,7 @@ body {
 .control-button {
     background: transparent;
     border: 2px solid transparent;
-    color: var(--royal-gray);
+    color: var(--royal-black);
     font-size: 1.1rem;
     cursor: pointer;
     padding: 0.75rem;
@@ -442,20 +442,23 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 0.7;
 }
 
 .control-button:hover {
-    color: var(--royal-gold);
-    border-color: var(--royal-gold);
+    color: var(--accent-gold);
+    border-color: var(--accent-gold);
+    opacity: 1;
 }
 
 .play-pause-btn {
-    background: var(--gold-gradient);
-    color: var(--royal-black);
-    border-color: var(--royal-gold);
+    background: var(--primary-black);
+    color: var(--royal-white);
+    border-color: var(--primary-black);
     width: 50px;
     height: 50px;
     font-size: 1.3rem;
+    opacity: 1;
 }
 
 .play-pause-btn:hover {
@@ -467,22 +470,23 @@ body {
    =============================================== */
 
 .card {
-    background: var(--card-gradient);
-    border: 1px solid var(--royal-gold);
+    background: var(--bg-card);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: var(--radius);
     padding: 2rem;
     transition: var(--transition);
+    box-shadow: var(--shadow-subtle);
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-gold);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-medium);
 }
 
 .btn {
     display: inline-block;
-    background: var(--gold-gradient);
-    color: var(--royal-black);
+    background: var(--primary-black);
+    color: var(--royal-white);
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: var(--radius);
@@ -495,18 +499,19 @@ body {
 
 .btn:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-gold);
+    box-shadow: var(--shadow-medium);
+    background: var(--royal-black);
 }
 
 .btn-outline {
     background: transparent;
-    color: var(--royal-gold);
-    border: 2px solid var(--royal-gold);
+    color: var(--primary-black);
+    border: 2px solid var(--primary-black);
 }
 
 .btn-outline:hover {
-    background: var(--gold-gradient);
-    color: var(--royal-black);
+    background: var(--primary-black);
+    color: var(--royal-white);
 }
 
 /* ===============================================
@@ -515,7 +520,7 @@ body {
 
 .footer {
     background: var(--bg-secondary);
-    border-top: 2px solid var(--royal-gold);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
     padding: 3rem 0 1rem;
     text-align: center;
 }
@@ -528,7 +533,7 @@ body {
 }
 
 .footer-section h3 {
-    color: var(--royal-gold);
+    color: var(--primary-black);
     margin-bottom: 1rem;
 }
 
@@ -541,19 +546,22 @@ body {
 }
 
 .footer-links a {
-    color: var(--royal-gray);
+    color: var(--royal-black);
     text-decoration: none;
     transition: var(--transition);
+    opacity: 0.7;
 }
 
 .footer-links a:hover {
-    color: var(--royal-gold);
+    color: var(--accent-gold);
+    opacity: 1;
 }
 
 .footer-bottom {
-    border-top: 1px solid var(--bg-card);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
     padding-top: 1rem;
-    color: var(--royal-gray);
+    color: var(--royal-black);
+    opacity: 0.6;
 }
 
 /* ===============================================
@@ -639,10 +647,10 @@ body {
    =============================================== */
 
 .text-center { text-align: center; }
-.text-gold { color: var(--royal-gold); }
-.bg-card { background: var(--card-gradient); }
-.border-gold { border-color: var(--royal-gold); }
-.shadow-gold { box-shadow: var(--shadow-gold); }
+.text-gold { color: var(--accent-gold); }
+.bg-card { background: var(--bg-card); }
+.border-gold { border-color: var(--accent-gold); }
+.shadow-subtle { box-shadow: var(--shadow-subtle); }
 
 .hidden { display: none; }
 .visible { display: block; }
