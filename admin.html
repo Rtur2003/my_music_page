@@ -260,6 +260,57 @@
     </div>
 
     <script>
+        // Safe Storage Helper - Multi-level fallback system
+        const SafeStorage = {
+            memoryStorage: new Map(),
+            
+            // Try to get data with fallback chain
+            getItem(key) {
+                try {
+                    return localStorage.getItem(key);
+                } catch (e) {
+                    console.log('localStorage not accessible:', e.message);
+                    try {
+                        return sessionStorage.getItem(key);
+                    } catch (e2) {
+                        console.log('SessionStorage also not accessible:', e2.message);
+                        return this.memoryStorage.get(key) || null;
+                    }
+                }
+            },
+            
+            // Try to set data with fallback chain
+            setItem(key, value) {
+                try {
+                    localStorage.setItem(key, value);
+                    return true;
+                } catch (e) {
+                    console.log('localStorage not accessible, using sessionStorage');
+                    try {
+                        sessionStorage.setItem(key, value);
+                        return true;
+                    } catch (e2) {
+                        console.log('SessionStorage also not accessible, using memory storage');
+                        this.memoryStorage.set(key, value);
+                        return true;
+                    }
+                }
+            },
+            
+            // Try to remove data with fallback chain
+            removeItem(key) {
+                try {
+                    localStorage.removeItem(key);
+                } catch (e) {
+                    try {
+                        sessionStorage.removeItem(key);
+                    } catch (e2) {
+                        this.memoryStorage.delete(key);
+                    }
+                }
+            }
+        };
+
         // Management system controller
         class AdminController {
             constructor() {
@@ -325,8 +376,8 @@
             checkExistingSession() {
                 try {
                     // Try localStorage first
-                    let sessionToken = localStorage.getItem('admin_token');
-                    let sessionTime = localStorage.getItem('admin_timestamp');
+                    let sessionToken = SafeStorage.getItem('admin_token');
+                    let sessionTime = SafeStorage.getItem('admin_timestamp');
                     
                     if (sessionToken && sessionTime) {
                         const timeDiff = Date.now() - parseInt(sessionTime);
@@ -387,9 +438,9 @@
                     const timestamp = Date.now().toString();
                     
                     try {
-                        localStorage.removeItem('failed_attempts');
-                        localStorage.setItem('admin_token', sessionToken);
-                        localStorage.setItem('admin_timestamp', timestamp);
+                        SafeStorage.removeItem('failed_attempts');
+                        SafeStorage.setItem('admin_token', sessionToken);
+                        SafeStorage.setItem('admin_timestamp', timestamp);
                     } catch (error) {
                         console.warn('localStorage not accessible:', error.message);
                         try {
@@ -479,8 +530,8 @@
             
             // Perform secure logout
             performLogout() {
-                localStorage.removeItem('admin_token');
-                localStorage.removeItem('admin_timestamp');
+                SafeStorage.removeItem('admin_token');
+                SafeStorage.removeItem('admin_timestamp');
                 this.showAuthenticationScreen();
                 this.showNotification('Güvenli çıkış gerçekleştirildi.');
             }
@@ -574,7 +625,7 @@
             
             // Data persistence methods
             saveMusicData(data) {
-                const existing = JSON.parse(localStorage.getItem('adminTracks') || '[]');
+                const existing = JSON.parse(SafeStorage.getItem('adminTracks') || '[]');
                 
                 // Transform data to match frontend expectations
                 const trackData = {
@@ -594,17 +645,17 @@
                 };
                 
                 existing.push(trackData);
-                localStorage.setItem('adminTracks', JSON.stringify(existing));
+                SafeStorage.setItem('adminTracks', JSON.stringify(existing));
                 
                 // Also update music_catalog for backward compatibility
-                localStorage.setItem('music_catalog', JSON.stringify(existing));
+                SafeStorage.setItem('music_catalog', JSON.stringify(existing));
                 
                 // Notify main page
                 this.notifyMainPage();
             }
             
             saveMediaData(data) {
-                const existing = JSON.parse(localStorage.getItem('adminGallery') || '[]');
+                const existing = JSON.parse(SafeStorage.getItem('adminGallery') || '[]');
                 
                 // Transform data to match frontend expectations
                 const mediaData = {
@@ -616,10 +667,10 @@
                 };
                 
                 existing.push(mediaData);
-                localStorage.setItem('adminGallery', JSON.stringify(existing));
+                SafeStorage.setItem('adminGallery', JSON.stringify(existing));
                 
                 // Also update media_gallery for backward compatibility
-                localStorage.setItem('media_gallery', JSON.stringify(existing));
+                SafeStorage.setItem('media_gallery', JSON.stringify(existing));
                 
                 // Notify main page
                 this.notifyMainPage();
@@ -627,10 +678,10 @@
             
             saveContentData(data) {
                 // Save content data in the format expected by the main page
-                localStorage.setItem('heroTitle', data.mainTitle);
-                localStorage.setItem('heroDescription', data.aboutContent);
-                localStorage.setItem('aboutTextEn', data.aboutContent);
-                localStorage.setItem('site_content', JSON.stringify(data));
+                SafeStorage.setItem('heroTitle', data.mainTitle);
+                SafeStorage.setItem('heroDescription', data.aboutContent);
+                SafeStorage.setItem('aboutTextEn', data.aboutContent);
+                SafeStorage.setItem('site_content', JSON.stringify(data));
                 
                 // Notify main page
                 this.notifyMainPage();
@@ -676,8 +727,8 @@
             
             // Refresh dashboard metrics
             refreshDashboardMetrics() {
-                const musicCatalog = JSON.parse(localStorage.getItem('music_catalog') || '[]');
-                const mediaGallery = JSON.parse(localStorage.getItem('media_gallery') || '[]');
+                const musicCatalog = JSON.parse(SafeStorage.getItem('music_catalog') || '[]');
+                const mediaGallery = JSON.parse(SafeStorage.getItem('media_gallery') || '[]');
                 
                 const trackCountEl = document.getElementById('trackCount');
                 const galleryCountEl = document.getElementById('galleryCount');

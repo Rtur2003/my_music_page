@@ -1,3 +1,50 @@
+// Safe Storage Helper - Multi-level fallback system
+const SafeStorage = {
+    memoryStorage: new Map(),
+    
+    // Try to get data with fallback chain
+    getItem(key) {
+        try {
+            return localStorage.getItem(key);
+        } catch (e) {
+            try {
+                return sessionStorage.getItem(key);
+            } catch (e2) {
+                return this.memoryStorage.get(key) || null;
+            }
+        }
+    },
+    
+    // Try to set data with fallback chain
+    setItem(key, value) {
+        try {
+            localStorage.setItem(key, value);
+            return true;
+        } catch (e) {
+            try {
+                sessionStorage.setItem(key, value);
+                return true;
+            } catch (e2) {
+                this.memoryStorage.set(key, value);
+                return true;
+            }
+        }
+    },
+    
+    // Try to remove data with fallback chain
+    removeItem(key) {
+        try {
+            localStorage.removeItem(key);
+        } catch (e) {
+            try {
+                sessionStorage.removeItem(key);
+            } catch (e2) {
+                this.memoryStorage.delete(key);
+            }
+        }
+    }
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
 });
@@ -144,9 +191,9 @@ function initializeScrollEffects() {
     animatedElements.forEach(el => observer.observe(el));
     
     // Page views tracking
-    const views = parseInt(localStorage.getItem('page_views') || '0') + 1;
-    localStorage.setItem('page_views', views.toString());
-    localStorage.setItem('last_visit', new Date().toISOString());
+    const views = parseInt(SafeStorage.getItem('page_views') || '0') + 1;
+    SafeStorage.setItem('page_views', views.toString());
+    SafeStorage.setItem('last_visit', new Date().toISOString());
 }
 
 function initializeAnimations() {
@@ -201,13 +248,13 @@ function initializeAnimations() {
         card.style.animationDelay = `${index * 0.1}s`;
         
         card.addEventListener('click', function() {
-            const plays = parseInt(localStorage.getItem('music_plays') || '0') + 1;
-            localStorage.setItem('music_plays', plays.toString());
+            const plays = parseInt(SafeStorage.getItem('music_plays') || '0') + 1;
+            SafeStorage.setItem('music_plays', plays.toString());
             
             const trackTitle = this.querySelector('h4').textContent;
-            const trackPlays = JSON.parse(localStorage.getItem('track_analytics') || '{}');
+            const trackPlays = JSON.parse(SafeStorage.getItem('track_analytics') || '{}');
             trackPlays[trackTitle] = (trackPlays[trackTitle] || 0) + 1;
-            localStorage.setItem('track_analytics', JSON.stringify(trackPlays));
+            SafeStorage.setItem('track_analytics', JSON.stringify(trackPlays));
         });
     });
     
@@ -217,13 +264,13 @@ function initializeAnimations() {
         item.style.animationDelay = `${index * 0.15}s`;
         
         item.addEventListener('click', function() {
-            const clicks = parseInt(localStorage.getItem('gallery_clicks') || '0') + 1;
-            localStorage.setItem('gallery_clicks', clicks.toString());
+            const clicks = parseInt(SafeStorage.getItem('gallery_clicks') || '0') + 1;
+            SafeStorage.setItem('gallery_clicks', clicks.toString());
             
             const category = this.getAttribute('data-category');
-            const categoryClicks = JSON.parse(localStorage.getItem('gallery_analytics') || '{}');
+            const categoryClicks = JSON.parse(SafeStorage.getItem('gallery_analytics') || '{}');
             categoryClicks[category] = (categoryClicks[category] || 0) + 1;
-            localStorage.setItem('gallery_analytics', JSON.stringify(categoryClicks));
+            SafeStorage.setItem('gallery_analytics', JSON.stringify(categoryClicks));
         });
     });
 }
@@ -290,8 +337,8 @@ function initializeContactForm() {
                     this.reset();
                     
                     // Track form submissions
-                    const submissions = parseInt(localStorage.getItem('form_submissions') || '0') + 1;
-                    localStorage.setItem('form_submissions', submissions.toString());
+                    const submissions = parseInt(SafeStorage.getItem('form_submissions') || '0') + 1;
+                    SafeStorage.setItem('form_submissions', submissions.toString());
                     
                     // Reset button
                     submitBtn.innerHTML = originalText;
@@ -377,16 +424,16 @@ function initializeContactForm() {
     const socialLinks = document.querySelectorAll('.social-link');
     socialLinks.forEach(link => {
         link.addEventListener('click', function() {
-            const clicks = parseInt(localStorage.getItem('social_clicks') || '0') + 1;
-            localStorage.setItem('social_clicks', clicks.toString());
+            const clicks = parseInt(SafeStorage.getItem('social_clicks') || '0') + 1;
+            SafeStorage.setItem('social_clicks', clicks.toString());
             
             const platform = this.href.includes('spotify') ? 'spotify' : 
                            this.href.includes('youtube') ? 'youtube' : 
                            this.href.includes('instagram') ? 'instagram' : 'other';
             
-            const platformClicks = JSON.parse(localStorage.getItem('social_analytics') || '{}');
+            const platformClicks = JSON.parse(SafeStorage.getItem('social_analytics') || '{}');
             platformClicks[platform] = (platformClicks[platform] || 0) + 1;
-            localStorage.setItem('social_analytics', JSON.stringify(platformClicks));
+            SafeStorage.setItem('social_analytics', JSON.stringify(platformClicks));
         });
     });
 }
@@ -487,7 +534,7 @@ function showNotification(message, type = 'info') {
 let startTime = Date.now();
 window.addEventListener('load', function() {
     const loadTime = Date.now() - startTime;
-    localStorage.setItem('last_load_time', loadTime.toString());
+    SafeStorage.setItem('last_load_time', loadTime.toString());
 });
 
 // Time tracking
@@ -502,16 +549,16 @@ setInterval(() => {
 }, 1000);
 
 window.addEventListener('beforeunload', function() {
-    const totalTime = parseInt(localStorage.getItem('total_time_spent') || '0') + timeSpent;
-    localStorage.setItem('total_time_spent', totalTime.toString());
+    const totalTime = parseInt(SafeStorage.getItem('total_time_spent') || '0') + timeSpent;
+    SafeStorage.setItem('total_time_spent', totalTime.toString());
 });
 
 // Version check and cache management
 const currentVersion = '1.2.0';
 function checkVersion() {
-    const storedVersion = localStorage.getItem('site_version');
+    const storedVersion = SafeStorage.getItem('site_version');
     if (storedVersion !== currentVersion) {
-        localStorage.setItem('site_version', currentVersion);
+        SafeStorage.setItem('site_version', currentVersion);
         
         if (storedVersion) {
             console.log('🔄 Site updated to version ' + currentVersion);
@@ -522,7 +569,7 @@ function checkVersion() {
 // Clear old cache data
 function clearOldCache() {
     const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
-    const lastClear = localStorage.getItem('last_cache_clear');
+    const lastClear = SafeStorage.getItem('last_cache_clear');
     
     if (!lastClear || parseInt(lastClear) < oneWeekAgo) {
         // Clear localStorage except user settings
@@ -535,24 +582,24 @@ function clearOldCache() {
             }
         });
         
-        localStorage.setItem('last_cache_clear', Date.now().toString());
+        SafeStorage.setItem('last_cache_clear', Date.now().toString());
         console.log('🧹 Cache cleared');
     }
 }
 
 // Content management functions
 function updateContentFromAdmin() {
-    const englishText = localStorage.getItem('about_text_en');
-    const heroTitle = localStorage.getItem('hero_title');
-    const heroDescription = localStorage.getItem('hero_description');
-    const email = localStorage.getItem('contact_email');
-    const phone = localStorage.getItem('contact_phone');
-    const location = localStorage.getItem('contact_location');
-    const spotify = localStorage.getItem('social_spotify');
-    const youtube = localStorage.getItem('social_youtube');
-    const instagram = localStorage.getItem('social_instagram');
-    const siteTitle = localStorage.getItem('site_title');
-    const siteDescription = localStorage.getItem('site_description');
+    const englishText = SafeStorage.getItem('about_text_en');
+    const heroTitle = SafeStorage.getItem('hero_title');
+    const heroDescription = SafeStorage.getItem('hero_description');
+    const email = SafeStorage.getItem('contact_email');
+    const phone = SafeStorage.getItem('contact_phone');
+    const location = SafeStorage.getItem('contact_location');
+    const spotify = SafeStorage.getItem('social_spotify');
+    const youtube = SafeStorage.getItem('social_youtube');
+    const instagram = SafeStorage.getItem('social_instagram');
+    const siteTitle = SafeStorage.getItem('site_title');
+    const siteDescription = SafeStorage.getItem('site_description');
     
     if (englishText) {
         const aboutTexts = document.querySelectorAll('.about-text');
@@ -663,10 +710,10 @@ function loadDynamicContent() {
 
 function loadUploadedMusic() {
     try {
-        // Load music from both old and new admin panel
+        // Load music from both old and new admin panel using safe storage
         const uploadedMusic = [
-            ...JSON.parse(localStorage.getItem('uploadedMusic') || '[]'),
-            ...JSON.parse(localStorage.getItem('music_catalog') || '[]')
+            ...JSON.parse(SafeStorage.getItem('uploadedMusic') || '[]'),
+            ...JSON.parse(SafeStorage.getItem('music_catalog') || '[]')
         ];
         const musicGrid = document.querySelector('.music-grid');
         
@@ -715,8 +762,8 @@ function loadUploadedGallery() {
     try {
         // Load gallery from both old and new admin panel
         const uploadedGallery = [
-            ...JSON.parse(localStorage.getItem('uploadedGallery') || '[]'),
-            ...JSON.parse(localStorage.getItem('media_gallery') || '[]')
+            ...JSON.parse(SafeStorage.getItem('uploadedGallery') || '[]'),
+            ...JSON.parse(SafeStorage.getItem('media_gallery') || '[]')
         ];
         const galleryGrid = document.querySelector('.gallery-grid');
         
@@ -758,8 +805,8 @@ function loadUploadedGallery() {
 function loadContentFromAdmin() {
     try {
         // Load about text
-        const aboutTextEn = localStorage.getItem('about_text_en');
-        const aboutTextTr = localStorage.getItem('about_text_tr');
+        const aboutTextEn = SafeStorage.getItem('about_text_en');
+        const aboutTextTr = SafeStorage.getItem('about_text_tr');
         
         if (aboutTextEn) {
             const aboutSection = document.querySelector('#about .about-text');
@@ -769,9 +816,9 @@ function loadContentFromAdmin() {
         }
         
         // Load hero content
-        const heroTitle = localStorage.getItem('hero_title');
-        const heroSubtitle = localStorage.getItem('hero_subtitle');
-        const heroDescription = localStorage.getItem('hero_description');
+        const heroTitle = SafeStorage.getItem('hero_title');
+        const heroSubtitle = SafeStorage.getItem('hero_subtitle');
+        const heroDescription = SafeStorage.getItem('hero_description');
         
         if (heroTitle) {
             const titleElement = document.querySelector('.hero-title');
@@ -789,9 +836,9 @@ function loadContentFromAdmin() {
         }
         
         // Load contact info
-        const email = localStorage.getItem('contact_email');
-        const phone = localStorage.getItem('contact_phone');
-        const location = localStorage.getItem('contact_location');
+        const email = SafeStorage.getItem('contact_email');
+        const phone = SafeStorage.getItem('contact_phone');
+        const location = SafeStorage.getItem('contact_location');
         
         if (email) {
             const emailLinks = document.querySelectorAll('a[href^="mailto:"]');
@@ -799,9 +846,9 @@ function loadContentFromAdmin() {
         }
         
         // Load social media links
-        const spotify = localStorage.getItem('social_spotify');
-        const youtube = localStorage.getItem('social_youtube');
-        const instagram = localStorage.getItem('social_instagram');
+        const spotify = SafeStorage.getItem('social_spotify');
+        const youtube = SafeStorage.getItem('social_youtube');
+        const instagram = SafeStorage.getItem('social_instagram');
         
         if (spotify) {
             const spotifyLinks = document.querySelectorAll('.social-link[href*="spotify"]');
