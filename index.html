@@ -145,7 +145,7 @@
     <!-- Prefetch critical images -->
     <link rel="preload" href="assets/images/logo-transparent.png" as="image" type="image/png">
     <link rel="preload" href="assets/images/hero-musician-bg.jpg" as="image" type="image/jpeg">
-    <link rel="preload" href="assets/images/hasan-arthur-profile.jpg" as="image" type="image/jpeg">
+    <link rel="preload" href="assets/images/hasan-arthur-profile.jpg?v=1.0" as="image" type="image/jpeg">
     
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
@@ -237,7 +237,7 @@
                     
                     <div class="hero-image">
                         <div class="image-container">
-                            <img src="assets/images/hasan-arthur-profile.jpg" alt="Hasan Arthur Altuntaş - Profesyonel Müzisyen" class="hero-img" width="800" height="600" loading="eager">
+                            <img src="assets/images/hasan-arthur-profile.jpg?v=1.0" alt="Hasan Arthur Altuntaş - Profesyonel Müzisyen" class="hero-img" width="800" height="600" loading="eager">
                             <div class="image-glow"></div>
                         </div>
                     </div>
@@ -261,7 +261,7 @@
                 
                 <div class="about-content">
                     <div class="about-image slide-from-left animate-on-scroll">
-                        <img src="assets/images/hasan-arthur-profile.jpg" alt="Hasan Arthur Altuntaş - Profesyonel Müzisyen ve Prodüktör" class="about-img professional-hover" width="600" height="400" loading="lazy">
+                        <img src="assets/images/hasan-arthur-profile.jpg?v=1.0" alt="Hasan Arthur Altuntaş - Profesyonel Müzisyen ve Prodüktör" class="about-img professional-hover" width="600" height="400" loading="lazy">
                         <div class="experience-badge stagger-animation stagger-3">
                             <span class="years">5+</span>
                             <span class="text">Years Experience</span>
@@ -322,7 +322,7 @@
                     <div class="modern-player-card">
                         <div class="player-artwork-section">
                             <div class="artwork-container">
-                                <img src="assets/images/logo-main.png" alt="Şu an çalan şarkı" id="currentArtwork" class="artwork-image" width="200" height="200" loading="lazy">
+                                <img src="assets/images/logo-main.png?v=1.0" alt="Şu an çalan şarkı" id="currentArtwork" class="artwork-image" width="200" height="200" loading="lazy">
                                 <div class="artwork-overlay">
                                     <button class="main-play-button" id="mainPlayBtn" aria-label="Oynat/Durdur">
                                         <i class="fas fa-play" id="mainPlayIcon"></i>
@@ -767,6 +767,50 @@
     
     <!-- Dynamic Content Loading -->
     <script>
+        // Safe Storage Helper - Multi-level fallback system
+        const SafeStorage = {
+            memoryStorage: new Map(),
+            
+            getItem(key) {
+                try {
+                    return localStorage.getItem(key);
+                } catch (e) {
+                    try {
+                        return sessionStorage.getItem(key);
+                    } catch (e2) {
+                        return this.memoryStorage.get(key) || null;
+                    }
+                }
+            },
+            
+            setItem(key, value) {
+                try {
+                    localStorage.setItem(key, value);
+                    return true;
+                } catch (e) {
+                    try {
+                        sessionStorage.setItem(key, value);
+                        return true;
+                    } catch (e2) {
+                        this.memoryStorage.set(key, value);
+                        return true;
+                    }
+                }
+            },
+            
+            removeItem(key) {
+                try {
+                    localStorage.removeItem(key);
+                } catch (e) {
+                    try {
+                        sessionStorage.removeItem(key);
+                    } catch (e2) {
+                        this.memoryStorage.delete(key);
+                    }
+                }
+            }
+        };
+
         // Load content from admin panel
         document.addEventListener('DOMContentLoaded', function() {
             loadDynamicContent();
@@ -774,7 +818,7 @@
         
         function loadDynamicContent() {
             // Load tracks from localStorage (added via admin panel)
-            const savedTracks = JSON.parse(localStorage.getItem('adminTracks') || '[]');
+            const savedTracks = JSON.parse(SafeStorage.getItem('adminTracks') || '[]');
             const musicGrid = document.getElementById('musicGrid');
             
             if (savedTracks.length > 0) {
@@ -842,7 +886,7 @@
             }
             
             // Load gallery from admin panel
-            const savedGallery = JSON.parse(localStorage.getItem('adminGallery') || '[]');
+            const savedGallery = JSON.parse(SafeStorage.getItem('adminGallery') || '[]');
             const galleryGrid = document.querySelector('#gallery .gallery-grid');
             
             if (savedGallery.length > 0 && galleryGrid) {
@@ -867,7 +911,7 @@
             }
             
             // Load about text from admin panel
-            const aboutTextEn = localStorage.getItem('aboutTextEn');
+            const aboutTextEn = SafeStorage.getItem('aboutTextEn');
             if (aboutTextEn) {
                 const aboutTexts = document.querySelectorAll('.about-text p');
                 if (aboutTexts.length > 0) {
@@ -876,9 +920,9 @@
             }
             
             // Load hero content
-            const heroTitle = localStorage.getItem('heroTitle');
-            const heroSubtitle = localStorage.getItem('heroSubtitle');
-            const heroDescription = localStorage.getItem('heroDescription');
+            const heroTitle = SafeStorage.getItem('heroTitle');
+            const heroSubtitle = SafeStorage.getItem('heroSubtitle');
+            const heroDescription = SafeStorage.getItem('heroDescription');
             
             if (heroTitle) {
                 const titleEl = document.querySelector('.hero-title .title-line.highlight');
@@ -901,7 +945,7 @@
         
         // Enhanced multi-platform music player
         function openMusicPlayer(index) {
-            const savedTracks = JSON.parse(localStorage.getItem('adminTracks') || '[]');
+            const savedTracks = JSON.parse(SafeStorage.getItem('adminTracks') || '[]');
             if (savedTracks[index]) {
                 const track = savedTracks[index];
                 document.getElementById('currentTrackTitle').textContent = track.title;
