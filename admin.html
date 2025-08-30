@@ -187,6 +187,14 @@
                         </button>
                     </form>
                 </div>
+                
+                <!-- Music Management List -->
+                <div class="form-container">
+                    <h3>📋 Mevcut Müzik Listesi</h3>
+                    <div id="musicList" class="content-list">
+                        <div class="list-placeholder">Henüz müzik eklenmemiş</div>
+                    </div>
+                </div>
             </div>
 
             <!-- Gallery Panel -->
@@ -223,6 +231,14 @@
                             <i class="fas fa-plus"></i> Galeriye Ekle
                         </button>
                     </form>
+                </div>
+                
+                <!-- Gallery Management List -->
+                <div class="form-container">
+                    <h3>🖼️ Mevcut Galeri</h3>
+                    <div id="galleryList" class="content-list">
+                        <div class="list-placeholder">Henüz medya eklenmemiş</div>
+                    </div>
                 </div>
             </div>
 
@@ -526,6 +542,7 @@
                 document.getElementById('managementPanel').style.display = 'block';
                 this.isAuthenticated = true;
                 this.refreshDashboardMetrics();
+                this.loadContentLists(); // Load content management lists
             }
             
             // Perform secure logout
@@ -567,21 +584,36 @@
                     genre: document.getElementById('trackGenre').value,
                     duration: document.getElementById('trackDuration').value || '3:45',
                     albumCover: document.getElementById('albumCover').value,
+                    spotifyUrl: document.getElementById('spotifyUrl').value,
+                    youtubeUrl: document.getElementById('youtubeUrl').value,
+                    appleUrl: document.getElementById('appleUrl').value,
+                    soundcloudUrl: document.getElementById('soundcloudUrl').value,
                     description: document.getElementById('trackDescription').value,
                     platforms: {
-                        spotify: document.getElementById('spotifyLink').value,
-                        youtube: document.getElementById('youtubeLink').value,
-                        appleMusic: document.getElementById('appleMusicLink').value,
-                        soundcloud: document.getElementById('soundcloudLink').value
+                        spotify: document.getElementById('spotifyUrl').value,
+                        youtube: document.getElementById('youtubeUrl').value,
+                        appleMusic: document.getElementById('appleUrl').value,
+                        soundcloud: document.getElementById('soundcloudUrl').value
                     },
                     timestamp: new Date().toISOString()
                 };
                 
                 if (trackData.title && trackData.artist) {
-                    this.saveMusicData(trackData);
-                    this.showNotification('Müzik kataloğa başarıyla eklendi!');
+                    // Check if we're editing or adding new
+                    if (this.editingMusicIndex !== undefined) {
+                        const musicCatalog = JSON.parse(SafeStorage.getItem('music_catalog') || '[]');
+                        musicCatalog[this.editingMusicIndex] = trackData;
+                        SafeStorage.setItem('music_catalog', JSON.stringify(musicCatalog));
+                        this.showNotification('Müzik parçası başarıyla güncellendi!');
+                        this.editingMusicIndex = undefined; // Clear edit mode
+                    } else {
+                        this.saveMusicData(trackData);
+                        this.showNotification('Müzik kataloğa başarıyla eklendi!');
+                    }
+                    
                     event.target.reset();
                     this.refreshDashboardMetrics();
+                    this.loadMusicList(); // Refresh the list
                 } else {
                     this.showNotification('Lütfen gerekli alanları doldurun.', true);
                 }
@@ -599,10 +631,22 @@
                 };
                 
                 if (mediaData.title && mediaData.url) {
-                    this.saveMediaData(mediaData);
-                    this.showNotification('Medya galeriye başarıyla eklendi!');
+                    // Check if we're editing or adding new
+                    if (this.editingGalleryIndex !== undefined) {
+                        const mediaGallery = JSON.parse(SafeStorage.getItem('media_gallery') || '[]');
+                        mediaData.imageUrl = mediaData.url; // Ensure consistency
+                        mediaGallery[this.editingGalleryIndex] = mediaData;
+                        SafeStorage.setItem('media_gallery', JSON.stringify(mediaGallery));
+                        this.showNotification('Medya öğesi başarıyla güncellendi!');
+                        this.editingGalleryIndex = undefined; // Clear edit mode
+                    } else {
+                        this.saveMediaData(mediaData);
+                        this.showNotification('Medya galeriye başarıyla eklendi!');
+                    }
+                    
                     event.target.reset();
                     this.refreshDashboardMetrics();
+                    this.loadGalleryList(); // Refresh the list
                 } else {
                     this.showNotification('Lütfen gerekli alanları doldurun.', true);
                 }
@@ -763,6 +807,146 @@
                     notification.style.display = 'block';
                     setTimeout(() => notification.style.display = 'none', 3500);
                 }
+            }
+            
+            // Content Management Methods
+            loadContentLists() {
+                this.loadMusicList();
+                this.loadGalleryList();
+            }
+            
+            loadMusicList() {
+                const musicCatalog = JSON.parse(SafeStorage.getItem('music_catalog') || '[]');
+                const musicListEl = document.getElementById('musicList');
+                
+                if (!musicListEl) return;
+                
+                if (musicCatalog.length === 0) {
+                    musicListEl.innerHTML = '<div class="list-placeholder">Henüz müzik eklenmemiş</div>';
+                    return;
+                }
+                
+                const listHTML = musicCatalog.map((track, index) => `
+                    <div class="content-item">
+                        <img src="${track.albumCover || 'assets/images/logo-main.png'}" alt="${track.title}" class="item-thumbnail">
+                        <div class="item-info">
+                            <div class="item-title">${track.title}</div>
+                            <div class="item-meta">
+                                <span>${track.artist || 'Bilinmeyen Sanatçı'}</span>
+                                <span>${track.genre || 'Genel'}</span>
+                                <span>${track.duration || 'Bilinmiyor'}</span>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn edit" onclick="adminController.editMusicItem(${index})" title="Düzenle">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete" onclick="adminController.deleteMusicItem(${index})" title="Sil">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                
+                musicListEl.innerHTML = listHTML;
+            }
+            
+            loadGalleryList() {
+                const mediaGallery = JSON.parse(SafeStorage.getItem('media_gallery') || '[]');
+                const galleryListEl = document.getElementById('galleryList');
+                
+                if (!galleryListEl) return;
+                
+                if (mediaGallery.length === 0) {
+                    galleryListEl.innerHTML = '<div class="list-placeholder">Henüz medya eklenmemiş</div>';
+                    return;
+                }
+                
+                const listHTML = mediaGallery.map((media, index) => `
+                    <div class="content-item">
+                        <img src="${media.imageUrl}" alt="${media.title}" class="item-thumbnail">
+                        <div class="item-info">
+                            <div class="item-title">${media.title}</div>
+                            <div class="item-meta">
+                                <span>${media.category || 'Genel'}</span>
+                                <span>${new Date(media.timestamp || Date.now()).toLocaleDateString('tr-TR')}</span>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn edit" onclick="adminController.editGalleryItem(${index})" title="Düzenle">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete" onclick="adminController.deleteGalleryItem(${index})" title="Sil">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                
+                galleryListEl.innerHTML = listHTML;
+            }
+            
+            editMusicItem(index) {
+                const musicCatalog = JSON.parse(SafeStorage.getItem('music_catalog') || '[]');
+                const track = musicCatalog[index];
+                
+                if (!track) return;
+                
+                // Fill form with existing data
+                document.getElementById('trackTitle').value = track.title || '';
+                document.getElementById('artistName').value = track.artist || '';
+                document.getElementById('trackGenre').value = track.genre || '';
+                document.getElementById('trackDuration').value = track.duration || '';
+                document.getElementById('albumCover').value = track.albumCover || '';
+                document.getElementById('spotifyUrl').value = track.spotifyUrl || '';
+                document.getElementById('youtubeUrl').value = track.youtubeUrl || '';
+                document.getElementById('appleUrl').value = track.appleUrl || '';
+                document.getElementById('soundcloudUrl').value = track.soundcloudUrl || '';
+                document.getElementById('trackDescription').value = track.description || '';
+                
+                // Store edit index for form submission
+                this.editingMusicIndex = index;
+                this.showNotification('Düzenleme modu aktif. Formu güncelleyin ve kaydedin.');
+            }
+            
+            editGalleryItem(index) {
+                const mediaGallery = JSON.parse(SafeStorage.getItem('media_gallery') || '[]');
+                const media = mediaGallery[index];
+                
+                if (!media) return;
+                
+                // Fill form with existing data
+                document.getElementById('mediaTitle').value = media.title || '';
+                document.getElementById('mediaCategory').value = media.category || '';
+                document.getElementById('mediaUrl').value = media.imageUrl || '';
+                
+                // Store edit index for form submission
+                this.editingGalleryIndex = index;
+                this.showNotification('Düzenleme modu aktif. Formu güncelleyin ve kaydedin.');
+            }
+            
+            deleteMusicItem(index) {
+                if (!confirm('Bu müzik parçasını silmek istediğinizden emin misiniz?')) return;
+                
+                const musicCatalog = JSON.parse(SafeStorage.getItem('music_catalog') || '[]');
+                musicCatalog.splice(index, 1);
+                SafeStorage.setItem('music_catalog', JSON.stringify(musicCatalog));
+                
+                this.loadMusicList();
+                this.updateMetrics();
+                this.showNotification('Müzik parçası silindi.');
+            }
+            
+            deleteGalleryItem(index) {
+                if (!confirm('Bu medya öğesini silmek istediğinizden emin misiniz?')) return;
+                
+                const mediaGallery = JSON.parse(SafeStorage.getItem('media_gallery') || '[]');
+                mediaGallery.splice(index, 1);
+                SafeStorage.setItem('media_gallery', JSON.stringify(mediaGallery));
+                
+                this.loadGalleryList();
+                this.updateMetrics();
+                this.showNotification('Medya öğesi silindi.');
             }
         }
         
