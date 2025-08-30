@@ -874,31 +874,43 @@ function loadDynamicContent() {
 
 function loadUploadedMusic() {
     try {
-        // Load music from both old and new admin panel using safe storage
-        const uploadedMusic = [
-            ...JSON.parse(SafeStorage.getItem('uploadedMusic') || '[]'),
-            ...JSON.parse(SafeStorage.getItem('music_catalog') || '[]')
-        ];
+        // Load music only from the new admin panel to avoid duplicates
+        const musicCatalog = JSON.parse(SafeStorage.getItem('music_catalog') || '[]');
         const musicGrid = document.querySelector('.music-grid');
         
-        if (!musicGrid || uploadedMusic.length === 0) return;
+        if (!musicGrid || musicCatalog.length === 0) return;
         
-        uploadedMusic.forEach(music => {
+        // Create consolidated music cards with smart cover selection
+        musicCatalog.forEach(music => {
             const musicCard = document.createElement('div');
             musicCard.className = 'music-card uploaded-music';
             musicCard.dataset.src = music.audioUrl || '#';
             
+            // Smart cover selection - use available cover or default
+            const albumCover = music.albumCover || music.cover || 'assets/images/logo-main.png?v=1.0';
+            
+            // Consolidate platform links
+            const platformLinks = [];
+            if (music.spotifyUrl) platformLinks.push(`<a href="${music.spotifyUrl}" class="platform-link spotify" target="_blank"><i class="fab fa-spotify"></i></a>`);
+            if (music.youtubeUrl) platformLinks.push(`<a href="${music.youtubeUrl}" class="platform-link youtube" target="_blank"><i class="fab fa-youtube"></i></a>`);
+            if (music.appleUrl) platformLinks.push(`<a href="${music.appleUrl}" class="platform-link apple" target="_blank"><i class="fab fa-apple"></i></a>`);
+            if (music.soundcloudUrl) platformLinks.push(`<a href="${music.soundcloudUrl}" class="platform-link soundcloud" target="_blank"><i class="fab fa-soundcloud"></i></a>`);
+            
             musicCard.innerHTML = `
                 <div class="card-image">
-                    <img src="${music.albumCover || 'https://via.placeholder.com/300x300/6c5ce7/ffffff?text=Album+Cover'}" alt="${music.title}">
+                    <img src="${albumCover}" alt="${music.title}" loading="lazy">
                     <div class="play-overlay">
                         <i class="fas fa-play"></i>
                     </div>
                 </div>
                 <div class="card-content">
                     <h4>${music.title}</h4>
-                    <p>${music.genre || 'Bilinmeyen'} • ${music.artist || 'Sanatçı'}</p>
-                    <div class="card-duration">${music.duration || '0:00'}</div>
+                    <p class="card-artist">${music.artist || 'Hasan Arthur Altuntaş'}</p>
+                    <div class="card-meta">
+                        <span class="card-genre">${music.genre || 'Instrumental'}</span>
+                        <span class="card-duration">${music.duration || '3:45'}</span>
+                    </div>
+                    ${platformLinks.length > 0 ? `<div class="card-platforms">${platformLinks.join('')}</div>` : ''}
                 </div>
             `;
             
@@ -924,16 +936,13 @@ function loadUploadedMusic() {
 
 function loadUploadedGallery() {
     try {
-        // Load gallery from both old and new admin panel
-        const uploadedGallery = [
-            ...JSON.parse(SafeStorage.getItem('uploadedGallery') || '[]'),
-            ...JSON.parse(SafeStorage.getItem('media_gallery') || '[]')
-        ];
+        // Load gallery only from the new admin panel to avoid duplicates
+        const mediaGallery = JSON.parse(SafeStorage.getItem('media_gallery') || '[]');
         const galleryGrid = document.querySelector('.gallery-grid');
         
-        if (!galleryGrid || uploadedGallery.length === 0) return;
+        if (!galleryGrid || mediaGallery.length === 0) return;
         
-        uploadedGallery.forEach(gallery => {
+        mediaGallery.forEach(gallery => {
             const galleryItem = document.createElement('div');
             galleryItem.className = 'gallery-item uploaded-gallery';
             galleryItem.dataset.category = gallery.category || 'general';

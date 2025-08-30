@@ -123,9 +123,25 @@ img[loading="lazy"].loaded {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1400px; /* Increased from 1200px for better PC display */
     margin: 0 auto;
     padding: 0 2rem;
+}
+
+/* Wider container for large screens */
+@media (min-width: 1600px) {
+    .container {
+        max-width: 1600px;
+        padding: 0 3rem;
+    }
+}
+
+/* Ultra-wide screen support */
+@media (min-width: 1920px) {
+    .container {
+        max-width: 1800px;
+        padding: 0 4rem;
+    }
 }
 
 /* ===============================================
@@ -1231,6 +1247,21 @@ section {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
+}
+
+/* Better grid layout for larger screens */
+@media (min-width: 1200px) {
+    .music-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2.5rem;
+    }
+}
+
+@media (min-width: 1600px) {
+    .music-grid {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 3rem;
+    }
 }
 
 .music-card {
