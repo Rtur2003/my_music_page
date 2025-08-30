@@ -45,6 +45,62 @@ const SafeStorage = {
     }
 };
 
+// Performance Optimization Helpers
+const PerformanceUtils = {
+    // Throttle function to limit function calls
+    throttle(func, limit) {
+        let inThrottle;
+        return function() {
+            const args = arguments;
+            const context = this;
+            if (!inThrottle) {
+                func.apply(context, args);
+                inThrottle = true;
+                setTimeout(() => inThrottle = false, limit);
+            }
+        }
+    },
+    
+    // Debounce function to delay function calls
+    debounce(func, wait, immediate) {
+        let timeout;
+        return function() {
+            const context = this, args = arguments;
+            const later = function() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            const callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        }
+    },
+    
+    // Request limiter to prevent excessive API calls
+    requestLimiter: {
+        requests: new Map(),
+        limit: 10, // Max requests per minute
+        
+        canMakeRequest(key) {
+            const now = Date.now();
+            const requests = this.requests.get(key) || [];
+            
+            // Remove requests older than 1 minute
+            const recentRequests = requests.filter(time => now - time < 60000);
+            this.requests.set(key, recentRequests);
+            
+            return recentRequests.length < this.limit;
+        },
+        
+        recordRequest(key) {
+            const requests = this.requests.get(key) || [];
+            requests.push(Date.now());
+            this.requests.set(key, requests);
+        }
+    }
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
 });
@@ -120,13 +176,13 @@ function initializeNavigation() {
     const navMenu = document.getElementById('nav-menu');
     const navLinks = document.querySelectorAll('.nav-link');
     
-    window.addEventListener('scroll', () => {
+    window.addEventListener('scroll', PerformanceUtils.throttle(() => {
         if (window.scrollY > 100) {
             header.classList.add('scrolled');
         } else {
             header.classList.remove('scrolled');
         }
-    });
+    }, 100));
     
     if (navToggle && navMenu) {
         navToggle.addEventListener('click', () => {
@@ -528,13 +584,13 @@ function initializeScrollToTop() {
     const scrollTopBtn = document.getElementById('scrollTop');
     
     if (scrollTopBtn) {
-        window.addEventListener('scroll', () => {
+        window.addEventListener('scroll', PerformanceUtils.throttle(() => {
             if (window.scrollY > 300) {
                 scrollTopBtn.classList.add('visible');
             } else {
                 scrollTopBtn.classList.remove('visible');
             }
-        });
+        }, 150));
         
         scrollTopBtn.addEventListener('click', () => {
             window.scrollTo({
@@ -580,12 +636,27 @@ window.addEventListener('load', function() {
 let timeSpent = 0;
 let lastActive = Date.now();
 
+// Optimize time tracking - reduce frequency and batch storage writes
+let timeSpentBatch = 0;
+const BATCH_SAVE_INTERVAL = 30000; // Save every 30 seconds instead of every second
+
 setInterval(() => {
     if (document.visibilityState === 'visible') {
-        timeSpent += Date.now() - lastActive;
-        lastActive = Date.now();
+        const currentTime = Date.now();
+        timeSpent += currentTime - lastActive;
+        timeSpentBatch += currentTime - lastActive;
+        lastActive = currentTime;
     }
-}, 1000);
+}, 5000); // Reduced from 1000ms to 5000ms
+
+// Batch save to storage every 30 seconds
+setInterval(() => {
+    if (timeSpentBatch > 0) {
+        const totalTime = parseInt(SafeStorage.getItem('total_time_spent') || '0') + timeSpentBatch;
+        SafeStorage.setItem('total_time_spent', totalTime.toString());
+        timeSpentBatch = 0; // Reset batch counter
+    }
+}, BATCH_SAVE_INTERVAL);
 
 window.addEventListener('beforeunload', function() {
     const totalTime = parseInt(SafeStorage.getItem('total_time_spent') || '0') + timeSpent;
