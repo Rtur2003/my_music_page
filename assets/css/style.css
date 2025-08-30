@@ -72,6 +72,18 @@ img,
     backface-visibility: hidden;
 }
 
+/* Reduced motion for low-end devices */
+.reduced-motion * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+}
+
+.reduced-motion .parallax-element {
+    transform: none !important;
+}
+
 body {
     font-family: 'Poppins', 'Segoe UI', sans-serif;
     background: var(--bg-primary);

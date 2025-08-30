@@ -17,6 +17,17 @@ function throttle(func, limit) {
 
 // Initialize advanced animations
 function initializeAdvancedAnimations() {
+    // Performance check - disable animations on low-end devices
+    const isLowPerformance = navigator.hardwareConcurrency < 4 || 
+                            window.devicePixelRatio < 1.5 ||
+                            navigator.connection?.effectiveType === 'slow-2g';
+    
+    if (isLowPerformance) {
+        console.log('🔧 Low performance device detected, reducing animations');
+        document.body.classList.add('reduced-motion');
+        return;
+    }
+    
     // Intersection Observer for scroll-triggered animations
     const observerOptions = {
         root: null,
