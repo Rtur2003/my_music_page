@@ -66,12 +66,51 @@ function initializeApp() {
 function hidePageLoader() {
     const loader = document.querySelector('.page-loader');
     if (loader) {
-        setTimeout(() => {
-            loader.classList.add('hidden');
+        // Wait for critical resources to load
+        Promise.all([
+            // Wait for fonts
+            document.fonts.ready,
+            // Wait for critical images
+            new Promise(resolve => {
+                const criticalImages = document.querySelectorAll('img[loading="eager"]');
+                if (criticalImages.length === 0) {
+                    resolve();
+                    return;
+                }
+                let loadedCount = 0;
+                criticalImages.forEach(img => {
+                    if (img.complete) {
+                        loadedCount++;
+                    } else {
+                        img.addEventListener('load', () => {
+                            loadedCount++;
+                            if (loadedCount === criticalImages.length) resolve();
+                        });
+                        img.addEventListener('error', () => {
+                            loadedCount++;
+                            if (loadedCount === criticalImages.length) resolve();
+                        });
+                    }
+                });
+                if (loadedCount === criticalImages.length) resolve();
+            })
+        ]).then(() => {
+            // Add minimum loading time for smooth UX
             setTimeout(() => {
-                loader.style.display = 'none';
-            }, 500);
-        }, 1500);
+                loader.classList.add('hidden');
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 300); // Reduced from 1500ms to 300ms
+        }).catch(() => {
+            // Fallback: hide after maximum wait time
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 800); // Maximum 800ms wait
+        });
     }
 }
 
