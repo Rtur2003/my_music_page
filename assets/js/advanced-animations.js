@@ -1,6 +1,20 @@
 // Advanced Animation System for Music Portfolio
 // Modern animations with professional effects
 
+// Throttle utility for performance
+function throttle(func, limit) {
+    let inThrottle;
+    return function() {
+        const args = arguments;
+        const context = this;
+        if (!inThrottle) {
+            func.apply(context, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+        }
+    }
+}
+
 // Initialize advanced animations
 function initializeAdvancedAnimations() {
     // Intersection Observer for scroll-triggered animations
@@ -152,7 +166,7 @@ function initializeParallaxEffects() {
         heroImage.classList.add('parallax-element');
     }
     
-    window.addEventListener('scroll', () => {
+    window.addEventListener('scroll', throttle(() => {
         const scrolled = window.pageYOffset;
         const rate = scrolled * 0.5;
         
@@ -166,7 +180,7 @@ function initializeParallaxEffects() {
             const speed = 0.2 + (index * 0.1);
             note.style.transform = `translate3d(0, ${rate * speed}px, 0) rotate(${rate * 0.1}deg)`;
         });
-    });
+    }, 16)); // ~60fps throttling
 }
 
 // Smooth reveal animation for sections

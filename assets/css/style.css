@@ -48,6 +48,30 @@ html {
     font-size: 16px;
 }
 
+/* Performance optimizations */
+.parallax-element,
+.loader-logo,
+.loader-ring,
+.wave,
+.visualizer-bar {
+    will-change: transform;
+}
+
+.page-loader,
+.navbar,
+.artwork-overlay,
+.platform-link {
+    will-change: opacity;
+}
+
+/* Reduce repaints */
+img,
+.artwork-image,
+.hero-img {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
 body {
     font-family: 'Poppins', 'Segoe UI', sans-serif;
     background: var(--bg-primary);
