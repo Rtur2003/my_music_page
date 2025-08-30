@@ -694,6 +694,10 @@ section {
     overflow: hidden;
     max-width: 100%;
     word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+    min-height: 500px;
+    gap: 1.5rem;
 }
 
 .modern-player-card::before {
@@ -812,6 +816,10 @@ section {
 
 .player-info-section {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 200px;
 }
 
 .track-details {
@@ -863,6 +871,9 @@ section {
     display: flex;
     gap: 1rem;
     align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: auto;
 }
 
 .platform-link {
