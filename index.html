@@ -147,6 +147,15 @@
     <link rel="preload" href="assets/images/hero-musician-bg.jpg" as="image" type="image/jpeg">
     <link rel="preload" href="assets/images/hasan-arthur-profile.jpg?v=1.0" as="image" type="image/jpeg">
     
+    <!-- DNS prefetch for external resources -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    
+    <!-- Prefetch non-critical assets -->
+    <link rel="prefetch" href="assets/js/music-player.js?v=1.5.0">
+    <link rel="prefetch" href="assets/js/gallery.js?v=1.5.0">
+    <link rel="prefetch" href="assets/js/advanced-animations.js?v=1.5.0">
+    
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
@@ -779,6 +788,49 @@
     <script defer src="assets/js/music-player.js?v=1.5.0"></script>
     <script defer src="assets/js/gallery.js?v=1.5.0"></script>
     
+    <!-- Maintenance Mode Check -->
+    <script>
+        // Maintenance Mode Controller
+        const MaintenanceMode = {
+            isEnabled: true, // Set to false to disable maintenance mode
+            
+            checkBypass() {
+                if (!this.isEnabled) return true;
+                
+                const bypass = localStorage.getItem('maintenance_bypass');
+                const timestamp = localStorage.getItem('bypass_timestamp');
+                
+                if (bypass === 'true' && timestamp) {
+                    const now = Date.now();
+                    const bypassTime = parseInt(timestamp);
+                    const hoursPassed = (now - bypassTime) / (1000 * 60 * 60);
+                    
+                    // Bypass expires after 24 hours
+                    if (hoursPassed < 24) {
+                        console.log('🔓 Maintenance bypass active');
+                        return true;
+                    } else {
+                        // Clear expired bypass
+                        localStorage.removeItem('maintenance_bypass');
+                        localStorage.removeItem('bypass_timestamp');
+                    }
+                }
+                
+                return false;
+            },
+            
+            redirect() {
+                console.log('🔧 Redirecting to maintenance page');
+                window.location.href = 'maintenance.html';
+            }
+        };
+        
+        // Check maintenance mode before loading anything
+        if (!MaintenanceMode.checkBypass()) {
+            MaintenanceMode.redirect();
+        }
+    </script>
+
     <!-- Dynamic Content Loading -->
     <script>
         // Safe Storage Helper - Multi-level fallback system

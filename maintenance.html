@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bakım Modu - Hasan Arthur Altuntaş</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/logo-transparent.png">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-black: #000000;
+            --royal-black: #1a1a1a;
+            --royal-white: #ffffff;
+            --accent-gold: #c9a96e;
+            --soft-gray: #f8f9fa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--primary-black) 0%, var(--royal-black) 50%, var(--accent-gold) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--royal-white);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Background Animation */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+        
+        .floating-note {
+            position: absolute;
+            font-size: 2rem;
+            color: var(--accent-gold);
+            animation: float 8s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Main Container */
+        .maintenance-container {
+            text-align: center;
+            max-width: 600px;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .logo-section {
+            margin-bottom: 3rem;
+        }
+        
+        .logo-circle {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            animation: logoFloat 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(201, 169, 110, 0.6));
+        }
+        
+        .logo-ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 3px solid transparent;
+            border-top: 3px solid var(--accent-gold);
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+        }
+        
+        .brand-title {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            margin-bottom: 0.5rem;
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+        
+        .brand-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 3rem;
+        }
+        
+        /* Maintenance Message */
+        .maintenance-message {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(201, 169, 110, 0.3);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .maintenance-icon {
+            font-size: 4rem;
+            color: var(--accent-gold);
+            margin-bottom: 1.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .maintenance-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--royal-white);
+        }
+        
+        .maintenance-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+        }
+        
+        /* Progress Bar */
+        .progress-section {
+            margin-bottom: 2rem;
+        }
+        
+        .progress-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-gold), var(--royal-white));
+            border-radius: 10px;
+            animation: progressAnimation 4s ease-in-out infinite;
+        }
+        
+        /* Social Links */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .social-link {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(201, 169, 110, 0.2);
+            color: var(--accent-gold);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(201, 169, 110, 0.3);
+        }
+        
+        .social-link:hover {
+            background: var(--accent-gold);
+            color: var(--primary-black);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(201, 169, 110, 0.4);
+        }
+        
+        /* Bypass Section */
+        .bypass-section {
+            margin-top: 3rem;
+            opacity: 0.3;
+            transition: opacity 0.3s ease;
+        }
+        
+        .bypass-section:hover {
+            opacity: 1;
+        }
+        
+        .bypass-hint {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 0.5rem;
+        }
+        
+        .bypass-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(201, 169, 110, 0.3);
+            border-radius: 25px;
+            padding: 0.8rem 1.5rem;
+            color: var(--royal-white);
+            font-size: 0.9rem;
+            text-align: center;
+            width: 200px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .bypass-input:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 15px rgba(201, 169, 110, 0.3);
+        }
+        
+        /* Animations */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 20px rgba(201, 169, 110, 0.5); }
+            100% { text-shadow: 0 0 30px rgba(201, 169, 110, 0.8), 0 0 40px rgba(201, 169, 110, 0.4); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        @keyframes progressAnimation {
+            0% { width: 0%; }
+            25% { width: 30%; }
+            50% { width: 60%; }
+            75% { width: 85%; }
+            100% { width: 100%; }
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .maintenance-container {
+                padding: 1rem;
+            }
+            
+            .brand-title {
+                font-size: 2rem;
+                letter-spacing: 2px;
+            }
+            
+            .maintenance-title {
+                font-size: 1.8rem;
+            }
+            
+            .maintenance-message {
+                padding: 1.5rem;
+            }
+            
+            .logo-circle {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .logo-img {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation" id="bgAnimation"></div>
+    
+    <div class="maintenance-container">
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <div class="logo-circle">
+                <img src="assets/images/logo-main.png?v=1.0" alt="Logo" class="logo-img">
+                <div class="logo-ring"></div>
+            </div>
+            <h1 class="brand-title">HASAN ARTHUR</h1>
+            <p class="brand-subtitle">Müzik Portföyü</p>
+        </div>
+        
+        <!-- Maintenance Message -->
+        <div class="maintenance-message">
+            <div class="maintenance-icon">
+                <i class="fas fa-tools"></i>
+            </div>
+            <h2 class="maintenance-title">Site Bakımda</h2>
+            <p class="maintenance-description">
+                Müzik portföyümüzü sizler için daha iyi bir deneyim sunmak amacıyla güncelliyoruz. 
+                Kısa sürede gelişmiş özellikler ve yeni müziklerle geri döneceğiz.
+            </p>
+            
+            <!-- Progress Bar -->
+            <div class="progress-section">
+                <div class="progress-label">Güncelleme İlerliği</div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+            
+            <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem;">
+                <i class="fas fa-clock"></i> Tahmini süre: Birkaç saat
+            </p>
+        </div>
+        
+        <!-- Social Links -->
+        <div class="social-links">
+            <a href="#" class="social-link" title="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="social-link" title="YouTube">
+                <i class="fab fa-youtube"></i>
+            </a>
+            <a href="#" class="social-link" title="Spotify">
+                <i class="fab fa-spotify"></i>
+            </a>
+            <a href="#" class="social-link" title="Email">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
+        
+        <!-- Bypass Section (Hidden) -->
+        <div class="bypass-section">
+            <div class="bypass-hint">Test erişimi için kod girin</div>
+            <input type="password" class="bypass-input" placeholder="Erişim kodu" id="bypassCode">
+        </div>
+    </div>
+    
+    <script>
+        // Background Animation
+        function createFloatingNotes() {
+            const container = document.getElementById('bgAnimation');
+            const notes = ['♪', '♫', '♬', '♩', '♭', '♯'];
+            
+            setInterval(() => {
+                const note = document.createElement('div');
+                note.className = 'floating-note';
+                note.textContent = notes[Math.floor(Math.random() * notes.length)];
+                note.style.left = Math.random() * 100 + '%';
+                note.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                note.style.fontSize = (Math.random() * 1 + 1.5) + 'rem';
+                
+                container.appendChild(note);
+                
+                setTimeout(() => {
+                    if (note.parentNode) {
+                        note.parentNode.removeChild(note);
+                    }
+                }, 8000);
+            }, 1500);
+        }
+        
+        // Bypass System
+        document.getElementById('bypassCode').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const code = this.value.toLowerCase();
+                // Secret bypass codes
+                if (code === 'hasan123' || code === 'test2024' || code === 'bypass') {
+                    // Store bypass token
+                    localStorage.setItem('maintenance_bypass', 'true');
+                    localStorage.setItem('bypass_timestamp', Date.now().toString());
+                    
+                    // Redirect to main site
+                    window.location.href = 'index.html';
+                } else if (code.length > 0) {
+                    this.style.borderColor = '#dc2626';
+                    this.style.boxShadow = '0 0 15px rgba(220, 38, 38, 0.3)';
+                    this.value = '';
+                    this.placeholder = 'Hatalı kod!';
+                    
+                    setTimeout(() => {
+                        this.style.borderColor = 'rgba(201, 169, 110, 0.3)';
+                        this.style.boxShadow = 'none';
+                        this.placeholder = 'Erişim kodu';
+                    }, 2000);
+                }
+            }
+        });
+        
+        // Initialize
+        createFloatingNotes();
+        
+        console.log('🔧 Bakım modu aktif');
+        console.log('💡 Test erişimi: hasan123, test2024, bypass');
+    </script>
+</body>
+</html>
