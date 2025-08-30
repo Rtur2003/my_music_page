@@ -101,8 +101,62 @@ const PerformanceUtils = {
     }
 };
 
+// Lazy Loading Utility
+const LazyLoader = {
+    // Lazy load images
+    initLazyImages() {
+        const images = document.querySelectorAll('img[data-src]');
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    img.classList.remove('lazy');
+                    observer.unobserve(img);
+                }
+            });
+        }, {
+            rootMargin: '50px'
+        });
+        
+        images.forEach(img => imageObserver.observe(img));
+    },
+    
+    // Lazy load JavaScript modules
+    loadModule(src, callback) {
+        if (document.querySelector(`script[src="${src}"]`)) {
+            callback && callback();
+            return;
+        }
+        
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = true;
+        script.onload = callback;
+        document.head.appendChild(script);
+    },
+    
+    // Preload critical resources
+    preloadCritical() {
+        const criticalResources = [
+            'assets/images/hero-musician-bg.jpg',
+            'assets/images/hasan-arthur-profile.jpg'
+        ];
+        
+        criticalResources.forEach(href => {
+            const link = document.createElement('link');
+            link.rel = 'preload';
+            link.as = 'image';
+            link.href = href + '?v=1.0';
+            document.head.appendChild(link);
+        });
+    }
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
+    LazyLoader.initLazyImages();
+    LazyLoader.preloadCritical();
 });
 
 function initializeApp() {
