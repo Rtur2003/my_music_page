@@ -142,6 +142,9 @@
     
     <!-- Admin CSS only loads when needed, not on main site -->
     
+    <!-- Language System -->
+    <link rel="stylesheet" href="assets/css/language-toggle.css?v=1.0">
+    
     <!-- Prefetch critical images -->
     <link rel="preload" href="assets/images/logo-transparent.png" as="image" type="image/png">
     <link rel="preload" href="assets/images/hero-musician-bg.jpg" as="image" type="image/jpeg">
@@ -194,22 +197,22 @@
                 
                 <ul class="nav-menu" id="nav-menu">
                     <li class="nav-item">
-                        <a href="#home" class="nav-link active">Ana Sayfa</a>
+                        <a href="#home" class="nav-link active" data-translate="nav.home">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#about" class="nav-link">Hakkımda</a>
+                        <a href="#about" class="nav-link" data-translate="nav.about">About</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#music" class="nav-link">Müziklerim</a>
+                        <a href="#music" class="nav-link" data-translate="nav.music">Music</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#software" class="nav-link">Software</a>
+                        <a href="#software" class="nav-link" data-translate="nav.software">Software</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#gallery" class="nav-link">Galeri</a>
+                        <a href="#gallery" class="nav-link" data-translate="nav.gallery">Gallery</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#contact" class="nav-link">İletişim</a>
+                        <a href="#contact" class="nav-link" data-translate="nav.contact">Contact</a>
                     </li>
                 </ul>
                 
@@ -782,6 +785,9 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 
+    <!-- Language System (Load First) -->
+    <script src="assets/js/language-system.js?v=1.0"></script>
+    
     <script defer src="assets/js/advanced-animations.js?v=1.5.0"></script>
     <script defer src="assets/js/main.js?v=1.5.0"></script>
     <!-- <script src="assets/js/pwa-manager.js"></script> PWA disabled temporarily -->
