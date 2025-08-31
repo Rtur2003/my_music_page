@@ -1,0 +1,310 @@
+/* ===============================================
+   SECTION COMPONENTS WITH GLASS EFFECT
+   =============================================== */
+
+/* Apply glass effect to all main sections */
+.about,
+.music, 
+.software,
+.gallery,
+.contact {
+    margin: 4rem 0;
+    position: relative;
+}
+
+.about .container,
+.music .container,
+.software .container, 
+.gallery .container,
+.contact .container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Top border accent */
+.about .container::before,
+.music .container::before,
+.software .container::before,
+.gallery .container::before,
+.contact .container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(201, 169, 110, 0.6), 
+        transparent
+    );
+    border-radius: 1px;
+}
+
+/* Section-specific accents */
+.music .container::before {
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(108, 92, 231, 0.6), 
+        transparent
+    );
+}
+
+.software .container::before {
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(72, 187, 120, 0.6), 
+        transparent
+    );
+}
+
+.gallery .container::before {
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(245, 101, 101, 0.6), 
+        transparent
+    );
+}
+
+.contact .container::before {
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(99, 102, 241, 0.6), 
+        transparent
+    );
+}
+
+/* Section Headers Enhancement */
+.section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    position: relative;
+    padding-bottom: 2rem;
+}
+
+.section-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 60px;
+    height: 3px;
+    background: var(--accent-gold);
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 700;
+    color: var(--primary-black);
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+}
+
+.section-subtitle {
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    color: var(--accent-gold);
+    font-weight: 500;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Content Spacing */
+.section-content {
+    margin-top: 3rem;
+}
+
+/* Music Section Special Styling */
+.music .container {
+    background: rgba(248, 250, 255, 0.95);
+    border: 1px solid rgba(108, 92, 231, 0.1);
+}
+
+.music-player-main {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 2rem;
+    margin: 3rem 0;
+    border: 1px solid rgba(108, 92, 231, 0.1);
+    box-shadow: 0 4px 20px rgba(108, 92, 231, 0.1);
+}
+
+/* Gallery Section */
+.gallery .container {
+    background: rgba(255, 248, 250, 0.95);
+    border: 1px solid rgba(245, 101, 101, 0.1);
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+/* Software Section */
+.software .container {
+    background: rgba(248, 255, 248, 0.95);
+    border: 1px solid rgba(72, 187, 120, 0.1);
+}
+
+/* Contact Section */
+.contact .container {
+    background: rgba(249, 250, 255, 0.95);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+/* About Section Special Layout */
+.about-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    margin-top: 3rem;
+}
+
+.about-image {
+    position: relative;
+}
+
+.about-img {
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    transition: var(--transition);
+}
+
+.about-img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.about-text h3 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--primary-black);
+    margin-bottom: 1.5rem;
+}
+
+.about-text p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: rgba(0, 0, 0, 0.7);
+    margin-bottom: 1.5rem;
+}
+
+/* Empty States */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: rgba(248, 249, 250, 0.5);
+    border-radius: 16px;
+    border: 2px dashed rgba(201, 169, 110, 0.3);
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: rgba(201, 169, 110, 0.4);
+    margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .about .container,
+    .music .container,
+    .software .container,
+    .gallery .container,
+    .contact .container {
+        margin: 2rem 1rem;
+        padding: 3rem 1.5rem;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(10px);
+    }
+    
+    .section-header {
+        margin-bottom: 3rem;
+        padding-bottom: 1.5rem;
+    }
+    
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .about .container,
+    .music .container,
+    .software .container,
+    .gallery .container,
+    .contact .container {
+        margin: 1rem 0.5rem;
+        padding: 2rem 1rem;
+    }
+    
+    .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+/* Performance optimizations */
+.section-container {
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .about .container,
+    .music .container,
+    .software .container,
+    .gallery .container,
+    .contact .container {
+        background: rgba(26, 26, 46, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+    }
+    
+    .section-title {
+        color: #ffffff;
+    }
+    
+    .about-text p {
+        color: rgba(255, 255, 255, 0.8);
+    }
+}
