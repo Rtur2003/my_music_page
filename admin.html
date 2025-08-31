@@ -14,46 +14,6 @@
     <!-- Admin Security Check -->
     <script>
         // Safe Storage Helper (needed for admin security)
-        const SafeStorage = {
-            memoryStorage: new Map(),
-            getItem(key) {
-                try {
-                    return localStorage.getItem(key);
-                } catch (e) {
-                    try {
-                        return sessionStorage.getItem(key);
-                    } catch (e2) {
-                        return this.memoryStorage.get(key) || null;
-                    }
-                }
-            },
-            setItem(key, value) {
-                try {
-                    localStorage.setItem(key, value);
-                    return true;
-                } catch (e) {
-                    try {
-                        sessionStorage.setItem(key, value);
-                        return true;
-                    } catch (e2) {
-                        this.memoryStorage.set(key, value);
-                        return true;
-                    }
-                }
-            },
-            removeItem(key) {
-                try {
-                    localStorage.removeItem(key);
-                } catch (e) {
-                    try {
-                        sessionStorage.removeItem(key);
-                    } catch (e2) {
-                        this.memoryStorage.delete(key);
-                    }
-                }
-            }
-        };
-        
         // Validate admin session
         function validateAdminSession() {
             const session = SafeStorage.getItem('admin_session');
