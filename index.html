@@ -799,8 +799,17 @@
     <!-- Admin Security (Hidden) -->
     <script defer src="assets/js/admin/security.js?v=2.0.0"></script>
     
+    <!-- Data & API Systems -->
+    <script defer src="assets/js/data/api-fallback.js?v=2.0.0"></script>
+    
+    <!-- Content Manager -->
+    <script defer src="assets/js/admin/content-manager.js?v=2.0.0"></script>
+    
     <!-- Professional Enhancements -->
     <script defer src="assets/js/enhancements/professional.js?v=2.0.0"></script>
+    
+    <!-- Legacy Code Cleanup -->
+    <script defer src="assets/js/legacy/cleanup.js?v=2.0.0"></script>
     
     <!-- Maintenance Mode Check -->
     <script>
@@ -845,11 +854,7 @@
         }
     </script>
 
-    <!-- Dynamic Content Loading -->
-    <script>
-        // Safe Storage Helper - Multi-level fallback system
-        const SafeStorage = {
-            memoryStorage: new Map(),
+    <!-- Dynamic Content Loading handled by modular system -->
             
             getItem(key) {
                 try {

@@ -1,0 +1,15 @@
+{
+    "version": "1.0.0",
+    "lastUpdated": "2024-12-21T12:00:00Z",
+    "images": [
+        {
+            "id": "demo-image-1",
+            "title": "Studio Session",
+            "url": "assets/images/hasan-arthur-profile.jpg",
+            "category": "studio",
+            "description": "Recording session for latest composition",
+            "dateAdded": "2024-12-21T12:00:00Z",
+            "isActive": true
+        }
+    ]
+}
