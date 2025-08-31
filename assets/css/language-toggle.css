@@ -78,33 +78,61 @@
     }
 }
 
-/* Navigation integration */
+/* Navigation integration - FIXED POSITIONING */
 .nav-container {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.navbar .language-toggle {
-    position: absolute;
+/* Language toggle positioned properly */
+.language-toggle {
+    position: fixed;
+    top: 2rem;
     right: 2rem;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
+    z-index: 1001;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(201, 169, 110, 0.3);
+}
+
+/* Alternative: In navbar but properly positioned */
+.navbar .language-toggle {
+    position: relative;
+    margin-left: 2rem;
+    background: rgba(255, 255, 255, 0.9);
+    order: 10; /* Ensure it's at the end */
 }
 
 /* Mobile menu integration */
 @media (max-width: 768px) {
+    .language-toggle {
+        top: 1rem;
+        right: 1rem;
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+    }
+    
     .navbar .language-toggle {
         position: static;
         transform: none;
-        margin: 0.5rem 1rem;
-        align-self: flex-end;
+        margin: 1rem;
+        order: -1;
+        align-self: center;
+        background: rgba(255, 255, 255, 0.95);
+        border-bottom: 1px solid rgba(201, 169, 110, 0.2);
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
     }
     
+    /* Mobile menu'de dil seçici */
     .nav-menu.active .language-toggle {
-        order: -1;
-        margin-bottom: 1rem;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        padding-bottom: 1rem;
+        display: flex;
+        justify-content: center;
+        width: fit-content;
+        margin: 0 auto 1.5rem;
     }
 }
 
