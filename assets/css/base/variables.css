@@ -1,0 +1,33 @@
+/* ===============================================
+   CSS VARIABLES & BASE DESIGN SYSTEM
+   =============================================== */
+
+:root {
+    /* ELEGANT ROYAL PALETTE */
+    --primary-black: #000000;
+    --royal-black: #1a1a1a;
+    --royal-white: #ffffff;
+    --soft-gray: #f8f9fa;
+    --accent-gold: #c9a96e;
+    
+    /* BACKGROUNDS */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-dark: #000000;
+    --bg-card: #ffffff;
+    
+    /* SUBTLE GRADIENTS */
+    --gold-accent: linear-gradient(135deg, #c9a96e 0%, #b8956a 100%);
+    --dark-gradient: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+    --light-gradient: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    
+    /* REFINED SHADOWS */
+    --shadow-subtle: 0 2px 12px rgba(0, 0, 0, 0.08);
+    --shadow-medium: 0 4px 20px rgba(0, 0, 0, 0.12);
+    --shadow-strong: 0 8px 40px rgba(0, 0, 0, 0.15);
+    
+    /* SPACING & TRANSITIONS */
+    --radius: 8px;
+    --radius-lg: 16px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
