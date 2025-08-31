@@ -8,7 +8,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: var(--dark-gradient);
+    background: #000000;
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -23,9 +24,11 @@
 
 .loader-container {
     text-align: center;
-    color: var(--royal-white);
+    color: #ffffff;
     max-width: 400px;
     padding: 2rem;
+    position: relative;
+    z-index: 1;
 }
 
 .logo-loader {
@@ -62,8 +65,8 @@
     width: 100%;
     height: 100%;
     border: 3px solid transparent;
-    border-top: 3px solid var(--accent-gold);
-    border-right: 3px solid var(--accent-gold);
+    border-top: 3px solid #c9a96e;
+    border-right: 3px solid #c9a96e;
     border-radius: 50%;
     animation: spin 2s linear infinite;
 }
@@ -83,7 +86,7 @@
 
 .wave {
     width: 4px;
-    background: var(--accent-gold);
+    background: #c9a96e;
     border-radius: 2px;
     animation: wave 1.5s ease-in-out infinite;
 }
@@ -132,7 +135,7 @@
 
 .progress-bar {
     height: 100%;
-    background: var(--accent-gold);
+    background: #c9a96e;
     border-radius: 2px;
     animation: progress 3s ease-out forwards;
     position: relative;
