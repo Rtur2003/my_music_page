@@ -41,7 +41,14 @@
 /* CSS custom properties fallback */
 @supports not (color: var(--primary-color)) {
     :root {
-        /* Fallback colors for browsers that don't support CSS variables */
+        --admin-bg: #f8f9fa;
+        --admin-text: #343a40;
+        --admin-border: #dee2e6;
+        --admin-primary: #6c5ce7;
+        --admin-secondary: #74b9ff;
+        --admin-success: #00b894;
+        --admin-warning: #fdcb6e;
+        --admin-danger: #e17055;
     }
     
     .btn-primary {
