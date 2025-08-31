@@ -665,22 +665,51 @@
             handleTrackSubmission(event) {
                 event.preventDefault();
                 
+                // Defensive element checking
+                const trackTitleEl = document.getElementById('trackTitle');
+                if (!trackTitleEl) {
+                    console.error('Track title element not found');
+                    return;
+                }
+                
+                // Collect all form elements safely
+                const elements = {
+                    title: document.getElementById('trackTitle'),
+                    artist: document.getElementById('artistName'),
+                    genre: document.getElementById('trackGenre'),
+                    duration: document.getElementById('trackDuration'),
+                    albumCover: document.getElementById('albumCover'),
+                    spotifyUrl: document.getElementById('spotifyUrl'),
+                    youtubeUrl: document.getElementById('youtubeUrl'),
+                    appleUrl: document.getElementById('appleUrl'),
+                    soundcloudUrl: document.getElementById('soundcloudUrl'),
+                    description: document.getElementById('trackDescription')
+                };
+                
+                // Check if all required elements exist
+                const missing = Object.keys(elements).filter(key => !elements[key]);
+                if (missing.length > 0) {
+                    console.error('Missing form elements:', missing);
+                    this.showNotification('Form elementi bulunamadı: ' + missing.join(', '), 'error');
+                    return;
+                }
+                
                 const trackData = {
-                    title: document.getElementById('trackTitle').value,
-                    artist: document.getElementById('artistName').value,
-                    genre: document.getElementById('trackGenre').value,
-                    duration: document.getElementById('trackDuration').value || '3:45',
-                    albumCover: document.getElementById('albumCover').value,
-                    spotifyUrl: document.getElementById('spotifyUrl').value,
-                    youtubeUrl: document.getElementById('youtubeUrl').value,
-                    appleUrl: document.getElementById('appleUrl').value,
-                    soundcloudUrl: document.getElementById('soundcloudUrl').value,
-                    description: document.getElementById('trackDescription').value,
+                    title: elements.title.value,
+                    artist: elements.artist.value,
+                    genre: elements.genre.value,
+                    duration: elements.duration.value || '3:45',
+                    albumCover: elements.albumCover.value,
+                    spotifyUrl: elements.spotifyUrl.value,
+                    youtubeUrl: elements.youtubeUrl.value,
+                    appleUrl: elements.appleUrl.value,
+                    soundcloudUrl: elements.soundcloudUrl.value,
+                    description: elements.description.value,
                     platforms: {
-                        spotify: document.getElementById('spotifyUrl').value,
-                        youtube: document.getElementById('youtubeUrl').value,
-                        appleMusic: document.getElementById('appleUrl').value,
-                        soundcloud: document.getElementById('soundcloudUrl').value
+                        spotify: elements.spotifyUrl.value,
+                        youtube: elements.youtubeUrl.value,
+                        appleMusic: elements.appleUrl.value,
+                        soundcloud: elements.soundcloudUrl.value
                     },
                     timestamp: new Date().toISOString()
                 };
