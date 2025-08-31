@@ -1,0 +1,319 @@
+/* ===============================================
+   MUSIC PLAYER COMPONENT
+   =============================================== */
+
+.music-player-main {
+    margin: 3rem 0;
+    padding: 2rem;
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-medium);
+}
+
+.modern-player-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+.player-artwork-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.artwork-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-medium);
+}
+
+.artwork-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.artwork-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.artwork-container:hover .artwork-overlay {
+    opacity: 1;
+}
+
+.main-play-button {
+    width: 60px;
+    height: 60px;
+    background: var(--accent-gold);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--royal-white);
+    font-size: 1.5rem;
+    transition: var(--transition);
+    cursor: pointer;
+    box-shadow: var(--shadow-medium);
+}
+
+.main-play-button:hover {
+    background: linear-gradient(135deg, #b8956a 0%, #a8855a 100%);
+    transform: scale(1.1);
+}
+
+.vinyl-effect {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    background: var(--primary-black);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.3;
+}
+
+.audio-visualizer {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    gap: 3px;
+    height: 40px;
+}
+
+.visualizer-bar {
+    width: 4px;
+    background: var(--accent-gold);
+    border-radius: 2px;
+    transition: var(--transition);
+    animation: visualizer 1.5s ease-in-out infinite;
+}
+
+.visualizer-bar:nth-child(1) { animation-delay: 0s; }
+.visualizer-bar:nth-child(2) { animation-delay: 0.1s; }
+.visualizer-bar:nth-child(3) { animation-delay: 0.2s; }
+.visualizer-bar:nth-child(4) { animation-delay: 0.3s; }
+.visualizer-bar:nth-child(5) { animation-delay: 0.4s; }
+.visualizer-bar:nth-child(6) { animation-delay: 0.5s; }
+
+@keyframes visualizer {
+    0%, 40%, 100% {
+        height: 8px;
+        opacity: 0.5;
+    }
+    20% {
+        height: 40px;
+        opacity: 1;
+    }
+}
+
+.player-info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.track-details {
+    flex: 1;
+}
+
+.modern-track-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--primary-black);
+}
+
+.modern-track-artist {
+    font-size: 1rem;
+    color: var(--accent-gold);
+    margin-bottom: 1rem;
+}
+
+.track-metadata {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.track-genre,
+.track-duration {
+    padding: 0.25rem 0.75rem;
+    background: rgba(201, 169, 110, 0.1);
+    border-radius: var(--radius);
+    font-size: 0.85rem;
+    color: var(--primary-black);
+}
+
+.platform-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.platform-link {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--royal-white);
+    font-size: 1.2rem;
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+.spotify-link { background: #1DB954; }
+.youtube-link { background: #FF0000; }
+.apple-link { background: #000000; }
+.soundcloud-link { background: #FF5500; }
+
+.platform-link:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-medium);
+}
+
+.music-catalog {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.music-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-subtle);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.music-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-strong);
+}
+
+.music-card-image {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.music-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.music-card:hover .music-card-image img {
+    transform: scale(1.05);
+}
+
+.music-card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.music-card:hover .music-card-overlay {
+    opacity: 1;
+}
+
+.music-card-info {
+    padding: 1.5rem;
+}
+
+.music-card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--primary-black);
+}
+
+.music-card-artist {
+    color: var(--accent-gold);
+    margin-bottom: 1rem;
+}
+
+.music-card-genre {
+    font-size: 0.85rem;
+    color: var(--primary-black);
+    opacity: 0.7;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .music-player-main {
+        padding: 1rem;
+        margin: 2rem 0;
+    }
+    
+    .modern-player-card {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        text-align: center;
+    }
+    
+    .artwork-container {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .platform-links {
+        justify-content: center;
+    }
+    
+    .music-catalog {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .artwork-container {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .main-play-button {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+    
+    .platform-link {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+}
