@@ -11,6 +11,93 @@
     <link rel="stylesheet" href="assets/css/admin.css">
 </head>
 <body>
+    <!-- Admin Security Check -->
+    <script>
+        // Safe Storage Helper (needed for admin security)
+        const SafeStorage = {
+            memoryStorage: new Map(),
+            getItem(key) {
+                try {
+                    return localStorage.getItem(key);
+                } catch (e) {
+                    try {
+                        return sessionStorage.getItem(key);
+                    } catch (e2) {
+                        return this.memoryStorage.get(key) || null;
+                    }
+                }
+            },
+            setItem(key, value) {
+                try {
+                    localStorage.setItem(key, value);
+                    return true;
+                } catch (e) {
+                    try {
+                        sessionStorage.setItem(key, value);
+                        return true;
+                    } catch (e2) {
+                        this.memoryStorage.set(key, value);
+                        return true;
+                    }
+                }
+            },
+            removeItem(key) {
+                try {
+                    localStorage.removeItem(key);
+                } catch (e) {
+                    try {
+                        sessionStorage.removeItem(key);
+                    } catch (e2) {
+                        this.memoryStorage.delete(key);
+                    }
+                }
+            }
+        };
+        
+        // Validate admin session
+        function validateAdminSession() {
+            const session = SafeStorage.getItem('admin_session');
+            const expiry = SafeStorage.getItem('admin_session_expiry');
+            
+            if (!session || !expiry) {
+                redirectToMain();
+                return false;
+            }
+            
+            if (Date.now() > parseInt(expiry)) {
+                clearAdminSession();
+                redirectToMain();
+                return false;
+            }
+            
+            // Validate token in URL if present
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlToken = urlParams.get('token');
+            
+            if (urlToken && urlToken !== session) {
+                redirectToMain();
+                return false;
+            }
+            
+            return true;
+        }
+        
+        function clearAdminSession() {
+            SafeStorage.removeItem('admin_session');
+            SafeStorage.removeItem('admin_session_expiry');
+        }
+        
+        function redirectToMain() {
+            clearAdminSession();
+            window.location.href = 'index.html';
+        }
+        
+        // Check session before allowing access to admin panel
+        if (!validateAdminSession()) {
+            // Will redirect, so stop execution here
+        }
+    </script>
+    
     <!-- Authentication Screen -->
     <div id="authScreen" class="auth-wrapper">
         <div class="auth-container">

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Hasan Arthur Altuntaş - Profesyonel müzisyen, prodüktör ve piyanist. Sinematik ve enstrümantal müzikler ile duyguları harmanlıyor. En yeni eserlerimi dinleyin, müzik yolculuğumu keşfedin.">
-    <meta name="keywords" content="Hasan Arthur Altuntaş, müzik, sanatçı, şarkı, albüm, müzik yapımcısı, konser, stüdyo, prodüktör, piyano, enstrümantal, sinematik müzik">
+    <meta name="description" content="Hasan Arthur Altuntaş - Professional musician, producer & composer. Experience cinematic and instrumental music that tells stories through the universal language of sound. Discover original compositions, behind-the-scenes content, and musical journey.">
+    <meta name="keywords" content="Hasan Arthur Altuntaş, musician, composer, producer, cinematic music, instrumental, piano, music portfolio, original compositions, film score, soundtrack, audio production">
     <meta name="author" content="Hasan Arthur Altuntaş">
     <meta name="robots" content="index, follow">
-    <meta name="language" content="Turkish">
+    <meta name="language" content="English">
     <meta name="revisit-after" content="7 days">
     <meta name="rating" content="General">
     
@@ -125,7 +125,7 @@
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     
     <!-- Critical CSS - load synchronously -->
-    <link rel="stylesheet" href="assets/css/style.css?v=1.5.0">
+    <link rel="stylesheet" href="assets/css/main.css?v=2.0.0">
     
     <!-- Non-critical CSS - async load -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -145,6 +145,10 @@
     <!-- Language System -->
     <link rel="stylesheet" href="assets/css/language-toggle.css?v=1.0">
     
+    <!-- Admin Security (Hidden) -->
+    <link rel="preload" href="assets/css/admin/security.css?v=2.0.0" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="assets/css/admin/security.css?v=2.0.0"></noscript>
+    
     <!-- Prefetch critical images -->
     <link rel="preload" href="assets/images/logo-transparent.png" as="image" type="image/png">
     <link rel="preload" href="assets/images/hero-musician-bg.jpg" as="image" type="image/jpeg">
@@ -155,9 +159,12 @@
     <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
     
     <!-- Prefetch non-critical assets -->
+    <link rel="prefetch" href="assets/js/utils/storage.js?v=2.0.0">
+    <link rel="prefetch" href="assets/js/utils/performance.js?v=2.0.0">
+    <link rel="prefetch" href="assets/js/components/animations.js?v=2.0.0">
+    <link rel="prefetch" href="assets/js/main-modular.js?v=2.0.0">
     <link rel="prefetch" href="assets/js/music-player.js?v=1.5.0">
     <link rel="prefetch" href="assets/js/gallery.js?v=1.5.0">
-    <link rel="prefetch" href="assets/js/advanced-animations.js?v=1.5.0">
     
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
@@ -178,7 +185,7 @@
                 </div>
             </div>
             <h2 class="loader-title">HASAN ARTHUR</h2>
-            <p class="loader-subtitle">Müzik portföyü yükleniyor...</p>
+            <p class="loader-subtitle" data-translate="loading.portfolio">Music portfolio loading...</p>
             <div class="loading-progress">
                 <div class="progress-bar"></div>
             </div>
@@ -241,22 +248,19 @@
             <div class="hero-content">
                 <div class="container">
                     <div class="hero-text">
-                        <h1 class="hero-title">
-                            <span class="title-line">Müziğin</span>
-                            <span class="title-line highlight">Büyülü Dünyası</span>
-                        </h1>
-                        <p class="hero-description">
-                            Tutkuyla yarattığım müziklerle duyguları harmanlıyor, 
-                            her notada hikayeler anlatıyorum.
+                        <h1 class="hero-title" data-translate="hero.title">HASAN ARTHUR ALTUNTAŞ</h1>
+                        <h2 class="hero-subtitle" data-translate="hero.subtitle">Professional Musician & Producer</h2>
+                        <p class="hero-description" data-translate="hero.description">
+                            Crafting cinematic and instrumental music that tells stories through universal language of sound. Each note carries emotion, every melody holds a memory.
                         </p>
                         <div class="hero-buttons">
                             <a href="#music" class="btn btn-primary modern-btn stagger-animation stagger-1">
                                 <i class="fas fa-play"></i>
-                                Müzikleri Dinle
+                                <span data-translate="hero.listen">Listen to Music</span>
                             </a>
                             <a href="#about" class="btn btn-secondary modern-btn stagger-animation stagger-2">
                                 <i class="fas fa-user"></i>
-                                Hakkımda
+                                <span data-translate="hero.contact">Get in Touch</span>
                             </a>
                         </div>
                     </div>
@@ -274,15 +278,15 @@
                 <div class="mouse">
                     <div class="wheel"></div>
                 </div>
-                <p>Aşağı kaydır</p>
+                <p data-translate="ui.scroll">Scroll down</p>
             </div>
         </section>
 
         <section class="about" id="about">
             <div class="container">
                 <div class="section-header">
-                    <h2 class="section-title">About Me</h2>
-                    <p class="section-subtitle">My passion for music and journey</p>
+                    <h2 class="section-title" data-translate="about.title">About Me</h2>
+                    <p class="section-subtitle" data-translate="about.subtitle">Musical Journey & Vision</p>
                 </div>
                 
                 <div class="about-content">
@@ -290,45 +294,32 @@
                         <img src="assets/images/hasan-arthur-profile.jpg?v=1.0" alt="Hasan Arthur Altuntaş - Profesyonel Müzisyen ve Prodüktör" class="about-img professional-hover" width="600" height="400" loading="lazy">
                         <div class="experience-badge stagger-animation stagger-3">
                             <span class="years">5+</span>
-                            <span class="text">Years Experience</span>
+                            <span class="text" data-translate="about.years">Years Experience</span>
                         </div>
                     </div>
                     
                     <div class="about-text slide-from-right animate-on-scroll">
-                        <h3>My Musical Journey</h3>
-                        <p>
-                            My passion for music began during my childhood years. Every note, every melody 
-                            tells a story for me. Over the years, I have developed myself by creating 
-                            music in different genres.
-                        </p>
-                        <p>
-                            I started playing piano during my high school years and became self-taught, 
-                            eventually evolving into music production. I now create instrumental melodic 
-                            music, specializing in cinematic compositions and my own interpretations of 
-                            film soundtracks.
-                        </p>
-                        <p>
-                            My goal is not just to make music, but to touch people's hearts and souls. 
-                            I strive to create an emotional connection with my listeners by leaving a 
-                            piece of my heart in every composition.
+                        <h3 data-translate="about.subtitle">Musical Journey & Vision</h3>
+                        <p data-translate="about.text">
+                            I tell stories in the universal language of music. Every note is an emotion, every melody is a memory. In the world of cinematic and instrumental music, I express myself while taking listeners on an emotional journey.
                         </p>
                         
                         <div class="skills">
                             <div class="skill-item">
                                 <i class="fas fa-music"></i>
-                                <span>Piano</span>
+                                <span data-translate="skills.instruments">Multi-Instrumentalist</span>
                             </div>
                             <div class="skill-item">
                                 <i class="fas fa-sliders-h"></i>
-                                <span>Music Production</span>
+                                <span data-translate="skills.production">Music Production</span>
                             </div>
                             <div class="skill-item">
                                 <i class="fas fa-film"></i>
-                                <span>Cinematic Music</span>
+                                <span data-translate="skills.composition">Music Composition</span>
                             </div>
                             <div class="skill-item">
                                 <i class="fas fa-headphones"></i>
-                                <span>Composition</span>
+                                <span data-translate="skills.mixing">Mixing & Mastering</span>
                             </div>
                         </div>
                     </div>
@@ -339,8 +330,8 @@
         <section class="music" id="music">
             <div class="container">
                 <div class="section-header">
-                    <h2 class="section-title">Müziklerim</h2>
-                    <p class="section-subtitle">En sevilen eserlerimi dinleyin</p>
+                    <h2 class="section-title" data-translate="music.title">My Music</h2>
+                    <p class="section-subtitle" data-translate="music.subtitle">Listen to my latest compositions</p>
                 </div>
                 
                 <!-- Modern Spotify-Style Music Player -->
@@ -348,9 +339,9 @@
                     <div class="modern-player-card">
                         <div class="player-artwork-section">
                             <div class="artwork-container">
-                                <img src="assets/images/logo-main.png?v=1.0" alt="Şu an çalan şarkı" id="currentArtwork" class="artwork-image" width="200" height="200" loading="lazy">
+                                <img src="assets/images/logo-main.png?v=1.0" alt="Current playing track" id="currentArtwork" class="artwork-image" width="200" height="200" loading="lazy">
                                 <div class="artwork-overlay">
-                                    <button class="main-play-button" id="mainPlayBtn" aria-label="Oynat/Durdur">
+                                    <button class="main-play-button" id="mainPlayBtn" aria-label="Play/Pause">
                                         <i class="fas fa-play" id="mainPlayIcon"></i>
                                     </button>
                                 </div>
@@ -369,8 +360,8 @@
                         
                         <div class="player-info-section">
                             <div class="track-details">
-                                <h3 class="modern-track-title" id="modernTrackTitle">Bir şarkı seçin</h3>
-                                <p class="modern-track-artist" id="modernTrackArtist">Hasan Arthur Altuntaş</p>
+                                <h3 class="modern-track-title" id="modernTrackTitle" data-translate="music.player.select">Select a track</h3>
+                                <p class="modern-track-artist" id="modernTrackArtist" data-translate="music.player.artist">Hasan Arthur Altuntaş</p>
                                 <div class="track-metadata">
                                     <span class="track-genre" id="trackGenre">Pop</span>
                                     <span class="track-duration" id="trackDuration">3:45</span>
@@ -378,16 +369,16 @@
                             </div>
                             
                             <div class="platform-links" id="platformLinks">
-                                <a href="#" class="platform-link spotify-link" id="spotifyLink" target="_blank" rel="noopener" title="Spotify'da dinle">
+                                <a href="#" class="platform-link spotify-link" id="spotifyLink" target="_blank" rel="noopener" data-translate="music.player.spotify" title="Listen on Spotify">
                                     <i class="fab fa-spotify"></i>
                                 </a>
-                                <a href="#" class="platform-link youtube-link" id="youtubeLink" target="_blank" rel="noopener" title="YouTube'da izle">
+                                <a href="#" class="platform-link youtube-link" id="youtubeLink" target="_blank" rel="noopener" data-translate="music.player.youtube" title="Watch on YouTube">
                                     <i class="fab fa-youtube"></i>
                                 </a>
-                                <a href="#" class="platform-link apple-link" id="appleLink" target="_blank" rel="noopener" title="Apple Music'te dinle">
+                                <a href="#" class="platform-link apple-link" id="appleLink" target="_blank" rel="noopener" data-translate="music.player.apple" title="Listen on Apple Music">
                                     <i class="fab fa-apple"></i>
                                 </a>
-                                <a href="#" class="platform-link soundcloud-link" id="soundcloudLink" target="_blank" rel="noopener" title="SoundCloud'da dinle">
+                                <a href="#" class="platform-link soundcloud-link" id="soundcloudLink" target="_blank" rel="noopener" data-translate="music.player.soundcloud" title="Listen on SoundCloud">
                                     <i class="fab fa-soundcloud"></i>
                                 </a>
                             </div>
@@ -455,18 +446,18 @@
         <section class="software" id="software">
             <div class="container">
                 <div class="section-header">
-                    <h2 class="section-title">Software Development</h2>
-                    <p class="section-subtitle">Code, creativity, and innovation</p>
+                    <h2 class="section-title" data-translate="software.title">Software Projects</h2>
+                    <p class="section-subtitle" data-translate="software.subtitle">Where creativity meets technology</p>
                 </div>
                 
                 <div class="software-content">
                     <div class="software-intro">
                         <div class="software-text">
-                            <h3>Full-Stack Developer & Tech Enthusiast</h3>
-                            <p>Beyond music, I'm passionate about creating digital solutions that make a difference. I specialize in modern web technologies, mobile development, and innovative software solutions.</p>
+                            <h3 data-translate="software.subtitle">Where creativity meets technology</h3>
+                            <p data-translate="software.description">As a musician and developer, I create innovative software solutions for the music industry. From audio processing tools to music production applications.</p>
                             
                             <div class="tech-stack">
-                                <h4>Tech Stack</h4>
+                                <h4 data-translate="software.technologies">Technologies Used</h4>
                                 <div class="tech-icons">
                                     <div class="tech-item">
                                         <i class="fab fa-js-square"></i>
@@ -600,22 +591,22 @@
         <section class="gallery" id="gallery">
             <div class="container">
                 <div class="section-header">
-                    <h2 class="section-title">Galeri</h2>
-                    <p class="section-subtitle">Müzik yolculuğumdan kareler</p>
+                    <h2 class="section-title" data-translate="gallery.title">Gallery</h2>
+                    <p class="section-subtitle" data-translate="gallery.subtitle">Behind the scenes & live performances</p>
                 </div>
                 
                 <div class="gallery-filter">
-                    <button class="filter-btn active" data-filter="all">Tümü</button>
-                    <button class="filter-btn" data-filter="concerts">Konserler</button>
-                    <button class="filter-btn" data-filter="studio">Stüdyo</button>
-                    <button class="filter-btn" data-filter="behind-scenes">Sahne Arkası</button>
+                    <button class="filter-btn active" data-filter="all" data-translate="gallery.all">All</button>
+                    <button class="filter-btn" data-filter="concerts" data-translate="gallery.live">Live Performance</button>
+                    <button class="filter-btn" data-filter="studio" data-translate="gallery.studio">Studio Work</button>
+                    <button class="filter-btn" data-filter="behind-scenes" data-translate="gallery.behind">Behind Scenes</button>
                 </div>
                 
                 <div class="gallery-grid" id="galleryGrid">
                     <div class="empty-state">
                         <i class="fas fa-images"></i>
-                        <h3>Henüz fotoğraf eklenmedi</h3>
-                        <p>Admin panelinden galeri resimlerini ekleyebilirsiniz</p>
+                        <h3 data-translate="gallery.loading">No images have been added yet</h3>
+                        <p>You can add gallery images from the admin panel</p>
                     </div>
                 </div>
             </div>
@@ -624,20 +615,20 @@
         <section class="contact" id="contact">
             <div class="container">
                 <div class="section-header">
-                    <h2 class="section-title">İletişim</h2>
-                    <p class="section-subtitle">Benimle iletişime geçin</p>
+                    <h2 class="section-title" data-translate="contact.title">Get in Touch</h2>
+                    <p class="section-subtitle" data-translate="contact.subtitle">Let's create something amazing together</p>
                 </div>
                 
                 <div class="contact-content">
                     <div class="contact-info">
-                        <h3>Bana Ulaşın</h3>
-                        <p>Müzik projeleri, işbirlikleri veya genel sorularınız için bana ulaşabilirsiniz.</p>
+                        <h3 data-translate="contact.title">Get in Touch</h3>
+                        <p data-translate="contact.description">Ready to collaborate on your next project? Whether it's music production, composition, or software development, I'd love to hear from you.</p>
                         
                         <div class="contact-items">
                             <div class="contact-item">
                                 <i class="fas fa-envelope"></i>
                                 <div>
-                                    <h4>E-posta</h4>
+                                    <h4 data-translate="contact.email">Your Email</h4>
                                     <p>info@muzikportfoyu.com</p>
                                 </div>
                             </div>
@@ -645,7 +636,7 @@
                             <div class="contact-item">
                                 <i class="fas fa-phone"></i>
                                 <div>
-                                    <h4>Telefon</h4>
+                                    <h4>Phone</h4>
                                     <p>+90 555 123 45 67</p>
                                 </div>
                             </div>
@@ -653,7 +644,7 @@
                             <div class="contact-item">
                                 <i class="fas fa-map-marker-alt"></i>
                                 <div>
-                                    <h4>Konum</h4>
+                                    <h4>Location</h4>
                                     <p>İstanbul, Türkiye</p>
                                 </div>
                             </div>
@@ -680,28 +671,28 @@
                     
                     <form class="contact-form" id="contactForm">
                         <div class="form-group">
-                            <label for="name">Ad Soyad</label>
+                            <label for="name" data-translate="contact.name">Your Name</label>
                             <input type="text" id="name" name="name" required>
                         </div>
                         
                         <div class="form-group">
-                            <label for="email">E-posta</label>
+                            <label for="email" data-translate="contact.email">Your Email</label>
                             <input type="email" id="email" name="email" required>
                         </div>
                         
                         <div class="form-group">
-                            <label for="subject">Konu</label>
+                            <label for="subject" data-translate="contact.subject">Subject</label>
                             <input type="text" id="subject" name="subject" required>
                         </div>
                         
                         <div class="form-group">
-                            <label for="message">Mesaj</label>
+                            <label for="message" data-translate="contact.message">Your Message</label>
                             <textarea id="message" name="message" rows="5" required></textarea>
                         </div>
                         
                         <button type="submit" class="btn btn-primary modern-btn">
                             <i class="fas fa-paper-plane"></i>
-                            Mesaj Gönder
+                            <span data-translate="contact.send">Send Message</span>
                         </button>
                     </form>
                 </div>
@@ -717,7 +708,7 @@
                         <img src="assets/images/logo-transparent.png?v=1.0" alt="Hasan Arthur Altuntaş Logo" class="footer-logo-image" width="50" height="50" loading="lazy">
                         <span>HASAN ARTHUR</span>
                     </div>
-                    <p>Müziğin evrensel dilinde hikayeler anlatıyorum. Her nota bir duygu, her melodi bir anı.</p>
+                    <p data-translate="footer.tagline">Creating musical experiences that resonate with the soul</p>
                     <div class="footer-social">
                         <a href="https://open.spotify.com/artist/hasanarthuraltuntas" target="_blank" rel="noopener noreferrer" aria-label="Spotify"><i class="fab fa-spotify"></i></a>
                         <a href="https://www.youtube.com/@hasanarthuraltuntas" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
@@ -727,19 +718,19 @@
                 </div>
                 
                 <div class="footer-section">
-                    <h4>Hızlı Linkler</h4>
+                    <h4 data-translate="footer.links">Quick Links</h4>
                     <ul>
-                        <li><a href="#home">Ana Sayfa</a></li>
-                        <li><a href="#about">Hakkımda</a></li>
-                        <li><a href="#music">Müziklerim</a></li>
-                        <li><a href="#software">Software</a></li>
-                        <li><a href="#gallery">Galeri</a></li>
-                        <li><a href="#contact">İletişim</a></li>
+                        <li><a href="#home" data-translate="nav.home">Home</a></li>
+                        <li><a href="#about" data-translate="nav.about">About</a></li>
+                        <li><a href="#music" data-translate="nav.music">Music</a></li>
+                        <li><a href="#software" data-translate="nav.software">Software</a></li>
+                        <li><a href="#gallery" data-translate="nav.gallery">Gallery</a></li>
+                        <li><a href="#contact" data-translate="nav.contact">Contact</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-section">
-                    <h4>Müzik Türleri</h4>
+                    <h4 data-translate="footer.social">Follow Me</h4>
                     <ul>
                         <li><a href="#">Pop</a></li>
                         <li><a href="#">Rock</a></li>
@@ -750,7 +741,7 @@
                 </div>
                 
                 <div class="footer-section">
-                    <h4>İletişim</h4>
+                    <h4 data-translate="footer.contact_info">Contact Info</h4>
                     <div class="footer-contact">
                         <p><i class="fas fa-envelope"></i> info@muzikportfoyu.com</p>
                         <p><i class="fas fa-phone"></i> +90 555 123 45 67</p>
@@ -762,7 +753,7 @@
             <div class="footer-bottom">
                 <div class="footer-divider"></div>
                 <div class="footer-bottom-content">
-                    <p>&copy; 2024 Müzik Portföyü. Tüm hakları saklıdır.</p>
+                    <p data-translate="footer.rights">&copy; 2024 Hasan Arthur Altuntaş. All rights reserved.</p>
                     <div class="footer-links">
                         <a href="#">Gizlilik Politikası</a>
                         <a href="#">Kullanım Şartları</a>
@@ -785,14 +776,28 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 
+    <!-- Modular JavaScript Architecture -->
     <!-- Language System (Load First) -->
     <script src="assets/js/language-system.js?v=1.0"></script>
     
-    <script defer src="assets/js/advanced-animations.js?v=1.5.0"></script>
-    <script defer src="assets/js/main.js?v=1.5.0"></script>
-    <!-- <script src="assets/js/pwa-manager.js"></script> PWA disabled temporarily -->
+    <!-- Utilities -->
+    <script defer src="assets/js/utils/storage.js?v=2.0.0"></script>
+    <script defer src="assets/js/utils/performance.js?v=2.0.0"></script>
+    
+    <!-- Components -->
+    <script defer src="assets/js/components/loader.js?v=2.0.0"></script>
+    <script defer src="assets/js/components/navigation.js?v=2.0.0"></script>
+    <script defer src="assets/js/components/animations.js?v=2.0.0"></script>
+    
+    <!-- Main Application -->
+    <script defer src="assets/js/main-modular.js?v=2.0.0"></script>
+    
+    <!-- Music Player & Gallery (specialized components) -->
     <script defer src="assets/js/music-player.js?v=1.5.0"></script>
     <script defer src="assets/js/gallery.js?v=1.5.0"></script>
+    
+    <!-- Admin Security (Hidden) -->
+    <script defer src="assets/js/admin/security.js?v=2.0.0"></script>
     
     <!-- Maintenance Mode Check -->
     <script>
