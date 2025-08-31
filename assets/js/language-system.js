@@ -112,6 +112,7 @@ class LanguageSystem {
                 'ui.next': 'Next',
                 'ui.previous': 'Previous',
                 'ui.volume': 'Volume',
+                'ui.scroll': 'Scroll down',
                 
                 // Maintenance
                 'maintenance.title': 'Under Maintenance',
@@ -217,6 +218,7 @@ class LanguageSystem {
                 'ui.next': 'Sonraki',
                 'ui.previous': 'Önceki',
                 'ui.volume': 'Ses',
+                'ui.scroll': 'Aşağı kaydır',
                 
                 // Maintenance
                 'maintenance.title': 'Bakım Modu',
