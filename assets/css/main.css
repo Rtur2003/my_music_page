@@ -9,6 +9,8 @@
 
 /* Components */
 @import url('./components/loading.css');
+@import url('./components/background.css');
+@import url('./components/sections.css');
 @import url('./components/header.css');
 @import url('./components/buttons.css');
 @import url('./components/hero.css');
