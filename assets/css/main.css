@@ -18,6 +18,9 @@
 /* Language System */
 @import url('./language-toggle.css');
 
+/* Professional Enhancements */
+@import url('./enhancements/professional.css');
+
 /* Layout & Utilities */
 .container {
     max-width: 1400px;
