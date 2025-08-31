@@ -12,11 +12,8 @@
     position: relative;
 }
 
-.about .container,
-.music .container,
-.software .container, 
-.gallery .container,
-.contact .container {
+/* Glass Container Effect */
+.glass-container {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -30,11 +27,7 @@
 }
 
 /* Top border accent */
-.about .container::before,
-.music .container::before,
-.software .container::before,
-.gallery .container::before,
-.contact .container::before {
+.glass-container::before {
     content: '';
     position: absolute;
     top: 0;
@@ -50,7 +43,7 @@
 }
 
 /* Section-specific accents */
-.music .container::before {
+.music .glass-container::before {
     background: linear-gradient(90deg, 
         transparent, 
         rgba(108, 92, 231, 0.6), 
@@ -58,7 +51,7 @@
     );
 }
 
-.software .container::before {
+.software .glass-container::before {
     background: linear-gradient(90deg, 
         transparent, 
         rgba(72, 187, 120, 0.6), 
@@ -66,7 +59,7 @@
     );
 }
 
-.gallery .container::before {
+.gallery .glass-container::before {
     background: linear-gradient(90deg, 
         transparent, 
         rgba(245, 101, 101, 0.6), 
@@ -74,7 +67,7 @@
     );
 }
 
-.contact .container::before {
+.contact .glass-container::before {
     background: linear-gradient(90deg, 
         transparent, 
         rgba(99, 102, 241, 0.6), 
@@ -127,7 +120,7 @@
 }
 
 /* Music Section Special Styling */
-.music .container {
+.music .glass-container {
     background: rgba(248, 250, 255, 0.95);
     border: 1px solid rgba(108, 92, 231, 0.1);
 }
@@ -143,7 +136,7 @@
 }
 
 /* Gallery Section */
-.gallery .container {
+.gallery .glass-container {
     background: rgba(255, 248, 250, 0.95);
     border: 1px solid rgba(245, 101, 101, 0.1);
 }
@@ -156,13 +149,13 @@
 }
 
 /* Software Section */
-.software .container {
+.software .glass-container {
     background: rgba(248, 255, 248, 0.95);
     border: 1px solid rgba(72, 187, 120, 0.1);
 }
 
 /* Contact Section */
-.contact .container {
+.contact .glass-container {
     background: rgba(249, 250, 255, 0.95);
     border: 1px solid rgba(99, 102, 241, 0.1);
 }
@@ -243,11 +236,7 @@
 }
 
 @media (max-width: 768px) {
-    .about .container,
-    .music .container,
-    .software .container,
-    .gallery .container,
-    .contact .container {
+    .glass-container {
         margin: 2rem 1rem;
         padding: 3rem 1.5rem;
         border-radius: 20px;
@@ -267,11 +256,7 @@
 }
 
 @media (max-width: 480px) {
-    .about .container,
-    .music .container,
-    .software .container,
-    .gallery .container,
-    .contact .container {
+    .glass-container {
         margin: 1rem 0.5rem;
         padding: 2rem 1rem;
     }
@@ -290,11 +275,7 @@
 
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
-    .about .container,
-    .music .container,
-    .software .container,
-    .gallery .container,
-    .contact .container {
+    .glass-container {
         background: rgba(26, 26, 46, 0.95);
         border: 1px solid rgba(255, 255, 255, 0.1);
         color: #ffffff;
