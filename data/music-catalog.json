@@ -1,0 +1,37 @@
+{
+    "version": "1.0.0",
+    "lastUpdated": "2024-12-21T12:00:00Z",
+    "tracks": [
+        {
+            "id": "demo-track-1",
+            "title": "Lost in Time",
+            "artist": "Hasan Arthur Altuntaş",
+            "genre": "Cinematic",
+            "duration": "3:45",
+            "coverImage": "assets/images/logo-main.png",
+            "description": "A cinematic piece that takes you on a journey through time and emotion.",
+            "platforms": {
+                "spotify": {
+                    "url": "https://open.spotify.com/artist/hasanarthuraltuntas",
+                    "id": "sample_id"
+                },
+                "youtube": {
+                    "url": "https://www.youtube.com/@hasanarthuraltuntas",
+                    "id": "sample_video_id"
+                },
+                "appleMusic": {
+                    "url": "https://music.apple.com/artist/hasan-arthur-altuntas"
+                },
+                "soundcloud": {
+                    "url": "https://soundcloud.com/hasanarthuraltuntas"
+                }
+            },
+            "spotifyUrl": "https://open.spotify.com/artist/hasanarthuraltuntas",
+            "youtubeUrl": "https://www.youtube.com/@hasanarthuraltuntas",
+            "appleUrl": "https://music.apple.com/artist/hasan-arthur-altuntas",
+            "soundcloudUrl": "https://soundcloud.com/hasanarthuraltuntas",
+            "dateAdded": "2024-12-21T12:00:00Z",
+            "isActive": true
+        }
+    ]
+}
