@@ -136,6 +136,6 @@ const formMessageStyles = `
 `;
 
 // Inject styles
-const styleSheet = document.createElement('style');
-styleSheet.textContent = formMessageStyles;
-document.head.appendChild(styleSheet);
+const contactFormStyleSheet = document.createElement('style');
+contactFormStyleSheet.textContent = formMessageStyles;
+document.head.appendChild(contactFormStyleSheet);

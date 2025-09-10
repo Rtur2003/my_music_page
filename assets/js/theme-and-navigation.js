@@ -4,8 +4,29 @@
 
 class ThemeAndNavigationManager {
     constructor() {
-        this.currentTheme = localStorage.getItem('theme') || 'dark';
+        this.currentTheme = this.getStoredTheme() || 'dark';
         this.init();
+    }
+    
+    getStoredTheme() {
+        try {
+            if (typeof Storage !== 'undefined' && window.localStorage) {
+                return localStorage.getItem('theme');
+            }
+        } catch (error) {
+            console.log('Theme storage not available');
+        }
+        return null;
+    }
+    
+    saveTheme(theme) {
+        try {
+            if (typeof Storage !== 'undefined' && window.localStorage) {
+                localStorage.setItem('theme', theme);
+            }
+        } catch (error) {
+            console.log('Cannot save theme preference');
+        }
     }
 
     init() {
@@ -64,7 +85,7 @@ class ThemeAndNavigationManager {
     toggleTheme() {
         this.currentTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
         this.applyTheme(this.currentTheme);
-        localStorage.setItem('theme', this.currentTheme);
+        this.saveTheme(this.currentTheme);
         console.log(`🎨 Theme switched to: ${this.currentTheme}`);
     }
 
@@ -234,6 +255,6 @@ const mobileOptimizations = `
 `;
 
 // Inject mobile optimizations
-const styleSheet = document.createElement('style');
-styleSheet.textContent = mobileOptimizations;
-document.head.appendChild(styleSheet);
+const themeStyleSheet = document.createElement('style');
+themeStyleSheet.textContent = mobileOptimizations;
+document.head.appendChild(themeStyleSheet);

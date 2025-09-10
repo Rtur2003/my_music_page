@@ -12,13 +12,11 @@
 
 class SonicInteractions {
     constructor() {
-        this.cursor = document.getElementById('cursor');
         this.nav = document.getElementById('sonicNav');
         this.visualizerBars = document.querySelectorAll('.visualizer-bar');
         this.musicNotes = document.querySelectorAll('.music-note');
         this.waveLayers = document.querySelectorAll('.wave-layer');
         
-        this.mouse = { x: 0, y: 0 };
         this.isScrolling = false;
         this.scrollTimeout = null;
         
@@ -26,7 +24,6 @@ class SonicInteractions {
     }
     
     init() {
-        this.setupCursor();
         this.setupNavigation();
         this.setupVisualizers();
         this.setupScrollEffects();
@@ -37,47 +34,8 @@ class SonicInteractions {
     }
     
     // ===============================================
-    // MAGNETIC CURSOR SYSTEM
+    // PERFORMANCE OPTIMIZED INTERACTIONS
     // ===============================================
-    setupCursor() {
-        // Track mouse movement
-        document.addEventListener('mousemove', (e) => {
-            this.mouse.x = e.clientX;
-            this.mouse.y = e.clientY;
-            
-            // Update cursor position with smooth animation
-            if (this.cursor) {
-                this.cursor.style.left = this.mouse.x - 10 + 'px';
-                this.cursor.style.top = this.mouse.y - 10 + 'px';
-            }
-        });
-        
-        // Magnetic effect on interactive elements
-        const magneticElements = document.querySelectorAll('.sonic-btn, .nav-link, .nav-brand');
-        
-        magneticElements.forEach(element => {
-            element.addEventListener('mouseenter', () => {
-                if (this.cursor) {
-                    this.cursor.classList.add('magnetic');
-                }
-                element.style.transform = 'translateY(-3px) scale(1.02)';
-            });
-            
-            element.addEventListener('mouseleave', () => {
-                if (this.cursor) {
-                    this.cursor.classList.remove('magnetic');
-                }
-                element.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-        
-        // Hide cursor on mobile
-        if (window.innerWidth <= 768) {
-            if (this.cursor) {
-                this.cursor.style.display = 'none';
-            }
-        }
-    }
     
     // ===============================================
     // NAVIGATION EFFECTS
