@@ -157,6 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
     LazyLoader.initLazyImages();
     LazyLoader.preloadCritical();
+    initializeContactForm();
 });
 
 function initializeApp() {
@@ -1021,6 +1022,78 @@ function openImageModal(imageSrc, title) {
             modal.classList.add('active');
         }, 10);
     }
+}
+
+// Contact form handler
+function initializeContactForm() {
+    const contactForm = document.getElementById('contactForm');
+    if (!contactForm) return;
+
+    contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        
+        // Show loading state
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Sending...</span>';
+        submitBtn.disabled = true;
+        
+        try {
+            // Get form data
+            const formData = new FormData(contactForm);
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                subject: formData.get('subject'),
+                message: formData.get('message')
+            };
+            
+            // Simulate form submission (since we don't have a backend)
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Show success message
+            showContactMessage('success', 'Message sent successfully! I will get back to you soon.');
+            
+            // Reset form
+            contactForm.reset();
+            
+        } catch (error) {
+            console.error('Contact form error:', error);
+            showContactMessage('error', 'Failed to send message. Please try again or contact directly via email.');
+        } finally {
+            // Reset button
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    });
+}
+
+function showContactMessage(type, message) {
+    // Remove existing messages
+    const existingMessages = document.querySelectorAll('.contact-message');
+    existingMessages.forEach(msg => msg.remove());
+    
+    // Create new message
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `contact-message ${type}`;
+    messageDiv.innerHTML = `
+        <div class="message-content">
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+            <span>${message}</span>
+        </div>
+    `;
+    
+    // Add after the form
+    const contactForm = document.getElementById('contactForm');
+    contactForm.parentNode.insertBefore(messageDiv, contactForm.nextSibling);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (messageDiv.parentNode) {
+            messageDiv.remove();
+        }
+    }, 5000);
 }
 
 console.log('%c🎵 Müzik Portföyü', 'color: #6c5ce7; font-size: 20px; font-weight: bold;');

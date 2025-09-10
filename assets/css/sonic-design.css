@@ -1,0 +1,572 @@
+/* ===============================================
+   SONIC SPECTRUM DESIGN SYSTEM
+   Hasan Arthur Altuntaş Music Portfolio
+   =============================================== */
+
+/* ===============================================
+   LOADING SCREEN - ELEGANT INTRO
+   =============================================== */
+
+.page-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--sonic-deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    transition: all 1s ease;
+}
+
+.page-loader.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loader-container {
+    text-align: center;
+    animation: fadeInUp 1s ease-out;
+}
+
+.logo-loader {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.logo-circle {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loader-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    animation: logoFloat 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px var(--freq-high));
+}
+
+.loader-ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 3px solid transparent;
+    border-top: 3px solid var(--freq-high);
+    border-radius: 50%;
+    animation: spin 2s linear infinite;
+}
+
+.loader-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--freq-high);
+    margin-bottom: 0.5rem;
+    letter-spacing: 3px;
+}
+
+.loader-subtitle {
+    color: var(--freq-ultra);
+    margin-bottom: 2rem;
+    font-size: 1rem;
+}
+
+.loading-progress {
+    width: 200px;
+    height: 4px;
+    background: rgba(0, 212, 255, 0.2);
+    border-radius: 2px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background: var(--energy-wave);
+    border-radius: 2px;
+    animation: loadingProgress 3s ease-in-out;
+}
+
+@keyframes loadingProgress {
+    0% { width: 0%; }
+    50% { width: 70%; }
+    100% { width: 100%; }
+}
+
+@keyframes logoFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+:root {
+    /* PRIMARY SONIC PALETTE */
+    --sonic-deep: #0a0a0f;
+    --sonic-primary: #1a1a2e;
+    --sonic-electric: #16213e;
+    --sonic-glow: #0f4c75;
+    
+    /* ACCENT FREQUENCIES */
+    --freq-low: #e43f5a;          /* Bass red */
+    --freq-mid: #f39c12;          /* Mid orange */
+    --freq-high: #00d4ff;         /* Treble cyan */
+    --freq-ultra: #bf55ec;        /* Ultra violet */
+    
+    /* ENERGY GRADIENTS */
+    --energy-wave: linear-gradient(45deg, #00d4ff, #bf55ec, #e43f5a);
+    --energy-pulse: radial-gradient(circle, #f39c12, #e43f5a, #0f4c75);
+    --energy-flow: conic-gradient(from 0deg, #00d4ff, #bf55ec, #e43f5a, #f39c12, #00d4ff);
+    
+    /* SONIC SHADOWS & GLOWS */
+    --glow-primary: 0 0 30px rgba(0, 212, 255, 0.3);
+    --glow-secondary: 0 0 20px rgba(191, 85, 236, 0.2);
+    --glow-accent: 0 0 40px rgba(228, 63, 90, 0.4);
+    --shadow-depth: 0 10px 40px rgba(10, 10, 15, 0.8);
+    
+    /* ANIMATION CURVES */
+    --ease-sonic: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --ease-wave: cubic-bezier(0.4, 0.0, 0.2, 1);
+    --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ===============================================
+   RESET & OPTIMIZATION
+   =============================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: clamp(14px, 1.5vw, 18px);
+}
+
+body {
+    font-family: 'Inter', 'SF Pro Display', -apple-system, sans-serif;
+    background: var(--sonic-deep);
+    color: var(--freq-high);
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* ===============================================
+   SONIC WAVE BACKGROUND SYSTEM
+   =============================================== */
+
+.sonic-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: var(--sonic-deep);
+}
+
+.wave-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: var(--energy-wave);
+    opacity: 0.05;
+    animation: waveFlow 20s linear infinite;
+}
+
+.wave-layer:nth-child(2) {
+    background: var(--energy-pulse);
+    opacity: 0.03;
+    animation: waveFlow 15s linear infinite reverse;
+}
+
+.wave-layer:nth-child(3) {
+    background: var(--energy-flow);
+    opacity: 0.02;
+    animation: waveFlow 25s linear infinite;
+}
+
+@keyframes waveFlow {
+    0% { transform: translateX(-100%) rotate(0deg); }
+    100% { transform: translateX(100%) rotate(360deg); }
+}
+
+/* ===============================================
+   MAGNETIC CURSOR SYSTEM
+   =============================================== */
+
+.cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background: var(--freq-high);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s ease;
+    box-shadow: var(--glow-primary);
+}
+
+.cursor.magnetic {
+    transform: scale(1.5);
+    background: var(--freq-ultra);
+    box-shadow: var(--glow-secondary);
+}
+
+/* ===============================================
+   NAVIGATION - SONIC COCKPIT
+   =============================================== */
+
+.sonic-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(26, 26, 46, 0.9);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+    padding: 1rem 0;
+    transition: all 0.3s var(--ease-sonic);
+}
+
+.sonic-nav.scrolled {
+    padding: 0.5rem 0;
+    background: rgba(26, 26, 46, 0.95);
+    box-shadow: var(--shadow-depth);
+}
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--freq-high);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.2rem;
+    transition: all 0.3s var(--ease-sonic);
+}
+
+.nav-brand:hover {
+    color: var(--freq-ultra);
+    text-shadow: var(--glow-secondary);
+    transform: translateY(-2px);
+}
+
+.brand-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--energy-flow);
+    animation: logoSpin 10s linear infinite;
+}
+
+@keyframes logoSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-link {
+    color: var(--freq-high);
+    text-decoration: none;
+    position: relative;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: all 0.3s var(--ease-sonic);
+    font-weight: 500;
+}
+
+.nav-link:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--energy-wave);
+    border-radius: 20px;
+    opacity: 0;
+    transition: all 0.3s var(--ease-sonic);
+}
+
+.nav-link:hover:before,
+.nav-link.active:before {
+    opacity: 0.2;
+}
+
+.nav-link:hover {
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--glow-primary);
+}
+
+/* ===============================================
+   HERO SECTION - SOUND STUDIO
+   =============================================== */
+
+.sonic-hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-visualizer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.visualizer-bar {
+    width: 4px;
+    margin: 0 2px;
+    background: var(--energy-wave);
+    border-radius: 2px;
+    animation: visualizerPulse 2s ease-in-out infinite;
+}
+
+.visualizer-bar:nth-child(odd) {
+    animation-delay: 0.1s;
+}
+
+.visualizer-bar:nth-child(even) {
+    animation-delay: 0.2s;
+}
+
+@keyframes visualizerPulse {
+    0%, 100% { height: 20px; opacity: 0.3; }
+    50% { height: 100px; opacity: 1; }
+}
+
+.hero-content {
+    text-align: center;
+    z-index: 2;
+    position: relative;
+    max-width: 800px;
+    padding: 2rem;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 8vw, 6rem);
+    font-weight: 900;
+    background: var(--energy-flow);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+    animation: titleGlow 3s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.2) drop-shadow(0 0 20px rgba(0, 212, 255, 0.5)); }
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    color: var(--freq-ultra);
+    margin-bottom: 2rem;
+    font-weight: 300;
+    animation: fadeInUp 1s ease-out 0.5s both;
+}
+
+.hero-description {
+    font-size: 1.1rem;
+    color: rgba(0, 212, 255, 0.8);
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    animation: fadeInUp 1s ease-out 1s both;
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===============================================
+   SONIC BUTTONS
+   =============================================== */
+
+.sonic-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 30px;
+    background: var(--energy-wave);
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s var(--ease-bounce);
+    position: relative;
+    overflow: hidden;
+    margin: 0 0.5rem;
+}
+
+.sonic-btn:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.sonic-btn:hover:before {
+    left: 100%;
+}
+
+.sonic-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: var(--glow-accent);
+}
+
+.sonic-btn.primary {
+    background: var(--freq-low);
+    box-shadow: 0 10px 30px rgba(228, 63, 90, 0.3);
+}
+
+.sonic-btn.secondary {
+    background: transparent;
+    border: 2px solid var(--freq-high);
+    color: var(--freq-high);
+}
+
+.sonic-btn.secondary:hover {
+    background: var(--freq-high);
+    color: var(--sonic-deep);
+}
+
+/* ===============================================
+   FLOATING MUSIC NOTES
+   =============================================== */
+
+.floating-notes {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.music-note {
+    position: absolute;
+    font-size: 2rem;
+    color: var(--freq-ultra);
+    opacity: 0.1;
+    animation: floatNote 15s linear infinite;
+}
+
+.music-note:nth-child(odd) {
+    animation-delay: -5s;
+}
+
+.music-note:nth-child(even) {
+    animation-delay: -10s;
+}
+
+@keyframes floatNote {
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% { opacity: 0.3; }
+    90% { opacity: 0.3; }
+    100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* ===============================================
+   RESPONSIVE DESIGN
+   =============================================== */
+
+@media (max-width: 768px) {
+    .nav-menu {
+        display: none;
+    }
+    
+    .hero-content {
+        padding: 1rem;
+    }
+    
+    .sonic-btn {
+        display: block;
+        margin: 0.5rem auto;
+        width: fit-content;
+    }
+    
+    .visualizer-bar {
+        width: 2px;
+        margin: 0 1px;
+    }
+}
+
+/* ===============================================
+   PERFORMANCE OPTIMIZATIONS
+   =============================================== */
+
+.will-change-transform {
+    will-change: transform;
+}
+
+.will-change-opacity {
+    will-change: opacity;
+}
+
+.gpu-accelerated {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+}

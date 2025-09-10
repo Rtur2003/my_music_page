@@ -8,7 +8,145 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/admin.css">
+    <link rel="stylesheet" href="assets/css/hasan-arthur-design.css">
+    <style>
+        /* Admin Panel Specific Styles */
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: var(--warm-white);
+            min-height: 100vh;
+        }
+        
+        .admin-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--cinematic-gradient);
+            border-radius: 20px;
+            color: white;
+        }
+        
+        .admin-section {
+            background: var(--warm-white);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-elegant);
+            border: 1px solid rgba(201, 169, 110, 0.2);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-black);
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid rgba(201, 169, 110, 0.3);
+            border-radius: 6px;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.1);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .admin-btn {
+            background: var(--accent-gold);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .admin-btn:hover {
+            background: var(--rich-gold);
+            transform: translateY(-1px);
+        }
+        
+        .track-list {
+            display: grid;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .track-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--soft-gray);
+            border-radius: 8px;
+            border: 1px solid rgba(201, 169, 110, 0.2);
+        }
+        
+        .track-info {
+            flex: 1;
+        }
+        
+        .track-info h4 {
+            margin: 0 0 0.25rem 0;
+            color: var(--primary-black);
+        }
+        
+        .track-info p {
+            margin: 0;
+            color: var(--accent-gold);
+            font-size: 0.9rem;
+        }
+        
+        .track-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .track-actions button {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: white;
+            font-size: 0.8rem;
+        }
+        
+        .edit-btn { background: var(--accent-gold); }
+        .delete-btn { background: #dc2626; }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-container {
+                padding: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Admin Security Check -->
@@ -58,38 +196,100 @@
         }
     </script>
     
-    <!-- Authentication Screen -->
-    <div id="authScreen" class="auth-wrapper">
-        <div class="auth-container">
-            <div class="auth-logo">
-                <i class="fas fa-shield-halved"></i>
-            </div>
-            <h1 class="auth-title">Yönetici Girişi</h1>
-            <p class="auth-description">Müzik portföy yönetim paneline erişim</p>
-            
-            <div id="errorAlert" class="error-alert">
-                <i class="fas fa-exclamation-triangle"></i>
-                Erişim reddedildi. Kalan deneme: <span id="remainingAttempts">3</span>
-            </div>
-            
-            <div id="successAlert" class="success-alert">
-                <i class="fas fa-check-circle"></i>
-                <span>Kimlik doğrulandı. Yönlendiriliyorsunuz...</span>
-            </div>
-            
-            <form id="authForm">
-                <div class="input-group">
-                    <label for="accessKey" class="input-label">
-                        <i class="fas fa-key"></i> Erişim Anahtarı
-                    </label>
-                    <input type="password" id="accessKey" class="input-field" placeholder="Yönetici erişim anahtarınızı girin" required autocomplete="new-password">
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>🎵 Hasan Arthur Music Manager</h1>
+            <p>Professional Music Portfolio Administration</p>
+        </div>
+        
+        <!-- Add New Track Section -->
+        <div class="admin-section">
+            <h2>Add New Track</h2>
+            <form id="addTrackForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="trackTitle">Track Title *</label>
+                        <input type="text" id="trackTitle" placeholder="e.g., Interstellar But My Version" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="trackGenre">Genre *</label>
+                        <select id="trackGenre" required>
+                            <option value="">Select Genre</option>
+                            <option value="Cinematic">Cinematic</option>
+                            <option value="Film Score">Film Score</option>
+                            <option value="Ambient">Ambient</option>
+                            <option value="Piano">Piano</option>
+                            <option value="Orchestral">Orchestral</option>
+                            <option value="Electronic">Electronic</option>
+                        </select>
+                    </div>
                 </div>
                 
-                <button type="submit" class="submit-button">
-                    <i class="fas fa-arrow-right"></i>
-                    Panele Giriş Yap
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="trackDuration">Duration</label>
+                        <input type="text" id="trackDuration" placeholder="e.g., 4:23" pattern="[0-9]:[0-5][0-9]">
+                    </div>
+                    <div class="form-group">
+                        <label for="trackYear">Year</label>
+                        <input type="number" id="trackYear" min="2020" max="2030" value="2025">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="trackDescription">Description</label>
+                    <textarea id="trackDescription" rows="3" placeholder="Brief description of the track..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="trackArtwork">Artwork URL (optional)</label>
+                    <input type="url" id="trackArtwork" placeholder="https://example.com/artwork.jpg">
+                </div>
+                
+                <h3 style="margin: 2rem 0 1rem 0;">Platform Links</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="spotifyUrl">
+                            <i class="fab fa-spotify" style="color: #1db954;"></i> Spotify URL
+                        </label>
+                        <input type="url" id="spotifyUrl" placeholder="https://open.spotify.com/track/...">
+                    </div>
+                    <div class="form-group">
+                        <label for="youtubeUrl">
+                            <i class="fab fa-youtube" style="color: #ff0000;"></i> YouTube URL
+                        </label>
+                        <input type="url" id="youtubeUrl" placeholder="https://www.youtube.com/watch?v=...">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="appleUrl">
+                            <i class="fab fa-apple" style="color: #000000;"></i> Apple Music URL
+                        </label>
+                        <input type="url" id="appleUrl" placeholder="https://music.apple.com/album/...">
+                    </div>
+                    <div class="form-group">
+                        <label for="soundcloudUrl">
+                            <i class="fab fa-soundcloud" style="color: #ff7700;"></i> SoundCloud URL
+                        </label>
+                        <input type="url" id="soundcloudUrl" placeholder="https://soundcloud.com/...">
+                    </div>
+                </div>
+                
+                <button type="submit" class="admin-btn">
+                    <i class="fas fa-plus"></i> Add Track to Portfolio
                 </button>
             </form>
+        </div>
+        
+        <!-- Current Tracks Section -->
+        <div class="admin-section">
+            <h2>Current Tracks</h2>
+            <div id="tracksList" class="track-list">
+                <p>Loading tracks...</p>
+            </div>
         </div>
     </div>
 
@@ -1026,11 +1226,132 @@
             }
         }
         
-        // Initialize the management system
-        document.addEventListener('DOMContentLoaded', () => {
-            if (!window.adminController) {
-                window.adminController = new AdminController();
+        // Simple Admin Manager
+        class SimpleAdminManager {
+            constructor() {
+                this.init();
             }
+            
+            init() {
+                this.setupForm();
+                this.loadTracks();
+                console.log('🎵 Admin Manager Ready');
+            }
+            
+            setupForm() {
+                const form = document.getElementById('addTrackForm');
+                if (form) {
+                    form.addEventListener('submit', (e) => this.handleAddTrack(e));
+                }
+            }
+            
+            handleAddTrack(e) {
+                e.preventDefault();
+                
+                const trackData = {
+                    title: document.getElementById('trackTitle').value,
+                    genre: document.getElementById('trackGenre').value,
+                    duration: document.getElementById('trackDuration').value || '3:45',
+                    year: document.getElementById('trackYear').value || '2025',
+                    description: document.getElementById('trackDescription').value,
+                    artwork: document.getElementById('trackArtwork').value,
+                    artist: "Hasan Arthur Altuntaş",
+                    platforms: {
+                        spotify: document.getElementById('spotifyUrl').value,
+                        youtube: document.getElementById('youtubeUrl').value,
+                        apple: document.getElementById('appleUrl').value,
+                        soundcloud: document.getElementById('soundcloudUrl').value
+                    }
+                };
+                
+                if (trackData.title && trackData.genre) {
+                    this.addTrackToStorage(trackData);
+                    e.target.reset();
+                    this.showNotification('✅ Track added successfully!');
+                    this.loadTracks();
+                } else {
+                    this.showNotification('❌ Please fill required fields', true);
+                }
+            }
+            
+            addTrackToStorage(trackData) {
+                let tracks = JSON.parse(localStorage.getItem('hasan_arthur_tracks') || '[]');
+                const newId = Math.max(...tracks.map(t => t.id), 0) + 1;
+                trackData.id = newId;
+                tracks.push(trackData);
+                localStorage.setItem('hasan_arthur_tracks', JSON.stringify(tracks));
+            }
+            
+            loadTracks() {
+                const tracksList = document.getElementById('tracksList');
+                if (!tracksList) return;
+                
+                const tracks = JSON.parse(localStorage.getItem('hasan_arthur_tracks') || '[]');
+                
+                if (tracks.length === 0) {
+                    tracksList.innerHTML = '<p style="text-align: center; color: #c9a96e;">No tracks added yet. Add your first track above!</p>';
+                    return;
+                }
+                
+                tracksList.innerHTML = tracks.map(track => `
+                    <div class="track-item">
+                        <div class="track-info">
+                            <h4>${track.title}</h4>
+                            <p>${track.genre} • ${track.duration} • ${track.year}</p>
+                        </div>
+                        <div class="track-actions">
+                            <button class="edit-btn" onclick="adminManager.editTrack(${track.id})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="delete-btn" onclick="adminManager.deleteTrack(${track.id})">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            editTrack(id) {
+                // For now, just show an alert - full edit functionality would require more UI
+                alert('Edit functionality - track ID: ' + id);
+            }
+            
+            deleteTrack(id) {
+                if (confirm('Are you sure you want to delete this track?')) {
+                    let tracks = JSON.parse(localStorage.getItem('hasan_arthur_tracks') || '[]');
+                    tracks = tracks.filter(track => track.id !== id);
+                    localStorage.setItem('hasan_arthur_tracks', JSON.stringify(tracks));
+                    this.loadTracks();
+                    this.showNotification('🗑️ Track deleted');
+                }
+            }
+            
+            showNotification(message, isError = false) {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 1rem 1.5rem;
+                    background: ${isError ? '#dc2626' : 'var(--accent-gold)'};
+                    color: white;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+                    z-index: 1000;
+                    font-weight: 500;
+                `;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }
+        }
+        
+        // Initialize admin manager
+        document.addEventListener('DOMContentLoaded', () => {
+            window.adminManager = new SimpleAdminManager();
         });
     </script>
 </body>
