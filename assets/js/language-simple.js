@@ -4,7 +4,7 @@
 
 class SimpleLanguageSystem {
     constructor() {
-        this.currentLang = localStorage.getItem('siteLanguage') || 'en';
+        this.currentLang = this.getStoredLanguage() || 'en';
         this.translations = {
             en: {
                 'nav.home': 'Home',
@@ -45,6 +45,27 @@ class SimpleLanguageSystem {
         this.init();
     }
     
+    getStoredLanguage() {
+        try {
+            if (typeof Storage !== 'undefined' && window.localStorage) {
+                return localStorage.getItem('siteLanguage');
+            }
+        } catch (error) {
+            console.log('Language storage not available');
+        }
+        return null;
+    }
+    
+    saveLanguage(lang) {
+        try {
+            if (typeof Storage !== 'undefined' && window.localStorage) {
+                localStorage.setItem('siteLanguage', lang);
+            }
+        } catch (error) {
+            console.log('Cannot save language preference');
+        }
+    }
+    
     init() {
         this.createLanguageToggle();
         this.applyTranslations();
@@ -72,7 +93,7 @@ class SimpleLanguageSystem {
     
     switchLanguage(newLang) {
         this.currentLang = newLang;
-        localStorage.setItem('siteLanguage', newLang);
+        this.saveLanguage(newLang);
         
         // Button states güncelle
         document.querySelectorAll('.lang-btn').forEach(btn => {
