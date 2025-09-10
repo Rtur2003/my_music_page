@@ -255,6 +255,46 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
+}
+
+.nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.theme-toggle {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(212, 176, 120, 0.1);
+    color: var(--accent-gold);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-toggle:hover {
+    background: rgba(212, 176, 120, 0.2);
+    transform: translateY(-2px);
+}
+
+.mobile-menu-toggle {
+    display: none;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(212, 176, 120, 0.1);
+    color: var(--accent-gold);
+    cursor: pointer;
+    transition: var(--transition);
+    align-items: center;
+    justify-content: center;
 }
 
 .nav-brand {
@@ -390,7 +430,7 @@ body {
 .stat-label {
     display: block;
     font-size: 0.9rem;
-    color: var(--deep-charcoal);
+    color: var(--text-secondary);
     font-weight: 500;
 }
 
@@ -468,8 +508,57 @@ body {
    =============================================== */
 
 @media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: flex;
+    }
+    
     .nav-menu {
-        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(10, 10, 10, 0.98);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(212, 176, 120, 0.2);
+        flex-direction: column;
+        padding: 1rem 2rem;
+        margin: 0;
+        box-shadow: var(--shadow-strong);
+        transform: translateY(-100%);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-menu.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .nav-menu li {
+        margin: 0.5rem 0;
+    }
+    
+    .nav-menu .nav-link {
+        display: block;
+        padding: 1rem;
+        text-align: center;
+        border-radius: 8px;
+        font-size: 1.1rem;
+    }
+    
+    .nav-controls {
+        gap: 0.5rem;
+    }
+    
+    .language-toggle {
+        padding: 3px;
+    }
+    
+    .lang-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
     }
     
     .sonic-hero {
@@ -770,7 +859,7 @@ body {
 .section-title {
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--primary-black);
+    color: var(--text-primary);
     margin-bottom: 1.5rem;
     position: relative;
     padding-bottom: 0.5rem;
@@ -1006,8 +1095,8 @@ body {
 
 .music-card-genre {
     font-size: 0.8rem;
-    color: var(--deep-charcoal);
-    background: var(--soft-gray);
+    color: var(--text-secondary);
+    background: rgba(212, 176, 120, 0.2);
     padding: 0.2rem 0.5rem;
     border-radius: 4px;
     display: inline-block;
@@ -1063,7 +1152,7 @@ body {
 .empty-state {
     text-align: center;
     padding: 3rem 1rem;
-    color: var(--deep-charcoal);
+    color: var(--text-secondary);
 }
 
 .empty-state i {

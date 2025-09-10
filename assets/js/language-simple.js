@@ -51,33 +51,23 @@ class SimpleLanguageSystem {
     }
     
     createLanguageToggle() {
-        // Language toggle HTML oluştur
-        const toggle = document.createElement('div');
-        toggle.className = 'language-toggle';
-        toggle.innerHTML = `
-            <button class="lang-btn ${this.currentLang === 'en' ? 'active' : ''}" data-lang="en">
-                <span class="flag">🇺🇸</span>
-                <span>EN</span>
-            </button>
-            <button class="lang-btn ${this.currentLang === 'tr' ? 'active' : ''}" data-lang="tr">
-                <span class="flag">🇹🇷</span>
-                <span>TR</span>
-            </button>
-        `;
-        
-        // Navigation'a ekle
-        const navContainer = document.querySelector('.nav-container');
-        if (navContainer) {
-            navContainer.appendChild(toggle);
+        // Language toggle zaten HTML'de var, sadece event listener ekle
+        const toggle = document.querySelector('.language-toggle');
+        if (toggle) {
+            // Mevcut duruma göre aktif buton'u ayarla
+            const buttons = toggle.querySelectorAll('.lang-btn');
+            buttons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === this.currentLang);
+            });
+            
+            // Event listeners ekle
+            toggle.addEventListener('click', (e) => {
+                const btn = e.target.closest('.lang-btn');
+                if (btn && btn.dataset.lang !== this.currentLang) {
+                    this.switchLanguage(btn.dataset.lang);
+                }
+            });
         }
-        
-        // Event listeners ekle
-        toggle.addEventListener('click', (e) => {
-            const btn = e.target.closest('.lang-btn');
-            if (btn && btn.dataset.lang !== this.currentLang) {
-                this.switchLanguage(btn.dataset.lang);
-            }
-        });
     }
     
     switchLanguage(newLang) {

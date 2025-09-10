@@ -175,13 +175,35 @@
             </a>
             
             <ul class="nav-menu">
-                <li><a href="#home" class="nav-link active">Home</a></li>
-                <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#music" class="nav-link">Music</a></li>
-                <li><a href="#software" class="nav-link">Software</a></li>
-                <li><a href="#gallery" class="nav-link">Gallery</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li><a href="#home" class="nav-link active" data-translate="nav.home">Home</a></li>
+                <li><a href="#about" class="nav-link" data-translate="nav.about">About</a></li>
+                <li><a href="#music" class="nav-link" data-translate="nav.music">Music</a></li>
+                <li><a href="#software" class="nav-link" data-translate="nav.software">Software</a></li>
+                <li><a href="#gallery" class="nav-link" data-translate="nav.gallery">Gallery</a></li>
+                <li><a href="#contact" class="nav-link" data-translate="nav.contact">Contact</a></li>
             </ul>
+            
+            <!-- Theme and Language Controls -->
+            <div class="nav-controls">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
+                    <i class="fas fa-sun"></i>
+                </button>
+                
+                <div class="language-toggle">
+                    <button class="lang-btn active" data-lang="en">
+                        <span class="flag">🇺🇸</span>
+                        <span>EN</span>
+                    </button>
+                    <button class="lang-btn" data-lang="tr">
+                        <span class="flag">🇹🇷</span>
+                        <span>TR</span>
+                    </button>
+                </div>
+                
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -787,6 +809,9 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 
+    <!-- THEME AND NAVIGATION -->
+    <script src="assets/js/theme-and-navigation.js"></script>
+    
     <!-- HASAN ARTHUR INTERACTIONS -->
     <script src="assets/js/sonic-interactions.js"></script>
     
