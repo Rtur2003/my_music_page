@@ -10,6 +10,7 @@ class MusicManager {
         this.currentIndex = 0;
         this.audioPlayer = null;
         this.isPlaying = false;
+        this.adminTracks = this.loadAdminTracks();
         
         // Hasan Arthur's complete album catalog from all platforms
         this.albums = [
@@ -274,12 +275,45 @@ class MusicManager {
         // Always use fresh defaults to ensure latest tracks
         this.tracks = [...this.defaultTracks];
         
+        // Add admin-managed tracks
+        if (this.adminTracks && this.adminTracks.length > 0) {
+            this.tracks.push(...this.adminTracks);
+            console.log(`🎵 Added ${this.adminTracks.length} admin tracks`);
+        }
+        
         // Remove any duplicates based on title (in case of data corruption)
         this.tracks = this.tracks.filter((track, index, arr) => 
             arr.findIndex(t => t.title === track.title) === index
         );
         
-        console.log(`🎵 Loaded ${this.tracks.length} unique tracks`);
+        console.log(`🎵 Loaded ${this.tracks.length} unique tracks total`);
+    }
+
+    loadAdminTracks() {
+        try {
+            const musicData = localStorage.getItem('musicData');
+            if (musicData) {
+                const parsed = JSON.parse(musicData);
+                return parsed.tracks || [];
+            }
+        } catch (error) {
+            console.error('Error loading admin tracks:', error);
+        }
+        return [];
+    }
+
+    updateFromAdmin(newTrack) {
+        // Add or update track from admin panel
+        if (newTrack) {
+            const existingIndex = this.tracks.findIndex(t => t.id === newTrack.id);
+            if (existingIndex >= 0) {
+                this.tracks[existingIndex] = newTrack;
+            } else {
+                this.tracks.push(newTrack);
+            }
+            this.renderMusicGrid();
+            console.log('🎵 Updated tracks from admin panel');
+        }
     }
     
     saveTracks() {
@@ -726,6 +760,36 @@ class MusicManager {
 let musicManager;
 document.addEventListener('DOMContentLoaded', () => {
     musicManager = new MusicManager();
+    
+    // Listen for admin track updates
+    window.addEventListener('musicDataUpdated', (event) => {
+        if (musicManager && event.detail.tracks) {
+            musicManager.adminTracks = event.detail.tracks;
+            musicManager.loadTracks();
+            musicManager.renderMusicGrid();
+            console.log('🎵 Music data updated from admin panel');
+        }
+    });
+    
+    // Listen for messages from admin panel
+    window.addEventListener('message', (event) => {
+        if (event.data.type === 'ADMIN_TRACK_UPDATE' && musicManager) {
+            musicManager.updateFromAdmin(event.data.data);
+        }
+    });
+    
+    // Periodically check for admin updates
+    setInterval(() => {
+        if (musicManager) {
+            const newAdminTracks = musicManager.loadAdminTracks();
+            if (JSON.stringify(newAdminTracks) !== JSON.stringify(musicManager.adminTracks)) {
+                musicManager.adminTracks = newAdminTracks;
+                musicManager.loadTracks();
+                musicManager.renderMusicGrid();
+                console.log('🎵 Detected admin track changes, refreshing...');
+            }
+        }
+    }, 5000); // Check every 5 seconds
 });
 
 // Export for admin panel
