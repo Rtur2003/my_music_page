@@ -263,10 +263,10 @@ class LanguageSystem {
             </button>
         `;
         
-        // Add to navigation
-        const navbar = document.querySelector('.nav-container');
-        if (navbar) {
-            navbar.appendChild(toggle);
+        // Add to language toggle container
+        const languageToggleContainer = document.getElementById('languageToggle');
+        if (languageToggleContainer) {
+            languageToggleContainer.appendChild(toggle);
         }
         
         // Add event listeners

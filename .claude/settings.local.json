@@ -1,7 +1,15 @@
 {
   "permissions": {
     "allow": [
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "WebSearch",
+      "Bash(python:*)",
+      "WebFetch(domain:hasanarthuraltuntas.com.tr)",
+      "WebFetch(domain:www.youtube.com)",
+      "WebFetch(domain:open.spotify.com)",
+      "WebFetch(domain:music.youtube.com)",
+      "WebFetch(domain:music.apple.com)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []
