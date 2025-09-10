@@ -99,18 +99,27 @@ class AdminSystem {
     }
 
     async validateAdminKey(enteredKey) {
-        console.log('Validating admin key...');
+        console.log('Validating admin key:', enteredKey);
         
-        // For development, use the dev key
+        // Always use fallback first for reliability
+        const fallbackResult = this.fallbackValidation(enteredKey);
+        if (fallbackResult) {
+            console.log('✅ Fallback validation successful');
+            return true;
+        }
+
+        // For development, also check dev key
         if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '') {
             const devKey = 'HASAN_ARTHUR_ADMIN_2024';
             console.log('Development mode - checking dev key');
-            return enteredKey === devKey;
+            if (enteredKey === devKey) {
+                return true;
+            }
         }
 
+        // Try serverless function as secondary option
         try {
-            console.log('Production mode - checking with serverless function');
-            // For Netlify production, make API call to serverless function
+            console.log('Trying serverless function...');
             const response = await fetch('/.netlify/functions/admin-auth', {
                 method: 'POST',
                 headers: {
@@ -123,15 +132,14 @@ class AdminSystem {
                 const result = await response.json();
                 console.log('Serverless function response:', result);
                 return result.valid === true;
-            } else {
-                console.log('Serverless function failed, using fallback');
-                return this.fallbackValidation(enteredKey);
             }
             
         } catch (error) {
-            console.log('Serverless function not available, using fallback validation:', error.message);
-            return this.fallbackValidation(enteredKey);
+            console.log('Serverless function not available:', error.message);
         }
+        
+        console.log('❌ All validation methods failed');
+        return false;
     }
 
     fallbackValidation(enteredKey) {

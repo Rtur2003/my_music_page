@@ -265,6 +265,6 @@ const lightboxStyles = `
 `;
 
 // Inject styles
-const styleSheet = document.createElement('style');
-styleSheet.textContent = lightboxStyles;
-document.head.appendChild(styleSheet);
+const galleryStyleSheet = document.createElement('style');
+galleryStyleSheet.textContent = lightboxStyles;
+document.head.appendChild(galleryStyleSheet);

@@ -291,13 +291,15 @@ class MusicManager {
 
     loadAdminTracks() {
         try {
-            const musicData = localStorage.getItem('musicData');
-            if (musicData) {
-                const parsed = JSON.parse(musicData);
-                return parsed.tracks || [];
+            if (typeof Storage !== 'undefined' && window.localStorage) {
+                const musicData = localStorage.getItem('musicData');
+                if (musicData) {
+                    const parsed = JSON.parse(musicData);
+                    return parsed.tracks || [];
+                }
             }
         } catch (error) {
-            console.error('Error loading admin tracks:', error);
+            console.log('Admin tracks storage not available');
         }
         return [];
     }
