@@ -104,10 +104,10 @@ class MusicManager {
                 year: "2025",
                 description: "Latest single - A dramatic electronic composition exploring themes of deception and truth.",
                 artwork: "assets/images/logo-main.png",
-                audioFile: "https://www.soundjay.com/misc/sounds-1039.mp3",
+                audioFile: "",
                 platforms: {
-                    spotify: "https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef",
-                    youtube: "https://www.youtube.com/@HasanArthurAltuntaş",
+                    spotify: "https://open.spotify.com/intl-tr/track/2VhpoqJKPMTz2cHYcaAX2j",
+                    youtube: "https://youtu.be/u3malJJSGds",
                     apple: "https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368",
                     soundcloud: ""
                 }
@@ -481,7 +481,7 @@ class MusicManager {
             this.currentTrack = this.tracks[index];
             
             // Load audio if available
-            if (this.audioPlayer && this.currentTrack.audioFile) {
+            if (this.audioPlayer && this.currentTrack.audioFile && this.currentTrack.audioFile.trim() !== "") {
                 this.audioPlayer.src = this.currentTrack.audioFile;
                 this.audioPlayer.load();
                 
@@ -489,6 +489,8 @@ class MusicManager {
                 this.audioPlayer.play().catch(error => {
                     console.log('Auto-play prevented:', error.message);
                 });
+            } else {
+                console.log('🎵 Track selected (no audio file available):', this.currentTrack.title);
             }
             
             this.updatePlayerUI();

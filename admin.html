@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Links Admin - Hasan Arthur</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #c9a96e;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            color: #c9a96e;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            color: #888;
+            font-size: 1.1rem;
+        }
+        
+        .tracks-container {
+            display: grid;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .track-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(201, 169, 110, 0.3);
+        }
+        
+        .track-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .track-title {
+            font-size: 1.3rem;
+            color: #c9a96e;
+            font-weight: 600;
+        }
+        
+        .track-info {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        .platforms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        
+        .platform-input {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .platform-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            color: #c9a96e;
+        }
+        
+        .platform-input input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 0.75rem;
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .platform-input input:focus {
+            outline: none;
+            border-color: #c9a96e;
+            box-shadow: 0 0 0 2px rgba(201, 169, 110, 0.3);
+        }
+        
+        .platform-input input::placeholder {
+            color: #666;
+        }
+        
+        .spotify { border-left: 4px solid #1db954; }
+        .youtube { border-left: 4px solid #ff0000; }
+        .apple { border-left: 4px solid #000000; }
+        
+        .actions {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn {
+            background: #c9a96e;
+            color: #0f0f0f;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #d4b078;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #c9a96e;
+            color: #c9a96e;
+        }
+        
+        .btn-secondary:hover {
+            background: #c9a96e;
+            color: #0f0f0f;
+        }
+        
+        .success-message {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4caf50;
+            color: #4caf50;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            text-align: center;
+            display: none;
+        }
+        
+        .note {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 2rem;
+            color: #ffc107;
+        }
+        
+        @media (max-width: 768px) {
+            .platforms-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .track-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎵 Music Links Admin</h1>
+            <p>Update platform links for your tracks and albums</p>
+        </div>
+        
+        <div class="note">
+            <strong>Instructions:</strong> Update the links for each platform. Spotify links should be direct track links (e.g., /track/...), YouTube should be direct video links (youtu.be/...), and Apple Music can be artist or track links.
+        </div>
+        
+        <div class="success-message" id="successMessage">
+            Links updated successfully! Changes will be applied to the website.
+        </div>
+        
+        <div class="tracks-container" id="tracksContainer">
+            <!-- Tracks will be loaded here by JavaScript -->
+        </div>
+        
+        <div class="actions">
+            <button class="btn" onclick="saveAllLinks()">💾 Save All Changes</button>
+            <button class="btn btn-secondary" onclick="loadCurrentLinks()">🔄 Reload Current</button>
+            <button class="btn btn-secondary" onclick="exportLinks()">📋 Export JSON</button>
+        </div>
+    </div>
+
+    <script>
+        // Track data - this will be synced with music-manager.js
+        let tracksData = [];
+        
+        // Load current track data
+        function loadCurrentLinks() {
+            // Fetch current data from music-manager.js
+            fetch('assets/js/music-manager.js')
+                .then(response => response.text())
+                .then(data => {
+                    // Parse track data from the file (basic parsing)
+                    parseTracksFromFile(data);
+                    renderTracks();
+                })
+                .catch(error => {
+                    console.error('Error loading tracks:', error);
+                    // Fallback data
+                    loadFallbackData();
+                });
+        }
+        
+        function parseTracksFromFile(fileContent) {
+            // Extract track data (basic regex parsing)
+            const trackMatches = fileContent.match(/{\s*id:\s*\d+,[\s\S]*?}/g);
+            tracksData = [];
+            
+            if (trackMatches) {
+                trackMatches.forEach((match, index) => {
+                    const titleMatch = match.match(/title:\s*"([^"]+)"/);
+                    const spotifyMatch = match.match(/spotify:\s*"([^"]+)"/);
+                    const youtubeMatch = match.match(/youtube:\s*"([^"]+)"/);
+                    const appleMatch = match.match(/apple:\s*"([^"]+)"/);
+                    
+                    if (titleMatch) {
+                        tracksData.push({
+                            id: index + 1,
+                            title: titleMatch[1],
+                            spotify: spotifyMatch ? spotifyMatch[1] : '',
+                            youtube: youtubeMatch ? youtubeMatch[1] : '',
+                            apple: appleMatch ? appleMatch[1] : ''
+                        });
+                    }
+                });
+            }
+        }
+        
+        function loadFallbackData() {
+            tracksData = [
+                {
+                    id: 1,
+                    title: "LIAR",
+                    spotify: "https://open.spotify.com/intl-tr/track/2VhpoqJKPMTz2cHYcaAX2j",
+                    youtube: "https://youtu.be/u3malJJSGds",
+                    apple: "https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368"
+                },
+                {
+                    id: 2,
+                    title: "Maimeyst",
+                    spotify: "https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef",
+                    youtube: "https://www.youtube.com/@HasanArthurAltuntaş",
+                    apple: "https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368"
+                },
+                {
+                    id: 3,
+                    title: "Umbralthorne",
+                    spotify: "https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef",
+                    youtube: "https://www.youtube.com/@HasanArthurAltuntaş",
+                    apple: "https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368"
+                }
+            ];
+            renderTracks();
+        }
+        
+        function renderTracks() {
+            const container = document.getElementById('tracksContainer');
+            container.innerHTML = '';
+            
+            tracksData.forEach(track => {
+                const trackCard = document.createElement('div');
+                trackCard.className = 'track-card';
+                trackCard.innerHTML = `
+                    <div class="track-header">
+                        <div class="track-title">${track.title}</div>
+                        <div class="track-info">Track ID: ${track.id}</div>
+                    </div>
+                    <div class="platforms-grid">
+                        <div class="platform-input spotify">
+                            <label class="platform-label">
+                                <span style="color: #1db954;">🎵</span> Spotify Link
+                            </label>
+                            <input type="url" 
+                                   id="spotify-${track.id}" 
+                                   value="${track.spotify || ''}"
+                                   placeholder="https://open.spotify.com/intl-tr/track/...">
+                        </div>
+                        <div class="platform-input youtube">
+                            <label class="platform-label">
+                                <span style="color: #ff0000;">📹</span> YouTube Link
+                            </label>
+                            <input type="url" 
+                                   id="youtube-${track.id}" 
+                                   value="${track.youtube || ''}"
+                                   placeholder="https://youtu.be/...">
+                        </div>
+                        <div class="platform-input apple">
+                            <label class="platform-label">
+                                <span style="color: #000;">🍎</span> Apple Music Link
+                            </label>
+                            <input type="url" 
+                                   id="apple-${track.id}" 
+                                   value="${track.apple || ''}"
+                                   placeholder="https://music.apple.com/...">
+                        </div>
+                    </div>
+                `;
+                container.appendChild(trackCard);
+            });
+        }
+        
+        function saveAllLinks() {
+            // Collect all input data
+            const updatedData = tracksData.map(track => {
+                return {
+                    ...track,
+                    spotify: document.getElementById(`spotify-${track.id}`).value,
+                    youtube: document.getElementById(`youtube-${track.id}`).value,
+                    apple: document.getElementById(`apple-${track.id}`).value
+                };
+            });
+            
+            // Generate updated JavaScript code
+            const jsCode = generateUpdatedJS(updatedData);
+            
+            // Show the generated code for manual copy-paste
+            showGeneratedCode(jsCode);
+            
+            // Show success message
+            document.getElementById('successMessage').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'none';
+            }, 3000);
+        }
+        
+        function generateUpdatedJS(data) {
+            let jsCode = '';
+            data.forEach(track => {
+                jsCode += `
+// ${track.title} - Update platforms section
+platforms: {
+    spotify: "${track.spotify}",
+    youtube: "${track.youtube}",
+    apple: "${track.apple}",
+    soundcloud: ""
+}
+`;
+            });
+            return jsCode;
+        }
+        
+        function showGeneratedCode(code) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+            `;
+            
+            const content = document.createElement('div');
+            content.style.cssText = `
+                background: #1a1a1a;
+                border-radius: 15px;
+                padding: 2rem;
+                max-width: 80%;
+                max-height: 80%;
+                overflow: auto;
+                border: 2px solid #c9a96e;
+            `;
+            
+            content.innerHTML = `
+                <h3 style="color: #c9a96e; margin-bottom: 1rem;">Generated Code - Copy and Update</h3>
+                <p style="color: #888; margin-bottom: 1rem;">Copy this code and manually update the platforms sections in music-manager.js</p>
+                <textarea style="width: 100%; height: 400px; background: #0f0f0f; color: white; border: 1px solid #c9a96e; border-radius: 8px; padding: 1rem; font-family: monospace;" readonly>${code}</textarea>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <button onclick="this.closest('div').parentElement.remove()" style="background: #c9a96e; color: #0f0f0f; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer;">Close</button>
+                </div>
+            `;
+            
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+        }
+        
+        function exportLinks() {
+            const data = tracksData.map(track => ({
+                title: track.title,
+                spotify: document.getElementById(`spotify-${track.id}`).value,
+                youtube: document.getElementById(`youtube-${track.id}`).value,
+                apple: document.getElementById(`apple-${track.id}`).value
+            }));
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'music-links.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCurrentLinks();
+        });
+    </script>
+</body>
+</html>
