@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Hasan Arthur Altuntaş</title>
+    <link rel="stylesheet" href="assets/css/hasan-arthur-design.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Admin-specific styles */
+        .admin-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .admin-login {
+            max-width: 400px;
+            margin: 10vh auto;
+            padding: 2rem;
+            background: var(--card-gradient);
+            border-radius: 15px;
+            border: 1px solid rgba(212, 176, 120, 0.2);
+            text-align: center;
+        }
+
+        .admin-login h2 {
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+        }
+
+        .admin-dashboard {
+            display: none;
+            padding: 2rem 0;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            background: var(--card-gradient);
+            border-radius: 15px;
+            border: 1px solid rgba(212, 176, 120, 0.2);
+        }
+
+        .dashboard-title {
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .logout-btn:hover {
+            background: rgba(244, 67, 54, 0.3);
+        }
+
+        .admin-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .admin-section {
+            background: var(--card-gradient);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(212, 176, 120, 0.2);
+        }
+
+        .admin-section h3 {
+            color: var(--accent-gold);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .music-manager {
+            margin-bottom: 2rem;
+        }
+
+        .track-form {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .track-list {
+            background: rgba(15, 15, 15, 0.8);
+            border-radius: 10px;
+            padding: 1rem;
+            border: 1px solid rgba(212, 176, 120, 0.2);
+        }
+
+        .track-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background: rgba(22, 22, 22, 0.9);
+            border-radius: 8px;
+            border: 1px solid rgba(212, 176, 120, 0.1);
+        }
+
+        .track-info {
+            flex: 1;
+        }
+
+        .track-info h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .track-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .track-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .edit-btn, .delete-btn {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .edit-btn {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196f3;
+            border: 1px solid rgba(33, 150, 243, 0.3);
+        }
+
+        .delete-btn {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .status-message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .status-success {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .status-error {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .site-preview {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .preview-btn {
+            background: var(--accent-gold);
+            color: var(--primary-black);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .preview-btn:hover {
+            background: var(--rich-gold);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-container">
+            <div class="logo-loader">
+                <div class="logo-circle">
+                    <img src="assets/images/logo-main.png" alt="Hasan Arthur Logo" class="loader-logo">
+                    <div class="loader-ring"></div>
+                </div>
+            </div>
+            <h2 class="loader-title">ADMIN PANEL</h2>
+            <p class="loader-subtitle">Authenticating...</p>
+        </div>
+    </div>
+
+    <!-- Admin Login -->
+    <div class="admin-login" id="adminLogin">
+        <h2>
+            <i class="fas fa-shield-alt"></i>
+            Admin Access
+        </h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="adminKey">Admin Key:</label>
+                <input type="password" id="adminKey" class="admin-input" placeholder="Enter admin key" required>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-unlock"></i>
+                Access Panel
+            </button>
+        </form>
+        <div id="loginMessage"></div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-container">
+        <div class="admin-dashboard" id="adminDashboard">
+            <div class="dashboard-header">
+                <div>
+                    <h1 class="dashboard-title">
+                        <i class="fas fa-cog"></i>
+                        Admin Dashboard
+                    </h1>
+                    <p style="color: var(--text-secondary); margin: 0;">Manage your music portfolio</p>
+                </div>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+
+            <div class="admin-sections">
+                <!-- Music Management -->
+                <div class="admin-section music-manager">
+                    <h3>
+                        <i class="fas fa-music"></i>
+                        Music Tracks
+                    </h3>
+                    
+                    <form class="track-form" id="trackForm">
+                        <div class="form-group">
+                            <label for="trackTitle">Track Title:</label>
+                            <input type="text" id="trackTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="trackArtist">Artist:</label>
+                            <input type="text" id="trackArtist" value="Hasan Arthur Altuntaş" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="trackGenre">Genre:</label>
+                            <input type="text" id="trackGenre" placeholder="e.g. Pop, Electronic">
+                        </div>
+                        <div class="form-group">
+                            <label for="trackDuration">Duration:</label>
+                            <input type="text" id="trackDuration" placeholder="3:45">
+                        </div>
+                        <div class="form-group">
+                            <label for="spotifyUrl">Spotify URL:</label>
+                            <input type="url" id="spotifyUrl" placeholder="https://open.spotify.com/track/...">
+                        </div>
+                        <div class="form-group">
+                            <label for="youtubeUrl">YouTube URL:</label>
+                            <input type="url" id="youtubeUrl" placeholder="https://youtu.be/...">
+                        </div>
+                        <div class="form-group">
+                            <label for="appleUrl">Apple Music URL:</label>
+                            <input type="url" id="appleUrl" placeholder="https://music.apple.com/...">
+                        </div>
+                        <div class="form-group">
+                            <label for="soundcloudUrl">SoundCloud URL:</label>
+                            <input type="url" id="soundcloudUrl" placeholder="https://soundcloud.com/...">
+                        </div>
+                        <div class="form-group">
+                            <label for="artworkUrl">Artwork URL:</label>
+                            <input type="url" id="artworkUrl" placeholder="https://example.com/image.jpg">
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Add Track
+                        </button>
+                    </form>
+
+                    <div class="track-list" id="trackList">
+                        <!-- Tracks will be loaded here -->
+                    </div>
+                    
+                    <div id="musicMessage"></div>
+                </div>
+
+                <!-- Site Management -->
+                <div class="admin-section">
+                    <h3>
+                        <i class="fas fa-globe"></i>
+                        Site Management
+                    </h3>
+                    
+                    <div class="site-preview">
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                            Preview and manage your live site
+                        </p>
+                        <button class="preview-btn" id="previewSite">
+                            <i class="fas fa-external-link-alt"></i>
+                            View Live Site
+                        </button>
+                    </div>
+
+                    <div class="status-message status-success" style="margin-top: 2rem;">
+                        <i class="fas fa-check-circle"></i>
+                        Site is live and accessible
+                    </div>
+                </div>
+
+                <!-- Analytics -->
+                <div class="admin-section">
+                    <h3>
+                        <i class="fas fa-chart-line"></i>
+                        Analytics
+                    </h3>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number" id="totalTracks">0</div>
+                            <div class="stat-label">Total Tracks</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="totalPlays">12K+</div>
+                            <div class="stat-label">Total Plays</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="activePlatforms">3</div>
+                            <div class="stat-label">Active Platforms</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/admin-system.js"></script>
+    <script>
+        // Hide loader after page loads
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('pageLoader').classList.add('hide');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
