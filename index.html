@@ -111,43 +111,18 @@
     }
     </script>
     
-    <title>🎵 Hasan Arthur Altuntaş - Profesyonel Müzisyen ve Prodüktör | Müzik Portföyü</title>
-    <meta name="version" content="1.2.0">
-    <meta name="build-time" content="2024-12-21T17:00:00Z">
+    <title>🎵 Hasan Arthur Altuntaş - Sonic Spectrum Portfolio</title>
     
-    <!-- DNS prefetch for external domains -->
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
-    
+    <!-- Optimized Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
     
-    <!-- Critical CSS - load synchronously -->
-    <link rel="stylesheet" href="assets/css/main.css?v=2.0.0">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
-    <!-- Non-critical CSS - async load -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
-    
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
-    
-    <link rel="preload" href="assets/css/animations.css?v=1.5.0" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="assets/css/animations.css?v=1.5.0"></noscript>
-    
-    <link rel="preload" href="assets/css/compatibility.css?v=1.5.0" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="assets/css/compatibility.css?v=1.5.0"></noscript>
-    
-    <!-- Admin CSS only loads when needed, not on main site -->
-    
-    <!-- Language System -->
-    <link rel="stylesheet" href="assets/css/language-toggle.css?v=1.0">
-    
-    <!-- Admin Security (Hidden) -->
-    <link rel="preload" href="assets/css/admin/security.css?v=2.0.0" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="assets/css/admin/security.css?v=2.0.0"></noscript>
+    <!-- HASAN ARTHUR DESIGN SYSTEM -->
+    <link rel="stylesheet" href="assets/css/hasan-arthur-design.css">
     
     <!-- Prefetch critical images -->
     <link rel="preload" href="assets/images/logo-transparent.png" as="image" type="image/png">
@@ -169,137 +144,107 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-    <div class="page-loader">
+    <!-- Loading Screen -->
+    <div class="page-loader" id="pageLoader">
         <div class="loader-container">
             <div class="logo-loader">
                 <div class="logo-circle">
-                    <img src="assets/images/logo-main.png?v=1.0" alt="Logo" class="loader-logo">
+                    <img src="assets/images/logo-main.png" alt="Hasan Arthur Logo" class="loader-logo">
                     <div class="loader-ring"></div>
-                </div>
-                <div class="sound-waves">
-                    <div class="wave wave-1"></div>
-                    <div class="wave wave-2"></div>
-                    <div class="wave wave-3"></div>
-                    <div class="wave wave-4"></div>
-                    <div class="wave wave-5"></div>
                 </div>
             </div>
             <h2 class="loader-title">HASAN ARTHUR</h2>
-            <p class="loader-subtitle" data-translate="loading.portfolio">Music portfolio loading...</p>
+            <p class="loader-subtitle">Music Portfolio Loading...</p>
             <div class="loading-progress">
                 <div class="progress-bar"></div>
             </div>
         </div>
     </div>
 
-    <!-- Language Toggle (Fixed Position) -->
-    <div class="language-toggle" id="languageToggle">
-        <button class="lang-btn active" data-lang="en">
-            <span class="flag">🇺🇸</span>
-            <span class="lang-text">EN</span>
-        </button>
-        <button class="lang-btn" data-lang="tr">
-            <span class="flag">🇹🇷</span>
-            <span class="lang-text">TR</span>
-        </button>
-    </div>
+    <!-- Magnetic Cursor -->
+    <div class="cursor" id="cursor"></div>
+    
+    <!-- Clean Background -->
+    <div class="sonic-canvas"></div>
 
-    <header class="header" id="header">
-        <nav class="navbar">
-            <div class="nav-container">
-                <div class="nav-logo">
-                    <a href="#home">
-                        <img src="assets/images/logo-transparent.png?v=1.0" alt="Hasan Arthur Altuntaş Logo" class="logo-image" width="40" height="40">
-                        <span>HASAN ARTHUR</span>
+    <!-- Language Toggle - dynamically generated by language-system.js -->
+    <div class="language-toggle" id="languageToggle"></div>
+
+    <!-- Navigation -->
+    <nav class="sonic-nav" id="sonicNav">
+        <div class="nav-container">
+            <a href="#home" class="nav-brand">
+                <img src="assets/images/logo-main.png" alt="HA Logo" class="brand-logo">
+                <span>HASAN ARTHUR</span>
+            </a>
+            
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active" data-translate="nav.home">Home</a></li>
+                <li><a href="#about" class="nav-link" data-translate="nav.about">About</a></li>
+                <li><a href="#music" class="nav-link" data-translate="nav.music">Music</a></li>
+                <li><a href="#software" class="nav-link" data-translate="nav.software">Software</a></li>
+                <li><a href="#gallery" class="nav-link" data-translate="nav.gallery">Gallery</a></li>
+                <li><a href="#contact" class="nav-link" data-translate="nav.contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section - Professional Modern -->
+    <section class="sonic-hero" id="home">
+        <div class="container" style="display: contents;">
+            <!-- Hero Visual -->
+            <div class="hero-visual">
+                <div class="hero-profile">
+                    <img src="assets/images/hasan-arthur-profile.jpg" alt="Hasan Arthur Altuntaş" class="hero-profile-img">
+                </div>
+            </div>
+            
+            <!-- Hero Content -->
+            <div class="hero-content">
+                <h1 class="hero-title">HASAN ARTHUR ALTUNTAŞ</h1>
+                <h2 class="hero-subtitle">Cinematic Music Producer</h2>
+                <p class="hero-description">
+                    Creating atmospheric soundscapes and reimagining iconic film scores. 
+                    Each composition tells a story through the universal language of music, 
+                    bringing emotional depth to every note.
+                </p>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">10+</span>
+                        <span class="stat-label">Original Tracks</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">12K+</span>
+                        <span class="stat-label">Total Plays</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">3</span>
+                        <span class="stat-label">Platforms</span>
+                    </div>
+                </div>
+                
+                <div class="hero-buttons">
+                    <a href="#music" class="sonic-btn primary">
+                        <i class="fas fa-play"></i>
+                        <span>Explore Music</span>
+                    </a>
+                    <a href="#about" class="sonic-btn secondary">
+                        <i class="fas fa-user"></i>
+                        <span>Learn More</span>
                     </a>
                 </div>
-                
-                <ul class="nav-menu" id="nav-menu">
-                    <li class="nav-item">
-                        <a href="#home" class="nav-link active" data-translate="nav.home">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#about" class="nav-link" data-translate="nav.about">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#music" class="nav-link" data-translate="nav.music">Music</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#software" class="nav-link" data-translate="nav.software">Software</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#gallery" class="nav-link" data-translate="nav.gallery">Gallery</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#contact" class="nav-link" data-translate="nav.contact">Contact</a>
-                    </li>
-                </ul>
-                
-                <div class="nav-toggle" id="nav-toggle">
-                    <span class="hamburger-line"></span>
-                    <span class="hamburger-line"></span>
-                    <span class="hamburger-line"></span>
-                </div>
             </div>
-        </nav>
-    </header>
+        </div>
+    </section>
 
-    <main>
-        <section class="hero" id="home" style="background-image: url('assets/images/hero-musician-bg.jpg');">
-            <div class="hero-background">
-                <div class="hero-overlay"></div>
-                <div class="floating-notes">
-                    <i class="fas fa-music note-1"></i>
-                    <i class="fas fa-music note-2"></i>
-                    <i class="fas fa-music note-3"></i>
-                    <i class="fas fa-music note-4"></i>
-                    <i class="fas fa-music note-5"></i>
-                </div>
-            </div>
-            
-            <div class="hero-content">
-                <div class="container">
-                    <div class="hero-text">
-                        <h1 class="hero-title" data-translate="hero.title">HASAN ARTHUR ALTUNTAŞ</h1>
-                        <h2 class="hero-subtitle" data-translate="hero.subtitle">Professional Musician & Producer</h2>
-                        <p class="hero-description" data-translate="hero.description">
-                            Crafting cinematic and instrumental music that tells stories through universal language of sound. Each note carries emotion, every melody holds a memory.
-                        </p>
-                        <div class="hero-buttons">
-                            <a href="#music" class="btn btn-primary modern-btn stagger-animation stagger-1">
-                                <i class="fas fa-play"></i>
-                                <span data-translate="hero.listen">Listen to Music</span>
-                            </a>
-                            <a href="#about" class="btn btn-secondary modern-btn stagger-animation stagger-2">
-                                <i class="fas fa-user"></i>
-                                <span data-translate="hero.contact">Get in Touch</span>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div class="hero-image">
-                        <div class="image-container">
-                            <img src="assets/images/hasan-arthur-profile.jpg?v=1.0" alt="Hasan Arthur Altuntaş - Profesyonel Müzisyen" class="hero-img" width="800" height="600" loading="eager">
-                            <div class="image-glow"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="scroll-indicator">
-                <div class="mouse">
-                    <div class="wheel"></div>
-                </div>
-                <p data-translate="ui.scroll">Scroll down</p>
-            </div>
-        </section>
-
-        <section class="about" id="about">
-            <div class="container">
-                <div class="glass-container">
+    <!-- About Section -->
+    <section class="section" id="about">
+        <div class="container">
+            <div class="glass-container">
                 <div class="section-header">
-                    <h2 class="section-title" data-translate="about.title">About Me</h2>
-                    <p class="section-subtitle" data-translate="about.subtitle">Musical Journey & Vision</p>
+                    <h2 class="section-title">About Me</h2>
+                    <p class="section-subtitle">Cinematic Music Reimagined</p>
                 </div>
                 
                 <div class="about-content">
@@ -341,12 +286,13 @@
             </div>
         </section>
 
-        <section class="music" id="music">
-            <div class="container">
-                <div class="glass-container">
+    <!-- Music Section -->
+    <section class="section" id="music">
+        <div class="container">
+            <div class="glass-container">
                 <div class="section-header">
-                    <h2 class="section-title" data-translate="music.title">My Music</h2>
-                    <p class="section-subtitle" data-translate="music.subtitle">Listen to my latest compositions</p>
+                    <h2 class="section-title">My Music</h2>
+                    <p class="section-subtitle">Cinematic Compositions & Film Score Reimaginings</p>
                 </div>
                 
                 <!-- Modern Spotify-Style Music Player -->
@@ -441,9 +387,8 @@
                         </div>
                     </div>
                     
-                    <audio id="audioPlayer" preload="none" crossorigin="anonymous">
-                        <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
-                        <p>Your browser doesn't support HTML5 audio. Müzik dosyaları yüklenmeyi bekliyor.</p>
+                    <audio id="audioPlayer" preload="none">
+                        <p>Music player ready for streaming from platforms.</p>
                     </audio>
                 </div>
                 
@@ -752,22 +697,22 @@
                 </div>
                 
                 <div class="footer-section">
-                    <h4 data-translate="footer.social">Follow Me</h4>
+                    <h4 data-translate="footer.genres">Music Genres</h4>
                     <ul>
-                        <li><a href="#">Pop</a></li>
-                        <li><a href="#">Rock</a></li>
-                        <li><a href="#">Alternatif</a></li>
-                        <li><a href="#">Akustik</a></li>
-                        <li><a href="#">Instrumental</a></li>
+                        <li><a href="#music">Cinematic</a></li>
+                        <li><a href="#music">Ambient</a></li>
+                        <li><a href="#music">Electronic</a></li>
+                        <li><a href="#music">Film Score</a></li>
+                        <li><a href="#music">Piano</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-section">
                     <h4 data-translate="footer.contact_info">Contact Info</h4>
                     <div class="footer-contact">
-                        <p><i class="fas fa-envelope"></i> info@muzikportfoyu.com</p>
-                        <p><i class="fas fa-phone"></i> +90 555 123 45 67</p>
-                        <p><i class="fas fa-map-marker-alt"></i> İstanbul, Türkiye</p>
+                        <p><i class="fas fa-envelope"></i> hasanarthuraltuntas@gmail.com</p>
+                        <p><i class="fas fa-globe"></i> Professional Music Producer</p>
+                        <p><i class="fas fa-map-marker-alt"></i> Turkey</p>
                     </div>
                 </div>
             </div>
@@ -798,106 +743,11 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 
-    <!-- Modular JavaScript Architecture -->
-    <!-- Language System (Load First) -->
-    <script src="assets/js/language-system.js?v=1.0"></script>
+    <!-- HASAN ARTHUR INTERACTIONS -->
+    <script src="assets/js/sonic-interactions.js"></script>
     
-    <!-- Utilities -->
-    <script defer src="assets/js/utils/storage.js?v=2.0.0"></script>
-    <script defer src="assets/js/utils/performance.js?v=2.0.0"></script>
-    
-    <!-- Components -->
-    <script defer src="assets/js/components/loader.js?v=2.0.0"></script>
-    <script defer src="assets/js/components/navigation.js?v=2.0.0"></script>
-    <script defer src="assets/js/components/animations.js?v=2.0.0"></script>
-    <script defer src="assets/js/components/background.js?v=2.0.0"></script>
-    
-    <!-- Main Application -->
-    <script defer src="assets/js/main-modular.js?v=2.0.0"></script>
-    
-    <!-- Music Player & Gallery (specialized components) -->
-    <script defer src="assets/js/music-player.js?v=1.5.0"></script>
-    <script defer src="assets/js/gallery.js?v=1.5.0"></script>
-    
-    <!-- Admin Security (Hidden) -->
-    <script defer src="assets/js/admin/security.js?v=2.0.0"></script>
-    
-    <!-- Data & API Systems -->
-    <script defer src="assets/js/data/api-fallback.js?v=2.0.0"></script>
-    
-    <!-- Content Manager -->
-    <script defer src="assets/js/admin/content-manager.js?v=2.0.0"></script>
-    
-    <!-- Professional Enhancements -->
-    <script defer src="assets/js/enhancements/professional.js?v=2.0.0"></script>
-    
-    <!-- Legacy Code Cleanup -->
-    <script defer src="assets/js/legacy/cleanup.js?v=2.0.0"></script>
-    
-    <!-- Maintenance Mode Check -->
-    <script>
-        // Maintenance Mode Controller
-        const MaintenanceMode = {
-            isEnabled: true, // Set to false to disable maintenance mode
-            
-            checkBypass() {
-                if (!this.isEnabled) return true;
-                
-                const bypass = localStorage.getItem('maintenance_bypass');
-                const timestamp = localStorage.getItem('bypass_timestamp');
-                
-                if (bypass === 'true' && timestamp) {
-                    const now = Date.now();
-                    const bypassTime = parseInt(timestamp);
-                    const hoursPassed = (now - bypassTime) / (1000 * 60 * 60);
-                    
-                    // Bypass expires after 24 hours
-                    if (hoursPassed < 24) {
-                        console.log('🔓 Maintenance bypass active');
-                        return true;
-                    } else {
-                        // Clear expired bypass
-                        localStorage.removeItem('maintenance_bypass');
-                        localStorage.removeItem('bypass_timestamp');
-                    }
-                }
-                
-                return false;
-            },
-            
-            redirect() {
-                console.log('🔧 Redirecting to maintenance page');
-                window.location.href = 'maintenance.html';
-            }
-        };
-        
-        // Check maintenance mode before loading anything
-        if (!MaintenanceMode.checkBypass()) {
-            MaintenanceMode.redirect();
-        }
-    </script>
-
-    <script>
-        // Admin access system
-        let adminKeySequence = '';
-        let adminTimeout;
-        
-        document.addEventListener('keypress', function(e) {
-            adminKeySequence += e.key.toUpperCase();
-            
-            // Clear sequence after 3 seconds
-            clearTimeout(adminTimeout);
-            adminTimeout = setTimeout(() => {
-                adminKeySequence = '';
-            }, 3000);
-            
-            // Check for admin sequence
-            if (adminKeySequence.includes('ADMIN')) {
-                adminKeySequence = '';
-                window.location.href = 'admin.html';
-            }
-        });
-    </script>
+    <!-- MUSIC MANAGER -->
+    <script src="assets/js/music-manager.js"></script>
 
     <!-- Content loading handled by modular JS files -->
 </body>
