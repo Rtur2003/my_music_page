@@ -19,10 +19,14 @@ class AdminSystem {
     }
 
     checkAuthStatus() {
-        const adminSession = sessionStorage.getItem('admin_authenticated');
-        if (adminSession === 'true') {
-            this.isAuthenticated = true;
-            this.showDashboard();
+        try {
+            const adminSession = sessionStorage.getItem('admin_authenticated');
+            if (adminSession === 'true') {
+                this.isAuthenticated = true;
+                this.showDashboard();
+            }
+        } catch (error) {
+            console.log('SessionStorage not available, continuing without saved auth');
         }
     }
 
@@ -72,7 +76,16 @@ class AdminSystem {
             if (isValid) {
                 this.isAuthenticated = true;
                 this.adminKey = enteredKey;
-                sessionStorage.setItem('admin_authenticated', 'true');
+                
+                // Save auth status if storage available
+                try {
+                    if (window.sessionStorage) {
+                        sessionStorage.setItem('admin_authenticated', 'true');
+                    }
+                } catch (error) {
+                    console.log('Session storage not available');
+                }
+                
                 this.showDashboard();
                 this.showMessage(messageDiv, 'Authentication successful!', 'success');
             } else {
@@ -86,16 +99,17 @@ class AdminSystem {
     }
 
     async validateAdminKey(enteredKey) {
-        // For production with Netlify, we'll check environment variables
-        // For development, we'll use a secure fallback
+        console.log('Validating admin key...');
         
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            // Development environment - use hardcoded key for testing
+        // For development, use the dev key
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '') {
             const devKey = 'HASAN_ARTHUR_ADMIN_2024';
+            console.log('Development mode - checking dev key');
             return enteredKey === devKey;
         }
 
         try {
+            console.log('Production mode - checking with serverless function');
             // For Netlify production, make API call to serverless function
             const response = await fetch('/.netlify/functions/admin-auth', {
                 method: 'POST',
@@ -107,26 +121,32 @@ class AdminSystem {
 
             if (response.ok) {
                 const result = await response.json();
+                console.log('Serverless function response:', result);
                 return result.valid === true;
+            } else {
+                console.log('Serverless function failed, using fallback');
+                return this.fallbackValidation(enteredKey);
             }
             
-            // Fallback for direct deployment without serverless functions
-            return this.fallbackValidation(enteredKey);
-            
         } catch (error) {
-            console.log('Serverless function not available, using fallback validation');
+            console.log('Serverless function not available, using fallback validation:', error.message);
             return this.fallbackValidation(enteredKey);
         }
     }
 
     fallbackValidation(enteredKey) {
-        // Fallback validation for when serverless functions aren't available
-        // This uses a hash-based approach to avoid exposing the key in source code
-        const expectedHash = 'cf23df2207d99a74fbe169e3eba035e633b65d94'; // SHA-1 of "HASAN_ARTHUR_ADMIN_2024"
+        console.log('Using fallback validation');
         
-        // Simple hash function for client-side verification
-        const hash = this.simpleHash(enteredKey);
-        return hash === expectedHash;
+        // Known valid keys for fallback
+        const validKeys = [
+            'MusicPage123',           // Netlify production key
+            'HASAN_ARTHUR_ADMIN_2024' // Development key
+        ];
+        
+        const isValid = validKeys.includes(enteredKey);
+        console.log('Fallback validation result:', isValid);
+        
+        return isValid;
     }
 
     simpleHash(str) {
@@ -145,7 +165,15 @@ class AdminSystem {
     handleLogout() {
         this.isAuthenticated = false;
         this.adminKey = null;
-        sessionStorage.removeItem('admin_authenticated');
+        
+        try {
+            if (window.sessionStorage) {
+                sessionStorage.removeItem('admin_authenticated');
+            }
+        } catch (error) {
+            console.log('Session storage not available for logout');
+        }
+        
         this.showLogin();
     }
 
@@ -319,12 +347,15 @@ class AdminSystem {
 
     loadMusicData() {
         try {
-            const stored = localStorage.getItem('musicData');
-            if (stored) {
-                return JSON.parse(stored);
+            // Test if localStorage is available
+            if (typeof Storage !== 'undefined' && window.localStorage) {
+                const stored = localStorage.getItem('musicData');
+                if (stored) {
+                    return JSON.parse(stored);
+                }
             }
         } catch (error) {
-            console.error('Error loading music data:', error);
+            console.log('LocalStorage not available, using default data:', error.message);
         }
         
         // Default data structure
@@ -340,16 +371,19 @@ class AdminSystem {
 
     saveMusicData() {
         try {
-            localStorage.setItem('musicData', JSON.stringify(this.musicData));
-            
-            // Also save to session storage for cross-tab updates
-            sessionStorage.setItem('musicDataLastUpdated', Date.now().toString());
-            
-            return true;
+            if (typeof Storage !== 'undefined' && window.localStorage) {
+                localStorage.setItem('musicData', JSON.stringify(this.musicData));
+                
+                // Also save to session storage for cross-tab updates if available
+                if (window.sessionStorage) {
+                    sessionStorage.setItem('musicDataLastUpdated', Date.now().toString());
+                }
+                return true;
+            }
         } catch (error) {
-            console.error('Error saving music data:', error);
-            return false;
+            console.log('Storage not available, data not saved:', error.message);
         }
+        return false;
     }
 
     previewSite() {
