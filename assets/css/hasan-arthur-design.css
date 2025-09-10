@@ -4,25 +4,27 @@
    =============================================== */
 
 :root {
-    /* REFINED PROFESSIONAL PALETTE */
-    --primary-black: #0f0f0f;
-    --royal-black: #1a1a1a;
-    --deep-charcoal: #2d2d2d;
-    --soft-gray: #f2f2f2;
-    --warm-bg: #fafafa;
-    --light-bg: #f7f8fa;
+    /* DARK MODE PALETTE */
+    --primary-black: #0a0a0a;
+    --royal-black: #111111;
+    --deep-charcoal: #1a1a1a;
+    --dark-surface: #161616;
+    --darker-surface: #0f0f0f;
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
     
     /* SIGNATURE GOLD PALETTE */
-    --accent-gold: #c9a96e;
-    --rich-gold: #b8956a;
-    --light-gold: #d4b078;
-    --pale-gold: #e8d5a8;
+    --accent-gold: #d4b078;
+    --rich-gold: #c9a96e;
+    --light-gold: #e2c490;
+    --pale-gold: #f0d8a8;
     
-    /* PROFESSIONAL GRADIENTS */
-    --hero-gradient: linear-gradient(135deg, #fafafa 0%, #f2f2f2 100%);
-    --section-gradient: linear-gradient(135deg, #ffffff 0%, #f7f8fa 100%);
-    --gold-gradient: linear-gradient(45deg, #c9a96e, #d4b078, #b8956a);
-    --dark-gradient: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+    /* DARK MODE GRADIENTS */
+    --hero-gradient: linear-gradient(135deg, #111111 0%, #0a0a0a 100%);
+    --section-gradient: linear-gradient(135deg, #161616 0%, #111111 100%);
+    --gold-gradient: linear-gradient(45deg, #d4b078, #e2c490, #c9a96e);
+    --dark-gradient: linear-gradient(135deg, #0f0f0f 0%, #0a0a0a 100%);
+    --card-gradient: linear-gradient(135deg, #1a1a1a 0%, #161616 100%);
     
     /* REFINED SHADOWS */
     --shadow-subtle: 0 2px 15px rgba(0, 0, 0, 0.08);
@@ -170,8 +172,8 @@ html {
 
 body {
     font-family: 'Inter', 'SF Pro Display', -apple-system, sans-serif;
-    background: var(--light-bg);
-    color: var(--primary-black);
+    background: var(--primary-black);
+    color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
 }
@@ -187,16 +189,11 @@ body {
    =============================================== */
 
 .language-toggle {
-    position: fixed;
-    top: 100px;
-    right: 20px;
-    z-index: 1001;
     display: flex;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(22, 22, 22, 0.9);
     border-radius: 25px;
     padding: 5px;
-    box-shadow: var(--shadow-medium);
-    backdrop-filter: blur(10px);
+    border: 1px solid rgba(212, 176, 120, 0.3);
 }
 
 .lang-btn {
@@ -210,22 +207,22 @@ body {
     cursor: pointer;
     transition: var(--transition);
     font-size: 0.9rem;
-    color: var(--deep-charcoal);
+    color: var(--text-secondary);
 }
 
 .lang-btn.active {
     background: var(--accent-gold);
-    color: white;
+    color: var(--primary-black);
 }
 
 .lang-btn:hover {
-    background: var(--pale-gold);
-    color: var(--primary-black);
+    background: rgba(212, 176, 120, 0.2);
+    color: var(--accent-gold);
 }
 
 .lang-btn.active:hover {
     background: var(--rich-gold);
-    color: white;
+    color: var(--primary-black);
 }
 
 /* ===============================================
@@ -238,11 +235,12 @@ body {
     left: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(10, 10, 10, 0.95);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(201, 169, 110, 0.3);
+    border-bottom: 1px solid rgba(212, 176, 120, 0.2);
     padding: 1rem 0;
     transition: var(--transition);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
 }
 
 .sonic-nav.scrolled {
@@ -263,7 +261,7 @@ body {
     display: flex;
     align-items: center;
     gap: 1rem;
-    color: var(--primary-black);
+    color: var(--text-primary);
     text-decoration: none;
     font-weight: 700;
     font-size: 1.2rem;
@@ -291,7 +289,7 @@ body {
 }
 
 .nav-link {
-    color: var(--primary-black);
+    color: var(--text-secondary);
     text-decoration: none;
     position: relative;
     padding: 0.5rem 1rem;
@@ -312,22 +310,22 @@ body {
 
 .sonic-hero {
     min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
     align-items: center;
-    gap: 4rem;
-    padding: 2rem 0;
+    justify-content: center;
+    padding: 8rem 0 4rem;
     position: relative;
     background: var(--hero-gradient);
+    overflow: hidden;
 }
 
 .hero-content {
-    text-align: left;
+    text-align: center;
     z-index: 2;
     position: relative;
-    max-width: 600px;
+    max-width: 800px;
     padding: 2rem;
-    margin-left: auto;
+    margin: 0 auto;
 }
 
 .hero-visual {
@@ -355,7 +353,7 @@ body {
 .hero-title {
     font-size: clamp(2.5rem, 6vw, 4rem);
     font-weight: 900;
-    color: var(--primary-black);
+    color: var(--text-primary);
     margin-bottom: 1rem;
     line-height: 1.1;
 }
@@ -398,7 +396,7 @@ body {
 
 .hero-description {
     font-size: 1.1rem;
-    color: var(--pale-gold);
+    color: var(--text-secondary);
     margin-bottom: 3rem;
     max-width: 600px;
     margin-left: auto;
@@ -529,7 +527,7 @@ body {
 .section-title {
     font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 700;
-    color: var(--primary-black);
+    color: var(--text-primary);
     margin-bottom: 1rem;
 }
 
@@ -542,12 +540,12 @@ body {
 }
 
 .glass-container {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(22, 22, 22, 0.9);
     backdrop-filter: blur(20px);
     border-radius: 20px;
     padding: 3rem;
     box-shadow: var(--shadow-medium);
-    border: 1px solid rgba(201, 169, 110, 0.2);
+    border: 1px solid rgba(212, 176, 120, 0.2);
 }
 
 /* ===============================================
@@ -803,12 +801,12 @@ body {
 }
 
 .music-card {
-    background: white;
+    background: var(--card-gradient);
     border-radius: 15px;
     padding: 1.5rem;
     box-shadow: var(--shadow-medium);
     transition: var(--transition);
-    border: 1px solid rgba(201, 169, 110, 0.2);
+    border: 1px solid rgba(212, 176, 120, 0.2);
 }
 
 .music-card:hover {
@@ -841,12 +839,12 @@ body {
    =============================================== */
 
 .album-card {
-    background: white;
+    background: var(--card-gradient);
     border-radius: 15px;
     padding: 0;
     box-shadow: var(--shadow-medium);
     transition: var(--transition);
-    border: 1px solid rgba(201, 169, 110, 0.2);
+    border: 1px solid rgba(212, 176, 120, 0.2);
     overflow: hidden;
     position: relative;
 }
@@ -944,13 +942,13 @@ body {
 .album-info h4 {
     font-size: 1.1rem;
     font-weight: 600;
-    color: var(--primary-black);
+    color: var(--text-primary);
     margin-bottom: 0.5rem;
     line-height: 1.3;
 }
 
 .album-info p {
-    color: var(--deep-charcoal);
+    color: var(--text-secondary);
     font-size: 0.85rem;
     margin-bottom: 1rem;
     line-height: 1.4;
@@ -996,7 +994,7 @@ body {
 .music-card-info h4 {
     font-size: 1.1rem;
     font-weight: 600;
-    color: var(--primary-black);
+    color: var(--text-primary);
     margin-bottom: 0.5rem;
 }
 
@@ -1291,11 +1289,11 @@ body {
 }
 
 .software-card {
-    background: white;
+    background: var(--card-gradient);
     border-radius: 15px;
     padding: 2rem;
     box-shadow: var(--shadow-medium);
-    border: 1px solid rgba(201, 169, 110, 0.2);
+    border: 1px solid rgba(212, 176, 120, 0.2);
     transition: var(--transition);
 }
 
@@ -1305,7 +1303,7 @@ body {
 }
 
 .software-card h3 {
-    color: var(--primary-black);
+    color: var(--text-primary);
     font-size: 1.3rem;
     font-weight: 600;
     margin-bottom: 1rem;
@@ -1320,7 +1318,7 @@ body {
 }
 
 .software-card p {
-    color: var(--deep-charcoal);
+    color: var(--text-secondary);
     line-height: 1.6;
     margin-bottom: 1.5rem;
 }
@@ -1333,12 +1331,13 @@ body {
 }
 
 .tech-tag {
-    background: var(--pale-gold);
-    color: var(--primary-black);
+    background: rgba(212, 176, 120, 0.2);
+    color: var(--accent-gold);
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
     font-size: 0.8rem;
     font-weight: 500;
+    border: 1px solid rgba(212, 176, 120, 0.3);
 }
 
 /* ===============================================
