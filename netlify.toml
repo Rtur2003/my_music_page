@@ -1,6 +1,7 @@
 [build]
-  # Static site - no build command needed
-  publish = "/"
+  # Static site with serverless functions
+  publish = "."
+  functions = "netlify/functions"
   command = ""
 
 [build.environment]
@@ -202,6 +203,20 @@
   from = "/about/*"
   to = "/index.html#about"
   status = 301
+
+# Admin panel redirect
+[[redirects]]
+  from = "/admin"
+  to = "/admin.html"
+  status = 200
+
+# Function headers
+[[headers]]
+  for = "/.netlify/functions/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Headers = "Content-Type"
+    Access-Control-Allow-Methods = "POST, OPTIONS"
 
 # SPA fallback - MUST BE LAST
 [[redirects]]

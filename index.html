@@ -245,7 +245,7 @@
                 
                 <div class="about-content">
                     
-                    <div class="about-text slide-from-right animate-on-scroll">
+                    <div class="about-text">
                         <h3 data-translate="about.subtitle">Musical Journey & Vision</h3>
                         <p data-translate="about.text">
                             I tell stories in the universal language of music. Every note is an emotion, every melody is a memory. In the world of cinematic and instrumental music, I express myself while taking listeners on an emotional journey.
@@ -556,10 +556,65 @@
                 </div>
                 
                 <div class="gallery-grid" id="galleryGrid">
-                    <div class="empty-state">
-                        <i class="fas fa-images"></i>
-                        <h3 data-translate="gallery.loading">No images have been added yet</h3>
-                        <p>You can add gallery images from the admin panel</p>
+                    <!-- Gallery items will be dynamically loaded -->
+                    <div class="gallery-item" data-category="studio">
+                        <img src="assets/images/logo-main.png" alt="Studio Work" loading="lazy">
+                        <div class="gallery-overlay">
+                            <div class="gallery-info">
+                                <h4>Studio Sessions</h4>
+                                <p>Behind the scenes music production</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item" data-category="concerts">
+                        <img src="assets/images/logo-main.png" alt="Live Performance" loading="lazy">
+                        <div class="gallery-overlay">
+                            <div class="gallery-info">
+                                <h4>Live Performance</h4>
+                                <p>Concert and live show moments</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item" data-category="behind-scenes">
+                        <img src="assets/images/logo-main.png" alt="Behind Scenes" loading="lazy">
+                        <div class="gallery-overlay">
+                            <div class="gallery-info">
+                                <h4>Behind the Scenes</h4>
+                                <p>Creative process and preparation</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item" data-category="studio">
+                        <img src="assets/images/hasan-arthur-profile.jpg" alt="Creative Process" loading="lazy">
+                        <div class="gallery-overlay">
+                            <div class="gallery-info">
+                                <h4>Creative Process</h4>
+                                <p>Composing and arranging music</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item" data-category="concerts">
+                        <img src="assets/images/hasan-arthur-profile.jpg" alt="Stage Moments" loading="lazy">
+                        <div class="gallery-overlay">
+                            <div class="gallery-info">
+                                <h4>Stage Moments</h4>
+                                <p>Connecting with the audience</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item" data-category="behind-scenes">
+                        <img src="assets/images/logo-main.png" alt="Inspiration" loading="lazy">
+                        <div class="gallery-overlay">
+                            <div class="gallery-info">
+                                <h4>Finding Inspiration</h4>
+                                <p>Moments that spark creativity</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 </div>
@@ -624,7 +679,7 @@
                         </div>
                     </div>
                     
-                    <form class="contact-form" id="contactForm">
+                    <form class="contact-form" id="contactForm" name="contact" method="POST" data-netlify="true">
                         <div class="form-group">
                             <label for="name" data-translate="contact.name">Your Name</label>
                             <input type="text" id="name" name="name" required>
@@ -737,6 +792,12 @@
     
     <!-- MUSIC MANAGER -->
     <script src="assets/js/music-manager.js"></script>
+    
+    <!-- GALLERY MANAGER -->
+    <script src="assets/js/gallery.js"></script>
+    
+    <!-- CONTACT FORM HANDLER -->
+    <script src="assets/js/contact-form.js"></script>
     
     <!-- LANGUAGE SYSTEM -->
     <script src="assets/js/language-simple.js"></script>
