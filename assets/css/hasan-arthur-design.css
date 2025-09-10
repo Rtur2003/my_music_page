@@ -33,6 +33,10 @@
     /* SMOOTH TRANSITIONS */
     --ease-elegant: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     --transition: all 0.3s var(--ease-elegant);
+    
+    /* ADDITIONAL COLORS */
+    --warm-white: #ffffff;
+    --cinematic-gradient: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
 }
 
 /* ===============================================
@@ -45,7 +49,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: var(--cinematic-gradient);
+    background: var(--dark-gradient);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -243,7 +247,7 @@ body {
 
 .sonic-nav.scrolled {
     padding: 0.5rem 0;
-    box-shadow: var(--shadow-elegant);
+    box-shadow: var(--shadow-medium);
 }
 
 .nav-container {
@@ -427,7 +431,7 @@ body {
 
 .sonic-btn:hover {
     transform: translateY(-3px);
-    box-shadow: var(--shadow-deep);
+    box-shadow: var(--shadow-strong);
     background: var(--rich-gold);
 }
 
@@ -542,7 +546,7 @@ body {
     backdrop-filter: blur(20px);
     border-radius: 20px;
     padding: 3rem;
-    box-shadow: var(--shadow-elegant);
+    box-shadow: var(--shadow-medium);
     border: 1px solid rgba(201, 169, 110, 0.2);
 }
 
@@ -555,14 +559,14 @@ body {
 }
 
 .modern-player-card {
-    background: var(--cinematic-gradient);
+    background: var(--dark-gradient);
     border-radius: 20px;
     padding: 2rem;
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 2rem;
     align-items: center;
-    box-shadow: var(--shadow-deep);
+    box-shadow: var(--shadow-strong);
 }
 
 .player-artwork-section {
@@ -802,7 +806,7 @@ body {
     background: white;
     border-radius: 15px;
     padding: 1.5rem;
-    box-shadow: var(--shadow-elegant);
+    box-shadow: var(--shadow-medium);
     transition: var(--transition);
     border: 1px solid rgba(201, 169, 110, 0.2);
 }
@@ -840,7 +844,7 @@ body {
     background: white;
     border-radius: 15px;
     padding: 0;
-    box-shadow: var(--shadow-elegant);
+    box-shadow: var(--shadow-medium);
     transition: var(--transition);
     border: 1px solid rgba(201, 169, 110, 0.2);
     overflow: hidden;
@@ -1133,5 +1137,230 @@ body {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* ===============================================
+   FOOTER STYLING
+   =============================================== */
+
+.footer {
+    background: var(--dark-gradient);
+    color: white;
+    padding: 3rem 0 1rem;
+    margin-top: 5rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-section h4 {
+    color: var(--accent-gold);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-section ul li a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.footer-section ul li a:hover {
+    color: var(--accent-gold);
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.footer-logo-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+}
+
+.footer-logo span {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent-gold);
+}
+
+.footer-section p {
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.footer-social {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.footer-social a {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
+}
+
+.footer-social a:hover {
+    background: var(--accent-gold);
+    transform: translateY(-2px);
+}
+
+.footer-contact p {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-contact i {
+    color: var(--accent-gold);
+    width: 16px;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1.5rem;
+}
+
+.footer-bottom-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.footer-bottom p {
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+}
+
+.footer-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.footer-links a:hover {
+    color: var(--accent-gold);
+}
+
+/* ===============================================
+   SOFTWARE SECTION STYLING
+   =============================================== */
+
+.software-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.software-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: var(--shadow-medium);
+    border: 1px solid rgba(201, 169, 110, 0.2);
+    transition: var(--transition);
+}
+
+.software-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-gold);
+}
+
+.software-card h3 {
+    color: var(--primary-black);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.software-card h3 i {
+    color: var(--accent-gold);
+    font-size: 1.5rem;
+}
+
+.software-card p {
+    color: var(--deep-charcoal);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.software-tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.tech-tag {
+    background: var(--pale-gold);
+    color: var(--primary-black);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* ===============================================
+   RESPONSIVE FOOTER & SOFTWARE
+   =============================================== */
+
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .footer-bottom-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .software-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .footer-social {
+        justify-content: center;
     }
 }

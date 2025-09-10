@@ -19,11 +19,11 @@ class MusicManager {
                 type: 'EP',
                 trackCount: 4,
                 year: '2024',
-                artwork: 'https://i.scdn.co/image/ab67616d0000b273293e2cd135bc9a88be0ba85a0',
+                artwork: 'assets/images/logo-main.png',
                 platforms: {
-                    spotify: 'https://open.spotify.com/album/echoes-of-the-threshold',
-                    apple: 'https://music.apple.com/tr/album/echoes-of-the-threshold/1758593368',
-                    youtube: 'https://music.youtube.com/playlist?list=echoes-of-the-threshold'
+                    spotify: 'https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef',
+                    apple: 'https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368',
+                    youtube: 'https://www.youtube.com/@HasanArthurAltuntaş'
                 }
             },
             {
@@ -32,11 +32,11 @@ class MusicManager {
                 type: 'EP',
                 trackCount: 5,
                 year: '2024',
-                artwork: 'https://i.scdn.co/image/ab67616d0000b273246d5184031836ea71678e179',
+                artwork: 'assets/images/logo-main.png',
                 platforms: {
-                    spotify: 'https://open.spotify.com/album/lumenoria',
-                    apple: 'https://music.apple.com/tr/album/lumenoria/1758593368',
-                    youtube: 'https://music.youtube.com/playlist?list=lumenoria'
+                    spotify: 'https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef',
+                    apple: 'https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368',
+                    youtube: 'https://www.youtube.com/@HasanArthurAltuntaş'
                 }
             },
             {
@@ -45,11 +45,11 @@ class MusicManager {
                 type: 'EP',
                 trackCount: 3,
                 year: '2025',
-                artwork: 'https://i.scdn.co/image/ab67616d0000b2732b7783be69aa5f0ce284ab18c',
+                artwork: 'assets/images/logo-main.png',
                 platforms: {
-                    spotify: 'https://open.spotify.com/album/palgtron',
-                    apple: 'https://music.apple.com/tr/album/palgtron/1758593368',
-                    youtube: 'https://music.youtube.com/playlist?list=palgtron'
+                    spotify: 'https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef',
+                    apple: 'https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368',
+                    youtube: 'https://www.youtube.com/@HasanArthurAltuntaş'
                 }
             },
             {
@@ -58,11 +58,11 @@ class MusicManager {
                 type: 'EP',
                 trackCount: 2,
                 year: '2024',
-                artwork: 'https://i.scdn.co/image/ab67616d0000b273236ce0d2ce0fef90f174e3402',
+                artwork: 'assets/images/logo-main.png',
                 platforms: {
-                    spotify: 'https://open.spotify.com/album/echomara',
-                    apple: 'https://music.apple.com/tr/album/echomara/1758593368',
-                    youtube: 'https://music.youtube.com/playlist?list=echomara'
+                    spotify: 'https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef',
+                    apple: 'https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368',
+                    youtube: 'https://www.youtube.com/@HasanArthurAltuntaş'
                 }
             },
             {
@@ -71,11 +71,11 @@ class MusicManager {
                 type: 'EP',
                 trackCount: 2,
                 year: '2024',
-                artwork: 'https://i.scdn.co/image/ab67616d0000b27323c29e4803183636ea71678e179',
+                artwork: 'assets/images/logo-main.png',
                 platforms: {
-                    spotify: 'https://open.spotify.com/album/morbideum',
-                    apple: 'https://music.apple.com/tr/album/morbideum/1758593368',
-                    youtube: 'https://music.youtube.com/playlist?list=morbideum'
+                    spotify: 'https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef',
+                    apple: 'https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368',
+                    youtube: 'https://www.youtube.com/@HasanArthurAltuntaş'
                 }
             },
             {
@@ -84,11 +84,11 @@ class MusicManager {
                 type: 'EP',
                 trackCount: 2,
                 year: '2024',
-                artwork: 'https://i.scdn.co/image/ab67616d0000b27326d518403d07c4676a0a19f8f',
+                artwork: 'assets/images/logo-main.png',
                 platforms: {
-                    spotify: 'https://open.spotify.com/album/whanau',
-                    apple: 'https://music.apple.com/tr/album/whanau/1758593368',
-                    youtube: 'https://music.youtube.com/playlist?list=whanau'
+                    spotify: 'https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef',
+                    apple: 'https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368',
+                    youtube: 'https://www.youtube.com/@HasanArthurAltuntaş'
                 }
             }
         ];
@@ -103,11 +103,12 @@ class MusicManager {
                 duration: "2:56",
                 year: "2025",
                 description: "Latest single - A dramatic electronic composition exploring themes of deception and truth.",
-                artwork: "assets/images/covers/liar-cover.jpg",
+                artwork: "assets/images/logo-main.png",
+                audioFile: "https://www.soundjay.com/misc/sounds-1039.mp3",
                 platforms: {
-                    spotify: "https://open.spotify.com/artist/6D5NDnftFDOelT5ssMe0ef",
-                    youtube: "https://music.youtube.com/channel/UCA7E1X_uGUqtSJeIxvBeTQA",
-                    apple: "https://music.apple.com/tr/artist/hasan-arthur-altuntaş/1758593368",
+                    spotify: "https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef",
+                    youtube: "https://www.youtube.com/@HasanArthurAltuntaş",
+                    apple: "https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368",
                     soundcloud: ""
                 }
             },
@@ -137,9 +138,9 @@ class MusicManager {
                 description: "Dark ambient exploration with haunting melodies and atmospheric textures.",
                 artwork: "assets/images/covers/umbralthorne-cover.jpg",
                 platforms: {
-                    spotify: "https://open.spotify.com/artist/6D5NDnftFDOelT5ssMe0ef",
-                    youtube: "https://music.youtube.com/channel/UCA7E1X_uGUqtSJeIxvBeTQA",
-                    apple: "https://music.apple.com/tr/artist/hasan-arthur-altuntaş/1758593368",
+                    spotify: "https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef",
+                    youtube: "https://www.youtube.com/@HasanArthurAltuntaş",
+                    apple: "https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368",
                     soundcloud: ""
                 }
             },
@@ -153,9 +154,9 @@ class MusicManager {
                 description: "Introspective piano composition capturing the beauty of peaceful isolation.",
                 artwork: "assets/images/covers/solitude-cover.jpg",
                 platforms: {
-                    spotify: "https://open.spotify.com/artist/6D5NDnftFDOelT5ssMe0ef",
-                    youtube: "https://music.youtube.com/channel/UCA7E1X_uGUqtSJeIxvBeTQA",
-                    apple: "https://music.apple.com/tr/artist/hasan-arthur-altuntaş/1758593368",
+                    spotify: "https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef",
+                    youtube: "https://www.youtube.com/@HasanArthurAltuntaş",
+                    apple: "https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368",
                     soundcloud: ""
                 }
             },
@@ -169,9 +170,9 @@ class MusicManager {
                 description: "Contemplative nighttime journey through sound and emotion.",
                 artwork: "assets/images/covers/nocturnal-reverie-cover.jpg",
                 platforms: {
-                    spotify: "https://open.spotify.com/artist/6D5NDnftFDOelT5ssMe0ef",
-                    youtube: "https://music.youtube.com/channel/UCA7E1X_uGUqtSJeIxvBeTQA",
-                    apple: "https://music.apple.com/tr/artist/hasan-arthur-altuntaş/1758593368",
+                    spotify: "https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef",
+                    youtube: "https://www.youtube.com/@HasanArthurAltuntaş",
+                    apple: "https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368",
                     soundcloud: ""
                 }
             },
@@ -201,9 +202,9 @@ class MusicManager {
                 description: "Powerful reimagining of the iconic Oppenheimer theme with unique artistic vision.",
                 artwork: "assets/images/covers/oppenheimer-cover.jpg",
                 platforms: {
-                    spotify: "https://open.spotify.com/artist/6D5NDnftFDOelT5ssMe0ef",
-                    youtube: "https://music.youtube.com/channel/UCA7E1X_uGUqtSJeIxvBeTQA",
-                    apple: "https://music.apple.com/tr/artist/hasan-arthur-altuntaş/1758593368",
+                    spotify: "https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef",
+                    youtube: "https://www.youtube.com/@HasanArthurAltuntaş",
+                    apple: "https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368",
                     soundcloud: ""
                 }
             },
@@ -217,9 +218,9 @@ class MusicManager {
                 description: "Cosmic journey reimagining Hans Zimmer's masterpiece with personal interpretation.",
                 artwork: "assets/images/covers/interstellar-cover.jpg",
                 platforms: {
-                    spotify: "https://open.spotify.com/artist/6D5NDnftFDOelT5ssMe0ef",
-                    youtube: "https://music.youtube.com/channel/UCA7E1X_uGUqtSJeIxvBeTQA",
-                    apple: "https://music.apple.com/tr/artist/hasan-arthur-altuntaş/1758593368",
+                    spotify: "https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef",
+                    youtube: "https://www.youtube.com/@HasanArthurAltuntaş",
+                    apple: "https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368",
                     soundcloud: ""
                 }
             },
@@ -233,9 +234,9 @@ class MusicManager {
                 description: "Experimental composition questioning our cosmic origins through sound.",
                 artwork: "assets/images/covers/are-you-from-earth-cover.jpg",
                 platforms: {
-                    spotify: "https://open.spotify.com/artist/6D5NDnftFDOelT5ssMe0ef",
-                    youtube: "https://music.youtube.com/channel/UCA7E1X_uGUqtSJeIxvBeTQA",
-                    apple: "https://music.apple.com/tr/artist/hasan-arthur-altuntaş/1758593368",
+                    spotify: "https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef",
+                    youtube: "https://www.youtube.com/@HasanArthurAltuntaş",
+                    apple: "https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368",
                     soundcloud: ""
                 }
             },
@@ -249,9 +250,9 @@ class MusicManager {
                 description: "Connection between ethereal realms through atmospheric musical textures.",
                 artwork: "assets/images/covers/ethereal-nexus-cover.jpg",
                 platforms: {
-                    spotify: "https://open.spotify.com/artist/6D5NDnftFDOelT5ssMe0ef",
-                    youtube: "https://music.youtube.com/channel/UCA7E1X_uGUqtSJeIxvBeTQA",
-                    apple: "https://music.apple.com/tr/artist/hasan-arthur-altuntaş/1758593368",
+                    spotify: "https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef",
+                    youtube: "https://www.youtube.com/@HasanArthurAltuntaş",
+                    apple: "https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368",
                     soundcloud: ""
                 }
             }
@@ -478,6 +479,18 @@ class MusicManager {
         if (index >= 0 && index < this.tracks.length) {
             this.currentIndex = index;
             this.currentTrack = this.tracks[index];
+            
+            // Load audio if available
+            if (this.audioPlayer && this.currentTrack.audioFile) {
+                this.audioPlayer.src = this.currentTrack.audioFile;
+                this.audioPlayer.load();
+                
+                // Auto play if supported
+                this.audioPlayer.play().catch(error => {
+                    console.log('Auto-play prevented:', error.message);
+                });
+            }
+            
             this.updatePlayerUI();
             
             // Show visual feedback that track is selected
