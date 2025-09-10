@@ -9,7 +9,8 @@
       "WebFetch(domain:open.spotify.com)",
       "WebFetch(domain:music.youtube.com)",
       "WebFetch(domain:music.apple.com)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
