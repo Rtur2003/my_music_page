@@ -212,7 +212,7 @@ body {
 
 .lang-btn.active {
     background: var(--accent-gold);
-    color: var(--primary-black);
+    color: var(--text-primary);
 }
 
 .lang-btn:hover {
@@ -222,7 +222,7 @@ body {
 
 .lang-btn.active:hover {
     background: var(--rich-gold);
-    color: var(--primary-black);
+    color: var(--text-primary);
 }
 
 /* ===============================================
@@ -743,7 +743,7 @@ body {
 
 .spotify-link { background: #1db954; }
 .youtube-link { background: #ff0000; }
-.apple-link { background: #000000; }
+.apple-link { background: var(--royal-black); }
 .soundcloud-link { background: #ff7700; }
 
 .platform-link:hover {
@@ -811,14 +811,14 @@ body {
 
 .control-button:hover {
     background: var(--accent-gold);
-    color: var(--primary-black);
+    color: var(--text-primary);
 }
 
 .play-pause-btn {
     width: 50px;
     height: 50px;
     background: var(--accent-gold);
-    color: var(--primary-black);
+    color: var(--text-primary);
 }
 
 .volume-controls {
@@ -1886,7 +1886,7 @@ body {
 .filter-btn:hover,
 .filter-btn.active {
     background: var(--accent-gold);
-    color: var(--primary-black);
+    color: var(--text-primary);
     border-color: var(--accent-gold);
 }
 
@@ -2099,7 +2099,7 @@ body {
 
 .btn-primary {
     background: var(--accent-gold);
-    color: var(--primary-black);
+    color: var(--text-primary);
     box-shadow: var(--shadow-gold);
 }
 
@@ -2192,5 +2192,122 @@ body {
     
     .tech-icons {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ===============================================
+   ADMIN FORM STYLES - MISSING CLASSES
+   =============================================== */
+
+.admin-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(22, 22, 22, 0.9);
+    border: 1px solid rgba(212, 176, 120, 0.2);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.admin-input:focus {
+    outline: none;
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 0 2px rgba(212, 176, 120, 0.2);
+}
+
+.admin-input::placeholder {
+    color: var(--text-secondary);
+}
+
+/* Track form styles */
+.track-form .form-group {
+    margin-bottom: 1rem;
+}
+
+.track-form .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.track-form .form-group input {
+    width: 100%;
+    padding: 10px 14px;
+    background: rgba(22, 22, 22, 0.9);
+    border: 1px solid rgba(212, 176, 120, 0.2);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+.track-form .form-group input:focus {
+    outline: none;
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 0 2px rgba(212, 176, 120, 0.15);
+}
+
+.track-form .form-group input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+/* Stats grid for analytics */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(15, 15, 15, 0.8);
+    border-radius: 8px;
+    border: 1px solid rgba(212, 176, 120, 0.1);
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-gold);
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ===============================================
+   MOBILE ADMIN RESPONSIVE
+   =============================================== */
+@media (max-width: 768px) {
+    .admin-sections {
+        grid-template-columns: 1fr;
+    }
+    
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .track-form .form-group {
+        margin-bottom: 0.75rem;
+    }
+    
+    .admin-input {
+        padding: 14px 16px;
+        font-size: 16px; /* Prevent zoom on iOS */
     }
 }
