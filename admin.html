@@ -252,60 +252,102 @@
 
             <div class="admin-sections">
                 <!-- Music Management -->
+                <!-- Quick Track Addition -->
                 <div class="admin-section music-manager">
                     <h3>
-                        <i class="fas fa-music"></i>
-                        Music Tracks
+                        <i class="fas fa-plus-circle"></i>
+                        Quick Track Add
                     </h3>
                     
-                    <form class="track-form" id="trackForm">
+                    <div class="quick-add-info">
+                        <p>🎵 Sadece 3 link girin, gerisini otomatik halledelim!</p>
+                    </div>
+                    
+                    <form class="quick-track-form" id="quickTrackForm">
                         <div class="form-group">
-                            <label for="trackTitle">Track Title:</label>
-                            <input type="text" id="trackTitle" required>
+                            <label for="albumSelect">Albüm Seçin:</label>
+                            <select id="albumSelect" name="albumSelect" required>
+                                <option value="">Albüm seçin...</option>
+                            </select>
                         </div>
-                        <div class="form-group">
-                            <label for="trackArtist">Artist:</label>
-                            <input type="text" id="trackArtist" value="Hasan Arthur Altuntaş" required>
+                        
+                        <div class="url-inputs">
+                            <div class="form-group">
+                                <label for="url1">🎵 Platform URL 1:</label>
+                                <input type="url" id="url1" name="url1" placeholder="Spotify, YouTube, Apple Music veya SoundCloud URL'si">
+                            </div>
+                            <div class="form-group">
+                                <label for="url2">🎵 Platform URL 2:</label>
+                                <input type="url" id="url2" name="url2" placeholder="İkinci platform URL'si (opsiyonel)">
+                            </div>
+                            <div class="form-group">
+                                <label for="url3">🎵 Platform URL 3:</label>
+                                <input type="url" id="url3" name="url3" placeholder="Üçüncü platform URL'si (opsiyonel)">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="trackGenre">Genre:</label>
-                            <input type="text" id="trackGenre" placeholder="e.g. Pop, Electronic">
-                        </div>
-                        <div class="form-group">
-                            <label for="trackDuration">Duration:</label>
-                            <input type="text" id="trackDuration" placeholder="3:45">
-                        </div>
-                        <div class="form-group">
-                            <label for="spotifyUrl">Spotify URL:</label>
-                            <input type="url" id="spotifyUrl" placeholder="https://open.spotify.com/track/...">
-                        </div>
-                        <div class="form-group">
-                            <label for="youtubeUrl">YouTube URL:</label>
-                            <input type="url" id="youtubeUrl" placeholder="https://youtu.be/...">
-                        </div>
-                        <div class="form-group">
-                            <label for="appleUrl">Apple Music URL:</label>
-                            <input type="url" id="appleUrl" placeholder="https://music.apple.com/...">
-                        </div>
-                        <div class="form-group">
-                            <label for="soundcloudUrl">SoundCloud URL:</label>
-                            <input type="url" id="soundcloudUrl" placeholder="https://soundcloud.com/...">
-                        </div>
-                        <div class="form-group">
-                            <label for="artworkUrl">Artwork URL:</label>
-                            <input type="url" id="artworkUrl" placeholder="https://example.com/image.jpg">
-                        </div>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-plus"></i>
-                            Add Track
+                        
+                        <button type="submit" class="btn btn-primary btn-large">
+                            <i class="fas fa-magic"></i>
+                            Otomatik Ekle
                         </button>
                     </form>
 
-                    <div class="track-list" id="trackList">
+                    <div id="musicMessage"></div>
+                </div>
+                
+                <!-- Album Management -->
+                <div class="admin-section album-manager">
+                    <h3>
+                        <i class="fas fa-compact-disc"></i>
+                        Album Management
+                    </h3>
+                    
+                    <form class="album-form" id="albumForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="albumTitle">Album Title:</label>
+                                <input type="text" id="albumTitle" name="albumTitle" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="albumYear">Year:</label>
+                                <input type="number" id="albumYear" name="albumYear" value="2025" min="2020" max="2030">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="albumType">Type:</label>
+                                <select id="albumType" name="albumType">
+                                    <option value="EP">EP</option>
+                                    <option value="Album">Album</option>
+                                    <option value="Single">Single</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="albumArtwork">Artwork URL:</label>
+                                <input type="url" id="albumArtwork" name="albumArtwork" placeholder="Album cover image URL">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-secondary">
+                            <i class="fas fa-plus"></i>
+                            Create Album
+                        </button>
+                    </form>
+                    
+                    <div class="album-grid" id="albumList">
+                        <!-- Albums will be rendered here -->
+                    </div>
+                </div>
+                
+                <!-- Track Library -->
+                <div class="admin-section track-library">
+                    <h3>
+                        <i class="fas fa-music"></i>
+                        Track Library
+                    </h3>
+                    
+                    <div class="track-grid" id="trackList">
                         <!-- Tracks will be loaded here -->
                     </div>
-                    
-                    <div id="musicMessage"></div>
                 </div>
 
                 <!-- Site Management -->
@@ -345,16 +387,20 @@
                     
                     <div class="stats-grid">
                         <div class="stat-item">
+                            <div class="stat-number" id="totalAlbums">0</div>
+                            <div class="stat-label">Albums</div>
+                        </div>
+                        <div class="stat-item">
                             <div class="stat-number" id="totalTracks">0</div>
-                            <div class="stat-label">Total Tracks</div>
+                            <div class="stat-label">Tracks</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-number" id="totalPlays">12K+</div>
                             <div class="stat-label">Total Plays</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-number" id="activePlatforms">3</div>
-                            <div class="stat-label">Active Platforms</div>
+                            <div class="stat-number" id="activePlatforms">4</div>
+                            <div class="stat-label">Platforms</div>
                         </div>
                     </div>
                 </div>
@@ -368,8 +414,12 @@
     <!-- FORM VALIDATION -->
     <script src="assets/js/form-validator.js"></script>
     
-    <!-- ADMIN SYSTEM -->
-    <script src="assets/js/admin-system.js" defer></script>
+    <!-- METADATA FETCHER -->
+    <script src="assets/js/metadata-fetcher.js" defer></script>
+    
+    <!-- ADVANCED ADMIN SYSTEM -->
+    <script src="assets/js/advanced-admin.js" defer></script>
+    
     <script>
         // Hide loader after page loads
         window.addEventListener('load', () => {
