@@ -11,7 +11,8 @@
       "WebFetch(domain:music.apple.com)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(del assetscssanimations.css assetscssstyle-new.css assetscssadmin.css assetscssstyle.css assetscsslanguage-toggle.css assetscsscompatibility.css assetscssmain.css assetscsssonic-design.css)"
+      "Bash(del assetscssanimations.css assetscssstyle-new.css assetscssadmin.css assetscssstyle.css assetscsslanguage-toggle.css assetscsscompatibility.css assetscssmain.css assetscsssonic-design.css)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []
