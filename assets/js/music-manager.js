@@ -121,11 +121,11 @@ class MusicManager {
                 duration: "3:21",
                 year: "2025",
                 description: "Atmospheric ambient piece with mysterious and ethereal qualities.",
-                artwork: "assets/images/covers/maimeyst-cover.jpg",
+                artwork: "assets/images/logo-main.png",
                 platforms: {
-                    spotify: "https://open.spotify.com/artist/6D5NDnftFDOelT5ssMe0ef",
-                    youtube: "https://music.youtube.com/channel/UCA7E1X_uGUqtSJeIxvBeTQA",
-                    apple: "https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368",
+                    spotify: "https://open.spotify.com/intl-tr/album/4WGKhWcSP0hJQzshq7qrsE?si=123",
+                    youtube: "https://youtu.be/maimeyst-track",
+                    apple: "https://music.apple.com/tr/album/maimeyst/id123456",
                     soundcloud: ""
                 }
             },
@@ -304,18 +304,39 @@ class MusicManager {
         return [];
     }
 
-    updateFromAdmin(newTrack) {
-        // Add or update track from admin panel
-        if (newTrack) {
-            const existingIndex = this.tracks.findIndex(t => t.id === newTrack.id);
+    updateFromAdmin(newTrackData) {
+        console.log('🔄 Processing admin update:', newTrackData);
+        
+        // If it's a single track
+        if (newTrackData && newTrackData.id) {
+            const existingIndex = this.tracks.findIndex(t => t.id === newTrackData.id);
             if (existingIndex >= 0) {
-                this.tracks[existingIndex] = newTrack;
+                this.tracks[existingIndex] = newTrackData;
+                console.log('✏️ Updated existing track:', newTrackData.title);
             } else {
-                this.tracks.push(newTrack);
+                this.tracks.push(newTrackData);
+                console.log('➕ Added new track:', newTrackData.title);
             }
             this.renderMusicGrid();
-            console.log('🎵 Updated tracks from admin panel');
         }
+        
+        // If it's a full tracks array
+        else if (Array.isArray(newTrackData)) {
+            console.log('📦 Updating with full tracks array');
+            this.adminTracks = newTrackData;
+            this.loadTracks();
+            this.renderMusicGrid();
+        }
+        
+        // If it's wrapped in data object
+        else if (newTrackData && newTrackData.tracks) {
+            console.log('📦 Updating with tracks from data object');
+            this.adminTracks = newTrackData.tracks;
+            this.loadTracks();
+            this.renderMusicGrid();
+        }
+        
+        console.log('✅ Admin update completed, now showing', this.tracks.length, 'tracks');
     }
     
     saveTracks() {
@@ -763,20 +784,52 @@ let musicManager;
 document.addEventListener('DOMContentLoaded', () => {
     musicManager = new MusicManager();
     
-    // Listen for admin track updates
-    window.addEventListener('musicDataUpdated', (event) => {
+    // Listen for admin track updates - Multiple Methods
+    
+    // Method 1: Custom events
+    window.addEventListener('adminMusicUpdated', (event) => {
         if (musicManager && event.detail.tracks) {
+            console.log('🎵 Received admin music update via custom event');
             musicManager.adminTracks = event.detail.tracks;
             musicManager.loadTracks();
             musicManager.renderMusicGrid();
-            console.log('🎵 Music data updated from admin panel');
         }
     });
     
-    // Listen for messages from admin panel
+    // Method 2: PostMessage from admin panel
     window.addEventListener('message', (event) => {
-        if (event.data.type === 'ADMIN_TRACK_UPDATE' && musicManager) {
-            musicManager.updateFromAdmin(event.data.data);
+        if (event.data.type === 'ADMIN_MUSIC_UPDATE' && musicManager) {
+            console.log('🎵 Received admin music update via postMessage');
+            if (event.data.data && event.data.data.tracks) {
+                musicManager.adminTracks = event.data.data.tracks;
+                musicManager.loadTracks();
+                musicManager.renderMusicGrid();
+            }
+        }
+    });
+    
+    // Method 3: Broadcast Channel
+    try {
+        const musicChannel = new BroadcastChannel('musicUpdates');
+        musicChannel.addEventListener('message', (event) => {
+            if (event.data.type === 'TRACKS_UPDATED' && musicManager) {
+                console.log('🎵 Received admin music update via broadcast channel');
+                musicManager.adminTracks = event.data.tracks;
+                musicManager.loadTracks();
+                musicManager.renderMusicGrid();
+            }
+        });
+    } catch (error) {
+        console.log('Broadcast channel not available for music updates');
+    }
+    
+    // Method 4: LocalStorage change detection
+    window.addEventListener('storage', (event) => {
+        if (event.key === 'musicData' && musicManager) {
+            console.log('🎵 Received admin music update via localStorage change');
+            musicManager.adminTracks = musicManager.loadAdminTracks();
+            musicManager.loadTracks();
+            musicManager.renderMusicGrid();
         }
     });
     

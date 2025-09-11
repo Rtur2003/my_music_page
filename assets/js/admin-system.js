@@ -54,6 +54,12 @@ class AdminSystem {
         if (previewBtn) {
             previewBtn.addEventListener('click', () => this.previewSite());
         }
+        
+        // Sync now button
+        const syncBtn = document.getElementById('syncNow');
+        if (syncBtn) {
+            syncBtn.addEventListener('click', () => this.forceSyncToLiveSite());
+        }
     }
 
     async handleLogin(e) {
@@ -240,22 +246,55 @@ class AdminSystem {
     }
 
     updateLiveSite(trackData) {
-        // Dispatch custom event to update music manager on main site
+        console.log('🔄 Updating live site with new data...');
+        
+        // Save to localStorage first
+        this.saveMusicData();
+        
+        // Method 1: PostMessage to parent/opener window
         if (window.opener && !window.opener.closed) {
+            console.log('📡 Sending data to opener window');
             window.opener.postMessage({
-                type: 'ADMIN_TRACK_UPDATE',
-                data: trackData
+                type: 'ADMIN_MUSIC_UPDATE',
+                data: {
+                    tracks: this.musicData.tracks,
+                    timestamp: Date.now()
+                }
             }, '*');
         }
         
-        // Also store in localStorage for main site to pick up
-        localStorage.setItem('musicData', JSON.stringify(this.musicData));
+        // Method 2: Broadcast Channel for same-origin communication
+        try {
+            const channel = new BroadcastChannel('musicUpdates');
+            channel.postMessage({
+                type: 'TRACKS_UPDATED',
+                tracks: this.musicData.tracks,
+                timestamp: Date.now()
+            });
+            console.log('📻 Broadcast channel message sent');
+        } catch (error) {
+            console.log('Broadcast channel not available');
+        }
         
-        // Trigger update event
-        const event = new CustomEvent('musicDataUpdated', {
-            detail: { tracks: this.musicData.tracks }
+        // Method 3: Custom event for same page
+        const event = new CustomEvent('adminMusicUpdated', {
+            detail: { 
+                tracks: this.musicData.tracks,
+                timestamp: Date.now()
+            }
         });
         window.dispatchEvent(event);
+        
+        // Method 4: LocalStorage event trigger
+        try {
+            if (window.localStorage) {
+                localStorage.setItem('musicUpdateTrigger', Date.now().toString());
+            }
+        } catch (error) {
+            console.log('Cannot trigger localStorage update');
+        }
+        
+        console.log('✅ Live site update completed');
     }
 
     deleteTrack(trackId) {
@@ -366,9 +405,55 @@ class AdminSystem {
             console.log('LocalStorage not available, using default data:', error.message);
         }
         
-        // Default data structure
+        // Default data structure with initial tracks
         return {
-            tracks: [],
+            tracks: [
+                {
+                    id: 'liar-2025',
+                    title: 'LIAR',
+                    artist: 'Hasan Arthur Altuntaş',
+                    genre: 'Electronic',
+                    duration: '2:56',
+                    platforms: {
+                        spotify: 'https://open.spotify.com/intl-tr/track/2VhpoqJKPMTz2cHYcaAX2j',
+                        youtube: 'https://youtu.be/u3malJJSGds',
+                        apple: 'https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368',
+                        soundcloud: ''
+                    },
+                    artwork: 'assets/images/logo-main.png',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: 'maimeyst-2025',
+                    title: 'Maimeyst',
+                    artist: 'Hasan Arthur Altuntaş',
+                    genre: 'Ambient',
+                    duration: '3:21',
+                    platforms: {
+                        spotify: 'https://open.spotify.com/artist/6D5NDnftFDOelT5ssMe0ef',
+                        youtube: 'https://www.youtube.com/@HasanArthurAltuntaş',
+                        apple: 'https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368',
+                        soundcloud: ''
+                    },
+                    artwork: 'assets/images/logo-main.png',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: 'umbralthorne-2025',
+                    title: 'Umbralthorne',
+                    artist: 'Hasan Arthur Altuntaş',
+                    genre: 'Dark Ambient',
+                    duration: '4:15',
+                    platforms: {
+                        spotify: 'https://open.spotify.com/artist/6D5NDnftFDOelT5ssMe0ef',
+                        youtube: 'https://www.youtube.com/@HasanArthurAltuntaş',
+                        apple: 'https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368',
+                        soundcloud: ''
+                    },
+                    artwork: 'assets/images/logo-main.png',
+                    createdAt: new Date().toISOString()
+                }
+            ],
             settings: {
                 siteName: 'Hasan Arthur Altuntaş',
                 defaultArtist: 'Hasan Arthur Altuntaş',
@@ -398,6 +483,32 @@ class AdminSystem {
         // Open main site in new tab
         const siteUrl = window.location.origin + '/index.html';
         window.open(siteUrl, '_blank');
+    }
+    
+    forceSyncToLiveSite() {
+        console.log('🚀 Force syncing to live site...');
+        
+        // Force update live site
+        this.updateLiveSite();
+        
+        // Show success message
+        const messageDiv = document.querySelector('.status-message');
+        if (messageDiv) {
+            messageDiv.innerHTML = `
+                <i class="fas fa-sync-alt fa-spin"></i>
+                Syncing to live site...
+            `;
+            messageDiv.className = 'status-message status-success';
+            
+            setTimeout(() => {
+                messageDiv.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    Successfully synced ${this.musicData.tracks.length} tracks to live site!
+                `;
+            }, 1000);
+        }
+        
+        console.log('✅ Force sync completed');
     }
 
     showMessage(element, message, type) {
