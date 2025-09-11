@@ -88,6 +88,18 @@ class AdvancedAdminSystem {
 
     // Setup event listeners
     setupEventListeners() {
+        // Login form
+        const loginForm = document.getElementById('loginForm');
+        if (loginForm) {
+            loginForm.addEventListener('submit', (e) => this.handleLogin(e));
+        }
+
+        // Logout button
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => this.handleLogout());
+        }
+
         // Quick track form (3 URLs only)
         const quickForm = document.getElementById('quickTrackForm');
         if (quickForm) {
@@ -104,6 +116,104 @@ class AdvancedAdminSystem {
         const syncBtn = document.getElementById('syncNow');
         if (syncBtn) {
             syncBtn.addEventListener('click', () => this.syncToMainSite());
+        }
+    }
+
+    // Handle admin login
+    async handleLogin(e) {
+        e.preventDefault();
+        
+        const keyInput = document.getElementById('adminKey');
+        const messageDiv = document.getElementById('loginMessage');
+        const enteredKey = keyInput.value.trim();
+
+        if (!enteredKey) {
+            this.showLoginMessage('error', 'Please enter admin key');
+            return;
+        }
+
+        // Check admin key (multiple methods for reliability)
+        const isValid = this.validateAdminKey(enteredKey);
+        
+        if (isValid) {
+            this.isAuthenticated = true;
+            try {
+                sessionStorage.setItem('admin_authenticated', 'true');
+            } catch (error) {
+                console.log('SessionStorage not available');
+            }
+            
+            this.showDashboard();
+            this.showLoginMessage('success', 'Welcome to Admin Panel!');
+        } else {
+            this.showLoginMessage('error', 'Invalid admin key. Please try again.');
+            keyInput.value = '';
+            keyInput.focus();
+        }
+    }
+
+    // Validate admin key
+    validateAdminKey(enteredKey) {
+        // Primary validation - direct key check
+        const validKeys = [
+            'MusicPage123',
+            'HasanArthur2024',
+            'AdminAccess123'
+        ];
+        
+        return validKeys.includes(enteredKey);
+    }
+
+    // Show dashboard
+    showDashboard() {
+        const loginSection = document.getElementById('adminLogin');
+        const dashboardSection = document.getElementById('adminDashboard');
+        
+        if (loginSection) loginSection.style.display = 'none';
+        if (dashboardSection) dashboardSection.style.display = 'block';
+        
+        // Initialize dashboard content
+        this.renderContent();
+    }
+
+    // Handle logout
+    handleLogout() {
+        this.isAuthenticated = false;
+        try {
+            sessionStorage.removeItem('admin_authenticated');
+        } catch (error) {
+            console.log('SessionStorage not available');
+        }
+        
+        const loginSection = document.getElementById('adminLogin');
+        const dashboardSection = document.getElementById('adminDashboard');
+        
+        if (loginSection) loginSection.style.display = 'block';
+        if (dashboardSection) dashboardSection.style.display = 'none';
+        
+        // Clear login form
+        const keyInput = document.getElementById('adminKey');
+        if (keyInput) keyInput.value = '';
+        
+        this.showLoginMessage('info', 'Logged out successfully');
+    }
+
+    // Show login message
+    showLoginMessage(type, message) {
+        const messageDiv = document.getElementById('loginMessage');
+        if (!messageDiv) return;
+
+        messageDiv.className = `status-message status-${type}`;
+        messageDiv.innerHTML = `
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+            ${message}
+        `;
+        messageDiv.style.display = 'block';
+
+        if (type !== 'success') {
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 3000);
         }
     }
 

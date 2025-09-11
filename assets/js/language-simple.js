@@ -7,38 +7,124 @@ class SimpleLanguageSystem {
         this.currentLang = this.getStoredLanguage() || 'en';
         this.translations = {
             en: {
+                // Navigation
                 'nav.home': 'Home',
                 'nav.about': 'About',
                 'nav.music': 'Music',
                 'nav.software': 'Software',
                 'nav.gallery': 'Gallery',
                 'nav.contact': 'Contact',
+                
+                // Hero Section
                 'hero.title': 'HASAN ARTHUR',
                 'hero.subtitle': 'Cinematic Music Producer',
+                'hero.description': 'Creating emotional soundscapes and cinematic experiences through music',
+                'hero.listen': 'Listen to Music',
+                'hero.about': 'About Me',
+                
+                // Stats
+                'stats.albums': 'Albums',
+                'stats.tracks': 'Tracks',
+                'stats.platforms': 'Platforms',
+                
+                // Music Section
+                'music.title': 'My Music',
+                'music.subtitle': 'Latest releases and compositions',
+                'music.player.ready': 'Music player ready for streaming from platforms.',
+                'music.player.spotify': 'Listen on Spotify',
+                'music.player.youtube': 'Watch on YouTube',
+                'music.player.apple': 'Listen on Apple Music',
+                'music.player.soundcloud': 'Listen on SoundCloud',
+                
+                // About Section
                 'about.title': 'About Me',
                 'about.subtitle': 'Musical Journey & Vision',
-                'music.title': 'My Music',
+                'about.text': 'Passionate music producer creating cinematic and emotional soundscapes. Each composition tells a story through the universal language of music.',
+                
+                // Software Section
                 'software.title': 'Software',
+                'software.subtitle': 'Creative coding & development',
+                
+                // Gallery Section
                 'gallery.title': 'Gallery',
+                'gallery.subtitle': 'Behind the scenes & live performances',
+                'gallery.all': 'All',
+                'gallery.live': 'Live Performance',
+                'gallery.studio': 'Studio Work',
+                'gallery.behind': 'Behind Scenes',
+                
+                // Contact Section
                 'contact.title': 'Contact',
-                'contact.send': 'Send Message'
+                'contact.subtitle': 'Get in touch for collaborations',
+                'contact.name': 'Your Name',
+                'contact.email': 'Your Email',
+                'contact.subject': 'Subject',
+                'contact.message': 'Your Message',
+                'contact.send': 'Send Message',
+                
+                // Footer
+                'footer.rights': 'All rights reserved.',
+                'footer.made': 'Made with'
             },
             tr: {
+                // Navigation
                 'nav.home': 'Ana Sayfa',
                 'nav.about': 'Hakkımda',
                 'nav.music': 'Müzik',
                 'nav.software': 'Yazılım',
                 'nav.gallery': 'Galeri',
                 'nav.contact': 'İletişim',
+                
+                // Hero Section
                 'hero.title': 'HASAN ARTHUR',
                 'hero.subtitle': 'Sinematik Müzik Prodüktörü',
+                'hero.description': 'Müzik aracılığıyla duygusal manzaralar ve sinematik deneyimler yaratıyorum',
+                'hero.listen': 'Müzikleri Dinle',
+                'hero.about': 'Hakkımda',
+                
+                // Stats
+                'stats.albums': 'Albüm',
+                'stats.tracks': 'Şarkı',
+                'stats.platforms': 'Platform',
+                
+                // Music Section
+                'music.title': 'Müziklerim',
+                'music.subtitle': 'En son çıkan eserleri ve kompozisyonları',
+                'music.player.ready': 'Müzik çalar platformlardan akış için hazır.',
+                'music.player.spotify': 'Spotify\'da Dinle',
+                'music.player.youtube': 'YouTube\'da İzle',
+                'music.player.apple': 'Apple Music\'te Dinle',
+                'music.player.soundcloud': 'SoundCloud\'da Dinle',
+                
+                // About Section
                 'about.title': 'Hakkımda',
                 'about.subtitle': 'Müzikal Yolculuk ve Vizyon',
-                'music.title': 'Müziklerim',
+                'about.text': 'Sinematik ve duygusal ses manzaraları yaratan tutkulu müzik prodüktörü. Her kompozisyon müziğin evrensel dili aracılığıyla bir hikaye anlatır.',
+                
+                // Software Section
                 'software.title': 'Yazılım',
+                'software.subtitle': 'Yaratıcı kodlama ve geliştirme',
+                
+                // Gallery Section
                 'gallery.title': 'Galeri',
+                'gallery.subtitle': 'Sahne arkası ve canlı performanslar',
+                'gallery.all': 'Hepsi',
+                'gallery.live': 'Canlı Performans',
+                'gallery.studio': 'Stüdyo Çalışması',
+                'gallery.behind': 'Sahne Arkası',
+                
+                // Contact Section
                 'contact.title': 'İletişim',
-                'contact.send': 'Mesaj Gönder'
+                'contact.subtitle': 'İşbirliği için iletişime geçin',
+                'contact.name': 'Adınız',
+                'contact.email': 'E-posta Adresiniz',
+                'contact.subject': 'Konu',
+                'contact.message': 'Mesajınız',
+                'contact.send': 'Mesaj Gönder',
+                
+                // Footer
+                'footer.rights': 'Tüm hakları saklıdır.',
+                'footer.made': 'İle yapıldı'
             }
         };
         
