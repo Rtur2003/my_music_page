@@ -19,7 +19,8 @@
       "WebFetch(domain:github.com)",
       "Bash(npm run lint)",
       "Bash(start index.html)",
-      "Read(//c/Users/MONSTER/Pictures/Screenshots/**)"
+      "Read(//c/Users/MONSTER/Pictures/Screenshots/**)",
+      "Bash(start local-admin/admin-panel.html)"
     ],
     "deny": [],
     "ask": []
