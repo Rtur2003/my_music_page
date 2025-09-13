@@ -1,6 +1,24 @@
 # 🎵 HASAN ARTHUR ALTUNTAŞ MUSIC PORTFOLIO
 # Güvenli .gitignore - Sadece gereksiz dosyalar ignore edilir
 
+# LOCAL ADMIN PANEL - SADECE LOCALDE KALACAK
+local-admin/
+admin.html
+*admin*.html
+assets/js/advanced-admin.js
+assets/js/music-manager.js
+assets/js/metadata-fetcher.js
+
+# CLAUDE AI AYARLARI - PERSONAL
+.claude/
+.claude/**
+
+# DATABASE VE KONFIG DOSYALARI - GUVENLİK
+assets/data/music-links.json
+config/
+database/
+backups/
+
 # Node.js Dependencies
 node_modules/
 npm-debug.log*

@@ -17,10 +17,10 @@ class SimpleLanguageSystem {
                 
                 // Hero Section
                 'hero.title': 'HASAN ARTHUR',
-                'hero.subtitle': 'Cinematic Music Producer',
-                'hero.description': 'Creating emotional soundscapes and cinematic experiences through music',
-                'hero.listen': 'Listen to Music',
-                'hero.about': 'About Me',
+                'hero.subtitle': 'Music Producer & Developer',
+                'hero.description': 'Hey there! I create cinematic music that tells stories and build cool AI projects. Every track I make has a piece of my soul in it, and every line of code solves a real problem.',
+                'hero.listen': 'Check Out My Music',
+                'hero.about': 'Get to Know Me',
                 
                 // Stats
                 'stats.albums': 'Albums',
@@ -29,21 +29,28 @@ class SimpleLanguageSystem {
                 
                 // Music Section
                 'music.title': 'My Music',
-                'music.subtitle': 'Latest releases and compositions',
+                'music.subtitle': 'Cinematic Compositions & Film Score Reimaginings',
+                'music.tracks.title': 'Singles',
+                'music.albums.title': 'Albums',
                 'music.player.ready': 'Music player ready for streaming from platforms.',
+                'music.player.select': 'Select a track',
+                'music.player.artist': 'Hasan Arthur Altuntaş',
                 'music.player.spotify': 'Listen on Spotify',
                 'music.player.youtube': 'Watch on YouTube',
                 'music.player.apple': 'Listen on Apple Music',
                 'music.player.soundcloud': 'Listen on SoundCloud',
                 
                 // About Section
-                'about.title': 'About Me',
-                'about.subtitle': 'Musical Journey & Vision',
-                'about.text': 'Passionate music producer creating cinematic and emotional soundscapes. Each composition tells a story through the universal language of music.',
+                'about.title': 'Who Am I?',
+                'about.subtitle': 'Music, Code & Everything In Between',
+                'about.text': 'Born in 2003, I\'m that guy who codes by day and makes beats by night! I study Computer Science and love creating atmospheric music that makes you feel something. Whether I\'m training AI models or composing the next "Interstellar but my version" 😄, I pour my heart into everything I do.',
                 
                 // Software Section
-                'software.title': 'Software',
-                'software.subtitle': 'Creative coding & development',
+                'software.title': 'My Code Adventures',
+                'software.subtitle': 'Where creativity meets algorithms',
+                'software.description': 'I\'m a Computer Science student who loves building AI tools and web apps. From YouTube comment generators to computer vision projects, I create stuff that actually solves problems (and sometimes just for fun 😅).',
+                'software.technologies': 'My Toolbox',
+                'software.details': 'See All My Projects',
                 
                 // Gallery Section
                 'gallery.title': 'Gallery',
@@ -54,13 +61,21 @@ class SimpleLanguageSystem {
                 'gallery.behind': 'Behind Scenes',
                 
                 // Contact Section
-                'contact.title': 'Contact',
-                'contact.subtitle': 'Get in touch for collaborations',
+                'contact.title': 'Let\'s Connect!',
+                'contact.subtitle': 'Got a cool project idea? Let\'s make it happen!',
                 'contact.name': 'Your Name',
-                'contact.email': 'Your Email',
-                'contact.subject': 'Subject',
-                'contact.message': 'Your Message',
-                'contact.send': 'Send Message',
+                'contact.email': 'E-posta',
+                'contact.phone': 'Phone',
+                'contact.location': 'Location',
+                'contact.subject': 'What\'s up?',
+                'contact.message': 'Tell me your idea...',
+                'contact.send': 'Send It!',
+                
+                // Skills
+                'skills.instruments': 'Multi-Instrumentalist',
+                'skills.production': 'Music Production',
+                'skills.composition': 'Music Composition',
+                'skills.mixing': 'Mixing & Mastering',
                 
                 // Footer
                 'footer.rights': 'All rights reserved.',
@@ -77,10 +92,10 @@ class SimpleLanguageSystem {
                 
                 // Hero Section
                 'hero.title': 'HASAN ARTHUR',
-                'hero.subtitle': 'Sinematik Müzik Prodüktörü',
-                'hero.description': 'Müzik aracılığıyla duygusal manzaralar ve sinematik deneyimler yaratıyorum',
-                'hero.listen': 'Müzikleri Dinle',
-                'hero.about': 'Hakkımda',
+                'hero.subtitle': 'Müzik Prodüktörü & Yazılımcı',
+                'hero.description': 'Merhaba! Hikaye anlatan sinematik müzikler yapıyorum ve havalı AI projeleri geliştiriyorum. Yaptığım her parçada ruhumdan bir parça var, yazdığım her kod gerçek problemleri çözüyor.',
+                'hero.listen': 'Müziklerimi Keşfet',
+                'hero.about': 'Beni Tanı',
                 
                 // Stats
                 'stats.albums': 'Albüm',
@@ -89,21 +104,28 @@ class SimpleLanguageSystem {
                 
                 // Music Section
                 'music.title': 'Müziklerim',
-                'music.subtitle': 'En son çıkan eserleri ve kompozisyonları',
+                'music.subtitle': 'Sinematik Kompozisyonlar ve Film Müziği Yorumları',
+                'music.tracks.title': 'Tekli Şarkılar',
+                'music.albums.title': 'Albümler',
                 'music.player.ready': 'Müzik çalar platformlardan akış için hazır.',
+                'music.player.select': 'Bir şarkı seçin',
+                'music.player.artist': 'Hasan Arthur Altuntaş',
                 'music.player.spotify': 'Spotify\'da Dinle',
                 'music.player.youtube': 'YouTube\'da İzle',
                 'music.player.apple': 'Apple Music\'te Dinle',
                 'music.player.soundcloud': 'SoundCloud\'da Dinle',
                 
                 // About Section
-                'about.title': 'Hakkımda',
-                'about.subtitle': 'Müzikal Yolculuk ve Vizyon',
-                'about.text': 'Sinematik ve duygusal ses manzaraları yaratan tutkulu müzik prodüktörü. Her kompozisyon müziğin evrensel dili aracılığıyla bir hikaye anlatır.',
+                'about.title': 'Ben Kimim?',
+                'about.subtitle': 'Müzik, Kod ve Aradaki Her Şey',
+                'about.text': '2003 doğumluyum, gündüz kod yazan gece beat yapan tipim! Bilgisayar Mühendisliği okuyorum ve insanı hissettiren atmosferik müzikler yapmayı seviyorum. AI modellerini eğitirken de olsa, "Interstellar but my version" gibi parçalar bestelerken de 😄, yaptığım her şeye kalbimi koyuyorum.',
                 
                 // Software Section
-                'software.title': 'Yazılım',
-                'software.subtitle': 'Yaratıcı kodlama ve geliştirme',
+                'software.title': 'Kod Maceraları',
+                'software.subtitle': 'Yaratıcılığın algoritmayla buluştuğu yer',
+                'software.description': 'Bilgisayar Mühendisliği öğrencisiyim ve AI araçları ile web uygulamaları yapmayı seviyorum. YouTube yorum üreticilerinden bilgisayar görüsü projelerine kadar, gerçek problemleri çözen şeyler yapıyorum (bazen de sadece eğlence için 😅).',
+                'software.technologies': 'Araç Çantam',
+                'software.details': 'Tüm Projelerime Bak',
                 
                 // Gallery Section
                 'gallery.title': 'Galeri',
@@ -114,13 +136,21 @@ class SimpleLanguageSystem {
                 'gallery.behind': 'Sahne Arkası',
                 
                 // Contact Section
-                'contact.title': 'İletişim',
-                'contact.subtitle': 'İşbirliği için iletişime geçin',
-                'contact.name': 'Adınız',
-                'contact.email': 'E-posta Adresiniz',
-                'contact.subject': 'Konu',
-                'contact.message': 'Mesajınız',
-                'contact.send': 'Mesaj Gönder',
+                'contact.title': 'Hadi Konuşalım!',
+                'contact.subtitle': 'Havalı bir proje fikrin var mı? Beraber gerçekleştirelim!',
+                'contact.name': 'İsmin',
+                'contact.email': 'E-posta',
+                'contact.phone': 'Telefon', 
+                'contact.location': 'Konum',
+                'contact.subject': 'Konu nedir?',
+                'contact.message': 'Fikrini anlat...',
+                'contact.send': 'Gönder Gitsin!',
+                
+                // Skills
+                'skills.instruments': 'Çok Enstrümanlı',
+                'skills.production': 'Müzik Prodüksiyonu',
+                'skills.composition': 'Müzik Kompozisyonu', 
+                'skills.mixing': 'Mix & Master',
                 
                 // Footer
                 'footer.rights': 'Tüm hakları saklıdır.',

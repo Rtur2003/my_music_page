@@ -19,8 +19,16 @@ Allow: /robots.txt
 
 # Disallow hiçbir şey - tüm içerik herkese açık
 
-# Sitemap konumu
-Sitemap: https://www.muzikportfoyu.com/sitemap.xml
+# Sitemap konumu  
+Sitemap: https://hasanarthuraltuntas.com.tr/sitemap.xml
+
+# Admin ve güvenlik disallow
+Disallow: /local-admin/
+Disallow: /admin/
+Disallow: /private/
+Disallow: *.log
+Disallow: /node_modules/
+Disallow: /.git/
 
 # Crawl delay (büyük siteler için)
 Crawl-delay: 1
