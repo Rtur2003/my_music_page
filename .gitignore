@@ -14,7 +14,6 @@ assets/js/metadata-fetcher.js
 .claude/**
 
 # DATABASE VE KONFIG DOSYALARI - GUVENLİK
-assets/data/music-links.json
 config/
 database/
 backups/

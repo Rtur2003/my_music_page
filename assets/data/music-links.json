@@ -1,0 +1,70 @@
+{
+  "tracks": [
+    {
+      "id": 1,
+      "title": "LIAR",
+      "artist": "Hasan Arthur Altuntaş",
+      "artwork": "assets/images/logo-main.png",
+      "links": {
+        "youtube": "https://www.youtube.com/watch?v=u3malJJSGds&list=OLAK5uy_le5DM9PMUqTnB4_whDwAxc-rMD54mVctQ",
+        "spotify": "https://open.spotify.com/intl-tr/track/2VhpoqJKPMTz2cHYcaAX2j?si=184e6e2589f3423b",
+        "apple": "https://music.apple.com/tr/song/liar/1833771404"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Epic Orchestral",
+      "artist": "Hasan Arthur Altuntaş",
+      "artwork": "assets/images/logo-main.png",
+      "links": {
+        "youtube": "https://www.youtube.com/watch?v=EXAMPLE2",
+        "spotify": "https://open.spotify.com/track/EXAMPLE2",
+        "apple": "https://music.apple.com/us/album/EXAMPLE2"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Interstellar But My Version",
+      "artist": "Hasan Arthur Altuntaş",
+      "artwork": "assets/images/logo-main.png",
+      "links": {
+        "youtube": "https://www.youtube.com/watch?v=4vDvuFldYiM&list=OLAK5uy_lassw25Z8Ch3EqP-H9jC6gjGeMbe4PCGs",
+        "spotify": "https://open.spotify.com/intl-tr/track/5fwzfwMJtVANQotGtmdv3C?si=ebc8d8228c644263",
+        "apple": "https://music.apple.com/tr/song/interstellar-but-my-version/1773902252"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Oppenheimer But My Version",
+      "artist": "Hasan Arthur Altuntaş",
+      "artwork": "assets/images/logo-main.png",
+      "links": {
+        "youtube": "https://youtu.be/ZnOMJ9E0LmA?si=p9FkzGERc_zh6RuR",
+        "spotify": "https://open.spotify.com/intl-tr/track/27q14aJw81Qr5XBGV4JlNp?si=e5aa51c4051d45ba",
+        "apple": "https://music.apple.com/tr/song/oppenheimer-but-my-version/1776487184"
+      }
+    }
+  ],
+  "albums": [
+    {
+      "id": 1,
+      "title": "My Compositions",
+      "artist": "Hasan Arthur Altuntaş",
+      "artwork": "assets/images/logo-main.png",
+      "release_date": "2024",
+      "links": {
+        "youtube": "https://www.youtube.com/watch?v=F0XzcRB1a94&list=PLuQhIRvxCsFxFF8wW3UWcSbXA0b6fGWim"
+      }
+    }
+      ,{
+      "id": 2,
+      "title": "film composition covers",
+      "artist": "Hasan Arthur Altuntaş",
+      "artwork": "assets/images/logo-main.png",
+      "release_date": "2024",
+      "links": {
+        "youtube": "https://www.youtube.com/watch?v=RormIa0YaJI&list=PLuQhIRvxCsFxyR4zeWWhVheUeUHJY5MLq"
+      }
+    }
+  ]
+}
