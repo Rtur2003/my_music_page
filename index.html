@@ -15,6 +15,7 @@
 
     <!-- Permissions Policy for YouTube API -->
     <meta http-equiv="Permissions-Policy" content="autoplay=*, encrypted-media=*, accelerometer=*, gyroscope=*, picture-in-picture=*, clipboard-write=*, web-share=*">
+    <meta http-equiv="Feature-Policy" content="autoplay 'self' https://www.youtube.com https://youtube.com; encrypted-media 'self' https://www.youtube.com https://youtube.com; picture-in-picture 'self' https://www.youtube.com https://youtube.com">
     <meta name="geo.region" content="TR-54">
     <meta name="geo.placename" content="Sakarya, Turkey">
     <meta name="geo.position" content="40.7569;30.3781">
@@ -437,16 +438,16 @@
                             </div>
                             
                             <div class="platform-links" id="platformLinks">
-                                <a href="#" class="platform-link spotify-link" id="spotifyLink" target="_blank" rel="noopener" title="Listen on Spotify">
+                                <a href="https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef" class="platform-link spotify-link" id="spotifyLink" target="_blank" rel="noopener" title="Listen on Spotify">
                                     <i class="fab fa-spotify"></i>
                                 </a>
-                                <a href="#" class="platform-link youtube-link" id="youtubeLink" target="_blank" rel="noopener" title="Watch on YouTube">
+                                <a href="https://www.youtube.com/channel/UCA7E1X_uGUqtSJeIxvBeTQA" class="platform-link youtube-link" id="youtubeLink" target="_blank" rel="noopener" title="Watch on YouTube">
                                     <i class="fab fa-youtube"></i>
                                 </a>
-                                <a href="#" class="platform-link apple-link" id="appleLink" target="_blank" rel="noopener" title="Listen on Apple Music">
+                                <a href="https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1833769554" class="platform-link apple-link" id="appleLink" target="_blank" rel="noopener" title="Listen on Apple Music">
                                     <i class="fab fa-apple"></i>
                                 </a>
-                                <a href="#" class="platform-link soundcloud-link" id="soundcloudLink" target="_blank" rel="noopener" title="Listen on SoundCloud">
+                                <a href="https://soundcloud.com/hasanarthur" class="platform-link soundcloud-link" id="soundcloudLink" target="_blank" rel="noopener" title="Listen on SoundCloud">
                                     <i class="fab fa-soundcloud"></i>
                                 </a>
                             </div>
@@ -645,20 +646,20 @@
                     
                     <div class="software-stats">
                         <div class="stat-item">
-                            <div class="stat-number" data-count="150">0</div>
-                            <div class="stat-label">Commits This Year</div>
+                            <div class="stat-number" data-count="120">0</div>
+                            <div class="stat-label">GitHub Commits</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-number" data-count="25">0</div>
-                            <div class="stat-label">Projects Completed</div>
+                            <div class="stat-number" data-count="15">0</div>
+                            <div class="stat-label">Public Repositories</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-number" data-count="8">0</div>
-                            <div class="stat-label">Technologies Mastered</div>
+                            <div class="stat-number" data-count="6">0</div>
+                            <div class="stat-label">Programming Languages</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-number" data-count="3">0</div>
-                            <div class="stat-label">Years Experience</div>
+                            <div class="stat-number" data-count="2">0</div>
+                            <div class="stat-label">Years Coding</div>
                         </div>
                     </div>
                     
@@ -683,14 +684,23 @@
                     <p class="section-subtitle" data-translate="gallery.subtitle">Behind the scenes & live performances</p>
                 </div>
                 
-                <div class="gallery-filter">
-                    <button class="filter-btn active" data-filter="all" data-translate="gallery.all">All</button>
-                    <button class="filter-btn" data-filter="concerts" data-translate="gallery.live">Live Performance</button>
-                    <button class="filter-btn" data-filter="studio" data-translate="gallery.studio">Studio Work</button>
-                    <button class="filter-btn" data-filter="behind-scenes" data-translate="gallery.behind">Behind Scenes</button>
+                <div class="coming-soon-message">
+                    <div class="coming-soon-card">
+                        <div class="coming-soon-icon">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <h3 data-translate="gallery.coming.title">Photos Coming Soon</h3>
+                        <p data-translate="gallery.coming.desc">I'm currently working on capturing some great photos from my studio sessions and live performances. Stay tuned for the gallery update!</p>
+                        <div class="coming-soon-actions">
+                            <a href="https://www.instagram.com/rthur_hsn" target="_blank" class="notify-btn">
+                                <i class="fab fa-instagram"></i>
+                                <span data-translate="gallery.coming.button">See Current Photos</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="gallery-grid" id="galleryGrid">
+
+                <div class="gallery-grid hidden" id="galleryGrid">
                     <!-- Gallery items will be dynamically loaded -->
                     <div class="gallery-item" data-category="studio">
                         <img src="assets/images/logo-main.png" alt="Studio Work" loading="lazy">
@@ -923,17 +933,7 @@
         </div>
     </footer>
 
-    <div class="modal" id="imageModal">
-        <div class="modal-content">
-            <span class="modal-close">&times;</span>
-            <img src="" alt="" id="modalImage">
-            <div class="modal-caption" id="modalCaption"></div>
-        </div>
-    </div>
-
-    <button class="scroll-top" id="scrollTop">
-        <i class="fas fa-arrow-up"></i>
-    </button>
+    <!-- Modal and scroll elements are created dynamically by JavaScript -->
 
     <!-- ERROR HANDLING (Critical - Load first) -->
     <script src="assets/js/error-handler.js" defer></script>

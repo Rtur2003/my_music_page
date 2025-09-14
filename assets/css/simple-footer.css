@@ -88,7 +88,10 @@
     display: flex;
     gap: 1rem;
     justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
 }
 
 .footer-social a {
