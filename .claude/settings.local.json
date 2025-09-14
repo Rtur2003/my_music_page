@@ -20,7 +20,9 @@
       "Bash(npm run lint)",
       "Bash(start index.html)",
       "Read(//c/Users/MONSTER/Pictures/Screenshots/**)",
-      "Bash(start local-admin/admin-panel.html)"
+      "Bash(start local-admin/admin-panel.html)",
+      "Bash(start test-icons.html)",
+      "WebFetch(domain:deadmau5.com)"
     ],
     "deny": [],
     "ask": []

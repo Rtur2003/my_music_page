@@ -1,0 +1,282 @@
+/* ===============================================
+   THEME CONSISTENCY & DARK/LIGHT MODE FIXES
+   Renk çakışmalarını önler ve tutarlılık sağlar
+   =============================================== */
+
+/* CSS Custom Properties - Theme Variables */
+:root {
+    /* Dark Theme (Default) */
+    --primary-bg: #0a0a0a;
+    --secondary-bg: #1a1a1a;
+    --tertiary-bg: #2d2d2d;
+    --card-bg: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+    --text-muted: #808080;
+
+    --accent-gold: #d4b078;
+    --accent-gold-light: #f4d699;
+    --accent-gold-dark: #b8956a;
+
+    --border-color: rgba(212, 176, 120, 0.2);
+    --border-color-light: rgba(212, 176, 120, 0.1);
+    --border-color-strong: rgba(212, 176, 120, 0.4);
+
+    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --shadow-medium: 0 8px 24px rgba(0, 0, 0, 0.2);
+    --shadow-strong: 0 16px 48px rgba(0, 0, 0, 0.4);
+    --shadow-gold: 0 8px 24px rgba(212, 176, 120, 0.3);
+
+    /* Gradient definitions */
+    --gradient-primary: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    --gradient-gold: linear-gradient(135deg, #d4b078 0%, #f4d699 100%);
+    --gradient-overlay: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+/* Light Theme Overrides */
+[data-theme="light"] {
+    --primary-bg: #ffffff;
+    --secondary-bg: #f8f9fa;
+    --tertiary-bg: #e9ecef;
+    --card-bg: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+
+    --text-primary: #212529;
+    --text-secondary: #495057;
+    --text-muted: #6c757d;
+
+    /* Gold colors remain same for brand consistency */
+    --accent-gold: #d4b078;
+    --accent-gold-light: #f4d699;
+    --accent-gold-dark: #b8956a;
+
+    --border-color: rgba(212, 176, 120, 0.3);
+    --border-color-light: rgba(212, 176, 120, 0.15);
+    --border-color-strong: rgba(212, 176, 120, 0.5);
+
+    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-medium: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --shadow-strong: 0 16px 48px rgba(0, 0, 0, 0.16);
+    --shadow-gold: 0 8px 24px rgba(212, 176, 120, 0.25);
+
+    --gradient-primary: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    --gradient-gold: linear-gradient(135deg, #d4b078 0%, #f4d699 100%);
+    --gradient-overlay: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.8) 100%);
+}
+
+/* Apply theme variables globally */
+body {
+    background: var(--primary-bg);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Fix specific component theming */
+
+/* Navigation */
+.sonic-nav {
+    background: var(--card-bg) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    backdrop-filter: blur(20px) !important;
+}
+
+.nav-link {
+    color: var(--text-secondary) !important;
+    transition: color 0.3s ease !important;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--accent-gold) !important;
+}
+
+/* Cards and containers */
+.modern-player-card,
+.music-card,
+.footer-section {
+    background: var(--card-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: var(--shadow-medium) !important;
+}
+
+/* Text consistency */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary) !important;
+}
+
+p, span, div {
+    color: var(--text-secondary);
+}
+
+.text-primary {
+    color: var(--text-primary) !important;
+}
+
+.text-secondary {
+    color: var(--text-secondary) !important;
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* Button theming */
+.sonic-btn,
+.btn {
+    transition: all 0.3s ease !important;
+}
+
+.sonic-btn.primary {
+    background: var(--gradient-gold) !important;
+    color: #1a1a1a !important;
+    border: none !important;
+}
+
+.sonic-btn.secondary {
+    background: var(--card-bg) !important;
+    color: var(--text-primary) !important;
+    border: 2px solid var(--border-color-strong) !important;
+}
+
+/* Input and form theming */
+input, textarea, select {
+    background: var(--tertiary-bg) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: var(--accent-gold) !important;
+    box-shadow: 0 0 0 2px rgba(212, 176, 120, 0.2) !important;
+}
+
+/* Platform links theme adaptation */
+[data-theme="light"] .platform-link {
+    box-shadow: var(--shadow-medium) !important;
+}
+
+[data-theme="light"] .platform-link:hover {
+    box-shadow: var(--shadow-strong) !important;
+}
+
+/* Music cards theme consistency */
+[data-theme="light"] .music-card {
+    background: var(--card-bg) !important;
+    box-shadow: var(--shadow-medium) !important;
+}
+
+[data-theme="light"] .music-card:hover {
+    box-shadow: var(--shadow-gold) !important;
+}
+
+/* Footer theme consistency */
+[data-theme="light"] .sonic-footer {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 50%, #f8f9fa 100%) !important;
+    border-top: 1px solid var(--border-color) !important;
+}
+
+[data-theme="light"] .footer-logo-image {
+    border-color: var(--border-color-strong) !important;
+    box-shadow: var(--shadow-medium) !important;
+}
+
+/* Scrollbar theming */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--secondary-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-gold);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-gold-light);
+}
+
+/* Selection theming */
+::selection {
+    background: var(--accent-gold);
+    color: var(--primary-bg);
+}
+
+::-moz-selection {
+    background: var(--accent-gold);
+    color: var(--primary-bg);
+}
+
+/* Loading states */
+.loading {
+    background: var(--tertiary-bg) !important;
+    color: var(--text-muted) !important;
+}
+
+/* Error states */
+.error {
+    background: rgba(220, 53, 69, 0.1) !important;
+    color: #dc3545 !important;
+    border-color: rgba(220, 53, 69, 0.3) !important;
+}
+
+/* Success states */
+.success {
+    background: rgba(40, 167, 69, 0.1) !important;
+    color: #28a745 !important;
+    border-color: rgba(40, 167, 69, 0.3) !important;
+}
+
+/* Warning states */
+.warning {
+    background: rgba(255, 193, 7, 0.1) !important;
+    color: #ffc107 !important;
+    border-color: rgba(255, 193, 7, 0.3) !important;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --border-color: rgba(212, 176, 120, 0.8);
+        --border-color-strong: rgba(212, 176, 120, 1);
+    }
+
+    .text-secondary {
+        color: var(--text-primary) !important;
+    }
+}
+
+/* Print styles */
+@media print {
+    .modern-player-card,
+    .music-card {
+        background: white !important;
+        color: black !important;
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+    }
+
+    .platform-link {
+        display: none !important;
+    }
+}
+
+/* Theme transition optimization */
+.theme-transition,
+.theme-transition *,
+.theme-transition *:before,
+.theme-transition *:after {
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1) !important;
+    transition-delay: 0s !important;
+}

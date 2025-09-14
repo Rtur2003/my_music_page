@@ -17,12 +17,71 @@ class MusicLoader {
 
     async loadMusicData() {
         try {
+            // Try to fetch from file (works in production)
             const response = await fetch('./assets/data/music-links.json');
             this.musicData = await response.json();
         } catch (error) {
             console.error('Failed to load music data:', error);
-            // Fallback data
-            this.musicData = { tracks: [], albums: [] };
+            // CORS sorunu için hardcoded data - güncelleme sonrası bu kısmı edit edeceksin
+            this.musicData = {
+                "tracks": [
+                    {
+                        "id": 1,
+                        "title": "LIAR",
+                        "artist": "Hasan Arthur Altuntaş",
+                        "artwork": "assets/images/logo-main.png",
+                        "links": {
+                            "youtube": "https://www.youtube.com/watch?v=u3malJJSGds&list=OLAK5uy_le5DM9PMUqTnB4_whDwAxc-rMD54mVctQ",
+                            "spotify": "https://open.spotify.com/intl-tr/track/2VhpoqJKPMTz2cHYcaAX2j?si=184e6e2589f3423b",
+                            "apple": "https://music.apple.com/tr/song/liar/1833771404"
+                        }
+                    },
+                    {
+                        "id": 3,
+                        "title": "Interstellar But My Version",
+                        "artist": "Hasan Arthur Altuntaş",
+                        "artwork": "assets/images/logo-main.png",
+                        "links": {
+                            "youtube": "https://www.youtube.com/watch?v=4vDvuFldYiM&list=OLAK5uy_lassw25Z8Ch3EqP-H9jC6gjGeMbe4PCGs",
+                            "spotify": "https://open.spotify.com/intl-tr/track/5fwzfwMJtVANQotGtmdv3C?si=ebc8d8228c644263",
+                            "apple": "https://music.apple.com/tr/song/interstellar-but-my-version/1773902252"
+                        }
+                    },
+                    {
+                        "id": 4,
+                        "title": "Oppenheimer But My Version",
+                        "artist": "Hasan Arthur Altuntaş",
+                        "artwork": "assets/images/logo-main.png",
+                        "links": {
+                            "youtube": "https://youtu.be/ZnOMJ9E0LmA?si=p9FkzGERc_zh6RuR",
+                            "spotify": "https://open.spotify.com/intl-tr/track/27q14aJw81Qr5XBGV4JlNp?si=e5aa51c4051d45ba",
+                            "apple": "https://music.apple.com/tr/song/oppenheimer-but-my-version/1776487184"
+                        }
+                    }
+                ],
+                "albums": [
+                    {
+                        "id": 1,
+                        "title": "My Compositions",
+                        "artist": "Hasan Arthur Altuntaş",
+                        "artwork": "assets/images/logo-main.png",
+                        "release_date": "2024",
+                        "links": {
+                            "youtube": "https://www.youtube.com/watch?v=F0XzcRB1a94&list=PLuQhIRvxCsFxFF8wW3UWcSbXA0b6fGWim"
+                        }
+                    },
+                    {
+                        "id": 2,
+                        "title": "Film Composition Covers",
+                        "artist": "Hasan Arthur Altuntaş",
+                        "artwork": "assets/images/logo-main.png",
+                        "release_date": "2024",
+                        "links": {
+                            "youtube": "https://www.youtube.com/watch?v=RormIa0YaJI&list=PLuQhIRvxCsFxyR4zeWWhVheUeUHJY5MLq"
+                        }
+                    }
+                ]
+            };
         }
     }
 
@@ -79,7 +138,7 @@ class MusicLoader {
             <div class="music-artwork">
                 <img src="${track.artwork}" alt="${track.title}" loading="lazy">
                 <div class="play-overlay">
-                    <button class="card-play-btn" onclick="musicLoader.playTrack('${track.links.youtube}')">
+                    <button class="card-play-btn" onclick="window.musicLoader.playTrack('${track.links.youtube}')">
                         <i class="fas fa-play"></i>
                     </button>
                 </div>
@@ -110,7 +169,7 @@ class MusicLoader {
             <div class="music-artwork">
                 <img src="${album.artwork}" alt="${album.title}" loading="lazy">
                 <div class="play-overlay">
-                    <button class="card-play-btn" onclick="musicLoader.playAlbum('${album.links.youtube}')">
+                    <button class="card-play-btn" onclick="window.musicLoader.playAlbum('${album.links.youtube}')">
                         <i class="fas fa-play"></i>
                     </button>
                 </div>
@@ -135,12 +194,119 @@ class MusicLoader {
     }
 
     playTrack(youtubeUrl) {
-        if (window.youtubePlayer && window.youtubePlayer.loadVideo) {
-            const videoId = this.extractVideoId(youtubeUrl);
-            if (videoId) {
-                window.youtubePlayer.loadVideo(videoId);
+        console.log('🎵 Playing track:', youtubeUrl);
+
+        // Mevcut track'i bul
+        const track = this.musicData.tracks.find(t => t.links.youtube === youtubeUrl);
+
+        if (track) {
+            // Ana player'a track bilgisini gönder
+            if (window.youtubePlayer) {
+                // Track bilgilerini player'a set et
+                window.youtubePlayer.currentTrack = track;
+
+                console.log('🎵 Setting current track:', track.title);
+
+                // Player UI'sini güncelle - track bilgileri ile
+                this.updateMainPlayerUI(track);
+
+                // Video ID'sini çıkar ve oynat
+                const videoId = this.extractVideoId(youtubeUrl);
+                if (videoId) {
+                    window.youtubePlayer.loadVideo(videoId);
+                    console.log('🎵 Loading video ID:', videoId);
+
+                    // Scroll to player
+                    const musicSection = document.getElementById('music');
+                    if (musicSection) {
+                        musicSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                } else {
+                    console.warn('❌ Could not extract video ID from:', youtubeUrl);
+                    window.open(youtubeUrl, '_blank');
+                }
+            } else {
+                console.error('❌ YouTube player not initialized yet');
+                // Player henüz hazır değilse 1 saniye bekle ve tekrar dene
+                setTimeout(() => this.playTrack(youtubeUrl), 1000);
             }
+        } else {
+            console.error('❌ Track not found for URL:', youtubeUrl);
+            window.open(youtubeUrl, '_blank');
         }
+    }
+
+    updateMainPlayerUI(track) {
+        console.log('🎨 Updating main player UI with track:', track.title);
+
+        // Modern player elements - these are the actual IDs in HTML
+        const trackTitleEl = document.querySelector('.modern-track-title');
+        const trackArtistEl = document.querySelector('.modern-track-artist');
+        const artworkEl = document.querySelector('.artwork-image');
+
+        // Update title
+        if (trackTitleEl) {
+            trackTitleEl.textContent = track.title;
+            console.log('✅ Updated title element');
+        } else {
+            console.warn('❌ Title element not found');
+        }
+
+        // Update artist
+        if (trackArtistEl) {
+            trackArtistEl.textContent = track.artist;
+            console.log('✅ Updated artist element');
+        } else {
+            console.warn('❌ Artist element not found');
+        }
+
+        // Update artwork
+        if (artworkEl) {
+            artworkEl.src = track.artwork;
+            artworkEl.alt = track.title;
+            console.log('✅ Updated artwork element');
+        } else {
+            console.warn('❌ Artwork element not found');
+        }
+
+        // Update platform links
+        this.updateMainPlayerPlatformLinks(track.links);
+
+        // Update genre and duration if elements exist
+        const genreEl = document.querySelector('.track-genre');
+        const durationEl = document.querySelector('.track-duration');
+
+        if (genreEl) genreEl.textContent = 'SINGLE';
+        if (durationEl) durationEl.textContent = '3:45';
+
+        console.log('🎨 Main player UI updated successfully');
+    }
+
+    updateMainPlayerPlatformLinks(links) {
+        // Platform link'leri güncelle
+        const spotifyLink = document.querySelector('.platform-links .spotify-link');
+        const youtubeLink = document.querySelector('.platform-links .youtube-link');
+        const appleLink = document.querySelector('.platform-links .apple-link');
+
+        if (spotifyLink && links.spotify) {
+            spotifyLink.href = links.spotify;
+            spotifyLink.style.opacity = '1';
+            spotifyLink.style.pointerEvents = 'auto';
+        }
+
+        if (youtubeLink && links.youtube) {
+            youtubeLink.href = links.youtube;
+            youtubeLink.style.opacity = '1';
+            youtubeLink.style.pointerEvents = 'auto';
+        }
+
+        if (appleLink && links.apple) {
+            appleLink.href = links.apple;
+            appleLink.style.opacity = '1';
+            appleLink.style.pointerEvents = 'auto';
+        }
+
+        console.log('🔗 Platform links updated');
     }
 
     playAlbum(youtubeUrl) {
@@ -163,9 +329,10 @@ class MusicLoader {
 }
 
 // Initialize music loader
-let musicLoader;
+window.musicLoader = null;
 document.addEventListener('DOMContentLoaded', () => {
-    musicLoader = new MusicLoader();
+    window.musicLoader = new MusicLoader();
+    console.log('Music loader initialized globally:', window.musicLoader);
 });
 
 // Listen for language changes
