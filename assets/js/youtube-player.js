@@ -136,10 +136,27 @@ class YouTubeAudioPlayer {
 
     // Setup event listeners
     setupEventListeners() {
-        // Main play button
-        const mainPlayBtn = document.getElementById('mainPlayBtn') || document.getElementById('playPauseBtn');
+        // Main play button - use class selector for modern player
+        const mainPlayBtn = document.querySelector('.main-play-button');
         if (mainPlayBtn) {
-            mainPlayBtn.addEventListener('click', () => this.togglePlay());
+            mainPlayBtn.addEventListener('click', () => {
+                console.log('🎵 Main play button clicked');
+                this.togglePlay();
+            });
+            console.log('✅ Main play button listener attached');
+        } else {
+            console.warn('❌ Main play button not found during setup');
+            // Try again after 1 second
+            setTimeout(() => {
+                const retryBtn = document.querySelector('.main-play-button');
+                if (retryBtn) {
+                    retryBtn.addEventListener('click', () => {
+                        console.log('🎵 Main play button clicked (retry)');
+                        this.togglePlay();
+                    });
+                    console.log('✅ Main play button listener attached (retry)');
+                }
+            }, 1000);
         }
 
         // Next/Previous buttons
@@ -236,30 +253,48 @@ class YouTubeAudioPlayer {
 
     // Toggle play/pause
     togglePlay() {
-        if (!this.isReady || !this.currentTrack) {
-            this.showNotification('info', 'No track selected or player not ready');
+        console.log('🎵 Toggle play called - Ready:', this.isReady, 'Has track:', !!this.currentTrack);
+
+        if (!this.isReady) {
+            this.showNotification('info', 'Player is loading, please wait...');
+            return;
+        }
+
+        if (!this.currentTrack) {
+            this.showNotification('info', 'Please select a track first');
             return;
         }
 
         if (this.isPlaying) {
+            console.log('🎵 Pausing...');
             this.pause();
         } else {
+            console.log('🎵 Playing...');
             this.play();
         }
     }
 
     // Play current track
     play() {
-        if (!this.isReady) return;
+        if (!this.isReady) {
+            console.warn('❌ Player not ready');
+            return;
+        }
 
         if (this.currentVideoId) {
+            console.log('🎵 Playing existing video:', this.currentVideoId);
             this.player.playVideo();
-        } else if (this.currentTrack) {
-            const videoId = this.extractYouTubeId(this.currentTrack.platforms.youtube);
+        } else if (this.currentTrack && this.currentTrack.links && this.currentTrack.links.youtube) {
+            const videoId = this.extractYouTubeId(this.currentTrack.links.youtube);
             if (videoId) {
+                console.log('🎵 Loading new video:', videoId);
                 this.currentVideoId = videoId;
                 this.player.loadVideoById(videoId);
+            } else {
+                console.error('❌ Could not extract video ID from:', this.currentTrack.links.youtube);
             }
+        } else {
+            console.error('❌ No video available to play');
         }
     }
 
@@ -333,26 +368,80 @@ class YouTubeAudioPlayer {
 
     // Update player UI
     updatePlayerUI() {
-        // Update track info
-        const trackTitleEl = document.getElementById('trackTitle');
-        const trackArtistEl = document.getElementById('trackArtist');
-        const trackArtworkEl = document.getElementById('trackArtwork');
-        
-        if (this.currentTrack) {
-            if (trackTitleEl) trackTitleEl.textContent = this.currentTrack.title;
-            if (trackArtistEl) trackArtistEl.textContent = this.currentTrack.artist || 'Hasan Arthur Altuntaş';
-            if (trackArtworkEl) {
-                trackArtworkEl.src = this.currentTrack.artwork || 'assets/images/logo-main.png';
-                trackArtworkEl.alt = this.currentTrack.title;
-            }
-        }
+        console.log('🎨 YouTube Player updating UI');
 
         // Update play button
-        const playBtn = document.getElementById('mainPlayBtn') || document.getElementById('playPauseBtn');
+        const playBtn = document.querySelector('.main-play-button');
         if (playBtn) {
             const icon = playBtn.querySelector('i');
             if (icon) {
                 icon.className = this.isPlaying ? 'fas fa-pause' : 'fas fa-play';
+                console.log('✅ Play button updated:', this.isPlaying ? 'PAUSE' : 'PLAY');
+            }
+        } else {
+            console.warn('❌ Main play button not found');
+        }
+
+        console.log('🎨 YouTube Player UI update complete');
+    }
+
+    updatePlatformLinks() {
+        if (!this.currentTrack || !this.currentTrack.links) return;
+
+        const spotifyLink = document.getElementById('spotifyLink');
+        const youtubeLink = document.getElementById('youtubeLink');
+        const appleLink = document.getElementById('appleLink');
+        const soundcloudLink = document.getElementById('soundcloudLink');
+
+        // Update Spotify link
+        if (spotifyLink) {
+            if (this.currentTrack.links.spotify) {
+                spotifyLink.href = this.currentTrack.links.spotify;
+                spotifyLink.style.opacity = '1';
+                spotifyLink.style.pointerEvents = 'auto';
+            } else {
+                spotifyLink.href = '#';
+                spotifyLink.style.opacity = '0.3';
+                spotifyLink.style.pointerEvents = 'none';
+            }
+        }
+
+        // Update YouTube link
+        if (youtubeLink) {
+            if (this.currentTrack.links.youtube) {
+                youtubeLink.href = this.currentTrack.links.youtube;
+                youtubeLink.style.opacity = '1';
+                youtubeLink.style.pointerEvents = 'auto';
+            } else {
+                youtubeLink.href = '#';
+                youtubeLink.style.opacity = '0.3';
+                youtubeLink.style.pointerEvents = 'none';
+            }
+        }
+
+        // Update Apple Music link
+        if (appleLink) {
+            if (this.currentTrack.links.apple) {
+                appleLink.href = this.currentTrack.links.apple;
+                appleLink.style.opacity = '1';
+                appleLink.style.pointerEvents = 'auto';
+            } else {
+                appleLink.href = '#';
+                appleLink.style.opacity = '0.3';
+                appleLink.style.pointerEvents = 'none';
+            }
+        }
+
+        // Update SoundCloud link (if exists)
+        if (soundcloudLink) {
+            if (this.currentTrack.links.soundcloud) {
+                soundcloudLink.href = this.currentTrack.links.soundcloud;
+                soundcloudLink.style.opacity = '1';
+                soundcloudLink.style.pointerEvents = 'auto';
+            } else {
+                soundcloudLink.href = '#';
+                soundcloudLink.style.opacity = '0.3';
+                soundcloudLink.style.pointerEvents = 'none';
             }
         }
     }
@@ -394,6 +483,24 @@ class YouTubeAudioPlayer {
             this.setCurrentTrack(trackIndex);
             this.play();
         }
+    }
+
+    // Method to load video directly with ID
+    loadVideo(videoId) {
+        if (!this.isReady) {
+            setTimeout(() => this.loadVideo(videoId), 500);
+            return;
+        }
+
+        this.currentVideoId = videoId;
+        this.player.loadVideoById(videoId);
+
+        // Auto play after loading
+        setTimeout(() => {
+            this.player.playVideo();
+        }, 1000);
+
+        console.log('🎵 Loading and playing video:', videoId);
     }
 
     // Get current status

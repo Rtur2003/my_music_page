@@ -1,0 +1,218 @@
+/* ===============================================
+   ICON & FONT AWESOME FIXES
+   =============================================== */
+
+/* Force Font Awesome to load */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
+
+/* FORCE FONT AWESOME ICONS TO SHOW */
+.card-platform-link i,
+.platform-link i {
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400 !important;
+    display: inline-block !important;
+    text-rendering: auto !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    font-size: 1rem !important;
+    color: white !important;
+    z-index: 999 !important;
+    position: relative !important;
+    background: none !important;
+    border: none !important;
+    width: auto !important;
+    height: auto !important;
+    line-height: 1 !important;
+    vertical-align: middle !important;
+}
+
+.fas,
+.fa-solid {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+}
+
+.fab,
+.fa-brands {
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400 !important;
+}
+
+/* FORCE SPECIFIC BRAND ICONS WITH UNICODE */
+.fab.fa-youtube:before,
+.fa-youtube:before {
+    content: "\f167" !important;
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400 !important;
+}
+
+.fab.fa-spotify:before,
+.fa-spotify:before {
+    content: "\f1bc" !important;
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400 !important;
+}
+
+.fab.fa-apple:before,
+.fa-apple:before {
+    content: "\f179" !important;
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400 !important;
+}
+
+.fas.fa-play:before,
+.fa-play:before {
+    content: "\f04b" !important;
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+}
+
+.fas.fa-pause:before,
+.fa-pause:before {
+    content: "\f04c" !important;
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+}
+
+/* Platform link styling fixes */
+.card-platform-link {
+    position: relative;
+    text-decoration: none !important;
+    overflow: visible !important;
+}
+
+.card-platform-link i {
+    z-index: 10;
+    position: relative;
+    color: white !important;
+    font-style: normal !important;
+    line-height: 1 !important;
+}
+
+/* Fallback text if icons don't load */
+.card-platform-link.youtube::after {
+    content: "YT";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: white;
+    z-index: 5;
+}
+
+.card-platform-link.spotify::after {
+    content: "SP";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: white;
+    z-index: 5;
+}
+
+.card-platform-link.apple::after {
+    content: "AP";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: white;
+    z-index: 5;
+}
+
+/* Hide fallback text when icon loads */
+.card-platform-link i:not(:empty) + .card-platform-link::after,
+.card-platform-link:has(i:not(:empty))::after {
+    display: none;
+}
+
+/* MAIN PLAYER PLATFORM LINKS - FORCE ICONS */
+.platform-link i,
+.platform-links .platform-link i {
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400 !important;
+    font-size: 1.5rem !important;
+    color: white !important;
+    z-index: 10 !important;
+    position: relative !important;
+    display: inline-block !important;
+    text-rendering: auto !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    line-height: 1 !important;
+    vertical-align: middle !important;
+    width: auto !important;
+    height: auto !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+/* HIDE TEXT IN PLATFORM LINKS - SHOW ONLY ICONS */
+.platform-link {
+    font-size: 0 !important; /* Hide text */
+    overflow: hidden !important;
+}
+
+.platform-link i {
+    font-size: 1.5rem !important; /* Show icon */
+}
+
+/* Specific platform link fixes */
+.platform-links .spotify-link i::before {
+    content: "\f1bc" !important;
+}
+.platform-links .youtube-link i::before {
+    content: "\f167" !important;
+}
+.platform-links .apple-link i::before {
+    content: "\f179" !important;
+}
+
+/* Fallback for main player if icons fail */
+.platform-links .spotify-link:not(:has(i:before))::after {
+    content: "🎵";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2rem;
+}
+
+.platform-links .youtube-link:not(:has(i:before))::after {
+    content: "📺";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2rem;
+}
+
+.platform-links .apple-link:not(:has(i:before))::after {
+    content: "🍎";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2rem;
+}
+
+/* Play button icons */
+.card-play-btn i,
+.main-play-button i {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+    color: inherit !important;
+}
+
+/* Debug: Make sure icons are visible */
+i[class*="fa-"]:empty::before {
+    visibility: visible !important;
+    display: inline-block !important;
+    font-style: normal !important;
+}

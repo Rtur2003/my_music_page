@@ -193,15 +193,25 @@
     <link rel="preconnect" href="//fonts.googleapis.com">
     <link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Font Awesome from multiple sources for reliability -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
     
     <!-- Critical styles moved to main CSS for better caching -->
     
     <!-- HASAN ARTHUR DESIGN SYSTEM -->
     <link rel="stylesheet" href="assets/css/hasan-arthur-design.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/modern-player-styles.css" media="print" onload="this.media='all'; this.onload=null;">
+    <link rel="stylesheet" href="assets/css/enhanced-player-design.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/music-sections-redesign.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/footer-redesign.css" media="print" onload="this.media='all'; this.onload=null;">
+    <link rel="stylesheet" href="assets/css/icon-fixes.css" media="print" onload="this.media='all'; this.onload=null;">
+    <link rel="stylesheet" href="assets/css/critical-icon-fix.css" media="all">
+    <link rel="stylesheet" href="assets/css/theme-consistency.css" media="print" onload="this.media='all'; this.onload=null;">
+    <link rel="stylesheet" href="assets/css/dynamic-enhancements.css" media="print" onload="this.media='all'; this.onload=null;">
+    <link rel="stylesheet" href="assets/css/mobile-optimization.css" media="print" onload="this.media='all'; this.onload=null;">
+    <link rel="stylesheet" href="assets/css/performance-optimization.css" media="print" onload="this.media='all'; this.onload=null;">
     
     <!-- Prefetch critical images -->
     <link rel="preload" href="assets/images/logo-main.png" as="image" type="image/png">
@@ -938,6 +948,7 @@
     <script src="assets/js/gallery.js" defer></script>
     <script src="assets/js/contact-form.js" defer></script>
     <script src="assets/js/sonic-interactions.js" defer></script>
+    <script src="assets/js/dynamic-effects.js" defer></script>
     
     <!-- LANGUAGE SYSTEM (Load last) -->
     <script src="assets/js/language-simple.js" defer></script>

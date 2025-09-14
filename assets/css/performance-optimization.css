@@ -1,0 +1,384 @@
+/* ===============================================
+   PERFORMANCE OPTIMIZATION & CORE WEB VITALS
+   Bu dosya sayfa performansını maksimize eder
+   =============================================== */
+
+/* Critical CSS Inlining - Above the fold content */
+.hero-section,
+.sonic-nav,
+.modern-player-card {
+    /* GPU acceleration için transform3d kullan */
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    /* Layout thrashing'i önle */
+    will-change: transform, opacity;
+}
+
+/* Layout Stability - CLS (Cumulative Layout Shift) Optimization */
+.music-card,
+.platform-link,
+.fab {
+    /* Boyutları önceden belirle */
+    contain: layout style paint;
+    /* Layout shift'i önle */
+    min-height: 0;
+    aspect-ratio: var(--card-ratio, auto);
+}
+
+/* Resim optimize et - LCP (Largest Contentful Paint) */
+.artwork-image,
+.card-artwork,
+.hero-bg,
+.footer-logo-image {
+    /* Lazy loading optimize */
+    loading: lazy;
+    /* Decode optimizasyonu */
+    decoding: async;
+    /* Layout shift önleme */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* GPU katmanına taşı */
+    transform: translateZ(0);
+}
+
+/* Critical resources için immediate loading */
+.hero-section img,
+.artwork-container img {
+    loading: eager;
+    fetchpriority: high;
+}
+
+/* Font Loading Optimization */
+@font-face {
+    font-family: 'Inter';
+    font-display: swap; /* FOUT yerine FOIT kullan */
+    src: local('Inter'),
+         url('https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2') format('woff2');
+    /* Sadece kullanılan karakterleri yükle */
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153;
+}
+
+/* Animation Performance Optimization */
+@keyframes optimizedRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.modern-player-card::before,
+.hero-section::before {
+    /* GPU'ya taşı */
+    will-change: transform;
+    /* Composite layer oluştur */
+    transform: translateZ(0);
+    /* Optimized animation */
+    animation: optimizedRotate 8s linear infinite;
+}
+
+/* Scroll Performance - Passive Event Listeners */
+.scroll-container {
+    /* Scroll optimizasyonu */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* Scroll snap için */
+    scroll-behavior: smooth;
+}
+
+/* Memory Management - Lazy Component Loading */
+.music-card:not(.loaded) {
+    /* Placeholder content */
+    background: var(--tertiary-bg);
+    min-height: 120px;
+}
+
+.music-card.loaded {
+    /* Actual content */
+    background: var(--card-bg);
+    transition: background 0.3s ease;
+}
+
+/* Network Optimization - Resource Hints */
+/* Bu zaten HTML'de preconnect olarak tanımlı */
+
+/* JavaScript Performance Helpers */
+.js-performance-marker {
+    /* Performance measurement için */
+    visibility: hidden;
+    position: absolute;
+}
+
+/* CSS Containment for Better Rendering */
+.section {
+    /* Layout containment */
+    contain: layout;
+}
+
+.music-cards {
+    /* Style containment */
+    contain: style layout;
+}
+
+.platform-links {
+    /* Paint containment */
+    contain: paint;
+}
+
+/* Reduced Motion Performance */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        /* Tüm animasyonları devre dışı bırak */
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    /* GPU katmanlarını kaldır */
+    .modern-player-card::before,
+    .hero-section::before {
+        will-change: auto;
+        transform: none;
+        animation: none;
+    }
+}
+
+/* Touch Performance Optimization */
+@media (hover: none) and (pointer: coarse) {
+    /* Hover efektlerini kaldır - mobil performans */
+    .music-card:hover,
+    .platform-link:hover,
+    .fab:hover {
+        transform: none;
+        transition: none;
+    }
+
+    /* Touch callout'ları optimize et */
+    * {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    /* Text seçilebilir olsun */
+    p, h1, h2, h3, h4, h5, h6, span, div {
+        -webkit-user-select: text;
+        user-select: text;
+    }
+
+    /* Touch targets - minimum 44px */
+    .platform-link,
+    .card-play-btn,
+    .fab,
+    .nav-link {
+        min-width: 44px;
+        min-height: 44px;
+    }
+}
+
+/* Memory Optimization for Low-End Devices */
+@media (max-width: 768px) {
+    /* Particle sayısını azalt */
+    .hero-particles .particle:nth-child(n+6) {
+        display: none;
+    }
+
+    /* Blur efektlerini basitleştir */
+    .modern-player-card,
+    .fab {
+        backdrop-filter: none;
+        background: var(--card-bg);
+    }
+
+    /* Gölge efektlerini azalt */
+    .music-card,
+    .platform-link {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    /* Animation duration'ları kısalt */
+    * {
+        animation-duration: 0.2s !important;
+        transition-duration: 0.2s !important;
+    }
+}
+
+/* Network Connection Optimization */
+@media (prefers-reduced-data: reduce) {
+    /* Düşük bant genişliği için optimize */
+    .hero-particles {
+        display: none;
+    }
+
+    .modern-player-card::before,
+    .hero-section::before {
+        animation: none;
+        background: none;
+    }
+
+    /* Görsel efektleri azalt */
+    .music-card,
+    .platform-link {
+        box-shadow: none;
+        border: 1px solid var(--border-color);
+    }
+}
+
+/* High Refresh Rate Optimization */
+@media (min-resolution: 120dpi) {
+    /* 120Hz+ ekranlar için smooth animations */
+    .modern-player-card::before,
+    .music-wave .wave-bar {
+        animation-timing-function: linear;
+    }
+
+    /* Frame rate optimize */
+    .scroll-progress-bar {
+        transition-timing-function: ease-out;
+    }
+}
+
+/* CPU Optimization */
+.cpu-intensive {
+    /* Heavy hesaplamalar için GPU delegate */
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* Battery Life Optimization */
+@media (prefers-reduced-motion: reduce) {
+    .hero-particles,
+    .modern-player-card::before,
+    .music-wave {
+        /* Batarya tasarrufu için animasyonları kaldır */
+        display: none;
+    }
+}
+
+/* Intersection Observer Performance */
+.intersection-target {
+    /* Observer için optimize */
+    contain: layout;
+    will-change: auto;
+}
+
+.intersection-target.visible {
+    will-change: transform, opacity;
+}
+
+/* Critical Path Optimization */
+.above-fold {
+    /* Above-the-fold content */
+    contain: none;
+    will-change: auto;
+}
+
+.below-fold {
+    /* Below-the-fold content */
+    contain: strict;
+}
+
+/* Vendor Specific Optimizations */
+
+/* WebKit (Safari) */
+@supports (-webkit-appearance: none) {
+    .music-card,
+    .platform-link {
+        -webkit-transform: translateZ(0);
+        -webkit-backface-visibility: hidden;
+    }
+
+    .scroll-container {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* Firefox */
+@-moz-document url-prefix() {
+    .modern-player-card::before {
+        /* Firefox için optimize */
+        background: radial-gradient(circle, rgba(212, 176, 120, 0.1) 0%, transparent 70%);
+        animation: none;
+    }
+}
+
+/* Chrome/Chromium */
+@supports (backdrop-filter: blur(10px)) {
+    .modern-player-card,
+    .fab {
+        backdrop-filter: blur(10px);
+    }
+}
+
+/* Performance Monitoring Markers */
+.perf-measure-start,
+.perf-measure-end {
+    display: none;
+    visibility: hidden;
+}
+
+/* Lighthouse Optimization Helpers */
+.lighthouse-optimize {
+    /* First Contentful Paint optimize */
+    contain: layout style;
+    /* Time to Interactive optimize */
+    will-change: auto;
+}
+
+/* Service Worker Cache Hints */
+.sw-cache-first {
+    /* Cache-first strategy için */
+    contain: strict;
+}
+
+.sw-network-first {
+    /* Network-first strategy için */
+    contain: layout;
+}
+
+/* Progressive Enhancement */
+.no-js .dynamic-content {
+    /* JavaScript olmadan da çalışsın */
+    display: block;
+    opacity: 1;
+    transform: none;
+}
+
+.js .dynamic-content {
+    /* JavaScript varsa enhanced experience */
+    will-change: transform, opacity;
+}
+
+/* Memory Leak Prevention */
+.cleanup-needed {
+    /* Event listener'ları temizle */
+    pointer-events: none;
+}
+
+.cleanup-needed * {
+    will-change: auto;
+    transform: none;
+    animation: none;
+    transition: none;
+}
+
+/* Bundle Size Optimization Hints */
+.tree-shakeable {
+    /* Tree-shaking için optimize */
+    display: var(--component-display, block);
+}
+
+/* Runtime Performance */
+.runtime-optimize {
+    /* Runtime sırasında optimize */
+    contain: size layout style paint;
+    transform: translateZ(0);
+}
+
+/* Critical CSS Completion Marker */
+.critical-css-loaded {
+    /* Critical CSS yüklendiğini işaretle */
+    opacity: 1;
+    visibility: visible;
+}
