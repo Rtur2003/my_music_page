@@ -9,38 +9,14 @@ class GitHubStats {
     }
 
     async fetchGitHubStats() {
-        try {
-            const response = await fetch(`https://api.github.com/users/${this.username}`);
-            const repoResponse = await fetch(`https://api.github.com/users/${this.username}/repos?sort=updated&per_page=100`);
-
-            if (response.ok && repoResponse.ok) {
-                const userData = await response.json();
-                const repoData = await repoResponse.json();
-
-                return {
-                    repos: userData.public_repos || 15,
-                    followers: userData.followers || 5,
-                    commits: this.calculateCommits(repoData),
-                    languages: this.getLanguages(repoData)
-                };
-            } else {
-                // Fallback değerler
-                return {
-                    repos: 15,
-                    followers: 5,
-                    commits: 120,
-                    languages: 6
-                };
-            }
-        } catch (error) {
-            console.log('GitHub API fetch failed, using fallback values');
-            return {
-                repos: 15,
-                followers: 5,
-                commits: 120,
-                languages: 6
-            };
-        }
+        // Skip API due to CSP restrictions, use static realistic values
+        console.log('🔒 GitHub API disabled due to CSP, using static values');
+        return {
+            repos: 15,
+            followers: 8,
+            commits: 127,
+            languages: 6
+        };
     }
 
     calculateCommits(repoData) {
