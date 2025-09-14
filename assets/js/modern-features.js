@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     addShowsSection();
     addMerchandiseSection();
     addSocialMediaIntegration();
-    addPatreonIntegration();
+    addSupportIntegration();
     initAudioVisualizer();
     addLatestReleasesCarousel();
     console.log('🎵 Modern features initialized');
@@ -84,11 +84,26 @@ function addShowsSection() {
                 <div class="section-header">
                     <h2 class="section-title">
                         <i class="fas fa-calendar-alt"></i>
-                        Upcoming Shows
+                        Live Shows
                     </h2>
-                    <p class="section-subtitle">Catch me live at these venues</p>
+                    <p class="section-subtitle">Coming soon - stay tuned for live performance dates</p>
                 </div>
-                <div class="shows-grid">
+                <div class="shows-grid coming-soon-message">
+                    <div class="coming-soon-card">
+                        <div class="coming-soon-icon">
+                            <i class="fas fa-calendar-plus"></i>
+                        </div>
+                        <h3>Shows Coming Soon</h3>
+                        <p>I'm currently working on some exciting live performance opportunities. Follow me on social media to be the first to know about upcoming shows!</p>
+                        <div class="coming-soon-actions">
+                            <a href="https://www.instagram.com/rthur_hsn" target="_blank" class="notify-btn">
+                                <i class="fab fa-instagram"></i>
+                                Get Notified
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="shows-grid hidden">
                     <div class="show-card">
                         <div class="show-date">
                             <div class="show-month">MAR</div>
@@ -182,11 +197,26 @@ function addMerchandiseSection() {
                 <div class="section-header">
                     <h2 class="section-title">
                         <i class="fas fa-tshirt"></i>
-                        Official Merchandise
+                        Merchandise
                     </h2>
-                    <p class="section-subtitle">Rep the brand with official gear</p>
+                    <p class="section-subtitle">Official merch store coming soon</p>
                 </div>
-                <div class="merch-grid">
+                <div class="merch-grid coming-soon-message">
+                    <div class="coming-soon-card">
+                        <div class="coming-soon-icon">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <h3>Merch Store Coming Soon</h3>
+                        <p>I'm working on creating some awesome merchandise for my fans. Stay tuned for official hoodies, t-shirts, and more!</p>
+                        <div class="coming-soon-actions">
+                            <a href="https://www.instagram.com/rthur_hsn" target="_blank" class="notify-btn">
+                                <i class="fab fa-instagram"></i>
+                                Get Notified
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="merch-grid hidden">
                     <div class="merch-card">
                         <div class="merch-image">
                             <img src="assets/images/logo-main.png" alt="Logo Hoodie" loading="lazy">
@@ -325,32 +355,37 @@ function addSocialMediaIntegration() {
 }
 
 /* ===============================================
-   PATREON INTEGRATION
+   SUPPORT INTEGRATION (IYZICO)
    =============================================== */
-function addPatreonIntegration() {
-    const patreonBanner = document.createElement('div');
-    patreonBanner.className = 'patreon-banner';
-    patreonBanner.innerHTML = `
-        <div class="patreon-content">
-            <div class="patreon-icon">
-                <i class="fab fa-patreon"></i>
+function addSupportIntegration() {
+    const supportBanner = document.createElement('div');
+    supportBanner.className = 'support-banner';
+    supportBanner.innerHTML = `
+        <div class="support-content">
+            <div class="support-icon">
+                <i class="fas fa-heart"></i>
             </div>
-            <div class="patreon-text">
-                <h3>Support My Work</h3>
-                <p>Get exclusive access to unreleased tracks, stems, and behind-the-scenes content</p>
+            <div class="support-text">
+                <h3>Çalışmalarımı Destekle</h3>
+                <p>Müzik üretimimde ve yazılım projelerimde bana destek olmak istersen</p>
             </div>
-            <a href="#" class="patreon-btn">
-                <i class="fab fa-patreon"></i>
-                Join Patreon
+            <a href="https://iyzi.link/AJspVg" target="_blank" rel="noopener" class="support-btn">
+                <i class="fas fa-coffee"></i>
+                Destek Ol
             </a>
         </div>
-        <button class="patreon-close" onclick="this.parentElement.style.display='none'">
+        <button class="support-close" onclick="this.parentElement.style.display='none'">
             <i class="fas fa-times"></i>
         </button>
     `;
 
-    // Add to top of page
-    document.body.appendChild(patreonBanner);
+    // Add support banner to page
+    document.body.appendChild(supportBanner);
+
+    // Show banner after 5 seconds
+    setTimeout(() => {
+        supportBanner.style.display = 'flex';
+    }, 5000);
 }
 
 /* ===============================================
