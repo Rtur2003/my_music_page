@@ -586,9 +586,24 @@ document.head.appendChild(styleSheet);
 
 // Initialize YouTube Audio Player
 let youtubePlayer;
+
+// Initialize with delay to ensure all DOM is ready
+function initializeYouTubePlayer() {
+    try {
+        youtubePlayer = new YouTubeAudioPlayer();
+        window.youtubePlayer = youtubePlayer;
+        console.log('✅ YouTube player initialized successfully');
+    } catch (error) {
+        console.error('❌ Failed to initialize YouTube player:', error);
+        // Retry after 2 seconds
+        setTimeout(initializeYouTubePlayer, 2000);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    youtubePlayer = new YouTubeAudioPlayer();
-    window.youtubePlayer = youtubePlayer;
+    // Add delay to ensure all other scripts are loaded
+    setTimeout(initializeYouTubePlayer, 1000);
 });
 
-export default YouTubeAudioPlayer;
+// Export removed for vanilla JS compatibility
+// export default YouTubeAudioPlayer;

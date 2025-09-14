@@ -164,4 +164,5 @@ window.safeStorage = {
     removeItem: (key) => errorHandler.safeFunctionCall(() => localStorage.removeItem(key))
 };
 
-export default ErrorHandler;
+// Export removed for vanilla JS compatibility
+// export default ErrorHandler;
