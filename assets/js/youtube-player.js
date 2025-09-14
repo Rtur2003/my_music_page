@@ -585,6 +585,53 @@ class YouTubeAudioPlayer {
         console.log('🎵 Loading and playing video:', videoId);
     }
 
+    // Setup player controls
+    setupPlayerControls() {
+        console.log('🎵 Setting up player controls...');
+
+        // Play/Pause button
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const mainPlayBtn = document.getElementById('mainPlayBtn');
+
+        if (playPauseBtn) {
+            playPauseBtn.addEventListener('click', () => {
+                this.togglePlayPause();
+            });
+        }
+
+        if (mainPlayBtn) {
+            mainPlayBtn.addEventListener('click', () => {
+                this.togglePlayPause();
+            });
+        }
+
+        // Next/Previous buttons
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                this.nextTrack();
+            });
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                this.prevTrack();
+            });
+        }
+
+        // Volume control
+        const volumeSlider = document.getElementById('volumeSlider');
+        if (volumeSlider) {
+            volumeSlider.addEventListener('input', (e) => {
+                this.setVolume(parseInt(e.target.value));
+            });
+        }
+
+        console.log('✅ Player controls setup complete');
+    }
+
     // Get current status
     getStatus() {
         return {
