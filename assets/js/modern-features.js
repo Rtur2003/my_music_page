@@ -436,15 +436,56 @@ function initAudioVisualizer() {
             animationId = requestAnimationFrame(drawVisualizer);
         }
 
-        document.getElementById('visualizerToggle').addEventListener('click', function() {
+        // Enhanced visualizer toggle with audio support
+        document.getElementById('visualizerToggle').addEventListener('click', async function() {
             if (animationId) {
                 cancelAnimationFrame(animationId);
                 animationId = null;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 this.innerHTML = '<i class="fas fa-wave-square"></i> Start Visualizer';
+                this.classList.remove('active');
             } else {
-                drawVisualizer();
-                this.innerHTML = '<i class="fas fa-stop"></i> Stop Visualizer';
+                try {
+                    // Try to get microphone access for real-time visualization
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const analyser = audioContext.createAnalyser();
+                    const source = audioContext.createMediaStreamSource(stream);
+
+                    analyser.fftSize = 64;
+                    source.connect(analyser);
+
+                    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+                    function drawRealtimeVisualizer() {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        analyser.getByteFrequencyData(dataArray);
+
+                        const barCount = dataArray.length;
+                        const barWidth = canvas.width / barCount;
+
+                        for (let i = 0; i < barCount; i++) {
+                            const barHeight = (dataArray[i] / 255) * canvas.height;
+                            const x = i * barWidth;
+                            const y = canvas.height - barHeight;
+
+                            ctx.fillStyle = `hsl(${45 + i * 3}, 70%, ${50 + (dataArray[i] / 255) * 30}%)`;
+                            ctx.fillRect(x, y, barWidth - 2, barHeight);
+                        }
+
+                        animationId = requestAnimationFrame(drawRealtimeVisualizer);
+                    }
+
+                    drawRealtimeVisualizer();
+                    this.innerHTML = '<i class="fas fa-stop"></i> Stop Visualizer';
+                    this.classList.add('active');
+
+                } catch (error) {
+                    // Fallback to demo mode
+                    drawVisualizer();
+                    this.innerHTML = '<i class="fas fa-stop"></i> Stop Visualizer (Demo)';
+                    this.classList.add('active');
+                }
             }
         });
     }

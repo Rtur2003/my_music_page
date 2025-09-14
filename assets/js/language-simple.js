@@ -59,6 +59,9 @@ class SimpleLanguageSystem {
                 'gallery.live': 'Live Performance',
                 'gallery.studio': 'Studio Work',
                 'gallery.behind': 'Behind Scenes',
+                'gallery.coming.title': 'Photos Coming Soon',
+                'gallery.coming.desc': 'I\'m currently working on capturing some great photos from my studio sessions and live performances. Stay tuned for the gallery update!',
+                'gallery.coming.button': 'See Current Photos',
                 
                 // Contact Section
                 'contact.title': 'Let\'s Connect!',
@@ -134,6 +137,9 @@ class SimpleLanguageSystem {
                 'gallery.live': 'Canlı Performans',
                 'gallery.studio': 'Stüdyo Çalışması',
                 'gallery.behind': 'Sahne Arkası',
+                'gallery.coming.title': 'Fotoğraflar Çok Yakında',
+                'gallery.coming.desc': 'Şu anda stüdyo seanslarım ve canlı performanslarımdan güzel fotoğraflar çekmeye odaklanıyorum. Galeri güncellemesi için takipte kalın!',
+                'gallery.coming.button': 'Mevcut Fotoğrafları Gör',
                 
                 // Contact Section
                 'contact.title': 'Hadi Konuşalım!',
