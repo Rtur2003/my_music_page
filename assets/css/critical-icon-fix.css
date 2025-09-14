@@ -47,7 +47,8 @@ i[class*="fa-"]:before,
     font-size: 0 !important; /* Metni gizle */
 }
 
-.music-card-platforms .card-platform-link i {
+.music-card-platforms .card-platform-link i,
+.music-card .card-platform-link i {
     font-size: 14px !important;
     color: white !important;
     z-index: 10 !important;
@@ -59,6 +60,8 @@ i[class*="fa-"]:before,
     background: none !important;
     border: none !important;
     text-align: center !important;
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400 !important;
 }
 
 /* SPOTIFY İCONU */
@@ -130,6 +133,13 @@ i[class*="fa-"]:before,
     position: relative !important;
     font-size: 0 !important; /* Metni gizle */
     overflow: hidden !important;
+    text-indent: -9999px !important; /* Ekstra metin gizleme */
+}
+
+/* Platform linklerinde hiç metin görünmesin */
+.platform-links .platform-link::before,
+.platform-links .platform-link::after {
+    content: none !important;
 }
 
 .platform-links .platform-link i {

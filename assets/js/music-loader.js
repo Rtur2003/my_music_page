@@ -16,14 +16,13 @@ class MusicLoader {
     }
 
     async loadMusicData() {
-        try {
-            // Try to fetch from file (works in production)
-            const response = await fetch('./assets/data/music-links.json');
-            this.musicData = await response.json();
-        } catch (error) {
-            console.error('Failed to load music data:', error);
-            // CORS sorunu için hardcoded data - güncelleme sonrası bu kısmı edit edeceksin
-            this.musicData = {
+        console.log('🎵 Loading music data...');
+
+        // CORS sorunu için direkt hardcoded data kullan - local development için
+        console.log('📁 Using hardcoded data for local development');
+
+        // Directly use hardcoded data instead of trying to fetch
+        this.musicData = {
                 "tracks": [
                     {
                         "id": 1,
@@ -81,8 +80,9 @@ class MusicLoader {
                         }
                     }
                 ]
-            };
-        }
+        };
+
+        console.log('✅ Music data loaded:', this.musicData.tracks.length, 'tracks');
     }
 
     renderTracks() {
@@ -200,15 +200,16 @@ class MusicLoader {
         const track = this.musicData.tracks.find(t => t.links.youtube === youtubeUrl);
 
         if (track) {
+            console.log('🎵 Track found:', track.title);
+
+            // Player UI'sini güncelle - track bilgileri ile
+            this.updateMainPlayerUI(track);
+
             // Ana player'a track bilgisini gönder
             if (window.youtubePlayer) {
                 // Track bilgilerini player'a set et
                 window.youtubePlayer.currentTrack = track;
-
-                console.log('🎵 Setting current track:', track.title);
-
-                // Player UI'sini güncelle - track bilgileri ile
-                this.updateMainPlayerUI(track);
+                console.log('🎵 Setting current track to YouTube player:', track.title);
 
                 // Video ID'sini çıkar ve oynat
                 const videoId = this.extractVideoId(youtubeUrl);
@@ -226,9 +227,29 @@ class MusicLoader {
                     window.open(youtubeUrl, '_blank');
                 }
             } else {
-                console.error('❌ YouTube player not initialized yet');
-                // Player henüz hazır değilse 1 saniye bekle ve tekrar dene
-                setTimeout(() => this.playTrack(youtubeUrl), 1000);
+                console.warn('⏳ YouTube player not ready yet, retrying...');
+
+                // Retry with exponential backoff
+                let retryCount = 0;
+                const maxRetries = 10;
+
+                const retryPlayTrack = () => {
+                    if (window.youtubePlayer) {
+                        console.log('✅ YouTube player ready, playing track');
+                        this.playTrack(youtubeUrl);
+                    } else if (retryCount < maxRetries) {
+                        retryCount++;
+                        const delay = Math.min(1000 * Math.pow(2, retryCount), 5000); // Max 5 second delay
+                        console.log(`⏳ Retry ${retryCount}/${maxRetries} in ${delay}ms`);
+                        setTimeout(retryPlayTrack, delay);
+                    } else {
+                        console.error('❌ YouTube player failed to initialize after', maxRetries, 'attempts');
+                        // Fallback to opening in new window
+                        window.open(youtubeUrl, '_blank');
+                    }
+                };
+
+                setTimeout(retryPlayTrack, 1000);
             }
         } else {
             console.error('❌ Track not found for URL:', youtubeUrl);

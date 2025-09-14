@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializePageTransitions();
     initializeNavScrollIndicator();
 
-    console.log('🎨 Dynamic Effects Initialized');
+    // console.log('🎨 Dynamic Effects Initialized'); // Disabled for production
 });
 
 /* ===============================================
@@ -64,6 +64,7 @@ function initializeScrollEffects() {
     document.body.appendChild(progressBar);
 
     const progressFill = progressBar.querySelector('.scroll-progress-bar');
+    if (!progressFill) return;
 
     // Update progress on scroll
     window.addEventListener('scroll', function() {
@@ -171,7 +172,9 @@ function initializeMusicWaveAnimation() {
     }
 
     // Insert after track title
-    playerSection.insertAdjacentElement('afterend', waveContainer);
+    if (playerSection) {
+        playerSection.insertAdjacentElement('afterend', waveContainer);
+    }
 
     // Animate waves when music is playing
     const playButton = document.querySelector('.main-play-button');

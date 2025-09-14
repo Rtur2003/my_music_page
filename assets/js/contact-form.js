@@ -11,7 +11,7 @@ class ContactFormHandler {
     init() {
         if (this.form) {
             this.form.addEventListener('submit', (e) => this.handleSubmit(e));
-            console.log('📧 Contact form handler initialized');
+            // console.log('📧 Contact form handler initialized'); // Disabled for production
         }
     }
 
