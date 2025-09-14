@@ -1,0 +1,294 @@
+/* ===============================================
+   MOBILE MY MUSIC PLAYER POSITION FIX
+   =============================================== */
+
+/* Mobile player layout fixes */
+@media (max-width: 768px) {
+
+    /* Global mobile fixes */
+    body {
+        overflow-x: hidden !important;
+    }
+
+    .container {
+        max-width: 100% !important;
+        padding: 0 1rem !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Music section container fix */
+    #music .container {
+        padding: 0 1rem !important;
+        max-width: 100% !important;
+        margin: 0 auto !important;
+        overflow-x: hidden !important;
+    }
+
+    /* Modern player card mobile optimization */
+    .modern-player-card {
+        grid-template-columns: 1fr !important;
+        text-align: center !important;
+        padding: 1rem !important;
+        gap: 1.5rem !important;
+        margin: 1rem auto !important;
+        max-width: calc(100% - 2rem) !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Artwork positioning */
+    .artwork-container {
+        width: 180px !important;
+        height: 180px !important;
+        margin: 0 auto 1rem !important;
+        position: relative;
+    }
+
+    .artwork-image {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        border-radius: 20px !important;
+    }
+
+    /* Main play button positioning */
+    .main-play-button {
+        position: absolute !important;
+        bottom: -15px !important;
+        right: -15px !important;
+        width: 60px !important;
+        height: 60px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: var(--gradient-gold) !important;
+        color: var(--primary-bg) !important;
+        border: 4px solid var(--primary-bg) !important;
+        box-shadow: 0 8px 25px rgba(212, 176, 120, 0.4) !important;
+        cursor: pointer !important;
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1) !important;
+        z-index: 10 !important;
+        -webkit-tap-highlight-color: transparent !important;
+        touch-action: manipulation !important;
+    }
+
+    .main-play-button:hover {
+        transform: scale(1.1) !important;
+        box-shadow: 0 12px 35px rgba(212, 176, 120, 0.6) !important;
+    }
+
+    .main-play-button:active {
+        transform: scale(0.95) !important;
+        transition: transform 0.1s ease-out !important;
+    }
+
+    .main-play-button i {
+        font-size: 1.2rem !important;
+        margin-left: 2px !important; /* Play icon optical alignment */
+    }
+
+    /* Track info mobile layout */
+    .player-info {
+        text-align: center !important;
+        width: 100% !important;
+    }
+
+    .modern-track-title {
+        font-size: 1.6rem !important;
+        line-height: 1.3 !important;
+        margin-bottom: 0.5rem !important;
+        color: var(--text-primary) !important;
+    }
+
+    .modern-track-artist {
+        font-size: 1rem !important;
+        color: var(--text-secondary) !important;
+        margin-bottom: 1rem !important;
+    }
+
+    /* Track metadata mobile */
+    .track-metadata {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 1rem !important;
+        margin-bottom: 1.5rem !important;
+        flex-wrap: wrap !important;
+    }
+
+    .track-genre,
+    .track-duration {
+        background: var(--tertiary-bg) !important;
+        color: var(--text-secondary) !important;
+        padding: 0.4rem 1rem !important;
+        border-radius: 20px !important;
+        font-size: 0.8rem !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    /* Platform links mobile */
+    .platform-links {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 0.75rem !important;
+        flex-wrap: wrap !important;
+    }
+
+    .platform-link {
+        width: 50px !important;
+        height: 50px !important;
+        border-radius: 15px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-decoration: none !important;
+        font-size: 0 !important; /* Hide text, show only icons */
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1) !important;
+        border: 2px solid var(--border-color) !important;
+        background: var(--card-bg) !important;
+    }
+
+    .platform-link i {
+        font-size: 1.2rem !important;
+        color: var(--text-primary) !important;
+        z-index: 2 !important;
+        position: relative !important;
+        pointer-events: none !important; /* Icon'a tıklanmasını engelle, parent'a yönlendir */
+    }
+
+    /* Mobile touch optimization */
+    .platform-link {
+        -webkit-tap-highlight-color: transparent !important;
+        touch-action: manipulation !important;
+        cursor: pointer !important;
+    }
+
+    /* Platform specific colors - mobile */
+    .platform-link:hover {
+        transform: translateY(-3px) scale(1.1) !important;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    /* Spotify */
+    .platform-link[href*="spotify"]:hover,
+    .spotify-link:hover {
+        background: #1db954 !important;
+        border-color: #1db954 !important;
+    }
+
+    .platform-link[href*="spotify"]:hover i,
+    .spotify-link:hover i {
+        color: white !important;
+    }
+
+    /* YouTube */
+    .platform-link[href*="youtube"]:hover,
+    .youtube-link:hover {
+        background: #ff0000 !important;
+        border-color: #ff0000 !important;
+    }
+
+    .platform-link[href*="youtube"]:hover i,
+    .youtube-link:hover i {
+        color: white !important;
+    }
+
+    /* Apple Music */
+    .platform-link[href*="apple"]:hover,
+    .apple-link:hover {
+        background: #000000 !important;
+        border-color: #000000 !important;
+    }
+
+    .platform-link[href*="apple"]:hover i,
+    .apple-link:hover i {
+        color: white !important;
+    }
+
+    /* Remove duplicate elements or overlapping content */
+    .modern-player-card .duplicate-content {
+        display: none !important;
+    }
+
+    /* Music wave animation mobile positioning */
+    .music-wave {
+        margin: 1rem 0 !important;
+        justify-content: center !important;
+        height: 30px !important;
+    }
+
+    .wave-bar {
+        width: 2px !important;
+    }
+
+    /* Volume control mobile (if exists) */
+    .volume-control {
+        margin: 1rem 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.5rem !important;
+    }
+
+    .volume-slider {
+        width: 120px !important;
+        height: 4px !important;
+    }
+
+    /* Progress bar mobile */
+    .progress-bar {
+        width: 100% !important;
+        margin: 1rem 0 !important;
+    }
+
+    /* Fix any overlapping issues */
+    .modern-player-card * {
+        position: relative !important;
+        z-index: 1 !important;
+    }
+
+    .main-play-button {
+        z-index: 10 !important;
+    }
+}
+
+/* Very small screens (under 400px) */
+@media (max-width: 400px) {
+    .modern-player-card {
+        margin: 0.5rem auto !important;
+        padding: 1rem !important;
+    }
+
+    .artwork-container {
+        width: 150px !important;
+        height: 150px !important;
+    }
+
+    .main-play-button {
+        width: 50px !important;
+        height: 50px !important;
+        bottom: -12px !important;
+        right: -12px !important;
+    }
+
+    .main-play-button i {
+        font-size: 1rem !important;
+    }
+
+    .modern-track-title {
+        font-size: 1.4rem !important;
+    }
+
+    .platform-link {
+        width: 44px !important;
+        height: 44px !important;
+    }
+
+    .platform-link i {
+        font-size: 1rem !important;
+    }
+}

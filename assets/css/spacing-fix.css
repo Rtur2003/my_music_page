@@ -1,0 +1,174 @@
+/* ===============================================
+   SECTION SPACING FIX
+   Tüm section'lar arası boşlukları optimize et
+   =============================================== */
+
+/* Base section spacing */
+section {
+    margin-bottom: 3rem !important; /* Default 3rem gap */
+}
+
+/* Specific section adjustments */
+.hero-section {
+    margin-bottom: 2rem !important; /* Hero'dan sonra daha az boşluk */
+}
+
+.releases-carousel-section {
+    margin-bottom: 2.5rem !important;
+}
+
+#about {
+    margin-bottom: 2.5rem !important;
+}
+
+#music {
+    margin-bottom: 2.5rem !important;
+}
+
+.shows-section {
+    margin-bottom: 2.5rem !important;
+}
+
+.merch-section {
+    margin-bottom: 2.5rem !important;
+}
+
+.social-feed-section {
+    margin-bottom: 2.5rem !important;
+}
+
+.newsletter-section {
+    margin-bottom: 2.5rem !important;
+}
+
+#gallery {
+    margin-bottom: 2.5rem !important;
+}
+
+#contact {
+    margin-bottom: 2rem !important; /* Contact'tan önce daha az boşluk */
+}
+
+/* Remove extra spacing from footer */
+.sonic-footer {
+    margin-top: 2rem !important; /* Footer öncesi az boşluk */
+}
+
+/* Container inner spacing optimization */
+.container {
+    padding: 0 1rem; /* Consistent horizontal padding */
+}
+
+/* Section header spacing */
+.section-header {
+    margin-bottom: 2rem !important; /* Section title'dan sonra az boşluk */
+}
+
+.section-title {
+    margin-bottom: 0.5rem !important;
+}
+
+.section-subtitle {
+    margin-bottom: 0 !important;
+}
+
+/* Modern features spacing adjustments */
+.newsletter-section {
+    padding: 3rem 0 !important; /* Newsletter daha kompakt */
+}
+
+.shows-section {
+    padding: 3rem 0 !important;
+}
+
+.merch-section {
+    padding: 3rem 0 !important;
+}
+
+.social-feed-section {
+    padding: 3rem 0 !important;
+}
+
+.releases-carousel-section {
+    padding: 3rem 0 !important;
+}
+
+/* Mobile spacing optimization */
+@media (max-width: 768px) {
+    section {
+        margin-bottom: 2rem !important; /* Mobilde daha kompakt */
+    }
+
+    .hero-section {
+        margin-bottom: 1.5rem !important;
+    }
+
+    .releases-carousel-section,
+    #about,
+    #music,
+    .shows-section,
+    .merch-section,
+    .social-feed-section,
+    .newsletter-section,
+    #gallery {
+        margin-bottom: 1.5rem !important;
+    }
+
+    #contact {
+        margin-bottom: 1rem !important;
+    }
+
+    .sonic-footer {
+        margin-top: 1rem !important;
+    }
+
+    /* Section padding adjustments for mobile */
+    .newsletter-section,
+    .shows-section,
+    .merch-section,
+    .social-feed-section,
+    .releases-carousel-section {
+        padding: 2rem 0 !important;
+    }
+
+    .section-header {
+        margin-bottom: 1.5rem !important;
+    }
+
+    .container {
+        padding: 0 0.75rem;
+    }
+}
+
+/* Remove extra margins from grid containers */
+.music-cards,
+.shows-grid,
+.merch-grid,
+.social-feed-grid {
+    margin-bottom: 0 !important;
+}
+
+/* Optimize card spacing */
+.music-card,
+.show-card,
+.merch-card,
+.social-post {
+    margin-bottom: 0 !important;
+}
+
+/* Fix player section spacing */
+.modern-player-card {
+    margin-bottom: 1.5rem !important;
+}
+
+/* Patreon banner shouldn't affect spacing */
+.patreon-banner + * {
+    margin-top: 0 !important;
+}
+
+/* Debug: Visual spacing indicators (remove in production) */
+/*
+section {
+    border: 1px dashed rgba(255, 0, 0, 0.3);
+}
+*/

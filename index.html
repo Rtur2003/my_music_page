@@ -12,6 +12,9 @@
     <meta name="rating" content="General">
     <meta name="theme-color" content="#d4b078">
     <meta name="msapplication-TileColor" content="#d4b078">
+
+    <!-- Permissions Policy for YouTube API -->
+    <meta http-equiv="Permissions-Policy" content="autoplay=*, encrypted-media=*, accelerometer=*, gyroscope=*, picture-in-picture=*, clipboard-write=*, web-share=*">
     <meta name="geo.region" content="TR-54">
     <meta name="geo.placename" content="Sakarya, Turkey">
     <meta name="geo.position" content="40.7569;30.3781">
@@ -201,18 +204,27 @@
     <!-- Critical styles moved to main CSS for better caching -->
     
     <!-- HASAN ARTHUR DESIGN SYSTEM -->
-    <link rel="stylesheet" href="assets/css/hasan-arthur-design.css" media="print" onload="this.media='all'; this.onload=null;">
+    <!-- Core CSS - Critical Path -->
+    <link rel="stylesheet" href="assets/css/hasan-arthur-design.css" media="all">
+    <link rel="stylesheet" href="assets/css/theme-consistency.css" media="all">
+    <link rel="stylesheet" href="assets/css/spacing-fix.css" media="all">
+    <link rel="stylesheet" href="assets/css/master-platform-fix.css" media="all">
+
+    <!-- Secondary CSS - Non-critical -->
     <link rel="stylesheet" href="assets/css/modern-player-styles.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/enhanced-player-design.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/music-sections-redesign.css" media="print" onload="this.media='all'; this.onload=null;">
-    <link rel="stylesheet" href="assets/css/footer-redesign.css" media="print" onload="this.media='all'; this.onload=null;">
-    <link rel="stylesheet" href="assets/css/icon-fixes.css" media="print" onload="this.media='all'; this.onload=null;">
-    <link rel="stylesheet" href="assets/css/critical-icon-fix.css" media="all">
-    <link rel="stylesheet" href="assets/css/theme-consistency.css" media="print" onload="this.media='all'; this.onload=null;">
-    <link rel="stylesheet" href="assets/css/dynamic-enhancements.css" media="print" onload="this.media='all'; this.onload=null;">
+    <link rel="stylesheet" href="assets/css/simple-footer.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/mobile-optimization.css" media="print" onload="this.media='all'; this.onload=null;">
-    <link rel="stylesheet" href="assets/css/performance-optimization.css" media="print" onload="this.media='all'; this.onload=null;">
-    <link rel="stylesheet" href="assets/css/modern-features.css" media="print" onload="this.media='all'; this.onload=null;">
+    <link rel="stylesheet" href="assets/css/mobile-player-fix.css" media="print" onload="this.media='all'; this.onload=null;">
+
+    <!-- Legacy CSS - Disabled for conflicts -->
+    <!-- <link rel="stylesheet" href="assets/css/footer-redesign.css" media="print" onload="this.media='all'; this.onload=null;"> -->
+    <!-- <link rel="stylesheet" href="assets/css/icon-fixes.css" media="print" onload="this.media='all'; this.onload=null;"> -->
+    <link rel="stylesheet" href="assets/css/critical-icon-fix.css" media="all">
+    <!-- <link rel="stylesheet" href="assets/css/dynamic-enhancements.css" media="print" onload="this.media='all'; this.onload=null;"> -->
+    <!-- <link rel="stylesheet" href="assets/css/performance-optimization.css" media="print" onload="this.media='all'; this.onload=null;"> -->
+    <!-- <link rel="stylesheet" href="assets/css/modern-features.css" media="print" onload="this.media='all'; this.onload=null;"> -->
     
     <!-- Prefetch critical images -->
     <link rel="preload" href="assets/images/logo-main.png" as="image" type="image/png">
@@ -425,16 +437,16 @@
                             </div>
                             
                             <div class="platform-links" id="platformLinks">
-                                <a href="#" class="platform-link spotify-link" id="spotifyLink" target="_blank" rel="noopener" data-translate="music.player.spotify" title="Listen on Spotify">
+                                <a href="#" class="platform-link spotify-link" id="spotifyLink" target="_blank" rel="noopener" title="Listen on Spotify">
                                     <i class="fab fa-spotify"></i>
                                 </a>
-                                <a href="#" class="platform-link youtube-link" id="youtubeLink" target="_blank" rel="noopener" data-translate="music.player.youtube" title="Watch on YouTube">
+                                <a href="#" class="platform-link youtube-link" id="youtubeLink" target="_blank" rel="noopener" title="Watch on YouTube">
                                     <i class="fab fa-youtube"></i>
                                 </a>
-                                <a href="#" class="platform-link apple-link" id="appleLink" target="_blank" rel="noopener" data-translate="music.player.apple" title="Listen on Apple Music">
+                                <a href="#" class="platform-link apple-link" id="appleLink" target="_blank" rel="noopener" title="Listen on Apple Music">
                                     <i class="fab fa-apple"></i>
                                 </a>
-                                <a href="#" class="platform-link soundcloud-link" id="soundcloudLink" target="_blank" rel="noopener" data-translate="music.player.soundcloud" title="Listen on SoundCloud">
+                                <a href="#" class="platform-link soundcloud-link" id="soundcloudLink" target="_blank" rel="noopener" title="Listen on SoundCloud">
                                     <i class="fab fa-soundcloud"></i>
                                 </a>
                             </div>
@@ -837,77 +849,76 @@
         </section>
     </main>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
+    <footer class="sonic-footer">
+        <div class="footer-content">
+            <!-- Ana footer section -->
+            <div class="footer-main">
+                <!-- Logo ve brand -->
+                <div class="footer-brand">
                     <div class="footer-logo">
-                        <img src="assets/images/logo-transparent.png?v=1.0" alt="Hasan Arthur Altuntaş Logo" class="footer-logo-image" width="50" height="50" loading="lazy">
-                        <span>HASAN ARTHUR</span>
+                        <img src="assets/images/logo-main.png" alt="Hasan Arthur Altuntaş" loading="lazy">
                     </div>
-                    <p data-translate="footer.tagline">Creating musical experiences that resonate with the soul</p>
+                    <h2 class="footer-title">HASAN ARTHUR ALTUNTAŞ</h2>
+                    <p class="footer-tagline">Music Producer & AI Developer</p>
+                </div>
+
+                <!-- Social links -->
+                <div class="footer-social-section">
+                    <h3 class="footer-social-title">Follow Me</h3>
                     <div class="footer-social">
-                        <a href="https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef" target="_blank" rel="noopener noreferrer" aria-label="Spotify"><i class="fab fa-spotify"></i></a>
-                        <a href="https://www.youtube.com/channel/UCA7E1X_uGUqtSJeIxvBeTQA" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-                        <a href="https://www.instagram.com/rthur_hsn" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="https://x.com/Rthur__1" target="_blank" rel="noopener noreferrer" aria-label="X"><i class="fab fa-twitter"></i></a>
-                        <a href="https://www.tiktok.com/@hasnarthur_piano" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-                        <a href="https://github.com/Rtur2003" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef" target="_blank" rel="noopener noreferrer" aria-label="Spotify">
+                            <i class="fab fa-spotify"></i>
+                        </a>
+                        <a href="https://www.youtube.com/channel/UCA7E1X_uGUqtSJeIxvBeTQA" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="https://www.instagram.com/rthur_hsn" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://x.com/Rthur__1" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://www.tiktok.com/@hasnarthur_piano" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                        <a href="https://tr.linkedin.com/in/hasan-arthur-altuntas" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="https://github.com/Rtur2003" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
                     </div>
                 </div>
-                
-                <div class="footer-section">
-                    <h4 data-translate="footer.links">Quick Links</h4>
-                    <ul>
-                        <li><a href="#home" data-translate="nav.home">Home</a></li>
-                        <li><a href="#about" data-translate="nav.about">About</a></li>
-                        <li><a href="#music" data-translate="nav.music">Music</a></li>
-                        <li><a href="#software" data-translate="nav.software">Software</a></li>
-                        <li><a href="#gallery" data-translate="nav.gallery">Gallery</a></li>
-                        <li><a href="#contact" data-translate="nav.contact">Contact</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h4 data-translate="footer.genres">Music Genres</h4>
-                    <ul>
-                        <li><a href="#music">Cinematic</a></li>
-                        <li><a href="#music">Ambient</a></li>
-                        <li><a href="#music">Electronic</a></li>
-                        <li><a href="#music">Film Score</a></li>
-                        <li><a href="#music">Piano</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h4 data-translate="footer.contact_info">Contact Info</h4>
-                    <div class="contact-info">
-                        <div class="contact-item">
-                            <i class="fas fa-envelope"></i>
-                            <a href="mailto:hasannarthurrr@gmail.com">hasannarthurrr@gmail.com</a>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fas fa-globe"></i>
-                            <span>Professional Music Producer</span>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>Sakarya, Turkey</span>
-                        </div>
+
+                <!-- Contact info -->
+                <div class="footer-contact">
+                    <div class="footer-contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>hasannarthurrr@gmail.com</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+90 530 475 76 90</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Sakarya, Turkey</span>
                     </div>
                 </div>
             </div>
-            
+
+            <!-- Bottom section -->
             <div class="footer-bottom">
-                <div class="footer-divider"></div>
-                <div class="footer-bottom-content">
-                    <p data-translate="footer.rights">&copy; 2024 Hasan Arthur Altuntaş. All rights reserved.</p>
-                    <div class="footer-links">
-                        <a href="https://github.com/Rtur2003" target="_blank" rel="noopener">GitHub</a>
-                        <a href="https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef" target="_blank" rel="noopener">Spotify</a>
-                        <a href="mailto:hasannarthurrr@gmail.com">İletişim</a>
-                    </div>
+                <div class="footer-links">
+                    <a href="#home">Home</a>
+                    <a href="#about">About</a>
+                    <a href="#music">Music</a>
+                    <a href="#contact">Contact</a>
                 </div>
+                <p class="footer-copyright">
+                    &copy; 2024 Hasan Arthur Altuntaş. All rights reserved.
+                    Made with <span style="color: var(--accent-gold);">♥</span> in Turkey
+                </p>
             </div>
         </div>
     </footer>
@@ -945,7 +956,7 @@
     <script src="assets/js/contact-form.js" defer></script>
     <script src="assets/js/sonic-interactions.js" defer></script>
     <script src="assets/js/dynamic-effects.js" defer></script>
-    <script src="assets/js/console-debug.js" defer></script>
+    <!-- <script src="assets/js/console-debug.js" defer></script> <!-- Disabled for production -->
     <script src="assets/js/modern-features.js" defer></script>
     
     <!-- LANGUAGE SYSTEM (Load last) -->

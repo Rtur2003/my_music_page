@@ -469,31 +469,53 @@ function addLatestReleasesCarousel() {
         heroSection.insertAdjacentHTML('afterend', carouselHTML);
     }
 
-    // Carousel functionality
+    // Carousel functionality - with null checks
     let currentSlide = 0;
     const slides = document.querySelectorAll('.release-slide');
     const totalSlides = slides.length;
 
     function showSlide(index) {
-        slides.forEach(slide => slide.classList.remove('active'));
-        slides[index].classList.add('active');
+        if (!slides || slides.length === 0) return;
+        if (index < 0 || index >= slides.length) return;
+
+        slides.forEach(slide => {
+            if (slide && slide.classList) {
+                slide.classList.remove('active');
+            }
+        });
+
+        if (slides[index] && slides[index].classList) {
+            slides[index].classList.add('active');
+        }
     }
 
-    document.getElementById('releasesNext').addEventListener('click', () => {
-        currentSlide = (currentSlide + 1) % totalSlides;
-        showSlide(currentSlide);
-    });
+    // Carousel controls - check if elements exist
+    const nextBtn = document.getElementById('releasesNext');
+    const prevBtn = document.getElementById('releasesPrev');
 
-    document.getElementById('releasesPrev').addEventListener('click', () => {
-        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-        showSlide(currentSlide);
-    });
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            showSlide(currentSlide);
+        });
+    }
 
-    // Auto-advance carousel
-    setInterval(() => {
-        currentSlide = (currentSlide + 1) % totalSlides;
-        showSlide(currentSlide);
-    }, 5000);
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            showSlide(currentSlide);
+        });
+    }
+
+    // Auto-advance carousel - only if slides exist
+    if (totalSlides > 0) {
+        setInterval(() => {
+            if (slides && slides.length > 0) {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                showSlide(currentSlide);
+            }
+        }, 5000);
+    }
 }
 
 /* ===============================================
