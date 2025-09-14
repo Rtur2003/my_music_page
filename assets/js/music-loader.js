@@ -87,8 +87,13 @@ class MusicLoader {
 
     renderTracks() {
         const tracksContainer = document.getElementById('tracks-container');
-        if (!tracksContainer) return;
+        console.log('🎵 Rendering tracks, container found:', !!tracksContainer);
+        if (!tracksContainer) {
+            console.warn('❌ tracks-container element not found');
+            return;
+        }
 
+        console.log('🎵 Music data tracks:', this.musicData?.tracks?.length || 0);
         if (!this.musicData.tracks || this.musicData.tracks.length === 0) {
             tracksContainer.innerHTML = `
                 <div class="empty-music-state">
@@ -110,8 +115,13 @@ class MusicLoader {
 
     renderAlbums() {
         const albumsContainer = document.getElementById('albums-container');
-        if (!albumsContainer) return;
+        console.log('🎵 Rendering albums, container found:', !!albumsContainer);
+        if (!albumsContainer) {
+            console.warn('❌ albums-container element not found');
+            return;
+        }
 
+        console.log('🎵 Music data albums:', this.musicData?.albums?.length || 0);
         if (!this.musicData.albums || this.musicData.albums.length === 0) {
             albumsContainer.innerHTML = `
                 <div class="empty-music-state">
