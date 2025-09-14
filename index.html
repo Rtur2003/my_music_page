@@ -210,6 +210,7 @@
     <link rel="stylesheet" href="assets/css/theme-consistency.css" media="all">
     <link rel="stylesheet" href="assets/css/spacing-fix.css" media="all">
     <link rel="stylesheet" href="assets/css/master-platform-fix.css" media="all">
+    <link rel="stylesheet" href="assets/css/loading-states.css" media="all">
 
     <!-- Secondary CSS - Non-critical -->
     <link rel="stylesheet" href="assets/css/modern-player-styles.css" media="print" onload="this.media='all'; this.onload=null;">
@@ -492,9 +493,19 @@
                                     <div class="volume-track"></div>
                                 </div>
                             </div>
+
+                            <!-- Progress Bar -->
+                            <div class="track-progress">
+                                <div class="track-progress-fill" id="progressFill"></div>
+                            </div>
+
+                            <div class="track-time">
+                                <span id="currentTime">0:00</span>
+                                <span id="totalTime">4:23</span>
+                            </div>
                         </div>
                     </div>
-                    
+
                     <audio id="audioPlayer" preload="none">
                         <p>Music player ready for streaming from platforms.</p>
                     </audio>

@@ -34,7 +34,8 @@ i[class*="fa-"]:before,
 }
 
 /* ŞARKI KARTLARINDA PLATFORM İCONLARI */
-.music-card-platforms .card-platform-link {
+.music-card-platforms .card-platform-link,
+.music-grid .card-platform-link {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -48,7 +49,8 @@ i[class*="fa-"]:before,
 }
 
 .music-card-platforms .card-platform-link i,
-.music-card .card-platform-link i {
+.music-card .card-platform-link i,
+.music-grid .card-platform-link i {
     font-size: 14px !important;
     color: white !important;
     z-index: 10 !important;

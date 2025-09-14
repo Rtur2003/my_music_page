@@ -17,19 +17,19 @@
 .platform-link,
 .platform-links .platform-link,
 .platform-links a {
-    width: 60px;
-    height: 60px;
-    border-radius: 18px;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
     position: relative;
-    font-size: 0; /* Metni gizle */
+    font-size: 0;
     overflow: hidden;
-    transition: all 0.2s ease-out;
-    border: 2px solid var(--border-color);
-    background: var(--card-bg);
+    transition: all 0.2s ease;
+    background: transparent;
+    border: 2px solid transparent;
     text-indent: -9999px;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
@@ -56,55 +56,28 @@
     font-weight: 400;
 }
 
-/* PLATFORM RENK TANIMLARI */
-.platform-link[href*="spotify"]:hover,
-.spotify-link:hover {
+/* PLATFORM RENK TANIMLARI - Sadeleştirilmiş */
+.platform-link[href*="spotify"] {
     background: #1db954;
-    border-color: #1db954;
 }
 
-.platform-link[href*="spotify"]:hover i,
-.spotify-link:hover i {
-    color: white;
-}
-
-.platform-link[href*="youtube"]:hover,
-.youtube-link:hover {
+.platform-link[href*="youtube"] {
     background: #ff0000;
-    border-color: #ff0000;
 }
 
-.platform-link[href*="youtube"]:hover i,
-.youtube-link:hover i {
-    color: white;
-}
-
-.platform-link[href*="apple"]:hover,
-.apple-link:hover {
+.platform-link[href*="apple"] {
     background: #000000;
-    border-color: #000000;
 }
 
-.platform-link[href*="apple"]:hover i,
-.apple-link:hover i {
-    color: white;
-}
-
-.platform-link[href*="soundcloud"]:hover,
-.soundcloud-link:hover {
+.platform-link[href*="soundcloud"] {
     background: #ff5500;
-    border-color: #ff5500;
 }
 
-.platform-link[href*="soundcloud"]:hover i,
-.soundcloud-link:hover i {
-    color: white;
-}
-
-/* HOVER EFEKTLER */
+/* HOVER EFEKTLER - Daha yumuşak */
 .platform-link:hover {
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 4px 15px rgba(212, 176, 120, 0.2);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0.9;
 }
 
 /* MOBİL ÖZEL AYARLAR */

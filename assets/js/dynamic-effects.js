@@ -127,7 +127,11 @@ function initializeFloatingActions() {
         const newTheme = currentTheme === 'light' ? 'dark' : 'light';
 
         document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
+        try {
+            localStorage.setItem('theme', newTheme);
+        } catch (e) {
+            console.log('LocalStorage not available for theme storage');
+        }
 
         // Update icon
         const icon = this.querySelector('i');
@@ -146,7 +150,12 @@ function initializeFloatingActions() {
     document.body.appendChild(fabContainer);
 
     // Set initial theme icon
-    const currentTheme = localStorage.getItem('theme') || 'dark';
+    let currentTheme = 'dark';
+    try {
+        currentTheme = localStorage.getItem('theme') || 'dark';
+    } catch (e) {
+        console.log('LocalStorage not available, using default theme');
+    }
     if (currentTheme === 'light') {
         themeToggleFab.querySelector('i').className = 'fas fa-sun';
         themeToggleFab.setAttribute('data-tooltip', 'Karanlık Mod');

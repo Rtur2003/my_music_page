@@ -352,8 +352,17 @@ class MusicLoader {
 // Initialize music loader
 window.musicLoader = null;
 document.addEventListener('DOMContentLoaded', () => {
-    window.musicLoader = new MusicLoader();
-    console.log('Music loader initialized globally:', window.musicLoader);
+    try {
+        window.musicLoader = new MusicLoader();
+        console.log('Music loader initialized globally:', window.musicLoader);
+    } catch (error) {
+        console.log('LocalStorage not available, skipping music loader');
+        window.musicLoader = {
+            musicData: { tracks: [], albums: [] },
+            loadMusicData: () => {},
+            updateLanguage: () => {}
+        };
+    }
 });
 
 // Listen for language changes
