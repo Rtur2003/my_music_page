@@ -17,7 +17,6 @@ class YouTubeAudioPlayer {
 
     init() {
         this.loadYouTubeAPI();
-        this.setupEventListeners();
         console.log('🎵 YouTube Audio Player initialized');
     }
 
@@ -62,7 +61,6 @@ class YouTubeAudioPlayer {
             }
         ];
 
-        this.setupPlayerControls();
         this.updateTrackDisplay();
     }
 
