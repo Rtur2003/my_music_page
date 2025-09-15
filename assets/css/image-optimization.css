@@ -72,8 +72,7 @@
 
 /* Optimize image rendering */
 .hero-profile-img,
-.artwork-image,
-.music-artwork img {
+.artwork-image {
     image-rendering: optimizeSpeed;
     image-rendering: -webkit-optimize-contrast;
     image-rendering: optimize-contrast;
@@ -89,6 +88,12 @@
     /* Force hardware acceleration */
     backface-visibility: hidden;
     perspective: 1000px;
+}
+
+/* Music artwork optimization - DO NOT override existing styles */
+.music-artwork img {
+    /* Only optimize rendering, don't change layout */
+    image-rendering: optimizeSpeed;
 }
 
 /* Lazy loading placeholders */

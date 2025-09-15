@@ -114,6 +114,23 @@ class AccessibilityEnhancer {
                 btn.setAttribute('title', text);
             }
         });
+
+        // Fix support banner close button
+        const supportCloseBtn = document.querySelector('.support-close');
+        if (supportCloseBtn && !supportCloseBtn.hasAttribute('aria-label')) {
+            supportCloseBtn.setAttribute('aria-label', 'Close support banner');
+            supportCloseBtn.setAttribute('title', 'Close support banner');
+        }
+
+        // Fix other close buttons
+        const closeButtons = document.querySelectorAll('button:not([aria-label])');
+        closeButtons.forEach(btn => {
+            const text = btn.textContent.trim();
+            if (text.includes('×') || text.includes('close') || text.includes('Close') || btn.className.includes('close')) {
+                btn.setAttribute('aria-label', 'Close');
+                btn.setAttribute('title', 'Close');
+            }
+        });
     }
 
     // Fix link accessibility issues
