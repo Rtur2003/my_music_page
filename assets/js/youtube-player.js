@@ -360,23 +360,13 @@ class YouTubeAudioPlayer {
 
     // Play current track
     play() {
-        if (!this.isReady) {
-            console.warn('❌ Player not ready');
-            return;
-        }
-
-        if (this.currentVideoId) {
+        if (this.isReady && this.player && this.currentVideoId) {
             console.log('🎵 Playing existing video:', this.currentVideoId);
             this.player.playVideo();
         } else if (this.currentTrack && this.currentTrack.links && this.currentTrack.links.youtube) {
-            const videoId = this.extractYouTubeId(this.currentTrack.links.youtube);
-            if (videoId) {
-                console.log('🎵 Loading new video:', videoId);
-                this.currentVideoId = videoId;
-                this.player.loadVideoById(videoId);
-            } else {
-                console.error('❌ Could not extract video ID from:', this.currentTrack.links.youtube);
-            }
+            // For simulated player - open in new tab
+            console.log('🎵 Opening track in new tab (simulated player):', this.currentTrack.title);
+            window.open(this.currentTrack.links.youtube, '_blank', 'noopener,noreferrer');
         } else {
             console.error('❌ No video available to play');
         }
@@ -387,6 +377,41 @@ class YouTubeAudioPlayer {
         if (this.isReady) {
             this.player.pauseVideo();
         }
+    }
+
+    // Toggle play/pause
+    togglePlayPause() {
+        console.log('🎵 Toggle play/pause called, currently playing:', this.isPlaying);
+
+        if (this.isPlaying) {
+            this.pause();
+            this.isPlaying = false;
+            console.log('⏸️ Paused');
+
+            // Update UI
+            const playBtn = document.getElementById('mainPlayBtn');
+            const playIcon = document.getElementById('mainPlayIcon');
+            if (playBtn) playBtn.classList.remove('playing');
+            if (playIcon) {
+                playIcon.classList.remove('fa-pause');
+                playIcon.classList.add('fa-play');
+            }
+        } else {
+            this.play();
+            this.isPlaying = true;
+            console.log('▶️ Playing');
+
+            // Update UI
+            const playBtn = document.getElementById('mainPlayBtn');
+            const playIcon = document.getElementById('mainPlayIcon');
+            if (playBtn) playBtn.classList.add('playing');
+            if (playIcon) {
+                playIcon.classList.remove('fa-play');
+                playIcon.classList.add('fa-pause');
+            }
+        }
+
+        return this.isPlaying;
     }
 
     // Extract YouTube video ID from URL
