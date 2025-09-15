@@ -446,20 +446,17 @@ function initAudioVisualizer() {
                 this.classList.remove('active');
             } else {
                 try {
-                    // Try to get microphone access for real-time visualization
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    const analyser = audioContext.createAnalyser();
-                    const source = audioContext.createMediaStreamSource(stream);
-
-                    analyser.fftSize = 64;
-                    source.connect(analyser);
-
-                    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+                    // Use simulated visualizer instead of microphone access
+                    console.log('🎵 Starting simulated visualizer');
+                    const dataArray = new Uint8Array(32); // Simulated frequency data
 
                     function drawRealtimeVisualizer() {
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        analyser.getByteFrequencyData(dataArray);
+
+                        // Generate simulated frequency data
+                        for (let i = 0; i < dataArray.length; i++) {
+                            dataArray[i] = Math.random() * 255;
+                        }
 
                         const barCount = dataArray.length;
                         const barWidth = canvas.width / barCount;
