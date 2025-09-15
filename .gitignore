@@ -115,13 +115,14 @@ screenshots-temp/
 *.csr
 private/
 secrets/
+.claude/
 
 # ❌ BUNLARI IGNORE ETME - PRODUCTION DOSYALARI:
-# 
+#
 # index.html
 # admin.html
 # assets/css/*
-# assets/js/*  
+# assets/js/*
 # assets/images/*
 # robots.txt
 # sitemap.xml
