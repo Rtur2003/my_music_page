@@ -29,7 +29,8 @@
       "Bash(start http://localhost:8000)",
       "WebFetch(domain:www.seoptimer.com)",
       "Bash(del \"C:\\Users\\MONSTER\\Desktop\\MyPage\\assets\\js\\music-loader.js\")",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []

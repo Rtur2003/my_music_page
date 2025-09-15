@@ -115,7 +115,7 @@ screenshots-temp/
 *.csr
 private/
 secrets/
-.claude/
+*.claude/*
 
 # ❌ BUNLARI IGNORE ETME - PRODUCTION DOSYALARI:
 #
