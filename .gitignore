@@ -115,6 +115,7 @@ screenshots-temp/
 *.csr
 private/
 secrets/
+.claude/
 
 # ❌ BUNLARI IGNORE ETME - PRODUCTION DOSYALARI:
 # 
@@ -130,4 +131,4 @@ secrets/
 # favicon.ico
 # *.md files
 #
-# ❌ Bu dosyalar web sitesi için HAYATI ÖNEMDEdir!
+# ❌ Bu dosyalar web sitesi için HAYATI ÖNEMDEdir!.claude/
