@@ -1,8 +1,18 @@
 class MusicLoader {
     constructor() {
         this.musicData = null;
-        this.currentLanguage = localStorage.getItem('language') || 'tr';
+        this.currentLanguage = this.getLanguageSafely() || 'tr';
         this.init();
+    }
+
+    // Safe localStorage access
+    getLanguageSafely() {
+        try {
+            return localStorage.getItem('language');
+        } catch (error) {
+            console.warn('localStorage access denied, using default language');
+            return 'tr';
+        }
     }
 
     async init() {
@@ -35,10 +45,20 @@ class MusicLoader {
     async loadMusicData() {
         console.log('🎵 Loading music data...');
 
-        // CORS sorunu için direkt hardcoded data kullan - local development için
-        console.log('📁 Using hardcoded data for local development');
+        // LocalStorage'a erişim deneyimi
+        try {
+            const savedData = localStorage.getItem('music_data_live');
+            if (savedData) {
+                console.log('📁 Found saved music data in localStorage');
+                this.musicData = JSON.parse(savedData);
+                return;
+            }
+        } catch (storageError) {
+            console.warn('⚠️ localStorage access denied, using hardcoded data:', storageError.message);
+        }
 
-        // Directly use hardcoded data instead of trying to fetch
+        // Hardcoded data as fallback - always works
+        console.log('📁 Using hardcoded music data');
         this.musicData = {
                 "tracks": [
                     {
@@ -503,27 +523,201 @@ function initializeMusicLoader() {
         window.musicLoader = new MusicLoader();
         console.log('✅ Music loader initialized globally:', window.musicLoader);
     } catch (error) {
-        console.warn('❌ Music loader initialization failed:', error);
-        // Fallback music loader
-        window.musicLoader = {
-            musicData: { tracks: [], albums: [] },
-            loadMusicData: () => console.log('🔄 Fallback music loader - no data'),
-            updateLanguage: () => {},
-            renderTracks: () => console.log('🔄 Fallback render tracks'),
-            renderAlbums: () => console.log('🔄 Fallback render albums')
-        };
+        console.warn('❌ Music loader initialization failed:', error.message);
 
-        // Retry after delay
+        // Create hardcoded fallback music loader that doesn't use localStorage
+        window.musicLoader = createFallbackMusicLoader();
+
+        // Render fallback data immediately
         setTimeout(() => {
-            console.log('🔄 Retrying music loader initialization...');
-            try {
-                window.musicLoader = new MusicLoader();
-                console.log('✅ Music loader retry successful');
-            } catch (retryError) {
-                console.warn('❌ Music loader retry failed:', retryError);
+            if (window.musicLoader && window.musicLoader.renderTracks) {
+                window.musicLoader.renderTracks();
+                window.musicLoader.renderAlbums();
+                console.log('🎵 Fallback music data rendered');
             }
-        }, 2000);
+        }, 100);
+
+        // Retry after delay only if it's not a localStorage security error
+        if (!error.message.includes('localStorage') && !error.message.includes('SecurityError')) {
+            setTimeout(() => {
+                console.log('🔄 Retrying music loader initialization...');
+                try {
+                    window.musicLoader = new MusicLoader();
+                    console.log('✅ Music loader retry successful');
+                } catch (retryError) {
+                    console.warn('❌ Music loader retry failed:', retryError.message);
+                }
+            }, 2000);
+        }
     }
+}
+
+function createFallbackMusicLoader() {
+    console.log('🔄 Creating fallback music loader with hardcoded data');
+
+    const hardcodedData = {
+        "tracks": [
+            {
+                "id": 1,
+                "title": "LIAR",
+                "artist": "Hasan Arthur Altuntaş",
+                "artwork": "assets/images/logo-main.png",
+                "links": {
+                    "youtube": "https://www.youtube.com/watch?v=u3malJJSGds&list=OLAK5uy_le5DM9PMUqTnB4_whDwAxc-rMD54mVctQ",
+                    "spotify": "https://open.spotify.com/intl-tr/track/2VhpoqJKPMTz2cHYcaAX2j?si=184e6e2589f3423b",
+                    "apple": "https://music.apple.com/tr/song/liar/1833771404"
+                }
+            },
+            {
+                "id": 3,
+                "title": "Interstellar But My Version",
+                "artist": "Hasan Arthur Altuntaş",
+                "artwork": "assets/images/logo-main.png",
+                "links": {
+                    "youtube": "https://www.youtube.com/watch?v=4vDvuFldYiM&list=OLAK5uy_lassw25Z8Ch3EqP-H9jC6gjGeMbe4PCGs",
+                    "spotify": "https://open.spotify.com/intl-tr/track/5fwzfwMJtVANQotGtmdv3C?si=ebc8d8228c644263",
+                    "apple": "https://music.apple.com/tr/song/interstellar-but-my-version/1773902252"
+                }
+            },
+            {
+                "id": 4,
+                "title": "Oppenheimer But My Version",
+                "artist": "Hasan Arthur Altuntaş",
+                "artwork": "assets/images/logo-main.png",
+                "links": {
+                    "youtube": "https://youtu.be/ZnOMJ9E0LmA?si=p9FkzGERc_zh6RuR",
+                    "spotify": "https://open.spotify.com/intl-tr/track/27q14aJw81Qr5XBGV4JlNp?si=e5aa51c4051d45ba",
+                    "apple": "https://music.apple.com/tr/song/oppenheimer-but-my-version/1776487184"
+                }
+            }
+        ],
+        "albums": [
+            {
+                "id": 1,
+                "title": "My Compositions",
+                "artist": "Hasan Arthur Altuntaş",
+                "artwork": "assets/images/logo-main.png",
+                "release_date": "2024",
+                "links": {
+                    "youtube": "https://www.youtube.com/watch?v=F0XzcRB1a94&list=PLuQhIRvxCsFxFF8wW3UWcSbXA0b6fGWim"
+                }
+            },
+            {
+                "id": 2,
+                "title": "Film Composition Covers",
+                "artist": "Hasan Arthur Altuntaş",
+                "artwork": "assets/images/logo-main.png",
+                "release_date": "2024",
+                "links": {
+                    "youtube": "https://www.youtube.com/watch?v=RormIa0YaJI&list=PLuQhIRvxCsFxyR4zeWWhVheUeUHJY5MLq"
+                }
+            }
+        ]
+    };
+
+    return {
+        musicData: hardcodedData,
+        currentLanguage: 'tr',
+        loadMusicData: () => {
+            console.log('🔄 Fallback loadMusicData called');
+            return Promise.resolve();
+        },
+        renderTracks: () => {
+            console.log('🔄 Fallback renderTracks called');
+            const tracksContainer = document.getElementById('tracks-container');
+            if (tracksContainer) {
+                tracksContainer.innerHTML = '';
+                hardcodedData.tracks.forEach(track => {
+                    const trackElement = createFallbackTrackElement(track);
+                    tracksContainer.appendChild(trackElement);
+                });
+                console.log('✅ Fallback tracks rendered');
+            }
+        },
+        renderAlbums: () => {
+            console.log('🔄 Fallback renderAlbums called');
+            const albumsContainer = document.getElementById('albums-container');
+            if (albumsContainer) {
+                albumsContainer.innerHTML = '';
+                hardcodedData.albums.forEach(album => {
+                    const albumElement = createFallbackAlbumElement(album);
+                    albumsContainer.appendChild(albumElement);
+                });
+                console.log('✅ Fallback albums rendered');
+            }
+        },
+        updateLanguage: () => {
+            console.log('🔄 Fallback updateLanguage called');
+        },
+        selectTrack: () => {
+            console.log('🔄 Fallback selectTrack called');
+        },
+        selectAlbumAsTrack: () => {
+            console.log('🔄 Fallback selectAlbumAsTrack called');
+        }
+    };
+}
+
+function createFallbackTrackElement(track) {
+    const trackDiv = document.createElement('div');
+    trackDiv.className = 'music-card track-card clickable-card';
+    trackDiv.innerHTML = `
+        <div class="music-artwork">
+            <img src="${track.artwork}" alt="${track.title}" loading="lazy">
+            <div class="play-overlay">
+                <button class="card-play-btn" onclick="window.open('${track.links.youtube}', '_blank')">
+                    <i class="fas fa-play"></i>
+                </button>
+            </div>
+        </div>
+        <div class="music-card-content">
+            <div class="music-card-header">
+                <h3 class="music-card-title">${track.title}</h3>
+                <p class="music-card-artist">${track.artist}</p>
+            </div>
+            <div class="music-card-info">
+                <span class="music-card-genre">Single</span>
+                <span class="music-card-date">2024</span>
+            </div>
+            <div class="music-card-platforms">
+                ${track.links.youtube ? `<a href="${track.links.youtube}" class="card-platform-link youtube" target="_blank" rel="noopener"><i class="fab fa-youtube"></i></a>` : ''}
+                ${track.links.spotify ? `<a href="${track.links.spotify}" class="card-platform-link spotify" target="_blank" rel="noopener"><i class="fab fa-spotify"></i></a>` : ''}
+                ${track.links.apple ? `<a href="${track.links.apple}" class="card-platform-link apple" target="_blank" rel="noopener"><i class="fab fa-apple"></i></a>` : ''}
+            </div>
+        </div>
+    `;
+    return trackDiv;
+}
+
+function createFallbackAlbumElement(album) {
+    const albumDiv = document.createElement('div');
+    albumDiv.className = 'music-card album-card clickable-card';
+    albumDiv.innerHTML = `
+        <div class="music-artwork">
+            <img src="${album.artwork}" alt="${album.title}" loading="lazy">
+            <div class="play-overlay">
+                <button class="card-play-btn" onclick="window.open('${album.links.youtube}', '_blank')">
+                    <i class="fas fa-play"></i>
+                </button>
+            </div>
+        </div>
+        <div class="music-card-content">
+            <div class="music-card-header">
+                <h3 class="music-card-title">${album.title}</h3>
+                <p class="music-card-artist">${album.artist}</p>
+            </div>
+            <div class="music-card-info">
+                <span class="music-card-genre">Album</span>
+                <span class="music-card-date">${album.release_date}</span>
+            </div>
+            <div class="music-card-platforms">
+                ${album.links.youtube ? `<a href="${album.links.youtube}" class="card-platform-link youtube" target="_blank" rel="noopener"><i class="fab fa-youtube"></i></a>` : ''}
+                ${album.links.spotify ? `<a href="${album.links.spotify}" class="card-platform-link spotify" target="_blank" rel="noopener"><i class="fab fa-spotify"></i></a>` : ''}
+                ${album.links.apple ? `<a href="${album.links.apple}" class="card-platform-link apple" target="_blank" rel="noopener"><i class="fab fa-apple"></i></a>` : ''}
+            </div>
+        </div>
+    `;
+    return albumDiv;
 }
 
 // Multiple initialization attempts for better reliability

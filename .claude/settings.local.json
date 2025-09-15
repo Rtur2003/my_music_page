@@ -22,7 +22,8 @@
       "Read(//c/Users/MONSTER/Pictures/Screenshots/**)",
       "Bash(start local-admin/admin-panel.html)",
       "Bash(start test-icons.html)",
-      "WebFetch(domain:deadmau5.com)"
+      "WebFetch(domain:deadmau5.com)",
+      "Read(//c/Users/MONSTER/Downloads/**)"
     ],
     "deny": [],
     "ask": []
