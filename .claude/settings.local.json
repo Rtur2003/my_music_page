@@ -24,7 +24,9 @@
       "Bash(start test-icons.html)",
       "WebFetch(domain:deadmau5.com)",
       "Read(//c/Users/MONSTER/Downloads/**)",
-      "Bash(where python)"
+      "Bash(where python)",
+      "Bash(timeout:*)",
+      "Bash(start http://localhost:8000)"
     ],
     "deny": [],
     "ask": []
