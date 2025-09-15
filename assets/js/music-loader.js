@@ -7,11 +7,28 @@ class MusicLoader {
 
     async init() {
         try {
+            console.log('🎵 Music loader initializing...');
             await this.loadMusicData();
-            this.renderTracks();
-            this.renderAlbums();
+
+            // Mobil için gecikme ekle
+            if (window.innerWidth <= 768) {
+                console.log('📱 Mobile detected, adding delay for DOM readiness');
+                setTimeout(() => {
+                    this.renderTracks();
+                    this.renderAlbums();
+                }, 500);
+            } else {
+                this.renderTracks();
+                this.renderAlbums();
+            }
         } catch (error) {
             console.error('Music loading error:', error);
+            // Hata durumunda retry
+            setTimeout(() => {
+                console.log('🔄 Retrying music load...');
+                this.renderTracks();
+                this.renderAlbums();
+            }, 1000);
         }
     }
 
@@ -143,7 +160,7 @@ class MusicLoader {
 
     createTrackElement(track) {
         const trackDiv = document.createElement('div');
-        trackDiv.className = 'music-card track-card';
+        trackDiv.className = 'music-card track-card clickable-card';
         trackDiv.innerHTML = `
             <div class="music-artwork">
                 <img src="${track.artwork}" alt="${track.title}" loading="lazy">
@@ -169,12 +186,24 @@ class MusicLoader {
                 </div>
             </div>
         `;
+
+        // Track kartına tıklanınca otomatik olarak seçsin ve üste gelsin
+        trackDiv.addEventListener('click', (e) => {
+            // Platform linklerine tıklanırsa track'i seçme
+            if (e.target.closest('.card-platform-link')) {
+                return;
+            }
+
+            // Track'i ana player'da seç
+            this.selectTrack(track);
+        });
+
         return trackDiv;
     }
 
     createAlbumElement(album) {
         const albumDiv = document.createElement('div');
-        albumDiv.className = 'music-card album-card';
+        albumDiv.className = 'music-card album-card clickable-card';
         albumDiv.innerHTML = `
             <div class="music-artwork">
                 <img src="${album.artwork}" alt="${album.title}" loading="lazy">
@@ -200,6 +229,18 @@ class MusicLoader {
                 </div>
             </div>
         `;
+
+        // Album kartına tıklanınca otomatik olarak seçsin ve üste gelsin
+        albumDiv.addEventListener('click', (e) => {
+            // Platform linklerine tıklanırsa albümü seçme
+            if (e.target.closest('.card-platform-link')) {
+                return;
+            }
+
+            // Albümü seçmek yerine album'ün ilk track'ini seç
+            this.selectAlbumAsTrack(album);
+        });
+
         return albumDiv;
     }
 
@@ -343,6 +384,78 @@ class MusicLoader {
     playAlbum(youtubeUrl) {
         // Album play functionality - same as track for now
         this.playTrack(youtubeUrl);
+    }
+
+    // Track seçme fonksiyonu - kartlara tıklanınca çalışır
+    selectTrack(track) {
+        console.log('🎵 Track selected from card:', track.title);
+
+        // Ana player UI'sini güncelle
+        this.updateMainPlayerUI(track);
+
+        // Ana player'a scroll yap
+        const musicSection = document.getElementById('music');
+        if (musicSection) {
+            musicSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Seçilen kartı highlight et
+        this.highlightSelectedCard(track.id, 'track');
+
+        console.log('✅ Track selected and UI updated');
+    }
+
+    // Album'ü track gibi seçme fonksiyonu
+    selectAlbumAsTrack(album) {
+        console.log('🎵 Album selected as track:', album.title);
+
+        // Album'ü track formatına çevir
+        const albumAsTrack = {
+            title: album.title,
+            artist: album.artist,
+            artwork: album.artwork,
+            links: album.links,
+            id: album.id
+        };
+
+        // Ana player UI'sini güncelle
+        this.updateMainPlayerUI(albumAsTrack);
+
+        // Ana player'a scroll yap
+        const musicSection = document.getElementById('music');
+        if (musicSection) {
+            musicSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Seçilen kartı highlight et
+        this.highlightSelectedCard(album.id, 'album');
+
+        console.log('✅ Album selected as track and UI updated');
+    }
+
+    // Seçilen kartı highlight etme fonksiyonu
+    highlightSelectedCard(itemId, type) {
+        // Önce tüm kartlardan seçim işaretini kaldır
+        document.querySelectorAll('.music-card').forEach(card => {
+            card.classList.remove('selected-card');
+        });
+
+        // Seçilen kartı highlight et
+        const cardSelector = type === 'track' ? '.track-card' : '.album-card';
+        document.querySelectorAll(cardSelector).forEach(card => {
+            const titleElement = card.querySelector('.music-card-title');
+            if (titleElement) {
+                // ID yerine title ile eşleştir (daha güvenilir)
+                const cardTitle = titleElement.textContent.trim();
+                const itemTitle = type === 'track'
+                    ? this.musicData.tracks.find(t => t.id === itemId)?.title
+                    : this.musicData.albums.find(a => a.id === itemId)?.title;
+
+                if (cardTitle === itemTitle) {
+                    card.classList.add('selected-card');
+                }
+            }
+        });
     }
 
     extractVideoId(url) {

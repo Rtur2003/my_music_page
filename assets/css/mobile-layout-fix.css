@@ -1,0 +1,307 @@
+/* ===============================================
+   MOBİL LAYOUT DÜZELTMELERİ - ÜST ÜSTE BİNME FIX
+   =============================================== */
+
+@media (max-width: 768px) {
+    /* Ana container z-index düzenlemesi */
+    .container {
+        position: relative !important;
+        z-index: 1 !important;
+        isolation: isolate !important;
+    }
+
+    /* Glass container'lar z-index */
+    .glass-container {
+        position: relative !important;
+        z-index: 2 !important;
+        isolation: isolate !important;
+        background: var(--card-bg) !important;
+        backdrop-filter: blur(10px) !important;
+        margin-bottom: 2rem !important;
+    }
+
+    /* Music section düzenlemesi */
+    #music {
+        position: relative !important;
+        z-index: 3 !important;
+        isolation: isolate !important;
+    }
+
+    .music-player-main {
+        position: relative !important;
+        z-index: 4 !important;
+        margin-bottom: 2rem !important;
+        background: var(--card-bg) !important;
+        border-radius: 15px !important;
+        padding: 1.5rem !important;
+    }
+
+    .modern-player-card {
+        position: relative !important;
+        z-index: 5 !important;
+        background: var(--card-bg) !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(212, 176, 120, 0.2) !important;
+    }
+
+    /* Music grid layout */
+    .music-section {
+        position: relative !important;
+        z-index: 3 !important;
+        margin: 2rem 0 !important;
+        clear: both !important;
+    }
+
+    .music-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+        position: relative !important;
+        z-index: 3 !important;
+        margin-top: 1rem !important;
+    }
+
+    .music-card {
+        position: relative !important;
+        z-index: 4 !important;
+        background: var(--card-bg) !important;
+        border: 1px solid rgba(212, 176, 120, 0.2) !important;
+        border-radius: 12px !important;
+        margin-bottom: 1rem !important;
+        overflow: hidden !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Contact section */
+    #contact {
+        position: relative !important;
+        z-index: 2 !important;
+        clear: both !important;
+    }
+
+    .contact-content {
+        position: relative !important;
+        z-index: 3 !important;
+    }
+
+    .social-links {
+        position: relative !important;
+        z-index: 4 !important;
+        margin: 2rem 0 !important;
+        clear: both !important;
+    }
+
+    /* Software section */
+    #software {
+        position: relative !important;
+        z-index: 2 !important;
+        clear: both !important;
+    }
+
+    .software-content {
+        position: relative !important;
+        z-index: 3 !important;
+    }
+
+    .link-cards {
+        position: relative !important;
+        z-index: 4 !important;
+        margin: 2rem 0 !important;
+        clear: both !important;
+    }
+
+    .link-card {
+        position: relative !important;
+        z-index: 5 !important;
+        background: var(--card-bg) !important;
+        margin-bottom: 1rem !important;
+        border: 1px solid rgba(212, 176, 120, 0.2) !important;
+        overflow: visible !important;
+    }
+
+    /* Section spacing düzeltmesi */
+    .section {
+        margin-bottom: 3rem !important;
+        position: relative !important;
+        z-index: 1 !important;
+        clear: both !important;
+    }
+
+    .section:last-child {
+        margin-bottom: 1rem !important;
+    }
+
+    /* Navigation fix */
+    .sonic-nav {
+        position: fixed !important;
+        z-index: 1000 !important;
+        background: var(--primary-bg) !important;
+        backdrop-filter: blur(10px) !important;
+    }
+
+    /* Footer fix */
+    footer {
+        position: relative !important;
+        z-index: 2 !important;
+        clear: both !important;
+        margin-top: 3rem !important;
+    }
+
+    /* Platform links düzeltmesi */
+    .platform-links {
+        position: relative !important;
+        z-index: 6 !important;
+        display: flex !important;
+        gap: 0.5rem !important;
+        margin: 1rem 0 !important;
+    }
+
+    .platform-link {
+        position: relative !important;
+        z-index: 7 !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Loading screen fix */
+    .page-loader {
+        position: fixed !important;
+        z-index: 9999 !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    /* Hero section */
+    .sonic-hero {
+        position: relative !important;
+        z-index: 1 !important;
+        margin-bottom: 2rem !important;
+    }
+
+    /* Gallery section */
+    #gallery {
+        position: relative !important;
+        z-index: 2 !important;
+        clear: both !important;
+    }
+
+    /* About section */
+    #about {
+        position: relative !important;
+        z-index: 2 !important;
+        clear: both !important;
+    }
+
+    /* Floating elements fix */
+    .floating-element {
+        position: relative !important;
+        float: none !important;
+        clear: both !important;
+    }
+
+    /* Overflow fix */
+    body {
+        overflow-x: hidden !important;
+    }
+
+    .container {
+        max-width: 100% !important;
+        padding: 0 1rem !important;
+        overflow-x: hidden !important;
+    }
+
+    /* Text wrapping */
+    h1, h2, h3, h4, h5, h6, p, span, div {
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        hyphens: auto !important;
+    }
+
+    /* Prevent horizontal scroll */
+    * {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Card content overflow fix */
+    .music-card-content,
+    .link-content,
+    .contact-item {
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    /* Platform links container fix */
+    .music-card-platforms {
+        position: relative !important;
+        z-index: 6 !important;
+        display: flex !important;
+        gap: 0.5rem !important;
+        margin-top: 1rem !important;
+    }
+
+    .card-platform-link {
+        position: relative !important;
+        z-index: 7 !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Empty state fix */
+    .empty-music-state {
+        position: relative !important;
+        z-index: 3 !important;
+        text-align: center !important;
+        padding: 2rem !important;
+        background: var(--card-bg) !important;
+        border-radius: 12px !important;
+        margin: 1rem 0 !important;
+    }
+
+    /* Critical path loading fix */
+    .music-section-title {
+        position: relative !important;
+        z-index: 3 !important;
+        margin: 1.5rem 0 1rem 0 !important;
+        clear: both !important;
+    }
+
+    /* Force layout reflow */
+    .layout-force-reflow {
+        transform: translateZ(0) !important;
+        backface-visibility: hidden !important;
+    }
+}
+
+/* Very small mobile devices */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 0.75rem !important;
+    }
+
+    .glass-container {
+        padding: 1rem !important;
+        margin: 0 0 1.5rem 0 !important;
+    }
+
+    .music-card {
+        margin-bottom: 0.75rem !important;
+    }
+
+    .section {
+        margin-bottom: 2rem !important;
+    }
+}
+
+/* Landscape mobile fix */
+@media (max-width: 768px) and (orientation: landscape) {
+    .section {
+        margin-bottom: 2rem !important;
+    }
+
+    .music-player-main {
+        margin-bottom: 1.5rem !important;
+    }
+}
