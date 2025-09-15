@@ -1,0 +1,651 @@
+/* Modern Music Cards - Spotify/Apple Music Style */
+
+.music-track-card {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 20px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.music-track-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    transition: left 0.8s ease;
+}
+
+.music-track-card:hover::before {
+    left: 100%;
+}
+
+.music-track-card:hover {
+    transform: translateY(-4px);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.track-card-inner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.track-cover {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.track-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.music-track-card:hover .track-cover img {
+    transform: scale(1.1);
+}
+
+.play-button-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+
+.music-track-card:hover .play-button-overlay {
+    opacity: 1;
+}
+
+.track-play-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.track-play-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+}
+
+.track-play-btn svg {
+    width: 16px;
+    height: 16px;
+    margin-left: 2px;
+}
+
+.track-duration-badge {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+}
+
+.track-details {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.track-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.track-artist {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.track-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+}
+
+.streaming-platforms {
+    display: flex;
+    gap: 12px;
+}
+
+.platform-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.platform-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.youtube-icon {
+    background: rgba(255, 0, 0, 0.1);
+    color: #ff0000;
+}
+
+.youtube-icon:hover {
+    background: rgba(255, 0, 0, 0.2);
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+}
+
+.spotify-icon {
+    background: rgba(30, 215, 96, 0.1);
+    color: #1ed760;
+}
+
+.spotify-icon:hover {
+    background: rgba(30, 215, 96, 0.2);
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(30, 215, 96, 0.3);
+}
+
+.apple-icon {
+    background: rgba(250, 250, 250, 0.1);
+    color: #fafafa;
+}
+
+.apple-icon:hover {
+    background: rgba(250, 250, 250, 0.2);
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(250, 250, 250, 0.3);
+}
+
+/* Album Cards */
+.album-card {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 24px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.album-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    transition: left 0.8s ease;
+}
+
+.album-card:hover::before {
+    left: 100%;
+}
+
+.album-card:hover {
+    transform: translateY(-8px);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.4);
+}
+
+.album-artwork {
+    width: 120px;
+    height: 120px;
+    border-radius: 16px;
+    overflow: hidden;
+    margin: 0 auto 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.4s ease;
+}
+
+.album-card:hover .album-artwork {
+    transform: scale(1.05) rotate(2deg);
+}
+
+.album-artwork img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.album-info h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    margin: 0 0 8px 0;
+}
+
+.album-info p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 0 16px 0;
+}
+
+.album-platforms {
+    display: flex;
+    justify-content: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .track-card-inner {
+        gap: 16px;
+    }
+
+    .track-cover {
+        width: 60px;
+        height: 60px;
+    }
+
+    .track-title {
+        font-size: 16px;
+    }
+
+    .track-artist {
+        font-size: 13px;
+    }
+
+    .streaming-platforms {
+        gap: 8px;
+    }
+
+    .platform-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .platform-icon svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .album-artwork {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+/* Music Layout - Full Width Cards */
+.music-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.music-tracks-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.music-player-side .player-artwork {
+    width: 100%;
+    height: 200px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.music-player-side .player-artwork img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.music-player-side .track-info {
+    text-align: center;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.music-player-side .track-info h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+}
+
+.music-player-side .track-info p {
+    font-size: 14px;
+    opacity: 0.8;
+    margin: 0;
+}
+
+.music-player-side .player-controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.music-player-side .control-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.music-player-side .control-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.music-player-side .progress-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.music-player-side .time-display {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.music-player-side .progress-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.music-player-side .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff6b35, #f7931e);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.1s ease;
+}
+
+.music-player-side .platform-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.music-player-side .platform-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.music-player-side .platform-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(4px);
+    color: white;
+}
+
+#youtubePlayerIframe {
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Track Card Adjustments */
+.music-track-card {
+    margin-bottom: 12px;
+}
+
+.track-platforms {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+    align-items: center;
+}
+
+.track-card-inner {
+    display: grid;
+    grid-template-columns: 80px 1fr 250px;
+    gap: 16px;
+    align-items: center;
+}
+
+.track-player-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px;
+}
+
+.audio-player {
+    display: none;
+}
+
+.track-controls-horizontal {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    justify-content: center;
+}
+
+.control-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.control-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.control-btn.play-btn {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(145deg, #ff6b35, #f7931e);
+    border: none;
+    font-size: 16px;
+}
+
+.control-btn.play-btn:hover {
+    background: linear-gradient(145deg, #ff7b45, #ff9b2e);
+}
+
+.control-btn.watch-btn {
+    background: rgba(255, 0, 0, 0.1);
+    color: #ff0000;
+    border-color: rgba(255, 0, 0, 0.3);
+}
+
+.control-btn.watch-btn:hover {
+    background: rgba(255, 0, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+}
+
+.volume-control-mini {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.volume-control-mini i {
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    font-size: 12px;
+    transition: color 0.3s ease;
+}
+
+.volume-control-mini i:hover {
+    color: #ff6b35;
+}
+
+.volume-control-mini input[type="range"] {
+    width: 60px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+    -webkit-appearance: none;
+}
+
+.volume-control-mini input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ff6b35;
+    cursor: pointer;
+}
+
+.volume-control-mini input[type="range"]::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ff6b35;
+    cursor: pointer;
+    border: none;
+}
+
+.track-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.track-platforms {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+/* Album Cards - Smaller */
+.album-card {
+    padding: 16px;
+}
+
+.album-artwork {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 12px;
+}
+
+.album-info h4 {
+    font-size: 16px;
+}
+
+.album-info p {
+    font-size: 13px;
+}
+
+/* Container Styles */
+#tracks-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#albums-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    margin-top: 30px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .track-card-inner {
+        grid-template-columns: 60px 1fr;
+        gap: 12px;
+    }
+
+    .track-player-area {
+        grid-column: 1 / -1;
+        margin-top: 12px;
+    }
+
+    .track-platforms {
+        margin-top: 8px;
+        justify-content: flex-start;
+    }
+
+    #albums-container {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 12px;
+    }
+}

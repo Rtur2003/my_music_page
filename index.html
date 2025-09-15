@@ -114,7 +114,7 @@
     <!-- Performance Resource Hints -->
     <link rel="preload" href="assets/css/hasan-arthur-design.css" as="style">
     <link rel="preload" href="assets/js/theme-and-navigation.js" as="script">
-    <link rel="preload" href="assets/js/music-loader.js" as="script">
+    <link rel="preload" href="assets/js/music-final.js" as="script">
     <link rel="preload" href="assets/images/logo-main.png" as="image">
     <link rel="preload" href="assets/images/hasan-arthur-profile.jpg" as="image">
     
@@ -251,12 +251,12 @@
     <link rel="stylesheet" href="assets/css/loading-states.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/modern-player-styles.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/enhanced-player-design.css" media="print" onload="this.media='all'; this.onload=null;">
-    <link rel="stylesheet" href="assets/css/music-sections-redesign.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/simple-footer.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/mobile-optimization.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/mobile-player-fix.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/mobile-animation-fix.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/performance-optimization.css" media="print" onload="this.media='all'; this.onload=null;">
+    <link rel="stylesheet" href="assets/css/new-music-cards.css" media="all">
 
     <!-- Fallback for browsers that don't support preload -->
     <noscript>
@@ -265,7 +265,6 @@
         <link rel="stylesheet" href="assets/css/loading-states.css">
         <link rel="stylesheet" href="assets/css/modern-player-styles.css">
         <link rel="stylesheet" href="assets/css/enhanced-player-design.css">
-        <link rel="stylesheet" href="assets/css/music-sections-redesign.css">
         <link rel="stylesheet" href="assets/css/simple-footer.css">
         <link rel="stylesheet" href="assets/css/mobile-optimization.css">
         <link rel="stylesheet" href="assets/css/mobile-player-fix.css">
@@ -324,6 +323,7 @@
                 <li><a href="#music" class="nav-link" data-translate="nav.music">Music</a></li>
                 <li><a href="#software" class="nav-link" data-translate="nav.software">Software</a></li>
                 <li><a href="#gallery" class="nav-link" data-translate="nav.gallery">Gallery</a></li>
+                <li><a href="#updates" class="nav-link" data-translate="nav.updates">Updates</a></li>
                 <li><a href="#contact" class="nav-link" data-translate="nav.contact">Contact</a></li>
             </ul>
             
@@ -378,7 +378,7 @@
                     </div>
                     <div class="stat-item">
                         <span class="stat-number">12K+</span>
-                        <span class="stat-label">Total Plays</span>
+                        <span class="stat-label" data-translate="stats.plays">Total Plays</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-number">3</span>
@@ -450,126 +450,21 @@
                     <p class="section-subtitle" data-translate="music.subtitle">Cinematic Compositions & Film Score Reimaginings</p>
                 </div>
                 
-                <!-- Modern Spotify-Style Music Player -->
-                <div class="music-player-main">
-                    <div class="modern-player-card">
-                        <div class="player-artwork-section">
-                            <div class="artwork-container">
-                                <img src="assets/images/logo-main.png?v=1.0" alt="Current playing track" id="currentArtwork" class="artwork-image" width="200" height="200" loading="lazy">
-                                <div class="artwork-overlay">
-                                    <button class="main-play-button" id="mainPlayBtn" aria-label="Play/Pause">
-                                        <i class="fas fa-play" id="mainPlayIcon"></i>
-                                    </button>
-                                </div>
-                                <div class="vinyl-effect"></div>
-                            </div>
-                            
-                            <div class="audio-visualizer" id="audioVisualizer">
-                                <div class="visualizer-bar"></div>
-                                <div class="visualizer-bar"></div>
-                                <div class="visualizer-bar"></div>
-                                <div class="visualizer-bar"></div>
-                                <div class="visualizer-bar"></div>
-                                <div class="visualizer-bar"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="player-info-section">
-                            <div class="track-details">
-                                <h3 class="modern-track-title" id="modernTrackTitle" data-translate="music.player.select">Select a track</h3>
-                                <p class="modern-track-artist" id="modernTrackArtist" data-translate="music.player.artist">Hasan Arthur Altuntaş</p>
-                                <div class="track-metadata">
-                                    <span class="track-genre" id="trackGenre">Pop</span>
-                                    <span class="track-duration" id="trackDuration">3:45</span>
-                                </div>
-                            </div>
-                            
-                            <div class="platform-links" id="platformLinks">
-                                <a href="https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef" class="platform-link spotify-link" id="spotifyLink" target="_blank" rel="noopener" title="Listen on Spotify">
-                                    <i class="fab fa-spotify"></i>
-                                </a>
-                                <a href="https://www.youtube.com/channel/UCA7E1X_uGUqtSJeIxvBeTQA" class="platform-link youtube-link" id="youtubeLink" target="_blank" rel="noopener" title="Watch on YouTube">
-                                    <i class="fab fa-youtube"></i>
-                                </a>
-                                <a href="https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1833769554" class="platform-link apple-link" id="appleLink" target="_blank" rel="noopener" title="Listen on Apple Music">
-                                    <i class="fab fa-apple"></i>
-                                </a>
-                                <a href="https://soundcloud.com/hasanarthur" class="platform-link soundcloud-link" id="soundcloudLink" target="_blank" rel="noopener" title="Listen on SoundCloud">
-                                    <i class="fab fa-soundcloud"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="player-controls-section">
-                        <div class="progress-section">
-                            <span class="time current-time" id="currentTime">0:00</span>
-                            <div class="progress-track" id="progressTrack">
-                                <div class="progress-fill" id="progressFill"></div>
-                                <div class="progress-handle" id="progressHandle"></div>
-                            </div>
-                            <span class="time total-time" id="totalTime">3:45</span>
-                        </div>
-                        
-                        <div class="controls-section">
-                            <div class="primary-controls">
-                                <button class="control-button secondary-btn" id="shuffleBtn" aria-label="Karışık çal" title="Karışık çal">
-                                    <i class="fas fa-random"></i>
-                                </button>
-                                <button class="control-button secondary-btn" id="prevBtn" aria-label="Önceki şarkı">
-                                    <i class="fas fa-step-backward"></i>
-                                </button>
-                                <button class="control-button play-pause-btn" id="playPauseBtn" aria-label="Oynat/Durdur">
-                                    <i class="fas fa-play" id="playPauseIcon"></i>
-                                </button>
-                                <button class="control-button secondary-btn" id="nextBtn" aria-label="Sonraki şarkı">
-                                    <i class="fas fa-step-forward"></i>
-                                </button>
-                                <button class="control-button secondary-btn" id="repeatBtn" aria-label="Tekrar oynat" title="Tekrar oynat">
-                                    <i class="fas fa-redo"></i>
-                                </button>
-                            </div>
-                            
-                            <div class="volume-controls">
-                                <button class="volume-button" id="volumeBtn" aria-label="Ses kontrolü">
-                                    <i class="fas fa-volume-up" id="volumeIcon"></i>
-                                </button>
-                                <div class="volume-slider-wrapper">
-                                    <input type="range" id="volumeSlider" min="0" max="100" value="75" class="volume-slider">
-                                    <div class="volume-track"></div>
-                                </div>
-                            </div>
 
-                            <!-- Progress Bar -->
-                            <div class="track-progress">
-                                <div class="track-progress-fill" id="progressFill"></div>
-                            </div>
-
-                            <div class="track-time">
-                                <span id="currentTime">0:00</span>
-                                <span id="totalTime">4:23</span>
-                            </div>
+                <!-- Music Content Layout -->
+                <div class="music-content-wrapper">
+                    <div class="music-section">
+                        <h3 class="music-section-title" data-translate="music.tracks.title">Singles</h3>
+                        <div id="tracks-container">
+                            <!-- Tracks will be loaded here -->
                         </div>
                     </div>
 
-                    <audio id="audioPlayer" preload="none">
-                        <p>Music player ready for streaming from platforms.</p>
-                    </audio>
-                </div>
-                
-                <!-- Tracks Section -->
-                <div class="music-section">
-                    <h3 class="music-section-title" data-translate="music.tracks.title">Singles</h3>
-                    <div class="music-grid" id="tracks-container">
-                        <!-- Tracks will be loaded from JSON -->
-                    </div>
-                </div>
-
-                <!-- Albums Section -->
-                <div class="music-section">
-                    <h3 class="music-section-title" data-translate="music.albums.title">Albums</h3>
-                    <div class="music-grid" id="albums-container">
-                        <!-- Albums will be loaded from JSON -->
+                    <div class="music-section">
+                        <h3 class="music-section-title" data-translate="music.albums.title">Albums</h3>
+                        <div id="albums-container">
+                            <!-- Albums will be loaded here -->
+                        </div>
                     </div>
                 </div>
                 </div>
@@ -704,19 +599,19 @@
                     <div class="software-stats">
                         <div class="stat-item">
                             <div class="stat-number" data-count="120">0</div>
-                            <div class="stat-label">GitHub Commits</div>
+                            <div class="stat-label" data-translate="software.stats.commits">GitHub Commits</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-number" data-count="15">0</div>
-                            <div class="stat-label">Public Repositories</div>
+                            <div class="stat-label" data-translate="software.stats.repos">Public Repositories</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-number" data-count="6">0</div>
-                            <div class="stat-label">Programming Languages</div>
+                            <div class="stat-label" data-translate="software.stats.languages">Programming Languages</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-number" data-count="2">0</div>
-                            <div class="stat-label">Years Coding</div>
+                            <div class="stat-label" data-translate="software.stats.years">Years Coding</div>
                         </div>
                     </div>
                     
@@ -741,84 +636,166 @@
                     <p class="section-subtitle" data-translate="gallery.subtitle">Behind the scenes & live performances</p>
                 </div>
                 
-                <div class="coming-soon-message">
-                    <div class="coming-soon-card">
-                        <div class="coming-soon-icon">
-                            <i class="fas fa-camera"></i>
+                <!-- Modern Gallery Coming Soon Design -->
+                <div class="modern-gallery-preview">
+                    <div class="gallery-status-card">
+                        <div class="status-header">
+                            <div class="status-accent"></div>
+                            <div class="status-indicator">
+                                <div class="pulse-dot"></div>
+                                <span class="status-label" data-translate="gallery.status.working">Currently Working</span>
+                            </div>
                         </div>
-                        <h3 data-translate="gallery.coming.title">Photos Coming Soon</h3>
-                        <p data-translate="gallery.coming.desc">I'm currently working on capturing some great photos from my studio sessions and live performances. Stay tuned for the gallery update!</p>
-                        <div class="coming-soon-actions">
-                            <a href="https://www.instagram.com/rthur_hsn" target="_blank" class="notify-btn">
-                                <i class="fab fa-instagram"></i>
-                                <span data-translate="gallery.coming.button">See Current Photos</span>
+
+                        <div class="status-content">
+                            <div class="status-icon-container">
+                                <div class="status-icon">
+                                    <i class="fas fa-camera-retro"></i>
+                                </div>
+                                <div class="icon-glow"></div>
+                            </div>
+
+                            <div class="status-text">
+                                <h3 class="status-title" data-translate="gallery.coming.title">Photos Coming Soon</h3>
+                                <p class="status-description" data-translate="gallery.coming.desc">I'm currently working on capturing some great photos from my studio sessions and live performances. Stay tuned for the gallery update!</p>
+                            </div>
+                        </div>
+
+                        <div class="preview-grid">
+                            <div class="preview-slot">
+                                <div class="placeholder-img">
+                                    <i class="fas fa-music"></i>
+                                    <span data-translate="gallery.preview.studio">Studio Sessions</span>
+                                </div>
+                            </div>
+                            <div class="preview-slot">
+                                <div class="placeholder-img">
+                                    <i class="fas fa-microphone"></i>
+                                    <span data-translate="gallery.preview.live">Live Performances</span>
+                                </div>
+                            </div>
+                            <div class="preview-slot">
+                                <div class="placeholder-img">
+                                    <i class="fas fa-video"></i>
+                                    <span data-translate="gallery.preview.behind">Behind Scenes</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="status-actions">
+                            <a href="https://www.instagram.com/rthur_hsn" target="_blank" rel="noopener noreferrer" class="modern-notify-btn">
+                                <div class="btn-icon">
+                                    <i class="fab fa-instagram"></i>
+                                </div>
+                                <div class="btn-content">
+                                    <span class="btn-text" data-translate="gallery.coming.button">Get Notified</span>
+                                    <span class="btn-subtitle" data-translate="gallery.notify.subtitle">Follow for updates</span>
+                                </div>
+                                <div class="btn-arrow">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </div>
                             </a>
+                        </div>
+
+                        <div class="progress-indicator">
+                            <div class="progress-label" data-translate="gallery.progress.label">Progress</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%"></div>
+                            </div>
+                            <div class="progress-text">65% <span data-translate="gallery.progress.complete">Complete</span></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="gallery-grid hidden" id="galleryGrid">
-                    <!-- Gallery items will be dynamically loaded -->
-                    <div class="gallery-item" data-category="studio">
-                        <img src="assets/images/logo-main.png" alt="Studio Work" loading="lazy">
-                        <div class="gallery-overlay">
-                            <div class="gallery-info">
-                                <h4>Studio Sessions</h4>
-                                <p>Behind the scenes music production</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="gallery-item" data-category="concerts">
-                        <img src="assets/images/logo-main.png" alt="Live Performance" loading="lazy">
-                        <div class="gallery-overlay">
-                            <div class="gallery-info">
-                                <h4>Live Performance</h4>
-                                <p>Concert and live show moments</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="gallery-item" data-category="behind-scenes">
-                        <img src="assets/images/logo-main.png" alt="Behind Scenes" loading="lazy">
-                        <div class="gallery-overlay">
-                            <div class="gallery-info">
-                                <h4>Behind the Scenes</h4>
-                                <p>Creative process and preparation</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="gallery-item" data-category="studio">
-                        <img src="assets/images/hasan-arthur-profile.jpg" alt="Creative Process" loading="lazy">
-                        <div class="gallery-overlay">
-                            <div class="gallery-info">
-                                <h4>Creative Process</h4>
-                                <p>Composing and arranging music</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="gallery-item" data-category="concerts">
-                        <img src="assets/images/hasan-arthur-profile.jpg" alt="Stage Moments" loading="lazy">
-                        <div class="gallery-overlay">
-                            <div class="gallery-info">
-                                <h4>Stage Moments</h4>
-                                <p>Connecting with the audience</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="gallery-item" data-category="behind-scenes">
-                        <img src="assets/images/logo-main.png" alt="Inspiration" loading="lazy">
-                        <div class="gallery-overlay">
-                            <div class="gallery-info">
-                                <h4>Finding Inspiration</h4>
-                                <p>Moments that spark creativity</p>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Gallery will be populated when photos are ready -->
                 </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Updates Section -->
+        <section class="social-updates" id="updates">
+            <div class="container">
+                <div class="social-updates-section">
+                    <div class="updates-header">
+                        <div class="updates-accent"></div>
+                        <h2 class="updates-title" data-translate="updates.title"># Latest Updates</h2>
+                        <p class="updates-subtitle" data-translate="updates.subtitle">Follow me across platforms</p>
+                    </div>
+
+                    <div class="social-feed">
+                        <!-- Instagram Post -->
+                        <div class="social-post instagram">
+                            <div class="post-header">
+                                <div class="platform-icon">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12.017 11.986c0 2.178-1.765 3.943-3.944 3.943-2.178 0-3.943-1.765-3.943-3.943 0-2.178 1.765-3.943 3.943-3.943 2.179 0 3.944 1.765 3.944 3.943zm1.693-8.986c1.325 0 2.4 1.075 2.4 2.4v13.2c0 1.325-1.075 2.4-2.4 2.4h-3.4c-1.325 0-2.4-1.075-2.4-2.4v-13.2c0-1.325 1.075-2.4 2.4-2.4h3.4zm-1.7 2.4c-.331 0-.6.269-.6.6s.269.6.6.6.6-.269.6-.6-.269-.6-.6-.6zm-6.017 7.586c0-3.313 2.687-6 6-6s6 2.687 6 6-2.687 6-6 6-6-2.687-6-6z"/>
+                                    </svg>
+                                </div>
+                                <span class="platform-name" data-translate="updates.instagram">Instagram</span>
+                            </div>
+                            <div class="post-content">
+                                <p data-translate="updates.instagram.caption">New track "Cinematic Dreams" is live! 🎵</p>
+                                <div class="post-location" data-translate="updates.instagram.location">Recording Studio</div>
+                                <div class="post-stats">
+                                    <span class="stat">❤️ 1.2K</span>
+                                    <span class="stat">💬 45</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Twitter Post -->
+                        <div class="social-post twitter">
+                            <div class="post-header">
+                                <div class="platform-icon">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                                    </svg>
+                                </div>
+                                <span class="platform-name" data-translate="updates.twitter">Twitter</span>
+                            </div>
+                            <div class="post-content">
+                                <p data-translate="updates.twitter.text">Working on some epic orchestral arrangements tonight! Can't wait to share what I've been cooking up 🎼✨</p>
+                                <div class="post-stats">
+                                    <span class="stat">🔄 89</span>
+                                    <span class="stat">❤️ 234</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- YouTube Post -->
+                        <div class="social-post youtube">
+                            <div class="post-header">
+                                <div class="platform-icon">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M23.498 6.186a2.999 2.999 0 0 0-2.111-2.135C19.505 3.546 12 3.546 12 3.546s-7.505 0-9.387.505A2.999 2.999 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a2.999 2.999 0 0 0 2.111 2.135c1.882.505 9.387.505 9.387.505s7.505 0 9.387-.505a2.999 2.999 0 0 0 2.111-2.135C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                    </svg>
+                                </div>
+                                <span class="platform-name" data-translate="updates.youtube">YouTube</span>
+                            </div>
+                            <div class="post-content">
+                                <p data-translate="updates.youtube.title">Behind the Scenes: Creating "Epic Journey"</p>
+                                <div class="post-stats">
+                                    <span class="stat">👁️ <span data-translate="updates.youtube.views">1.2K views</span></span>
+                                    <span class="stat">👍 178</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Email Subscription -->
+                    <div class="subscription-section">
+                        <div class="subscription-header">
+                            <h3 data-translate="updates.subscribe.title">Stay Updated</h3>
+                            <p data-translate="updates.subscribe.text">Get notified about new releases and behind-the-scenes content</p>
+                        </div>
+
+                        <div class="subscription-form">
+                            <input type="email" class="email-input" data-translate="updates.subscribe.placeholder" placeholder="Enter your email">
+                            <button class="subscribe-btn" data-translate="updates.subscribe.button">Subscribe</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -926,12 +903,12 @@
                         <img src="assets/images/logo-main.png" alt="Hasan Arthur Altuntaş" loading="lazy">
                     </div>
                     <h2 class="footer-title">HASAN ARTHUR ALTUNTAŞ</h2>
-                    <p class="footer-tagline">Music Producer & AI Developer</p>
+                    <p class="footer-tagline" data-translate="footer.tagline">Music Producer & AI Developer</p>
                 </div>
 
                 <!-- Social links -->
                 <div class="footer-social-section">
-                    <h3 class="footer-social-title">Follow Me</h3>
+                    <h3 class="footer-social-title" data-translate="footer.social">Follow Me</h3>
                     <div class="footer-social">
                         <a href="https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef" target="_blank" rel="noopener noreferrer" aria-label="Spotify">
                             <i class="fab fa-spotify"></i>
@@ -977,14 +954,14 @@
             <!-- Bottom section -->
             <div class="footer-bottom">
                 <div class="footer-links">
-                    <a href="#home">Home</a>
-                    <a href="#about">About</a>
-                    <a href="#music">Music</a>
-                    <a href="#contact">Contact</a>
+                    <a href="#home" data-translate="nav.home">Home</a>
+                    <a href="#about" data-translate="nav.about">About</a>
+                    <a href="#music" data-translate="nav.music">Music</a>
+                    <a href="#contact" data-translate="nav.contact">Contact</a>
                 </div>
                 <p class="footer-copyright">
-                    &copy; 2024 Hasan Arthur Altuntaş. All rights reserved.
-                    Made with <span style="color: var(--accent-gold);">♥</span> in Turkey
+                    &copy; 2024 Hasan Arthur Altuntaş. <span data-translate="footer.rights">All rights reserved.</span>
+                    <span data-translate="footer.made">Made with</span> <span style="color: var(--accent-gold);">♥</span> in Turkey
                 </p>
             </div>
         </div>
@@ -1007,21 +984,20 @@
     <!-- FORM VALIDATION (Critical - Load after security) -->
     <script src="assets/js/form-validator.js" defer></script>
     
-    <!-- YOUTUBE PLAYER (Load before music manager) -->
-    <script src="assets/js/youtube-player.js" defer></script>
-    
+    <!-- MUSIC SYSTEM (Final Clean Version) -->
+    <script src="assets/js/music-final.js" defer></script>
+
     <!-- CORE FUNCTIONALITY -->
     <script src="assets/js/theme-and-navigation.js" defer></script>
-    <script src="assets/js/music-loader.js" defer></script>
     
     <!-- UI ENHANCEMENTS -->
     <script src="assets/js/gallery.js" defer></script>
     <script src="assets/js/contact-form.js" defer></script>
     <script src="assets/js/sonic-interactions.js" defer></script>
-    <script src="assets/js/dynamic-effects.js" defer></script>
+    <!-- <script src="assets/js/dynamic-effects.js" defer></script> <!-- Disabled - creates duplicate floating actions -->
     <script src="assets/js/redirect-warning.js" defer></script>
     <!-- <script src="assets/js/console-debug.js" defer></script> <!-- Disabled for production -->
-    <script src="assets/js/modern-features.js" defer></script>
+    <!-- <script src="assets/js/modern-features.js" defer></script> <!-- Disabled - creates duplicate sections -->
     
     <!-- GITHUB STATS -->
     <script src="assets/js/github-stats.js" defer></script>
