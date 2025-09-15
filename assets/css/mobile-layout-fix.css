@@ -27,20 +27,72 @@
         isolation: isolate !important;
     }
 
-    .music-player-main {
+    /* Music player main container - section[3]/div/div/div[2]/div[1] */
+    #music .music-player-main {
         position: relative !important;
         z-index: 4 !important;
-        margin: 0 auto 2rem auto !important;
+        margin: 0 auto !important;
         background: var(--card-bg) !important;
         border-radius: 15px !important;
-        padding: 1.5rem !important;
+        padding: 1rem !important;
         width: 100% !important;
         max-width: 100% !important;
         left: 0 !important;
         right: 0 !important;
-        transform: none !important;
-        margin-left: 0 !important;
-        margin-right: 0 !important;
+        transform: translateX(0) !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        display: block !important;
+        text-align: center !important;
+    }
+
+    /* Extra specific targeting for the exact XPath element */
+    section:nth-child(3) > div > div > div:nth-child(2) > div:first-child {
+        margin: 0 auto !important;
+        left: 0 !important;
+        right: 0 !important;
+        transform: translateX(0) !important;
+        position: relative !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        display: block !important;
+        text-align: center !important;
+    }
+
+    /* Music section specific fixes */
+    section[id="music"] {
+        padding: 0 1rem !important;
+        margin: 0 auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    section[id="music"] > div {
+        margin: 0 auto !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    #music .container {
+        padding: 0 1rem !important;
+        margin: 0 auto !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    #music .glass-container {
+        padding: 1rem !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     .modern-player-card {
@@ -54,11 +106,45 @@
         margin: 0 !important;
         left: 0 !important;
         right: 0 !important;
-        transform: none !important;
+        transform: translateX(0) !important;
         display: grid !important;
         grid-template-columns: 1fr !important;
         gap: 1rem !important;
         text-align: center !important;
+        box-sizing: border-box !important;
+        padding: 1rem !important;
+    }
+
+    /* Player artwork section */
+    .player-artwork-section {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 auto !important;
+        text-align: center !important;
+    }
+
+    .artwork-container {
+        width: 150px !important;
+        height: 150px !important;
+        margin: 0 auto !important;
+        position: relative !important;
+    }
+
+    /* Player info section */
+    .player-info-section {
+        width: 100% !important;
+        max-width: 100% !important;
+        text-align: center !important;
+        margin: 0 !important;
+    }
+
+    /* Platform links center alignment */
+    .platform-links {
+        display: flex !important;
+        justify-content: center !important;
+        gap: 0.5rem !important;
+        margin: 1rem 0 !important;
+        width: 100% !important;
     }
 
     /* Music grid layout */

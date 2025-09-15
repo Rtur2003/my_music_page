@@ -736,8 +736,204 @@ setTimeout(() => {
     if (!window.musicLoader || !window.musicLoader.musicData) {
         console.log('🔄 Final fallback music loader initialization...');
         initializeMusicLoader();
+    } else {
+        // Force render if music loader exists but tracks not visible
+        const tracksContainer = document.getElementById('tracks-container');
+        const albumsContainer = document.getElementById('albums-container');
+
+        if (tracksContainer && tracksContainer.children.length === 0) {
+            console.log('🔄 Force rendering tracks - container empty');
+            if (window.musicLoader.renderTracks) {
+                window.musicLoader.renderTracks();
+            }
+        }
+
+        if (albumsContainer && albumsContainer.children.length === 0) {
+            console.log('🔄 Force rendering albums - container empty');
+            if (window.musicLoader.renderAlbums) {
+                window.musicLoader.renderAlbums();
+            }
+        }
     }
 }, 3000);
+
+// Additional failsafe for live site - multiple checks
+setTimeout(() => {
+    console.log('🔄 First failsafe check (1s)...');
+    const tracksContainer = document.getElementById('tracks-container');
+    if (tracksContainer && tracksContainer.children.length === 0) {
+        console.log('⚠️ No tracks found, forcing hardcoded render');
+        forceRenderHardcodedMusic();
+    }
+}, 1000);
+
+setTimeout(() => {
+    console.log('🔄 Second failsafe check (3s)...');
+    const tracksContainer = document.getElementById('tracks-container');
+    if (tracksContainer && tracksContainer.children.length === 0) {
+        console.log('⚠️ No tracks found, forcing hardcoded render');
+        forceRenderHardcodedMusic();
+    }
+}, 3000);
+
+setTimeout(() => {
+    console.log('🔄 Final failsafe check (5s)...');
+    const tracksContainer = document.getElementById('tracks-container');
+    if (tracksContainer && tracksContainer.children.length === 0) {
+        console.log('⚠️ No tracks found, forcing hardcoded render');
+        forceRenderHardcodedMusic();
+    }
+}, 5000);
+
+// Also check on window load
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        console.log('🔄 Window load check...');
+        const tracksContainer = document.getElementById('tracks-container');
+        if (tracksContainer && tracksContainer.children.length === 0) {
+            console.log('⚠️ No tracks found after window load, forcing hardcoded render');
+            forceRenderHardcodedMusic();
+        }
+    }, 500);
+});
+
+function forceRenderHardcodedMusic() {
+    const tracksContainer = document.getElementById('tracks-container');
+    const albumsContainer = document.getElementById('albums-container');
+
+    if (tracksContainer) {
+        tracksContainer.innerHTML = `
+            <div class="music-card track-card">
+                <div class="music-artwork">
+                    <img src="assets/images/logo-main.png" alt="LIAR" loading="lazy">
+                    <div class="play-overlay">
+                        <button class="card-play-btn" onclick="window.open('https://www.youtube.com/watch?v=u3malJJSGds', '_blank')">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="music-card-content">
+                    <div class="music-card-header">
+                        <h3 class="music-card-title">LIAR</h3>
+                        <p class="music-card-artist">Hasan Arthur Altuntaş</p>
+                    </div>
+                    <div class="music-card-info">
+                        <span class="music-card-genre">Single</span>
+                        <span class="music-card-date">2024</span>
+                    </div>
+                    <div class="music-card-platforms">
+                        <a href="https://www.youtube.com/watch?v=u3malJJSGds" class="card-platform-link youtube" target="_blank" rel="noopener"><i class="fab fa-youtube"></i></a>
+                        <a href="https://open.spotify.com/track/2VhpoqJKPMTz2cHYcaAX2j" class="card-platform-link spotify" target="_blank" rel="noopener"><i class="fab fa-spotify"></i></a>
+                        <a href="https://music.apple.com/song/liar/1833771404" class="card-platform-link apple" target="_blank" rel="noopener"><i class="fab fa-apple"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="music-card track-card">
+                <div class="music-artwork">
+                    <img src="assets/images/logo-main.png" alt="Interstellar But My Version" loading="lazy">
+                    <div class="play-overlay">
+                        <button class="card-play-btn" onclick="window.open('https://www.youtube.com/watch?v=4vDvuFldYiM', '_blank')">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="music-card-content">
+                    <div class="music-card-header">
+                        <h3 class="music-card-title">Interstellar But My Version</h3>
+                        <p class="music-card-artist">Hasan Arthur Altuntaş</p>
+                    </div>
+                    <div class="music-card-info">
+                        <span class="music-card-genre">Single</span>
+                        <span class="music-card-date">2024</span>
+                    </div>
+                    <div class="music-card-platforms">
+                        <a href="https://www.youtube.com/watch?v=4vDvuFldYiM" class="card-platform-link youtube" target="_blank" rel="noopener"><i class="fab fa-youtube"></i></a>
+                        <a href="https://open.spotify.com/track/5fwzfwMJtVANQotGtmdv3C" class="card-platform-link spotify" target="_blank" rel="noopener"><i class="fab fa-spotify"></i></a>
+                        <a href="https://music.apple.com/song/interstellar-but-my-version/1773902252" class="card-platform-link apple" target="_blank" rel="noopener"><i class="fab fa-apple"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="music-card track-card">
+                <div class="music-artwork">
+                    <img src="assets/images/logo-main.png" alt="Oppenheimer But My Version" loading="lazy">
+                    <div class="play-overlay">
+                        <button class="card-play-btn" onclick="window.open('https://youtu.be/ZnOMJ9E0LmA', '_blank')">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="music-card-content">
+                    <div class="music-card-header">
+                        <h3 class="music-card-title">Oppenheimer But My Version</h3>
+                        <p class="music-card-artist">Hasan Arthur Altuntaş</p>
+                    </div>
+                    <div class="music-card-info">
+                        <span class="music-card-genre">Single</span>
+                        <span class="music-card-date">2024</span>
+                    </div>
+                    <div class="music-card-platforms">
+                        <a href="https://youtu.be/ZnOMJ9E0LmA" class="card-platform-link youtube" target="_blank" rel="noopener"><i class="fab fa-youtube"></i></a>
+                        <a href="https://open.spotify.com/track/27q14aJw81Qr5XBGV4JlNp" class="card-platform-link spotify" target="_blank" rel="noopener"><i class="fab fa-spotify"></i></a>
+                        <a href="https://music.apple.com/song/oppenheimer-but-my-version/1776487184" class="card-platform-link apple" target="_blank" rel="noopener"><i class="fab fa-apple"></i></a>
+                    </div>
+                </div>
+            </div>
+        `;
+        console.log('✅ Hardcoded tracks rendered');
+    }
+
+    if (albumsContainer) {
+        albumsContainer.innerHTML = `
+            <div class="music-card album-card">
+                <div class="music-artwork">
+                    <img src="assets/images/logo-main.png" alt="My Compositions" loading="lazy">
+                    <div class="play-overlay">
+                        <button class="card-play-btn" onclick="window.open('https://www.youtube.com/playlist?list=PLuQhIRvxCsFxFF8wW3UWcSbXA0b6fGWim', '_blank')">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="music-card-content">
+                    <div class="music-card-header">
+                        <h3 class="music-card-title">My Compositions</h3>
+                        <p class="music-card-artist">Hasan Arthur Altuntaş</p>
+                    </div>
+                    <div class="music-card-info">
+                        <span class="music-card-genre">Album</span>
+                        <span class="music-card-date">2024</span>
+                    </div>
+                    <div class="music-card-platforms">
+                        <a href="https://www.youtube.com/playlist?list=PLuQhIRvxCsFxFF8wW3UWcSbXA0b6fGWim" class="card-platform-link youtube" target="_blank" rel="noopener"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="music-card album-card">
+                <div class="music-artwork">
+                    <img src="assets/images/logo-main.png" alt="Film Composition Covers" loading="lazy">
+                    <div class="play-overlay">
+                        <button class="card-play-btn" onclick="window.open('https://www.youtube.com/playlist?list=PLuQhIRvxCsFxyR4zeWWhVheUeUHJY5MLq', '_blank')">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="music-card-content">
+                    <div class="music-card-header">
+                        <h3 class="music-card-title">Film Composition Covers</h3>
+                        <p class="music-card-artist">Hasan Arthur Altuntaş</p>
+                    </div>
+                    <div class="music-card-info">
+                        <span class="music-card-genre">Album</span>
+                        <span class="music-card-date">2024</span>
+                    </div>
+                    <div class="music-card-platforms">
+                        <a href="https://www.youtube.com/playlist?list=PLuQhIRvxCsFxyR4zeWWhVheUeUHJY5MLq" class="card-platform-link youtube" target="_blank" rel="noopener"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+        `;
+        console.log('✅ Hardcoded albums rendered');
+    }
+}
 
 // Listen for language changes
 document.addEventListener('languageChanged', (e) => {
