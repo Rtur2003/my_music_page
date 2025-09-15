@@ -22,7 +22,7 @@
         justify-content: center !important;
         border-radius: 50% !important;
         position: relative !important;
-        transform: translateY(15px) !important;
+        transform: translateY(25px) !important;
         text-decoration: none !important;
         margin: 0 !important;
         flex-shrink: 0 !important;
@@ -33,7 +33,7 @@
         color: white !important;
         position: relative !important;
         z-index: 2 !important;
-        transform: translateY(3px) !important;
+        transform: translateY(5px) !important;
         margin: 0 !important;
         display: block !important;
         text-align: center !important;
@@ -53,7 +53,7 @@
         justify-content: center !important;
         border-radius: 12px !important;
         position: relative !important;
-        transform: translateY(12px) !important;
+        transform: translateY(20px) !important;
         flex-shrink: 0 !important;
         margin: 0 !important;
     }
@@ -63,7 +63,7 @@
         color: white !important;
         position: relative !important;
         z-index: 2 !important;
-        transform: translateY(2px) !important;
+        transform: translateY(4px) !important;
         margin: 0 !important;
         display: block !important;
         text-align: center !important;

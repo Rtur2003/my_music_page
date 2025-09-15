@@ -103,31 +103,53 @@ class MusicLoader {
     }
 
     renderTracks() {
-        const tracksContainer = document.getElementById('tracks-container');
-        console.log('🎵 Rendering tracks, container found:', !!tracksContainer);
-        if (!tracksContainer) {
-            console.warn('❌ tracks-container element not found');
-            return;
+        try {
+            const tracksContainer = document.getElementById('tracks-container');
+            console.log('🎵 Rendering tracks, container found:', !!tracksContainer);
+            if (!tracksContainer) {
+                console.warn('❌ tracks-container element not found, retrying...');
+                // Retry after short delay
+                setTimeout(() => this.renderTracks(), 500);
+                return;
+            }
+
+            console.log('🎵 Music data tracks:', this.musicData?.tracks?.length || 0);
+            if (!this.musicData || !this.musicData.tracks || this.musicData.tracks.length === 0) {
+                console.log('🔄 No tracks data, showing loading state');
+                tracksContainer.innerHTML = `
+                    <div class="empty-music-state">
+                        <i class="fas fa-music"></i>
+                        <h4>Şarkılar Yükleniyor...</h4>
+                        <p>Müzik verileri yükleniyor, lütfen bekleyin...</p>
+                    </div>
+                `;
+
+                // Retry loading after delay
+                setTimeout(() => {
+                    if (this.musicData && this.musicData.tracks && this.musicData.tracks.length > 0) {
+                        this.renderTracks();
+                    }
+                }, 1000);
+                return;
+            }
+
+            tracksContainer.innerHTML = '';
+            console.log('🎵 Rendering', this.musicData.tracks.length, 'tracks');
+
+            this.musicData.tracks.forEach((track, index) => {
+                try {
+                    const trackElement = this.createTrackElement(track);
+                    tracksContainer.appendChild(trackElement);
+                    console.log('✅ Track rendered:', track.title);
+                } catch (trackError) {
+                    console.warn('❌ Error rendering track:', track?.title, trackError);
+                }
+            });
+
+            console.log('✅ All tracks rendered successfully');
+        } catch (error) {
+            console.error('❌ Error in renderTracks:', error);
         }
-
-        console.log('🎵 Music data tracks:', this.musicData?.tracks?.length || 0);
-        if (!this.musicData.tracks || this.musicData.tracks.length === 0) {
-            tracksContainer.innerHTML = `
-                <div class="empty-music-state">
-                    <i class="fas fa-music"></i>
-                    <h4>Şarkılar Yükleniyor...</h4>
-                    <p>Admin panelden yeni şarkılar ekleyebilirsiniz</p>
-                </div>
-            `;
-            return;
-        }
-
-        tracksContainer.innerHTML = '';
-
-        this.musicData.tracks.forEach(track => {
-            const trackElement = this.createTrackElement(track);
-            tracksContainer.appendChild(trackElement);
-        });
     }
 
     renderAlbums() {
@@ -474,19 +496,54 @@ class MusicLoader {
 
 // Initialize music loader
 window.musicLoader = null;
-document.addEventListener('DOMContentLoaded', () => {
+
+function initializeMusicLoader() {
     try {
+        console.log('🎵 Attempting to initialize music loader...');
         window.musicLoader = new MusicLoader();
-        console.log('Music loader initialized globally:', window.musicLoader);
+        console.log('✅ Music loader initialized globally:', window.musicLoader);
     } catch (error) {
-        console.log('LocalStorage not available, skipping music loader');
+        console.warn('❌ Music loader initialization failed:', error);
+        // Fallback music loader
         window.musicLoader = {
             musicData: { tracks: [], albums: [] },
-            loadMusicData: () => {},
-            updateLanguage: () => {}
+            loadMusicData: () => console.log('🔄 Fallback music loader - no data'),
+            updateLanguage: () => {},
+            renderTracks: () => console.log('🔄 Fallback render tracks'),
+            renderAlbums: () => console.log('🔄 Fallback render albums')
         };
+
+        // Retry after delay
+        setTimeout(() => {
+            console.log('🔄 Retrying music loader initialization...');
+            try {
+                window.musicLoader = new MusicLoader();
+                console.log('✅ Music loader retry successful');
+            } catch (retryError) {
+                console.warn('❌ Music loader retry failed:', retryError);
+            }
+        }, 2000);
     }
-});
+}
+
+// Multiple initialization attempts for better reliability
+document.addEventListener('DOMContentLoaded', initializeMusicLoader);
+
+// Backup initialization
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeMusicLoader);
+} else {
+    // DOM already loaded
+    setTimeout(initializeMusicLoader, 100);
+}
+
+// Final fallback for slow connections
+setTimeout(() => {
+    if (!window.musicLoader || !window.musicLoader.musicData) {
+        console.log('🔄 Final fallback music loader initialization...');
+        initializeMusicLoader();
+    }
+}, 3000);
 
 // Listen for language changes
 document.addEventListener('languageChanged', (e) => {
