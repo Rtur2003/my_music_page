@@ -23,7 +23,8 @@
       "Bash(start local-admin/admin-panel.html)",
       "Bash(start test-icons.html)",
       "WebFetch(domain:deadmau5.com)",
-      "Read(//c/Users/MONSTER/Downloads/**)"
+      "Read(//c/Users/MONSTER/Downloads/**)",
+      "Bash(where python)"
     ],
     "deny": [],
     "ask": []
