@@ -13,6 +13,28 @@
     <meta name="theme-color" content="#d4b078">
     <meta name="msapplication-TileColor" content="#d4b078">
 
+    <!-- PWA Manifest - Only works with HTTP/HTTPS -->
+    <!-- <link rel="manifest" href="manifest.json"> -->
+    <!-- Uncomment above line when deploying to web server -->
+
+    <!-- Apple Touch Icons for iOS -->
+    <link rel="apple-touch-icon" href="assets/images/logo-main.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/images/logo-main.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/logo-main.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="assets/images/logo-main.png">
+
+    <!-- iOS specific meta tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Hasan Arthur">
+
+    <!-- Microsoft Tiles -->
+    <meta name="msapplication-TileImage" content="assets/images/logo-main.png">
+    <meta name="msapplication-square70x70logo" content="assets/images/logo-main.png">
+    <meta name="msapplication-square150x150logo" content="assets/images/logo-main.png">
+    <meta name="msapplication-wide310x150logo" content="assets/images/logo-main.png">
+    <meta name="msapplication-square310x310logo" content="assets/images/logo-main.png">
+
     <!-- Permissions Policy for YouTube API -->
     <meta http-equiv="Permissions-Policy" content="autoplay=*, encrypted-media=*, accelerometer=*, gyroscope=*, picture-in-picture=*, clipboard-write=*, web-share=*">
     <meta http-equiv="Feature-Policy" content="autoplay 'self' https://www.youtube.com https://youtube.com; encrypted-media 'self' https://www.youtube.com https://youtube.com; picture-in-picture 'self' https://www.youtube.com https://youtube.com">
@@ -202,38 +224,58 @@
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
     
-    <!-- Critical styles moved to main CSS for better caching -->
-    
+    <!-- CRITICAL CSS INLINE - For fastest first paint -->
+    <style>
+        /* Critical CSS for above-the-fold content */
+        *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a0a;color:#fff;line-height:1.6;overflow-x:hidden}.sonic-nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10,10,10,0.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(212,176,120,0.2);padding:1rem 0}.nav-container{max-width:1400px;margin:0 auto;padding:0 2rem;display:flex;justify-content:space-between;align-items:center}.nav-logo{font-size:1.5rem;font-weight:700;color:#d4b078}.nav-links{display:flex;gap:2rem;list-style:none}.nav-links a{color:#fff;text-decoration:none;transition:color 0.3s ease}.nav-links a:hover{color:#d4b078}.sonic-hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 2rem 2rem;background:#0a0a0a}.hero-content{text-align:center;max-width:800px}.hero-title{font-size:clamp(2.5rem,5vw,4rem);font-weight:900;margin-bottom:1rem;background:linear-gradient(135deg,#d4b078,#f4d03f);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 2px 4px rgba(0,0,0,0.3)}.hero-subtitle{font-size:clamp(1.2rem,2.5vw,1.8rem);color:rgba(255,255,255,0.9);margin-bottom:1.5rem;font-weight:400}.hero-description{font-size:clamp(1rem,1.5vw,1.2rem);color:rgba(255,255,255,0.8);margin-bottom:2rem;line-height:1.8;max-width:600px;margin-left:auto;margin-right:auto}.hero-profile-img{width:200px;height:200px;border-radius:50%;object-fit:cover;margin:0 auto 2rem;display:block;border:3px solid rgba(212,176,120,0.3);box-shadow:0 8px 32px rgba(212,176,120,0.2)}.container{max-width:1400px;margin:0 auto;padding:0 2rem}.glass-container{background:rgba(20,20,20,0.6);backdrop-filter:blur(10px);border:1px solid rgba(212,176,120,0.2);border-radius:15px;padding:2rem}.sonic-btn{display:inline-block;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;transition:all 0.3s ease;border:none;cursor:pointer}.sonic-btn.primary{background:linear-gradient(135deg,#d4b078,#f4d03f);color:#0a0a0a}.sonic-btn.secondary{background:transparent;color:#d4b078;border:2px solid #d4b078}.page-loader{position:fixed;top:0;left:0;width:100%;height:100%;background:#0a0a0a;z-index:9999;display:flex;align-items:center;justify-content:center}.page-loader.hide{opacity:0;visibility:hidden;transition:opacity 0.5s ease,visibility 0.5s ease}@media (max-width:768px){.nav-container{padding:0 1rem}.sonic-hero{padding:100px 1rem 2rem}.hero-profile-img{width:150px;height:150px}.container{padding:0 1rem}.glass-container{padding:1.5rem}}@media (max-width:480px){.hero-profile-img{width:120px;height:120px}.glass-container{padding:1rem}}.page-transition{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}.page-transition.loaded{opacity:1;transform:translateY(0)}
+    </style>
+
     <!-- HASAN ARTHUR DESIGN SYSTEM -->
     <!-- Core CSS - Critical Path -->
     <link rel="stylesheet" href="assets/css/hasan-arthur-design.css" media="all">
+    <link rel="stylesheet" href="assets/css/critical-inline.css" media="all">
+    <link rel="stylesheet" href="assets/css/image-optimization.css" media="all">
     <link rel="stylesheet" href="assets/css/theme-consistency.css" media="all">
-    <link rel="stylesheet" href="assets/css/spacing-fix.css" media="all">
-    <link rel="stylesheet" href="assets/css/master-platform-fix.css" media="all">
-    <link rel="stylesheet" href="assets/css/loading-states.css" media="all">
+    <link rel="stylesheet" href="assets/css/critical-icon-fix.css" media="all">
 
-    <!-- Secondary CSS - Non-critical -->
+    <!-- Performance CSS - Critical -->
+    <link rel="stylesheet" href="assets/css/lighthouse-performance-fix.css" media="all">
+    <link rel="stylesheet" href="assets/css/mobile-layout-fix.css" media="all">
+    <link rel="stylesheet" href="assets/css/specific-icon-fixes.css" media="all">
+
+    <!-- Accessibility CSS - Critical for a11y -->
+    <link rel="stylesheet" href="assets/css/accessibility-enhancements.css" media="all">
+
+    <!-- Secondary CSS - Non-critical (async loaded) -->
+    <link rel="stylesheet" href="assets/css/spacing-fix.css" media="print" onload="this.media='all'; this.onload=null;">
+    <link rel="stylesheet" href="assets/css/master-platform-fix.css" media="print" onload="this.media='all'; this.onload=null;">
+    <link rel="stylesheet" href="assets/css/loading-states.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/modern-player-styles.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/enhanced-player-design.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/music-sections-redesign.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/simple-footer.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/mobile-optimization.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/mobile-player-fix.css" media="print" onload="this.media='all'; this.onload=null;">
-    <!-- <link rel="stylesheet" href="assets/css/mobile-icon-fixes.css" media="print" onload="this.media='all'; this.onload=null;"> -->
-    <link rel="stylesheet" href="assets/css/specific-icon-fixes.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/mobile-animation-fix.css" media="print" onload="this.media='all'; this.onload=null;">
-    <link rel="stylesheet" href="assets/css/mobile-layout-fix.css" media="print" onload="this.media='all'; this.onload=null;">
-    <link rel="stylesheet" href="assets/css/lighthouse-performance-fix.css" media="print" onload="this.media='all'; this.onload=null;">
-
-    <!-- Legacy CSS - Disabled for conflicts -->
-    <!-- <link rel="stylesheet" href="assets/css/footer-redesign.css" media="print" onload="this.media='all'; this.onload=null;"> -->
-    <!-- <link rel="stylesheet" href="assets/css/icon-fixes.css" media="print" onload="this.media='all'; this.onload=null;"> -->
-    <link rel="stylesheet" href="assets/css/critical-icon-fix.css" media="all">
-    <!-- <link rel="stylesheet" href="assets/css/dynamic-enhancements.css" media="print" onload="this.media='all'; this.onload=null;"> -->
     <link rel="stylesheet" href="assets/css/performance-optimization.css" media="print" onload="this.media='all'; this.onload=null;">
-    <!-- <link rel="stylesheet" href="assets/css/modern-features.css" media="print" onload="this.media='all'; this.onload=null;"> -->
+
+    <!-- Fallback for browsers that don't support preload -->
+    <noscript>
+        <link rel="stylesheet" href="assets/css/spacing-fix.css">
+        <link rel="stylesheet" href="assets/css/master-platform-fix.css">
+        <link rel="stylesheet" href="assets/css/loading-states.css">
+        <link rel="stylesheet" href="assets/css/modern-player-styles.css">
+        <link rel="stylesheet" href="assets/css/enhanced-player-design.css">
+        <link rel="stylesheet" href="assets/css/music-sections-redesign.css">
+        <link rel="stylesheet" href="assets/css/simple-footer.css">
+        <link rel="stylesheet" href="assets/css/mobile-optimization.css">
+        <link rel="stylesheet" href="assets/css/mobile-player-fix.css">
+        <link rel="stylesheet" href="assets/css/mobile-animation-fix.css">
+        <link rel="stylesheet" href="assets/css/performance-optimization.css">
+    </noscript>
     
-    <!-- Prefetch critical images -->
+    <!-- Critical images preload -->
+    <link rel="preload" href="assets/images/hasan-arthur-profile.jpg" as="image" type="image/jpeg">
     <link rel="preload" href="assets/images/logo-main.png" as="image" type="image/png">
     
     <!-- DNS prefetch for external resources -->
@@ -951,6 +993,12 @@
 
     <!-- Modal and scroll elements are created dynamically by JavaScript -->
 
+    <!-- PERFORMANCE OPTIMIZER (Load first for critical optimizations) -->
+    <script src="assets/js/performance-optimizer.js"></script>
+
+    <!-- ACCESSIBILITY ENHANCER (Critical for a11y) -->
+    <script src="assets/js/accessibility-enhancer.js"></script>
+
     <!-- ERROR HANDLING (Critical - Load first) -->
     <script src="assets/js/error-handler.js" defer></script>
     
@@ -980,6 +1028,151 @@
 
     <!-- LANGUAGE SYSTEM (Load last) -->
     <script src="assets/js/language-simple.js" defer></script>
+
+    <!-- PWA SERVICE WORKER REGISTRATION -->
+    <script>
+        // Register service worker for PWA functionality (only on HTTP/HTTPS)
+        if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((registration) => {
+                        console.log('✅ SW registered: ', registration);
+
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // New content is available
+                                    if (confirm('New version available! Reload to update?')) {
+                                        window.location.reload();
+                                    }
+                                }
+                            });
+                        });
+                    })
+                    .catch((registrationError) => {
+                        console.log('❌ SW registration failed: ', registrationError);
+                    });
+            });
+        }
+
+        // PWA install prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('💡 PWA install prompt available');
+            e.preventDefault();
+            deferredPrompt = e;
+
+            // Show custom install button after 5 seconds
+            setTimeout(() => {
+                if (deferredPrompt && !window.matchMedia('(display-mode: standalone)').matches) {
+                    showInstallPrompt();
+                }
+            }, 5000);
+        });
+
+        function showInstallPrompt() {
+            const installBanner = document.createElement('div');
+            installBanner.innerHTML = `
+                <div style="
+                    position: fixed;
+                    bottom: 20px;
+                    left: 20px;
+                    right: 20px;
+                    background: linear-gradient(135deg, #d4b078, #f4d03f);
+                    color: #0a0a0a;
+                    padding: 15px;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                    z-index: 10000;
+                    font-family: 'Inter', sans-serif;
+                    text-align: center;
+                    animation: slideUp 0.3s ease;
+                ">
+                    <p style="margin: 0 0 10px 0; font-weight: 600;">📱 Install Hasan Arthur's Portfolio</p>
+                    <p style="margin: 0 0 15px 0; font-size: 14px; opacity: 0.8;">Get the full experience with offline access!</p>
+                    <button onclick="installPWA()" style="
+                        background: #0a0a0a;
+                        color: #d4b078;
+                        border: none;
+                        padding: 8px 16px;
+                        border-radius: 5px;
+                        margin-right: 10px;
+                        cursor: pointer;
+                        font-weight: 600;
+                    ">Install</button>
+                    <button onclick="dismissInstall()" style="
+                        background: transparent;
+                        color: #0a0a0a;
+                        border: 1px solid #0a0a0a;
+                        padding: 8px 16px;
+                        border-radius: 5px;
+                        cursor: pointer;
+                    ">Maybe Later</button>
+                </div>
+            `;
+            installBanner.id = 'pwa-install-banner';
+            document.body.appendChild(installBanner);
+
+            // Add animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideUp {
+                    from { transform: translateY(100px); opacity: 0; }
+                    to { transform: translateY(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    console.log('PWA install choice:', choiceResult.outcome);
+                    deferredPrompt = null;
+                    dismissInstall();
+                });
+            }
+        }
+
+        function dismissInstall() {
+            const banner = document.getElementById('pwa-install-banner');
+            if (banner) {
+                banner.style.animation = 'slideDown 0.3s ease';
+                setTimeout(() => banner.remove(), 300);
+            }
+        }
+
+        // Add slideDown animation
+        const slideDownStyle = document.createElement('style');
+        slideDownStyle.textContent = `
+            @keyframes slideDown {
+                from { transform: translateY(0); opacity: 1; }
+                to { transform: translateY(100px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(slideDownStyle);
+
+        // PWA detection
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('🎉 PWA was installed');
+            // Track installation
+            if (window.gtag) {
+                gtag('event', 'pwa_installed', {
+                    event_category: 'engagement',
+                    event_label: 'PWA Installation'
+                });
+            }
+        });
+
+        // Detect if running as PWA
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            console.log('🚀 Running as PWA');
+            document.body.classList.add('pwa-mode');
+        }
+    </script>
 
 </body>
 </html>

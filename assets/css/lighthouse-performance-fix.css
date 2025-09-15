@@ -71,23 +71,46 @@
 /* Reduce non-composited animations */
 @media (max-width: 768px) {
     * {
-        animation-duration: 0.3s !important;
-        transition-duration: 0.3s !important;
+        animation-duration: 0.2s !important;
+        transition-duration: 0.2s !important;
     }
 
     /* Disable expensive animations on mobile */
     .modern-player-card::before,
     .hero-section::before,
-    .sonic-canvas::before {
+    .sonic-canvas::before,
+    *[class*="shimmer"],
+    *[class*="glow"],
+    *[class*="pulse"] {
         animation: none !important;
         background: none !important;
+        box-shadow: none !important;
     }
 
-    /* Simplify hover effects */
+    /* Simplify hover effects - only compositable properties */
     .music-card:hover,
-    .platform-link:hover {
+    .platform-link:hover,
+    .social-link:hover,
+    .link-card:hover {
         transform: none !important;
-        transition: background-color 0.2s ease !important;
+        transition: opacity 0.2s ease !important;
+    }
+
+    /* Disable all non-essential animations */
+    .titleShimmer,
+    .playButtonGlow,
+    .artworkPulse,
+    .playerGlow,
+    .loadingProgress {
+        animation: none !important;
+    }
+
+    /* Force GPU acceleration for remaining animations */
+    .page-transition,
+    .fade-in,
+    .slide-up {
+        transform: translateZ(0) !important;
+        will-change: transform, opacity !important;
     }
 }
 

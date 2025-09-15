@@ -880,6 +880,12 @@ function forceRenderHardcodedMusic() {
             </div>
         `;
         console.log('✅ Hardcoded tracks rendered');
+
+        // Dispatch event for accessibility enhancer
+        const musicLoadedEvent = new CustomEvent('musicDataLoaded', {
+            detail: { type: 'tracks', source: 'hardcoded' }
+        });
+        document.dispatchEvent(musicLoadedEvent);
     }
 
     if (albumsContainer) {
@@ -932,6 +938,12 @@ function forceRenderHardcodedMusic() {
             </div>
         `;
         console.log('✅ Hardcoded albums rendered');
+
+        // Dispatch event for accessibility enhancer
+        const albumsLoadedEvent = new CustomEvent('musicDataLoaded', {
+            detail: { type: 'albums', source: 'hardcoded' }
+        });
+        document.dispatchEvent(albumsLoadedEvent);
     }
 }
 
