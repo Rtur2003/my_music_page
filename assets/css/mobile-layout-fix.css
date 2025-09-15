@@ -30,10 +30,17 @@
     .music-player-main {
         position: relative !important;
         z-index: 4 !important;
-        margin-bottom: 2rem !important;
+        margin: 0 auto 2rem auto !important;
         background: var(--card-bg) !important;
         border-radius: 15px !important;
         padding: 1.5rem !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        left: 0 !important;
+        right: 0 !important;
+        transform: none !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
     }
 
     .modern-player-card {
@@ -42,6 +49,16 @@
         background: var(--card-bg) !important;
         backdrop-filter: blur(10px) !important;
         border: 1px solid rgba(212, 176, 120, 0.2) !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        transform: none !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+        text-align: center !important;
     }
 
     /* Music grid layout */
