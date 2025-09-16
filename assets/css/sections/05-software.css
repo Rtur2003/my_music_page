@@ -1,0 +1,700 @@
+/* ===============================================
+   05 - SOFTWARE SECTION
+   Classes: software, container, glass-container, section-header,
+            section-title, section-subtitle, software-content,
+            software-intro, software-text, tech-stack, tech-icons,
+            tech-item, software-visual, code-window, code-header,
+            code-buttons, code-btn, code-title, code-content,
+            code-line, line-number, code-text, keyword, variable,
+            property, string, software-links, link-cards, link-card,
+            link-icon, link-content, link-arrow, software-stats,
+            stat-item, stat-number, stat-label, software-details-section
+   =============================================== */
+
+/* ===============================================
+   DESKTOP SOFTWARE SECTION
+   =============================================== */
+
+.section.software {
+    padding: 6rem 0;
+    position: relative;
+    background: var(--section-bg);
+    transition: var(--transition);
+}
+
+.section.software .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.section.software .glass-container {
+    background: var(--card-bg);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    border: 1px solid rgba(212, 176, 120, 0.2);
+    padding: 3rem;
+    box-shadow: var(--shadow-strong);
+    transition: var(--transition);
+}
+
+/* ===============================================
+   SOFTWARE SECTION HEADER
+   =============================================== */
+
+.section.software .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.section.software .section-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 4px 20px rgba(212, 176, 120, 0.3);
+    letter-spacing: -1px;
+}
+
+.section.software .section-subtitle {
+    font-size: 1.2rem;
+    color: var(--accent-gold);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* ===============================================
+   SOFTWARE CONTENT
+   =============================================== */
+
+.software-content {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+.software-intro {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+.software-text h3 {
+    color: var(--text-primary);
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.software-text p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+/* ===============================================
+   TECH STACK
+   =============================================== */
+
+.tech-stack h4 {
+    color: var(--accent-gold);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.tech-icons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    width: 100%;
+    max-width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.tech-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    padding: 1.5rem 1rem;
+    background: rgba(212, 176, 120, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(212, 176, 120, 0.2);
+    transition: var(--transition);
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    min-height: 120px;
+}
+
+.tech-item:hover {
+    background: rgba(212, 176, 120, 0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border-color: rgba(212, 176, 120, 0.4);
+}
+
+.tech-item i {
+    font-size: 2.2rem;
+    color: var(--accent-gold);
+    transition: var(--transition);
+}
+
+.tech-item:hover i {
+    transform: scale(1.1);
+    color: var(--rich-gold);
+}
+
+.tech-item span {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.tech-item:hover span {
+    color: var(--text-primary);
+}
+
+/* ===============================================
+   SOFTWARE VISUAL - CODE WINDOW
+   =============================================== */
+
+.software-visual {
+    display: flex;
+    justify-content: center;
+}
+
+.code-window {
+    background: var(--darker-surface);
+    border-radius: 12px;
+    box-shadow: var(--shadow-medium);
+    border: 1px solid rgba(212, 176, 120, 0.2);
+    width: 100%;
+    max-width: 450px;
+    overflow: hidden;
+}
+
+.code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    background: rgba(22, 22, 22, 0.9);
+    border-bottom: 1px solid rgba(212, 176, 120, 0.2);
+}
+
+.code-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.code-btn {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    transition: var(--transition);
+}
+
+.code-btn:hover {
+    transform: scale(1.1);
+}
+
+.code-btn.red { background: #ff5f56; }
+.code-btn.yellow { background: #ffbd2e; }
+.code-btn.green { background: #27ca3f; }
+
+.code-title {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+}
+
+.code-content {
+    padding: 1.5rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    background: rgba(10, 10, 10, 0.5);
+}
+
+.code-line {
+    margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+}
+
+.line-number {
+    color: var(--text-secondary);
+    margin-right: 1rem;
+    min-width: 20px;
+    text-align: right;
+    -webkit-user-select: none;
+    user-select: none;
+    opacity: 0.6;
+}
+
+.code-text {
+    flex: 1;
+}
+
+.keyword {
+    color: #f92672;
+    font-weight: 600;
+}
+
+.variable {
+    color: #a6e22e;
+}
+
+.property {
+    color: #66d9ef;
+}
+
+.string {
+    color: #e6db74;
+}
+
+/* ===============================================
+   SOFTWARE LINKS
+   =============================================== */
+
+.software-links {
+    margin-top: 2rem;
+}
+
+.link-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.link-card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    text-decoration: none;
+    border-radius: 16px;
+    background: var(--card-bg);
+    border: 1px solid rgba(212, 176, 120, 0.2);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.link-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg,
+        rgba(212, 176, 120, 0.05),
+        transparent,
+        rgba(212, 176, 120, 0.05));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.link-card:hover::before {
+    opacity: 1;
+}
+
+.link-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-gold);
+    border-color: rgba(212, 176, 120, 0.4);
+}
+
+.link-icon {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    position: relative;
+    transition: var(--transition);
+}
+
+.link-icon i {
+    font-size: 1.5rem;
+    color: white;
+    transition: var(--transition);
+}
+
+.link-card:hover .link-icon i {
+    transform: scale(1.1);
+}
+
+.github-card .link-icon {
+    background: linear-gradient(135deg, #333, #24292e);
+}
+
+.linkedin-card .link-icon {
+    background: linear-gradient(135deg, #0077b5, #005885);
+}
+
+.email-card .link-icon {
+    background: linear-gradient(135deg, var(--accent-gold), var(--rich-gold));
+}
+
+.link-content {
+    flex: 1;
+}
+
+.link-content h4 {
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.link-content p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 0;
+}
+
+.link-arrow {
+    flex-shrink: 0;
+    color: var(--accent-gold);
+    font-size: 1.1rem;
+    transition: var(--transition);
+}
+
+.link-card:hover .link-arrow {
+    transform: translateX(5px);
+}
+
+/* ===============================================
+   SOFTWARE STATS
+   =============================================== */
+
+.software-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.software-stats .stat-item {
+    text-align: center;
+    padding: 2rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    border: 1px solid rgba(212, 176, 120, 0.2);
+    transition: var(--transition);
+}
+
+.software-stats .stat-item:hover {
+    background: rgba(212, 176, 120, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    border-color: rgba(212, 176, 120, 0.4);
+}
+
+.software-stats .stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent-gold);
+    margin-bottom: 0.5rem;
+}
+
+.software-stats .stat-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+/* ===============================================
+   SOFTWARE DETAILS SECTION
+   =============================================== */
+
+.software-details-section {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(212, 176, 120, 0.2);
+}
+
+.details-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, var(--accent-gold), var(--rich-gold));
+    color: var(--text-primary);
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: var(--transition);
+    box-shadow: var(--shadow-gold);
+}
+
+.details-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(212, 176, 120, 0.4);
+}
+
+/* ===============================================
+   DARK MODE SOFTWARE
+   =============================================== */
+
+[data-theme="dark"] .section.software {
+    background: var(--gradient-dark);
+}
+
+/* ===============================================
+   LIGHT MODE SOFTWARE
+   =============================================== */
+
+[data-theme="light"] .section.software {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+[data-theme="light"] .section.software .section-title {
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .section.software .glass-container {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(184, 149, 95, 0.3);
+}
+
+[data-theme="light"] .link-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(184, 149, 95, 0.2);
+}
+
+[data-theme="light"] .code-window {
+    background: rgba(240, 240, 240, 0.9);
+}
+
+[data-theme="light"] .code-content {
+    background: rgba(250, 250, 250, 0.9);
+}
+
+/* ===============================================
+   MOBILE SOFTWARE RESPONSIVE
+   =============================================== */
+
+@media (max-width: 768px) {
+    .section.software {
+        padding: 4rem 0;
+    }
+
+    .section.software .container {
+        padding: 0 1rem;
+        display: flex;
+        justify-content: center;
+    }
+
+    .section.software .glass-container {
+        padding: 2rem 1.5rem;
+        border-radius: 20px;
+    }
+
+    .section.software .section-title {
+        font-size: 2.2rem;
+        margin-bottom: 0.8rem;
+        letter-spacing: -0.5px;
+    }
+
+    .section.software .section-subtitle {
+        font-size: 1rem;
+        letter-spacing: 1px;
+    }
+
+    .software-content {
+        gap: 2.5rem;
+        margin-top: 2rem;
+    }
+
+    .software-intro {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .software-text h3 {
+        font-size: 1.4rem;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .software-text p {
+        font-size: 1rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .tech-stack h4 {
+        font-size: 1rem;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .tech-icons {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.8rem;
+        justify-items: center;
+    }
+
+    .tech-item {
+        padding: 1rem 0.8rem;
+        gap: 0.5rem;
+    }
+
+    .tech-item i {
+        font-size: 1.8rem;
+    }
+
+    .tech-item span {
+        font-size: 0.8rem;
+    }
+
+    .code-window {
+        max-width: 100%;
+        font-size: 0.8rem;
+    }
+
+    .code-header {
+        padding: 0.8rem 1rem;
+    }
+
+    .code-content {
+        padding: 1rem;
+        font-size: 0.8rem;
+    }
+
+    .link-cards {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .link-card {
+        padding: 1.2rem;
+        gap: 1rem;
+    }
+
+    .link-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .link-icon i {
+        font-size: 1.3rem;
+    }
+
+    .link-content h4 {
+        font-size: 1.1rem;
+    }
+
+    .link-content p {
+        font-size: 0.9rem;
+    }
+
+    .software-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .software-stats .stat-item {
+        padding: 1.5rem 1rem;
+    }
+
+    .software-stats .stat-number {
+        font-size: 2rem;
+    }
+
+    .software-stats .stat-label {
+        font-size: 0.8rem;
+    }
+
+    .details-btn {
+        padding: 0.8rem 2rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .section.software .container {
+        padding: 0 0.75rem;
+        display: flex;
+        justify-content: center;
+    }
+
+    .section.software .glass-container {
+        padding: 1.5rem 1rem;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .section.software .section-title {
+        font-size: 1.8rem;
+    }
+
+    .software-text h3 {
+        font-size: 1.2rem;
+    }
+
+    .tech-icons {
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
+    }
+
+    .tech-item {
+        padding: 0.8rem;
+    }
+
+    .tech-item i {
+        font-size: 1.5rem;
+    }
+
+    .software-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .link-card {
+        padding: 1rem;
+        gap: 0.8rem;
+    }
+
+    .link-icon {
+        width: 45px;
+        height: 45px;
+    }
+
+    .link-icon i {
+        font-size: 1.1rem;
+    }
+}

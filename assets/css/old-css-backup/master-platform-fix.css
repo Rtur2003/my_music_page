@@ -1,0 +1,450 @@
+/* ===============================================
+   MASTER PLATFORM LINKS FIX - TÜM ÇAKIŞMALARI ÇÖZ
+   Bu dosya tüm platform link çakışmalarını çözer
+   =============================================== */
+
+/* PLATFORM LİNK TEMEL STILLER - EN YÜKSEK ÖNCELİK */
+.platform-links {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+}
+
+.platform-link,
+.platform-links .platform-link,
+.platform-links a {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    position: relative;
+    font-size: 0;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    background: transparent;
+    border: 2px solid transparent;
+    text-indent: -9999px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.platform-link::before,
+.platform-link::after {
+    content: none;
+}
+
+/* İCON STİLLERİ */
+.platform-link i,
+.platform-links .platform-link i,
+.platform-links a i {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    z-index: 2;
+    position: relative;
+    display: inline-block;
+    line-height: 1;
+    pointer-events: none;
+    font-family: "Font Awesome 6 Brands";
+    font-weight: 400;
+}
+
+/* PLATFORM RENK TANIMLARI - Sadeleştirilmiş */
+.platform-link[href*="spotify"] {
+    background: #1db954;
+}
+
+.platform-link[href*="youtube"] {
+    background: #ff0000;
+}
+
+.platform-link[href*="apple"] {
+    background: #000000;
+}
+
+.platform-link[href*="soundcloud"] {
+    background: #ff5500;
+}
+
+/* HOVER EFEKTLER - Daha yumuşak */
+.platform-link:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0.9;
+}
+
+/* MOBİL ÖZEL AYARLAR */
+@media (max-width: 768px) {
+    .platform-link,
+    .platform-links .platform-link {
+        width: 50px;
+        height: 50px;
+        border-radius: 15px;
+    }
+
+    .platform-link i,
+    .platform-links .platform-link i {
+        font-size: 1.2rem;
+    }
+
+    .platform-link:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .platform-link:active {
+        transform: scale(0.95);
+        transition: transform 0.1s ease-out;
+    }
+}
+
+/* MUSIC CARD PLATFORM LİNKS */
+.music-card-platforms,
+.music-card .platforms {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0.5rem 0;
+}
+
+.music-card-platforms .card-platform-link,
+.music-card .card-platform-link {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.music-card-platforms .card-platform-link i,
+.music-card .card-platform-link i {
+    font-size: 14px;
+    color: white;
+    font-family: "Font Awesome 6 Brands";
+    font-weight: 400;
+    position: relative;
+    z-index: 2;
+}
+
+/* Music card mobile fixes */
+@media (max-width: 768px) {
+    .music-card-platforms,
+    .music-card .platforms {
+        justify-content: center;
+        margin: 1rem 0 0.5rem 0;
+    }
+
+    .music-card-platforms .card-platform-link,
+    .music-card .card-platform-link {
+        width: 28px;
+        height: 28px;
+    }
+
+    .music-card-platforms .card-platform-link i,
+    .music-card .card-platform-link i {
+        font-size: 12px;
+    }
+}
+
+/* ICON UNICODE FORCE */
+.platform-link[href*="spotify"] i:before,
+.spotify-link i:before {
+    content: "\f1bc";
+}
+
+.platform-link[href*="youtube"] i:before,
+.youtube-link i:before {
+    content: "\f167";
+}
+
+.platform-link[href*="apple"] i:before,
+.apple-link i:before {
+    content: "\f179";
+}
+
+.platform-link[href*="soundcloud"] i:before,
+.soundcloud-link i:before {
+    content: "\f1a6";
+}
+
+/* SOCIAL LINKS IN HERO SECTION */
+.social-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+}
+
+.social-link,
+.social-links a {
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 0;
+    overflow: hidden;
+    transition: all 0.2s ease-out;
+    border: 2px solid var(--border-color);
+    background: var(--card-bg);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.social-link i,
+.social-links a i {
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    font-family: "Font Awesome 6 Brands";
+    font-weight: 400;
+}
+
+.social-link:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 15px rgba(212, 176, 120, 0.2);
+}
+
+/* Mobile social links */
+@media (max-width: 768px) {
+    .social-links {
+        gap: 0.75rem;
+        margin: 1.5rem 0;
+    }
+
+    .social-link,
+    .social-links a {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+    }
+
+    .social-link i,
+    .social-links a i {
+        font-size: 1rem;
+    }
+
+    .social-link:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .social-link:active {
+        transform: scale(0.95);
+    }
+}
+
+/* COMING SOON CARDS */
+.coming-soon-message {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.coming-soon-card {
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    max-width: 500px;
+    transition: all 0.3s ease;
+}
+
+.coming-soon-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.coming-soon-icon {
+    font-size: 3rem;
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.coming-soon-card h3 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.coming-soon-card p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.notify-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--gradient-gold);
+    color: var(--primary-bg);
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.notify-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(212, 176, 120, 0.3);
+}
+
+.hidden {
+    display: none;
+}
+
+/* SUPPORT BANNER */
+.support-banner {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--card-bg);
+    border: 2px solid var(--accent-color);
+    border-radius: 15px;
+    padding: 1rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    max-width: 350px;
+    display: none;
+    flex-direction: column;
+    animation: slideInUp 0.5s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.support-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.support-icon {
+    font-size: 2rem;
+    color: var(--accent-color);
+}
+
+.support-text h3 {
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+}
+
+.support-text p {
+    color: var(--text-secondary);
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.support-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--gradient-gold);
+    color: var(--primary-bg);
+    padding: 0.75rem 1rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    transition: all 0.3s ease;
+}
+
+.support-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(212, 176, 120, 0.3);
+}
+
+.support-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.support-close:hover {
+    background: var(--tertiary-bg);
+    color: var(--text-primary);
+}
+
+/* Mobile support banner */
+@media (max-width: 768px) {
+    .support-banner {
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        border-radius: 10px;
+        padding: 0.75rem;
+    }
+
+    /* Move floating actions when support banner is visible */
+    .floating-actions {
+        bottom: 120px !important;
+        right: 1rem !important;
+        z-index: 950 !important;
+    }
+
+    .support-content {
+        gap: 0.75rem;
+    }
+
+    .support-icon {
+        font-size: 1.5rem;
+    }
+
+    .support-text h3 {
+        font-size: 0.9rem;
+    }
+
+    .support-text p {
+        font-size: 0.8rem;
+    }
+
+    .support-btn {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.85rem;
+    }
+}

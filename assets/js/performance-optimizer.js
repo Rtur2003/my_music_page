@@ -136,8 +136,7 @@ class PerformanceOptimizer {
     preloadCriticalResources() {
         // Preload critical CSS that wasn't inlined
         const criticalCSS = [
-            'assets/css/hasan-arthur-design.css',
-            'assets/css/theme-consistency.css'
+            // Missing CSS files removed - using section-based structure
         ];
 
         criticalCSS.forEach(href => {

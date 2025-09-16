@@ -1,0 +1,534 @@
+/* ===============================================
+   07 - UPDATES SECTION
+   Classes: social-updates, container, social-updates-section,
+            updates-header, updates-accent, updates-title, updates-subtitle,
+            social-feed, social-post, post-header, platform-icon,
+            platform-name, post-content, post-location, post-stats,
+            stat, subscription-section, subscription-header,
+            subscription-form, email-input, subscribe-btn, privacy-note
+   =============================================== */
+
+/* ===============================================
+   DESKTOP UPDATES SECTION
+   =============================================== */
+
+.section.social-updates {
+    padding: 0;
+    position: relative;
+    background: transparent;
+}
+
+.section.social-updates .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.social-updates-section {
+    background: linear-gradient(135deg,
+        rgba(10, 10, 10, 0.95),
+        rgba(15, 15, 15, 0.9));
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border-radius: 0;
+    padding: 4rem 3rem;
+    margin: 0 -2rem;
+    position: relative;
+    border-top: 1px solid rgba(212, 176, 120, 0.2);
+    border-bottom: 1px solid rgba(212, 176, 120, 0.2);
+    overflow: hidden;
+}
+
+.social-updates-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 0%,
+        rgba(212, 176, 120, 0.1) 0%,
+        transparent 50%);
+    z-index: 0;
+}
+
+.social-updates-section > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* ===============================================
+   UPDATES HEADER
+   =============================================== */
+
+.updates-header {
+    margin-bottom: 3rem;
+    position: relative;
+    text-align: center;
+}
+
+.updates-accent {
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-gold), var(--rich-gold));
+    margin: 0 auto 1.5rem;
+    border-radius: 2px;
+}
+
+.updates-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.8rem 0;
+    letter-spacing: -0.5px;
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.updates-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin: 0;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ===============================================
+   SOCIAL FEED
+   =============================================== */
+
+.social-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.social-post {
+    background: rgba(255, 255, 255, 0.05);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 1.5rem;
+    border: 1px solid rgba(212, 176, 120, 0.2);
+    border-left: 4px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.social-post::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.02),
+        transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.social-post:hover::before {
+    opacity: 1;
+}
+
+.social-post:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    border-color: rgba(212, 176, 120, 0.4);
+}
+
+/* Platform-specific styles */
+.social-post.instagram {
+    border-left-color: #E4405F;
+}
+
+.social-post.instagram:hover {
+    box-shadow: 0 8px 25px rgba(228, 64, 95, 0.2);
+}
+
+.social-post.twitter {
+    border-left-color: #1DA1F2;
+}
+
+.social-post.twitter:hover {
+    box-shadow: 0 8px 25px rgba(29, 161, 242, 0.2);
+}
+
+.social-post.youtube {
+    border-left-color: #FF0000;
+}
+
+.social-post.youtube:hover {
+    box-shadow: 0 8px 25px rgba(255, 0, 0, 0.2);
+}
+
+/* ===============================================
+   POST HEADER
+   =============================================== */
+
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.platform-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--text-secondary);
+    transition: var(--transition);
+}
+
+.social-post.instagram .platform-icon {
+    color: #E4405F;
+}
+
+.social-post.twitter .platform-icon {
+    color: #1DA1F2;
+}
+
+.social-post.youtube .platform-icon {
+    color: #FF0000;
+}
+
+.platform-name {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* ===============================================
+   POST CONTENT
+   =============================================== */
+
+.post-content p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0 0 1rem 0;
+}
+
+.post-location {
+    color: var(--accent-gold);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.post-location::before {
+    content: '📍';
+    font-size: 0.8rem;
+}
+
+.post-stats {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.stat {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition: var(--transition);
+}
+
+.stat:hover {
+    color: var(--accent-gold);
+}
+
+/* ===============================================
+   SUBSCRIPTION SECTION
+   =============================================== */
+
+.subscription-section {
+    background: rgba(255, 255, 255, 0.03);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    padding: 2.5rem;
+    border-radius: 20px;
+    border: 1px solid rgba(212, 176, 120, 0.2);
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.subscription-header {
+    margin-bottom: 2rem;
+}
+
+.subscription-header h3 {
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subscription-header p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.subscription-form {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    align-items: stretch;
+}
+
+.email-input {
+    flex: 1;
+    background: rgba(10, 10, 10, 0.5);
+    border: 1px solid rgba(212, 176, 120, 0.3);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    color: var(--text-primary);
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.email-input:focus {
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 0 3px rgba(212, 176, 120, 0.1);
+}
+
+.email-input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+.subscribe-btn {
+    background: linear-gradient(135deg, var(--accent-gold), var(--rich-gold));
+    border: none;
+    border-radius: 12px;
+    padding: 1rem 2rem;
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    box-shadow: var(--shadow-gold);
+}
+
+.subscribe-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(212, 176, 120, 0.4);
+}
+
+.subscribe-btn:active {
+    transform: translateY(0);
+}
+
+.privacy-note {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin: 0;
+    text-align: center;
+    opacity: 0.8;
+}
+
+/* ===============================================
+   DARK MODE UPDATES
+   =============================================== */
+
+[data-theme="dark"] .social-updates-section {
+    background: linear-gradient(135deg,
+        rgba(10, 10, 10, 0.95),
+        rgba(15, 15, 15, 0.9));
+}
+
+/* ===============================================
+   LIGHT MODE UPDATES
+   =============================================== */
+
+[data-theme="light"] .social-updates-section {
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.95),
+        rgba(248, 249, 250, 0.9));
+    border-color: rgba(184, 149, 95, 0.3);
+}
+
+[data-theme="light"] .social-post {
+    background: rgba(255, 255, 255, 0.7);
+    border-color: rgba(184, 149, 95, 0.2);
+}
+
+[data-theme="light"] .subscription-section {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(184, 149, 95, 0.2);
+}
+
+[data-theme="light"] .email-input {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(184, 149, 95, 0.3);
+}
+
+/* ===============================================
+   MOBILE UPDATES RESPONSIVE
+   =============================================== */
+
+@media (max-width: 768px) {
+    .section.social-updates .container {
+        padding: 0 1rem;
+    }
+
+    .social-updates-section {
+        padding: 3rem 1.5rem;
+        margin: 0 -1rem;
+        border-radius: 0;
+    }
+
+    .updates-header {
+        margin-bottom: 2rem;
+    }
+
+    .updates-accent {
+        width: 60px;
+        height: 3px;
+        margin-bottom: 1rem;
+    }
+
+    .updates-title {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .updates-subtitle {
+        font-size: 1rem;
+    }
+
+    .social-feed {
+        gap: 1rem;
+        margin-bottom: 3rem;
+    }
+
+    .social-post {
+        padding: 1.25rem;
+        border-radius: 12px;
+    }
+
+    .post-header {
+        gap: 0.5rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .platform-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .platform-name {
+        font-size: 0.9rem;
+    }
+
+    .post-content p {
+        font-size: 0.9rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .post-location {
+        font-size: 0.8rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .post-stats {
+        gap: 1rem;
+    }
+
+    .stat {
+        font-size: 0.8rem;
+    }
+
+    .subscription-section {
+        padding: 2rem 1.5rem;
+        border-radius: 16px;
+    }
+
+    .subscription-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .subscription-header h3 {
+        font-size: 1.3rem;
+    }
+
+    .subscription-header p {
+        font-size: 0.9rem;
+    }
+
+    .subscription-form {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .email-input {
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+        border-radius: 10px;
+    }
+
+    .subscribe-btn {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.9rem;
+        border-radius: 10px;
+    }
+
+    .privacy-note {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .social-updates-section {
+        padding: 2rem 1rem;
+    }
+
+    .updates-title {
+        font-size: 1.8rem;
+    }
+
+    .social-post {
+        padding: 1rem;
+    }
+
+    .subscription-section {
+        padding: 1.5rem 1rem;
+    }
+
+    .subscription-header h3 {
+        font-size: 1.2rem;
+    }
+
+    .email-input,
+    .subscribe-btn {
+        padding: 0.7rem 0.9rem;
+        font-size: 0.85rem;
+    }
+}
