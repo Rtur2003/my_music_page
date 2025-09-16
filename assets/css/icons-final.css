@@ -177,6 +177,7 @@
     font-variant: normal !important;
     text-rendering: auto !important;
     -webkit-font-smoothing: antialiased !important;
+    line-height: 4 !important;
 }
 
 /* Brands icons */
