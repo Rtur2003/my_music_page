@@ -13,6 +13,14 @@
           "scrollbar-width: thin"
         ]
       }
+    ],
+    "compat-api/html": [
+      "default",
+      {
+        "ignore": [
+          "link[fetchpriority]"
+        ]
+      }
     ]
   }
 }
