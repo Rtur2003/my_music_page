@@ -1,0 +1,514 @@
+/* ===============================================
+   UNIFIED MOBILE CSS - ALL MOBILE FIXES IN ONE FILE
+   Combines: mobile-optimization, mobile-layout-fix,
+            mobile-player-fix, mobile-animation-fix, mobile-icon-fixes
+   =============================================== */
+
+/* Base Mobile Styles (max-width: 768px) */
+@media (max-width: 768px) {
+
+    /* ===============================================
+       GLOBAL MOBILE FIXES
+       =============================================== */
+
+    body {
+        overflow-x: hidden !important;
+    }
+
+    .container {
+        max-width: 100% !important;
+        padding: 0 1rem !important;
+        box-sizing: border-box !important;
+    }
+
+    /* ===============================================
+       NAVIGATION & HEADER
+       =============================================== */
+
+    .mobile-menu-toggle {
+        display: flex;
+        position: relative;
+        z-index: 1001;
+    }
+
+    .nav-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(10, 10, 10, 0.98);
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(212, 176, 120, 0.2);
+        flex-direction: column;
+        padding: 1rem 2rem;
+        margin: 0;
+        box-shadow: var(--shadow-strong);
+        transform: translateY(-100%);
+        opacity: 0;
+        z-index: 9999;
+        visibility: hidden;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav-menu.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+        z-index: 9999;
+    }
+
+    /* ===============================================
+       HERO SECTION
+       =============================================== */
+
+    .hero-section {
+        padding: 4rem 1rem 2rem;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .hero-content {
+        text-align: center;
+        max-width: 100%;
+    }
+
+    /* ===============================================
+       MUSIC SECTION
+       =============================================== */
+
+    #music .container {
+        padding: 0 1rem !important;
+        margin: 0 auto !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    #music .glass-container {
+        padding: 1rem !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .modern-player-card {
+        position: relative !important;
+        z-index: 5 !important;
+        background: var(--card-bg) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(212, 176, 120, 0.2) !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        transform: translateX(0) !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+        padding: 1rem !important;
+        overflow: hidden !important;
+    }
+
+    .modern-player-card h3,
+    .modern-player-card p,
+    .modern-player-card .card-text {
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+        max-width: 100% !important;
+    }
+
+    .modern-player-card .card-text {
+        white-space: normal !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+    }
+
+    /* Additional music section text overflow fixes */
+    #music * {
+        max-width: 100% !important;
+        word-wrap: break-word !important;
+        word-break: break-word !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Fix music cards content alignment and prevent right overflow */
+    #music .music-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 1rem !important;
+        text-align: center !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    #music .music-card > * {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    #music .music-card,
+    #music .platform-link,
+    #music .song-item {
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+    }
+
+    #music .music-card h3,
+    #music .music-card h4,
+    #music .platform-link span,
+    #music .song-title {
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+        max-width: 100% !important;
+    }
+
+    /* ===============================================
+       CONTACT SECTION ICONS
+       =============================================== */
+
+    /* Contact items icon fixes */
+    .contact-item {
+        display: flex !important;
+        align-items: center !important;
+        gap: 1rem !important;
+        padding: 1rem 0 !important;
+    }
+
+    .contact-item i {
+        flex-shrink: 0 !important;
+        width: 40px !important;
+        height: 40px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: var(--accent-color) !important;
+        color: white !important;
+        border-radius: 50% !important;
+        font-size: 16px !important;
+        margin: 0 !important;
+        position: relative !important;
+    }
+
+    /* Contact social links */
+    .social-link {
+        width: 44px !important;
+        height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 50% !important;
+        text-decoration: none !important;
+        transition: all 0.3s ease !important;
+        position: relative !important;
+    }
+
+    .social-link i {
+        font-size: 2rem !important;
+        color: white !important;
+        position: relative !important;
+        z-index: 2 !important;
+        margin: 0 !important;
+        display: block !important;
+        text-align: center !important;
+        line-height: 1 !important;
+    }
+
+    /* ===============================================
+       SOFTWARE SECTION ICONS
+       =============================================== */
+
+    .link-card {
+        display: flex !important;
+        align-items: center !important;
+        gap: 1rem !important;
+        padding: 1.5rem !important;
+        text-decoration: none !important;
+        border-radius: 12px !important;
+        background: var(--card-bg) !important;
+        border: 1px solid rgba(212, 176, 120, 0.2) !important;
+        transition: all 0.3s ease !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .link-icon {
+        flex-shrink: 0 !important;
+        width: 48px !important;
+        height: 48px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 12px !important;
+        position: relative !important;
+    }
+
+    .link-icon i {
+        font-size: 20px !important;
+        color: white !important;
+        position: relative !important;
+        z-index: 2 !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        line-height: 1 !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    /* Software section specific styling */
+    #software .link-icon i {
+        font-size: 2rem !important;
+        color: white !important;
+        position: relative !important;
+        z-index: 2 !important;
+        transform: translateY(8px) !important;
+        margin: 0 !important;
+        display: block !important;
+        text-align: center !important;
+        line-height: 1.5 !important;
+        left: 0 !important;
+        top: 0 !important;
+        right: auto !important;
+        bottom: auto !important;
+    }
+
+    /* ===============================================
+       GALLERY SECTION
+       =============================================== */
+
+    #gallery .link-card {
+        display: flex !important;
+        align-items: center !important;
+        gap: 1rem !important;
+        padding: 1.5rem !important;
+        text-decoration: none !important;
+        border-radius: 12px !important;
+        background: var(--card-bg) !important;
+        border: 1px solid rgba(212, 176, 120, 0.2) !important;
+        transition: all 0.3s ease !important;
+        margin-bottom: 1rem !important;
+    }
+
+    #gallery .link-icon {
+        flex-shrink: 0 !important;
+        width: 48px !important;
+        height: 48px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 12px !important;
+        position: relative !important;
+    }
+
+    #gallery .link-icon i {
+        font-size: 1.5rem !important;
+        color: white !important;
+        position: relative !important;
+        z-index: 2 !important;
+        margin: 0 !important;
+        display: block !important;
+        text-align: center !important;
+        line-height: 1 !important;
+    }
+
+    /* ===============================================
+       ANIMATIONS & TRANSITIONS
+       =============================================== */
+
+    /* Slow down animations for mobile */
+    * {
+        animation-duration: 0.6s !important;
+        transition-duration: 0.4s !important;
+    }
+
+    .music-card,
+    .clickable-card,
+    .link-card {
+        transition: all 0.5s ease !important;
+        animation-duration: 0.8s !important;
+    }
+
+    /* Mobile menu animations */
+    .mobile-menu-toggle {
+        transition: all 0.3s ease !important;
+    }
+
+    /* ===============================================
+       ICON FONT LOADING
+       =============================================== */
+
+    /* Force icon display */
+    .fa, .fas, .fab, .far, .fal, .fad, .fak {
+        display: inline-block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        font-style: normal !important;
+        font-variant: normal !important;
+        text-rendering: auto !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+
+    /* Ensure icons are always visible */
+    .contact-item i:before,
+    .link-icon i:before,
+    .social-link i:before {
+        font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+        font-weight: 900 !important;
+        display: inline-block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    /* Fix for brands icons specifically */
+    .fab:before,
+    .fa-brands:before {
+        font-family: "Font Awesome 6 Brands" !important;
+        font-weight: 400 !important;
+        display: inline-block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    /* ===============================================
+       HOVER EFFECTS & INTERACTIONS
+       =============================================== */
+
+    .link-card:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .social-link:hover {
+        transform: scale(1.1) !important;
+    }
+
+    /* Social link colors */
+    .social-link[href*="spotify"] {
+        background: #1db954 !important;
+    }
+
+    .social-link[href*="youtube"] {
+        background: #ff0000 !important;
+    }
+
+    .social-link[href*="instagram"] {
+        background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%) !important;
+    }
+
+    .social-link[href*="x.com"], .social-link[href*="twitter"] {
+        background: #000000 !important;
+    }
+
+    .social-link[href*="tiktok"] {
+        background: #000000 !important;
+    }
+
+    .social-link[href*="linkedin"] {
+        background: #0077b5 !important;
+    }
+
+    /* Card background colors */
+    .github-card .link-icon {
+        background: #333 !important;
+    }
+
+    .linkedin-card .link-icon {
+        background: #0077b5 !important;
+    }
+
+    .email-card .link-icon {
+        background: var(--accent-color) !important;
+    }
+}
+
+/* ===============================================
+   SMALL MOBILE DEVICES (max-width: 575px)
+   =============================================== */
+
+@media (max-width: 575px) {
+    .hero-section {
+        padding: 4rem 1rem 2rem;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .hero-content {
+        text-align: center;
+        max-width: 100%;
+    }
+
+    .container {
+        padding: 0 0.5rem !important;
+    }
+
+    .link-card {
+        padding: 1rem !important;
+    }
+
+    .link-icon {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .link-icon i {
+        font-size: 16px !important;
+    }
+
+    #software .link-icon i {
+        font-size: 1.5rem !important;
+    }
+}
+
+/* ===============================================
+   TABLET VIEW (769px - 1024px)
+   =============================================== */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .link-card {
+        padding: 1.25rem !important;
+    }
+
+    .link-icon {
+        width: 44px !important;
+        height: 44px !important;
+    }
+
+    .link-icon i {
+        font-size: 18px !important;
+    }
+
+    .contact-item i {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 14px !important;
+    }
+
+    .social-link {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .social-link i {
+        font-size: 16px !important;
+    }
+}
