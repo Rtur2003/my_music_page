@@ -18,8 +18,8 @@ class SimpleLanguageSystem {
                 
                 // Hero Section
                 'hero.title': 'HASAN ARTHUR',
-                'hero.subtitle': 'Music Producer & Developer',
-                'hero.description': 'Hey there! I create cinematic music that tells stories and build cool AI projects. Every track I make has a piece of my soul in it, and every line of code solves a real problem.',
+                'hero.subtitle': 'Pianist, Composer & Computer Engineer',
+                'hero.description': 'I compose cinematic ambient music on piano and study Computer Engineering. From autonomous vehicle vision systems to open-source tools, I blend AI assistance with hands-on coding to create solutions that matter.',
                 'hero.listen': 'Check Out My Music',
                 'hero.about': 'Get to Know Me',
                 
@@ -31,7 +31,7 @@ class SimpleLanguageSystem {
                 
                 // Music Section
                 'music.title': 'My Music',
-                'music.subtitle': 'Cinematic Compositions & Film Score Reimaginings',
+                'music.subtitle': 'Piano-driven Cinematic Ambient Compositions',
                 'music.tracks.title': 'Singles',
                 'music.albums.title': 'Albums',
                 'music.player.ready': 'Music player ready for streaming from platforms.',
@@ -79,12 +79,12 @@ class SimpleLanguageSystem {
                 // About Section
                 'about.title': 'Who Am I?',
                 'about.subtitle': 'Music, Code & Everything In Between',
-                'about.text': 'Born in 2003, I\'m that guy who codes by day and makes beats by night! I study Computer Science and love creating atmospheric music that makes you feel something. Whether I\'m training AI models or composing the next "Interstellar but my version" 😄, I pour my heart into everything I do.',
+                'about.text': 'Born in 2003, I\'m a Computer Engineering student who plays piano and composes cinematic ambient music. I\'ve worked on autonomous vehicle computer vision, target detection models, and build web applications. I create open-source tools on GitHub, leveraging AI while keeping hands-on control over every project.',
                 
                 // Software Section
                 'software.title': 'My Code Adventures',
                 'software.subtitle': 'Where creativity meets algorithms',
-                'software.description': 'I\'m a Computer Science student who loves building AI tools and web apps. From YouTube comment generators to computer vision projects, I create stuff that actually solves problems (and sometimes just for fun 😅).',
+                'software.description': 'Computer Engineering student specializing in autonomous vehicle vision systems and target detection models. I build full-stack web applications (Python, TypeScript, React, Angular) and create practical open-source tools. I use AI assistance strategically while maintaining hands-on development skills.',
                 'software.technologies': 'My Toolbox',
                 'software.details': 'See All My Projects',
                 'software.stats.commits': 'GitHub Commits',
@@ -145,8 +145,8 @@ class SimpleLanguageSystem {
                 
                 // Hero Section
                 'hero.title': 'HASAN ARTHUR',
-                'hero.subtitle': 'Müzik Prodüktörü & Yazılımcı',
-                'hero.description': 'Merhaba! Hikaye anlatan sinematik müzikler yapıyorum ve havalı AI projeleri geliştiriyorum. Yaptığım her parçada ruhumdan bir parça var, yazdığım her kod gerçek problemleri çözüyor.',
+                'hero.subtitle': 'Piyanist, Besteci & Bilgisayar Mühendisi',
+                'hero.description': 'Piyano ile sinematik ambient müzikler besteliyorum ve Bilgisayar Mühendisliği okuyorum. İnsansız araç görüntü sistemlerinden açık kaynak araçlara kadar, AI desteği ile hands-on kodlama birleştirerek anlamlı çözümler üretiyorum.',
                 'hero.listen': 'Müziklerimi Keşfet',
                 'hero.about': 'Beni Tanı',
                 
@@ -158,7 +158,7 @@ class SimpleLanguageSystem {
                 
                 // Music Section
                 'music.title': 'Müziklerim',
-                'music.subtitle': 'Sinematik Kompozisyonlar ve Film Müziği Yorumları',
+                'music.subtitle': 'Piyano Temelli Sinematik Ambient Kompozisyonlar',
                 'music.tracks.title': 'Tekli Şarkılar',
                 'music.albums.title': 'Albümler',
                 'music.player.ready': 'Müzik çalar platformlardan akış için hazır.',
@@ -206,12 +206,12 @@ class SimpleLanguageSystem {
                 // About Section
                 'about.title': 'Ben Kimim?',
                 'about.subtitle': 'Müzik, Kod ve Aradaki Her Şey',
-                'about.text': '2003 doğumluyum, gündüz kod yazan gece beat yapan tipim! Bilgisayar Mühendisliği okuyorum ve insanı hissettiren atmosferik müzikler yapmayı seviyorum. AI modellerini eğitirken de olsa, "Interstellar but my version" gibi parçalar bestelerken de 😄, yaptığım her şeye kalbimi koyuyorum.',
+                'about.text': '2003 doğumluyum, Bilgisayar Mühendisliği öğrencisiyim, piyano çalıyor ve sinematik ambient müzikler besteliyorum. İnsansız araç bilgisayar görüsü, hedef tespit modelleri üzerinde çalıştım ve web uygulamaları geliştiriyorum. GitHub\'da açık kaynak araçlar üretiyor, AI desteği alırken her projeyi elimle kontrol ediyorum.',
                 
                 // Software Section
                 'software.title': 'Kod Maceraları',
                 'software.subtitle': 'Yaratıcılığın algoritmayla buluştuğu yer',
-                'software.description': 'Bilgisayar Mühendisliği öğrencisiyim ve AI araçları ile web uygulamaları yapmayı seviyorum. YouTube yorum üreticilerinden bilgisayar görüsü projelerine kadar, gerçek problemleri çözen şeyler yapıyorum (bazen de sadece eğlence için 😅).',
+                'software.description': 'Bilgisayar Mühendisliği öğrencisiyim, insansız araç görüntü sistemleri ve hedef tespit modelleri konusunda uzmanlaşıyorum. Full-stack web uygulamaları (Python, TypeScript, React, Angular) geliştiriyor ve pratik açık kaynak araçlar üretiyorum. AI desteğini stratejik kullanıp hands-on geliştirme becerilerimi koruyorum.',
                 'software.technologies': 'Araç Çantam',
                 'software.details': 'Tüm Projelerime Bak',
                 'software.stats.commits': 'GitHub Commit',
