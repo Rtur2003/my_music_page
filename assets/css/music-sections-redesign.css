@@ -15,8 +15,8 @@
     margin-bottom: 2.5rem;
     text-align: center;
     background: linear-gradient(135deg, #ffffff 0%, #d4b078 100%);
-    background-clip: text;
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 0 4px 20px rgba(212, 176, 120, 0.3);
     letter-spacing: -1px;
@@ -115,6 +115,7 @@
     justify-content: center;
     opacity: 0;
     transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
 }
 
@@ -215,6 +216,7 @@
     border-radius: 12px;
     text-decoration: none;
     transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border: 2px solid transparent;
 }

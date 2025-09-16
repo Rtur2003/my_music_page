@@ -74,9 +74,8 @@
 .hero-profile-img,
 .artwork-image {
     image-rendering: optimizeSpeed;
-    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -webkit-optimize-contrast; /* Edge 79+ compatible */
     image-rendering: optimize-contrast;
-    image-rendering: crisp-edges;
 
     /* Prevent layout shift */
     contain: layout;
@@ -197,6 +196,6 @@
     .hero-profile-img,
     .artwork-image {
         -webkit-print-color-adjust: exact;
-        color-adjust: exact;
+        print-color-adjust: exact;
     }
 }

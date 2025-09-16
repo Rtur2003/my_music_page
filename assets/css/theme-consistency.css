@@ -6,10 +6,10 @@
 /* CSS Custom Properties - Theme Variables */
 :root {
     /* Dark Theme (Default) */
-    --primary-bg: #0a0a0a;
-    --secondary-bg: #1a1a1a;
-    --tertiary-bg: #2d2d2d;
-    --card-bg: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    --primary-bg: radial-gradient(ellipse at center, #0f0f0f 0%, #050505 70%, #000000 100%);
+    --secondary-bg: radial-gradient(circle at top right, #1a1a1a 0%, #0f0f0f 50%, #0a0a0a 100%);
+    --tertiary-bg: linear-gradient(145deg, #2d2d2d 0%, #1a1a1a 50%, #0f0f0f 100%);
+    --card-bg: linear-gradient(135deg, rgba(26,26,26,0.9) 0%, rgba(45,45,45,0.8) 50%, rgba(26,26,26,0.9) 100%);
 
     --text-primary: #ffffff;
     --text-secondary: #b0b0b0;
@@ -29,9 +29,12 @@
     --shadow-gold: 0 8px 24px rgba(212, 176, 120, 0.3);
 
     /* Gradient definitions */
-    --gradient-primary: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-    --gradient-gold: linear-gradient(135deg, #d4b078 0%, #f4d699 100%);
-    --gradient-overlay: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 100%);
+    --gradient-primary: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+    --gradient-gold: linear-gradient(135deg, #d4b078 0%, #f4d699 50%, #d4b078 100%);
+    --gradient-overlay: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.6) 100%);
+    --gradient-vignette: radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, 0.3) 70%, rgba(0, 0, 0, 0.8) 100%);
+    --gradient-hero: radial-gradient(ellipse 120% 80% at 50% 20%, rgba(212, 176, 120, 0.1) 0%, transparent 50%),
+                     linear-gradient(145deg, #0a0a0a 0%, #050505 50%, #000000 100%);
 }
 
 /* Light Theme Overrides */
@@ -77,6 +80,7 @@ body {
 .sonic-nav {
     background: var(--card-bg) !important;
     border-bottom: 1px solid var(--border-color) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
     backdrop-filter: blur(20px) !important;
 }
 
@@ -90,13 +94,63 @@ body {
     color: var(--accent-gold) !important;
 }
 
-/* Cards and containers */
+/* Cards and containers with enhanced gradients */
 .modern-player-card,
 .music-card,
 .footer-section {
     background: var(--card-bg) !important;
     border: 1px solid var(--border-color) !important;
     box-shadow: var(--shadow-medium) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.modern-player-card::before,
+.music-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top left, rgba(212, 176, 120, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.modern-player-card > *,
+.music-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Section backgrounds */
+.music-section,
+.about-section,
+.gallery-section {
+    background: var(--secondary-bg) !important;
+    position: relative;
+}
+
+.music-section::before,
+.about-section::before,
+.gallery-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, transparent 0%, rgba(212, 176, 120, 0.02) 50%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.music-section > *,
+.about-section > *,
+.gallery-section > * {
+    position: relative;
+    z-index: 1;
 }
 
 /* Text consistency */
@@ -279,4 +333,92 @@ input:focus, textarea:focus, select:focus {
 .theme-transition *:after {
     transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1) !important;
     transition-delay: 0s !important;
+}
+
+/* Enhanced body background with vignette */
+body {
+    background: var(--primary-bg) !important;
+    position: relative;
+    min-height: 100vh;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-vignette);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Hero section with enhanced gradient */
+.sonic-hero {
+    background: var(--gradient-hero) !important;
+    position: relative;
+}
+
+.sonic-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-vignette);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.sonic-hero > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Utility classes for inline styles */
+.display-contents {
+    display: contents;
+}
+
+.heart-color {
+    color: var(--accent-gold);
+}
+
+.progress-65 {
+    width: 65%;
+}
+
+/* Footer with gradient overlay */
+.footer-section {
+    background: var(--tertiary-bg) !important;
+}
+
+.footer-section::before {
+    background: linear-gradient(45deg, rgba(212, 176, 120, 0.03) 0%, transparent 30%, rgba(212, 176, 120, 0.01) 100%);
+}
+
+/* Enhanced glass containers */
+.glass-container {
+    background: var(--card-bg) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at bottom right, rgba(212, 176, 120, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.glass-container > * {
+    position: relative;
+    z-index: 1;
 }

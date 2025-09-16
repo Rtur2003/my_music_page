@@ -170,6 +170,7 @@
     text-decoration: none;
     box-shadow: 0 8px 20px rgba(212, 176, 120, 0.4);
     transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border: 2px solid rgba(255, 255, 255, 0.1);
 }
@@ -208,8 +209,8 @@
 .animate-text {
     background: linear-gradient(45deg, var(--text-primary), var(--accent-gold), var(--text-primary));
     background-size: 300% 300%;
-    background-clip: text;
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: textShimmer 3s ease-in-out infinite;
 }
@@ -361,6 +362,7 @@
     visibility: hidden;
     transition: all 0.3s;
     z-index: 1000;
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow-medium);

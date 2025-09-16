@@ -70,8 +70,8 @@ section.animate-in {
     color: var(--text-primary);
     margin-bottom: 1rem;
     background: var(--gradient-gold);
-    background-clip: text;
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 

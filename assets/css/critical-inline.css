@@ -26,6 +26,7 @@ body {
     right: 0;
     z-index: 1000;
     background: rgba(10, 10, 10, 0.95);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(212, 176, 120, 0.2);
     padding: 1rem 0;
@@ -82,8 +83,8 @@ body {
     font-weight: 900;
     margin-bottom: 1rem;
     background: linear-gradient(135deg, #d4b078, #f4d03f);
-    background-clip: text;
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
@@ -127,6 +128,7 @@ body {
 /* Glass container - critical styling */
 .glass-container {
     background: rgba(20, 20, 20, 0.6);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(212, 176, 120, 0.2);
     border-radius: 15px;
@@ -247,4 +249,68 @@ button:focus,
 a:focus {
     outline: 2px solid #d4b078;
     outline-offset: 2px;
+}
+
+/* Inline styles moved to external CSS */
+.maintenance-info-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+.pwa-install-banner {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #d4b078, #f4d03f);
+    color: #0a0a0a;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    z-index: 10000;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    animation: slideUp 0.3s ease;
+}
+
+.pwa-install-title {
+    margin: 0 0 10px 0;
+    font-weight: 600;
+}
+
+.pwa-install-subtitle {
+    margin: 0 0 15px 0;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.pwa-install-btn {
+    background: #0a0a0a;
+    color: #d4b078;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.pwa-dismiss-btn {
+    background: transparent;
+    color: #0a0a0a;
+    border: 1px solid #0a0a0a;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }

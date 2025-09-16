@@ -22,7 +22,7 @@
         justify-content: center !important;
         border-radius: 50% !important;
         position: relative !important;
-        transform: translateY(25px) !important;
+        transform: translateY(8px) !important;
         text-decoration: none !important;
         margin: 0 !important;
         flex-shrink: 0 !important;
@@ -33,7 +33,7 @@
         color: white !important;
         position: relative !important;
         z-index: 2 !important;
-        transform: translateY(5px) !important;
+        transform: translateY(8px) !important;
         margin: 0 !important;
         display: block !important;
         text-align: center !important;
@@ -53,7 +53,7 @@
         justify-content: center !important;
         border-radius: 12px !important;
         position: relative !important;
-        transform: translateY(20px) !important;
+        transform: translateY(8px) !important;
         flex-shrink: 0 !important;
         margin: 0 !important;
     }
@@ -63,7 +63,7 @@
         color: white !important;
         position: relative !important;
         z-index: 2 !important;
-        transform: translateY(4px) !important;
+        transform: translateY(8px) !important;
         margin: 0 !important;
         display: block !important;
         text-align: center !important;
@@ -135,10 +135,20 @@
     #contact .social-link {
         width: 44px !important;
         height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
 
     #contact .social-link i {
         font-size: 18px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        line-height: 1 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        transform: translateY(8px) !important;
     }
 
     #software .link-icon {
@@ -148,6 +158,27 @@
 
     #software .link-icon i {
         font-size: 20px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        line-height: 1 !important;
+        vertical-align: middle !important;
+        transform: translateY(8px) !important;
+    }
+
+    /* Fix specific software icons positioning */
+    #software .link-card:nth-child(1) .link-icon,
+    #software .link-card:nth-child(2) .link-icon {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    #software .link-card:nth-child(1) .link-icon i,
+    #software .link-card:nth-child(2) .link-icon i {
+        margin: 0 !important;
+        padding: 0 !important;
+        transform: translateY(8px) !important;
     }
 }
 

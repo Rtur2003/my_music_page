@@ -16,6 +16,7 @@
         z-index: 2 !important;
         isolation: isolate !important;
         background: var(--card-bg) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
         backdrop-filter: blur(10px) !important;
         margin-bottom: 2rem !important;
     }
@@ -99,6 +100,7 @@
         position: relative !important;
         z-index: 5 !important;
         background: var(--card-bg) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
         backdrop-filter: blur(10px) !important;
         border: 1px solid rgba(212, 176, 120, 0.2) !important;
         width: 100% !important;
@@ -113,6 +115,69 @@
         text-align: center !important;
         box-sizing: border-box !important;
         padding: 1rem !important;
+        overflow: hidden !important;
+    }
+
+    .modern-player-card h3,
+    .modern-player-card p,
+    .modern-player-card .card-text {
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+        max-width: 100% !important;
+    }
+
+    .modern-player-card .card-text {
+        white-space: normal !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+    }
+
+    /* Additional music section text overflow fixes */
+    #music * {
+        max-width: 100% !important;
+        word-wrap: break-word !important;
+        word-break: break-word !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Fix music cards content alignment and prevent right overflow */
+    #music .music-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 1rem !important;
+        text-align: center !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    #music .music-card > * {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    #music .music-card,
+    #music .platform-link,
+    #music .song-item {
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+    }
+
+    #music .music-card h3,
+    #music .music-card h4,
+    #music .platform-link span,
+    #music .song-title {
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+        max-width: 100% !important;
     }
 
     /* Player artwork section */
@@ -241,6 +306,7 @@
         position: fixed !important;
         z-index: 1000 !important;
         background: var(--primary-bg) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
         backdrop-filter: blur(10px) !important;
     }
 
@@ -320,6 +386,8 @@
     h1, h2, h3, h4, h5, h6, p, span, div {
         word-wrap: break-word !important;
         overflow-wrap: break-word !important;
+        -moz-hyphens: auto !important;
+        -webkit-hyphens: auto !important;
         hyphens: auto !important;
     }
 

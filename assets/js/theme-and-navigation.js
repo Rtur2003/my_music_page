@@ -48,15 +48,21 @@ class ThemeAndNavigationManager {
     setupMobileNavigation() {
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const navMenu = document.querySelector('.nav-menu');
-        
+
         if (mobileMenuToggle && navMenu) {
-            mobileMenuToggle.addEventListener('click', () => {
+            mobileMenuToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                console.log('Mobile menu toggle clicked');
                 navMenu.classList.toggle('active');
                 const icon = mobileMenuToggle.querySelector('i');
-                
+
                 if (navMenu.classList.contains('active')) {
+                    console.log('Menu opened');
                     icon.className = 'fas fa-times';
                 } else {
+                    console.log('Menu closed');
                     icon.className = 'fas fa-bars';
                 }
             });
@@ -73,7 +79,8 @@ class ThemeAndNavigationManager {
 
             // Close mobile menu when clicking outside
             document.addEventListener('click', (e) => {
-                if (!navMenu.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+                if (!navMenu.contains(e.target) && !mobileMenuToggle.contains(e.target) && navMenu.classList.contains('active')) {
+                    console.log('Closing menu - clicked outside');
                     navMenu.classList.remove('active');
                     const icon = mobileMenuToggle.querySelector('i');
                     icon.className = 'fas fa-bars';

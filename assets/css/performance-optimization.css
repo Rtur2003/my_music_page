@@ -30,10 +30,7 @@
 .card-artwork,
 .hero-bg,
 .footer-logo-image {
-    /* Lazy loading optimize */
-    loading: lazy;
-    /* Decode optimizasyonu */
-    decoding: async;
+    /* Loading and decoding optimization should be done in HTML attributes, not CSS */
     /* Layout shift önleme */
     width: 100%;
     height: 100%;
@@ -42,11 +39,10 @@
     transform: translateZ(0);
 }
 
-/* Critical resources için immediate loading */
+/* Critical resources için immediate loading - HTML attributes should be used instead */
 .hero-section img,
 .artwork-container img {
-    loading: eager;
-    fetchpriority: high;
+    /* Loading and fetchpriority should be HTML attributes, not CSS properties */
 }
 
 /* Font Loading Optimization */
@@ -79,7 +75,6 @@
 .scroll-container {
     /* Scroll optimizasyonu */
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
     /* Scroll snap için */
     scroll-behavior: smooth;
 }
@@ -187,6 +182,7 @@
     /* Blur efektlerini basitleştir */
     .modern-player-card,
     .fab {
+        -webkit-backdrop-filter: none;
         backdrop-filter: none;
         background: var(--card-bg);
     }
@@ -286,27 +282,28 @@
     .music-card,
     .platform-link {
         -webkit-transform: translateZ(0);
+        transform: translateZ(0);
         -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
     }
 
     .scroll-container {
-        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
     }
 }
 
 /* Firefox */
-@-moz-document url-prefix() {
-    .modern-player-card::before {
-        /* Firefox için optimize */
-        background: radial-gradient(circle, rgba(212, 176, 120, 0.1) 0%, transparent 70%);
-        animation: none;
-    }
+/* Firefox specific optimizations moved to standard CSS for better compatibility */
+.modern-player-card::before {
+    /* Browser-neutral gradient optimization */
+    background: radial-gradient(circle, rgba(212, 176, 120, 0.1) 0%, transparent 70%);
 }
 
 /* Chrome/Chromium */
-@supports (backdrop-filter: blur(10px)) {
+@supports ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
     .modern-player-card,
     .fab {
+        -webkit-backdrop-filter: blur(10px);
         backdrop-filter: blur(10px);
     }
 }

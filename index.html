@@ -10,17 +10,14 @@
     <meta name="language" content="Turkish, English">
     <meta name="revisit-after" content="3 days">
     <meta name="rating" content="General">
-    <meta name="theme-color" content="#d4b078">
+    <!-- Theme color removed for maximum compatibility -->
     <meta name="msapplication-TileColor" content="#d4b078">
 
     <!-- PWA Manifest - Only works with HTTP/HTTPS -->
     <link rel="manifest" href="manifest.json">
 
     <!-- Apple Touch Icons for iOS -->
-    <link rel="apple-touch-icon" href="assets/images/logo-main.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="assets/images/logo-main.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/images/logo-main.png">
-    <link rel="apple-touch-icon" sizes="167x167" href="assets/images/logo-main.png">
 
     <!-- iOS specific meta tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -113,8 +110,6 @@
     
     <!-- Performance Resource Hints -->
     <link rel="preload" href="assets/css/hasan-arthur-design.css" as="style">
-    <link rel="preload" href="assets/js/theme-and-navigation.js" as="script">
-    <link rel="preload" href="assets/js/music-final.js" as="script">
     <link rel="preload" href="assets/images/logo-main.png" as="image">
     <link rel="preload" href="assets/images/hasan-arthur-profile.jpg" as="image">
     
@@ -132,13 +127,11 @@
     <!-- Favicon and Icons -->
     <link rel="icon" type="image/png" href="assets/images/logo-transparent.png">
     <link rel="alternate icon" href="assets/images/favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/logo-main.png">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/images/logo-transparent.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/images/logo-transparent.png">
     
     <!-- PWA Manifest -->
     <!-- <link rel="manifest" href="manifest.json"> PWA disabled temporarily -->
-    <meta name="theme-color" content="#6c5ce7">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Hasan Arthur Altuntaş">
@@ -214,9 +207,9 @@
     
     <!-- Font Awesome -->
     <!-- PERFORMANCE: Resource hints -->
-    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
-    <link rel="preconnect" href="//fonts.googleapis.com">
-    <link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
     <!-- Font Awesome from multiple sources for reliability -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -226,7 +219,7 @@
     <!-- CRITICAL CSS INLINE - For fastest first paint -->
     <style>
         /* Critical CSS for above-the-fold content */
-        *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a0a;color:#fff;line-height:1.6;overflow-x:hidden}.sonic-nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10,10,10,0.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(212,176,120,0.2);padding:1rem 0}.nav-container{max-width:1400px;margin:0 auto;padding:0 2rem;display:flex;justify-content:space-between;align-items:center}.nav-logo{font-size:1.5rem;font-weight:700;color:#d4b078}.nav-links{display:flex;gap:2rem;list-style:none}.nav-links a{color:#fff;text-decoration:none;transition:color 0.3s ease}.nav-links a:hover{color:#d4b078}.sonic-hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 2rem 2rem;background:#0a0a0a}.hero-content{text-align:center;max-width:800px}.hero-title{font-size:clamp(2.5rem,5vw,4rem);font-weight:900;margin-bottom:1rem;background:linear-gradient(135deg,#d4b078,#f4d03f);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 2px 4px rgba(0,0,0,0.3)}.hero-subtitle{font-size:clamp(1.2rem,2.5vw,1.8rem);color:rgba(255,255,255,0.9);margin-bottom:1.5rem;font-weight:400}.hero-description{font-size:clamp(1rem,1.5vw,1.2rem);color:rgba(255,255,255,0.8);margin-bottom:2rem;line-height:1.8;max-width:600px;margin-left:auto;margin-right:auto}.hero-profile-img{width:200px;height:200px;border-radius:50%;object-fit:cover;margin:0 auto 2rem;display:block;border:3px solid rgba(212,176,120,0.3);box-shadow:0 8px 32px rgba(212,176,120,0.2)}.container{max-width:1400px;margin:0 auto;padding:0 2rem}.glass-container{background:rgba(20,20,20,0.6);backdrop-filter:blur(10px);border:1px solid rgba(212,176,120,0.2);border-radius:15px;padding:2rem}.sonic-btn{display:inline-block;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;transition:all 0.3s ease;border:none;cursor:pointer}.sonic-btn.primary{background:linear-gradient(135deg,#d4b078,#f4d03f);color:#0a0a0a}.sonic-btn.secondary{background:transparent;color:#d4b078;border:2px solid #d4b078}.page-loader{position:fixed;top:0;left:0;width:100%;height:100%;background:#0a0a0a;z-index:9999;display:flex;align-items:center;justify-content:center}.page-loader.hide{opacity:0;visibility:hidden;transition:opacity 0.5s ease,visibility 0.5s ease}@media (max-width:768px){.nav-container{padding:0 1rem}.sonic-hero{padding:100px 1rem 2rem}.hero-profile-img{width:150px;height:150px}.container{padding:0 1rem}.glass-container{padding:1.5rem}}@media (max-width:480px){.hero-profile-img{width:120px;height:120px}.glass-container{padding:1rem}}.page-transition{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}.page-transition.loaded{opacity:1;transform:translateY(0)}
+        *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a0a;color:#fff;line-height:1.6;overflow-x:hidden}.sonic-nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10,10,10,0.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid rgba(212,176,120,0.2);padding:1rem 0}.nav-container{max-width:1400px;margin:0 auto;padding:0 2rem;display:flex;justify-content:space-between;align-items:center}.nav-logo{font-size:1.5rem;font-weight:700;color:#d4b078}.nav-links{display:flex;gap:2rem;list-style:none}.nav-links a{color:#fff;text-decoration:none;transition:color 0.3s ease}.nav-links a:hover{color:#d4b078}.sonic-hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 2rem 2rem;background:#0a0a0a}.hero-content{text-align:center;max-width:800px}.hero-title{font-size:clamp(2.5rem,5vw,4rem);font-weight:900;margin-bottom:1rem;background:linear-gradient(135deg,#d4b078,#f4d03f);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 2px 4px rgba(0,0,0,0.3)}.hero-subtitle{font-size:clamp(1.2rem,2.5vw,1.8rem);color:rgba(255,255,255,0.9);margin-bottom:1.5rem;font-weight:400}.hero-description{font-size:clamp(1rem,1.5vw,1.2rem);color:rgba(255,255,255,0.8);margin-bottom:2rem;line-height:1.8;max-width:600px;margin-left:auto;margin-right:auto}.hero-profile-img{width:200px;height:200px;border-radius:50%;object-fit:cover;margin:0 auto 2rem;display:block;border:3px solid rgba(212,176,120,0.3);box-shadow:0 8px 32px rgba(212,176,120,0.2)}.container{max-width:1400px;margin:0 auto;padding:0 2rem}.glass-container{background:rgba(20,20,20,0.6);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(212,176,120,0.2);border-radius:15px;padding:2rem}.sonic-btn{display:inline-block;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;transition:all 0.3s ease;border:none;cursor:pointer}.sonic-btn.primary{background:linear-gradient(135deg,#d4b078,#f4d03f);color:#0a0a0a}.sonic-btn.secondary{background:transparent;color:#d4b078;border:2px solid #d4b078}.page-loader{position:fixed;top:0;left:0;width:100%;height:100%;background:#0a0a0a;z-index:9999;display:flex;align-items:center;justify-content:center}.page-loader.hide{opacity:0;visibility:hidden;transition:opacity 0.5s ease,visibility 0.5s ease}@media (max-width:768px){.nav-container{padding:0 1rem}.sonic-hero{padding:100px 1rem 2rem}.hero-profile-img{width:150px;height:150px}.container{padding:0 1rem}.glass-container{padding:1.5rem}}@media (max-width:480px){.hero-profile-img{width:120px;height:120px}.glass-container{padding:1rem}}.page-transition{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}.page-transition.loaded{opacity:1;transform:translateY(0)}
     </style>
 
     <!-- HASAN ARTHUR DESIGN SYSTEM -->
@@ -239,11 +232,12 @@
 
     <!-- Performance CSS - Critical -->
     <link rel="stylesheet" href="assets/css/lighthouse-performance-fix.css" media="all">
-    <link rel="stylesheet" href="assets/css/mobile-layout-fix.css" media="all">
-    <link rel="stylesheet" href="assets/css/specific-icon-fixes.css" media="all">
 
     <!-- Accessibility CSS - Critical for a11y -->
     <link rel="stylesheet" href="assets/css/accessibility-enhancements.css" media="all">
+
+    <!-- Unified Mobile CSS - All mobile fixes in one file -->
+    <link rel="stylesheet" href="assets/css/mobile-unified.css" media="all">
 
     <!-- Secondary CSS - Non-critical (async loaded) -->
     <link rel="stylesheet" href="assets/css/spacing-fix.css" media="print" onload="this.media='all'; this.onload=null;">
@@ -252,9 +246,6 @@
     <link rel="stylesheet" href="assets/css/modern-player-styles.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/enhanced-player-design.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/simple-footer.css" media="print" onload="this.media='all'; this.onload=null;">
-    <link rel="stylesheet" href="assets/css/mobile-optimization.css" media="print" onload="this.media='all'; this.onload=null;">
-    <link rel="stylesheet" href="assets/css/mobile-player-fix.css" media="print" onload="this.media='all'; this.onload=null;">
-    <link rel="stylesheet" href="assets/css/mobile-animation-fix.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/performance-optimization.css" media="print" onload="this.media='all'; this.onload=null;">
     <link rel="stylesheet" href="assets/css/new-music-cards.css" media="all">
 
@@ -266,19 +257,13 @@
         <link rel="stylesheet" href="assets/css/modern-player-styles.css">
         <link rel="stylesheet" href="assets/css/enhanced-player-design.css">
         <link rel="stylesheet" href="assets/css/simple-footer.css">
-        <link rel="stylesheet" href="assets/css/mobile-optimization.css">
-        <link rel="stylesheet" href="assets/css/mobile-player-fix.css">
-        <link rel="stylesheet" href="assets/css/mobile-animation-fix.css">
         <link rel="stylesheet" href="assets/css/performance-optimization.css">
     </noscript>
     
-    <!-- Critical images preload -->
-    <link rel="preload" href="assets/images/hasan-arthur-profile.jpg" as="image" type="image/jpeg">
-    <link rel="preload" href="assets/images/logo-main.png" as="image" type="image/png">
     
     <!-- DNS prefetch for external resources -->
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     
     <!-- Prefetch non-critical assets -->
     <link rel="prefetch" href="assets/js/gallery.js?v=1.5.0">
@@ -353,7 +338,7 @@
 
     <!-- Hero Section - Professional Modern -->
     <section class="sonic-hero" id="home">
-        <div class="container" style="display: contents;">
+        <div class="container display-contents">
             <!-- Hero Visual -->
             <div class="hero-visual">
                 <div class="hero-profile">
@@ -700,7 +685,7 @@
                         <div class="progress-indicator">
                             <div class="progress-label" data-translate="gallery.progress.label">Progress</div>
                             <div class="progress-bar">
-                                <div class="progress-fill" style="width: 65%"></div>
+                                <div class="progress-fill progress-65"></div>
                             </div>
                             <div class="progress-text">65% <span data-translate="gallery.progress.complete">Complete</span></div>
                         </div>
@@ -961,7 +946,7 @@
                 </div>
                 <p class="footer-copyright">
                     &copy; 2024 Hasan Arthur Altuntaş. <span data-translate="footer.rights">All rights reserved.</span>
-                    <span data-translate="footer.made">Made with</span> <span style="color: var(--accent-gold);">♥</span> in Turkey
+                    <span data-translate="footer.made">Made with</span> <span class="heart-color">♥</span> in Turkey
                 </p>
             </div>
         </div>
@@ -1051,41 +1036,11 @@
         function showInstallPrompt() {
             const installBanner = document.createElement('div');
             installBanner.innerHTML = `
-                <div style="
-                    position: fixed;
-                    bottom: 20px;
-                    left: 20px;
-                    right: 20px;
-                    background: linear-gradient(135deg, #d4b078, #f4d03f);
-                    color: #0a0a0a;
-                    padding: 15px;
-                    border-radius: 10px;
-                    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-                    z-index: 10000;
-                    font-family: 'Inter', sans-serif;
-                    text-align: center;
-                    animation: slideUp 0.3s ease;
-                ">
-                    <p style="margin: 0 0 10px 0; font-weight: 600;">📱 Install Hasan Arthur's Portfolio</p>
-                    <p style="margin: 0 0 15px 0; font-size: 14px; opacity: 0.8;">Get the full experience with offline access!</p>
-                    <button onclick="installPWA()" style="
-                        background: #0a0a0a;
-                        color: #d4b078;
-                        border: none;
-                        padding: 8px 16px;
-                        border-radius: 5px;
-                        margin-right: 10px;
-                        cursor: pointer;
-                        font-weight: 600;
-                    ">Install</button>
-                    <button onclick="dismissInstall()" style="
-                        background: transparent;
-                        color: #0a0a0a;
-                        border: 1px solid #0a0a0a;
-                        padding: 8px 16px;
-                        border-radius: 5px;
-                        cursor: pointer;
-                    ">Maybe Later</button>
+                <div class="pwa-install-banner">
+                    <p class="pwa-install-title">📱 Install Hasan Arthur's Portfolio</p>
+                    <p class="pwa-install-subtitle">Get the full experience with offline access!</p>
+                    <button onclick="installPWA()" class="pwa-install-btn">Install</button>
+                    <button onclick="dismissInstall()" class="pwa-dismiss-btn">Maybe Later</button>
                 </div>
             `;
             installBanner.id = 'pwa-install-banner';

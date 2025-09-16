@@ -21,6 +21,7 @@
     /* WebP support */
     image-rendering: -webkit-optimize-contrast;
     image-rendering: optimize-contrast;
+    image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
 }
 
