@@ -93,12 +93,16 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    background:
+        radial-gradient(circle at 20% 50%, rgba(212, 176, 120, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(212, 176, 120, 0.1) 0%, transparent 50%),
+        linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 9999;
     transition: opacity 0.5s ease, visibility 0.5s ease;
+    overflow: hidden;
 }
 
 .page-loader.hide {
@@ -112,6 +116,18 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 2rem;
+    animation: loaderFadeIn 1s ease-out;
+}
+
+@keyframes loaderFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .logo-loader {
@@ -130,6 +146,19 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    background: radial-gradient(circle, rgba(212, 176, 120, 0.1) 0%, transparent 70%);
+    animation: logoGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes logoGlow {
+    from {
+        box-shadow: 0 0 20px rgba(212, 176, 120, 0.3);
+        transform: scale(1);
+    }
+    to {
+        box-shadow: 0 0 40px rgba(212, 176, 120, 0.5);
+        transform: scale(1.02);
+    }
 }
 
 .loader-logo {
@@ -139,6 +168,19 @@ body {
     object-fit: cover;
     z-index: 2;
     position: relative;
+    filter: drop-shadow(0 4px 15px rgba(212, 176, 120, 0.4));
+    animation: logoBreathe 4s ease-in-out infinite;
+}
+
+@keyframes logoBreathe {
+    0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 4px 15px rgba(212, 176, 120, 0.4));
+    }
+    50% {
+        transform: scale(1.05);
+        filter: drop-shadow(0 6px 20px rgba(212, 176, 120, 0.6));
+    }
 }
 
 .loader-ring {
@@ -165,6 +207,17 @@ body {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     letter-spacing: -1px;
+    animation: titleShimmer 2s ease-in-out infinite;
+    text-shadow: 0 4px 20px rgba(212, 176, 120, 0.3);
+}
+
+@keyframes titleShimmer {
+    0%, 100% {
+        filter: brightness(1);
+    }
+    50% {
+        filter: brightness(1.2);
+    }
 }
 
 .loader-subtitle {
@@ -193,6 +246,80 @@ body {
     0% { width: 0%; }
     50% { width: 60%; }
     100% { width: 100%; }
+}
+
+/* ===============================================
+   LOADER MOBILE RESPONSIVE
+   =============================================== */
+
+@media (max-width: 768px) {
+    .loader-container {
+        gap: 1.5rem;
+        padding: 0 1rem;
+    }
+
+    .logo-circle {
+        width: 100px;
+        height: 100px;
+    }
+
+    .loader-logo {
+        width: 70px;
+        height: 70px;
+    }
+
+    .loader-ring {
+        width: 100px;
+        height: 100px;
+    }
+
+    .loader-title {
+        font-size: 1.75rem;
+        letter-spacing: -0.5px;
+    }
+
+    .loader-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .loading-progress {
+        width: 180px;
+        height: 3px;
+    }
+}
+
+@media (max-width: 480px) {
+    .loader-container {
+        gap: 1.25rem;
+    }
+
+    .logo-circle {
+        width: 90px;
+        height: 90px;
+    }
+
+    .loader-logo {
+        width: 60px;
+        height: 60px;
+    }
+
+    .loader-ring {
+        width: 90px;
+        height: 90px;
+        border-width: 2px;
+    }
+
+    .loader-title {
+        font-size: 1.5rem;
+    }
+
+    .loader-subtitle {
+        font-size: 0.85rem;
+    }
+
+    .loading-progress {
+        width: 160px;
+    }
 }
 
 /* ===============================================
