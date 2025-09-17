@@ -308,6 +308,23 @@
     transform: translateY(-1px);
 }
 
+/* Support Link Special Styling */
+.footer-links .support-link {
+    background: linear-gradient(135deg, rgba(212, 176, 120, 0.1), rgba(244, 208, 63, 0.05));
+    border-color: rgba(212, 176, 120, 0.2);
+}
+
+.footer-links .support-link:hover {
+    background: linear-gradient(135deg, rgba(212, 176, 120, 0.2), rgba(244, 208, 63, 0.1));
+    border-color: rgba(212, 176, 120, 0.4);
+    box-shadow: 0 4px 12px rgba(212, 176, 120, 0.2);
+}
+
+.footer-links .support-link i {
+    margin-right: 0.5rem;
+    color: #d4b078;
+}
+
 .footer-copyright {
     color: var(--text-secondary);
     font-size: 0.9rem;

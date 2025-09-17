@@ -131,7 +131,10 @@ class SimpleLanguageSystem {
                 'footer.tagline': 'Music Producer & AI Developer',
                 'footer.social': 'Follow Me',
                 'footer.rights': 'All rights reserved.',
-                'footer.made': 'Made with'
+                'footer.made': 'Made with',
+
+                // Support
+                'support.title': 'Support'
             },
             tr: {
                 // Navigation
@@ -258,7 +261,10 @@ class SimpleLanguageSystem {
                 'footer.tagline': 'Müzik Prodüktörü & AI Geliştirici',
                 'footer.social': 'Takip Et',
                 'footer.rights': 'Tüm hakları saklıdır.',
-                'footer.made': 'İle yapıldı'
+                'footer.made': 'İle yapıldı',
+
+                // Support
+                'support.title': 'Destek Ol'
             }
         };
         
