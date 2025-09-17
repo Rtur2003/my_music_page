@@ -358,20 +358,10 @@
 
 .modern-music-card {
     background: var(--music-glass);
-    -webkit-backdrop-filter: blur(var(--music-blur));
-    backdrop-filter: blur(var(--music-blur));
     border-radius: 16px;
-    border: 1px solid var(--music-glass-border);
     padding: 1.5rem;
     margin-bottom: 1rem;
-    box-shadow: var(--music-shadow);
     transition: var(--music-transition);
-}
-
-.modern-music-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--music-shadow-hover);
-    border-color: rgba(212, 176, 120, 0.3);
 }
 
 .card-content {
@@ -891,7 +881,6 @@
         grid-template-columns: 60px 1fr;
         grid-template-rows: auto auto;
         gap: 0.8rem;
-        padding: 0.8rem;
     }
 
     .track-controls-fixed {
@@ -1730,12 +1719,6 @@
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(212, 176, 120, 0.3);
-}
-
-.play-pause-btn:hover {
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 6px 18px rgba(212, 176, 120, 0.4);
 }
 
 .play-icon {
@@ -1754,40 +1737,21 @@
     justify-content: center;
     text-decoration: none;
     transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.platform-link:hover {
-    transform: translateY(-2px) scale(1.05);
 }
 
 .platform-link.spotify {
     color: #1db954;
-}
-
-.platform-link.spotify:hover {
-    background: rgba(29, 185, 84, 0.2);
-    border-color: rgba(29, 185, 84, 0.3);
+    background: rgba(29, 185, 84, 0.1);
 }
 
 .platform-link.apple {
     color: #fc3c44;
-}
-
-.platform-link.apple:hover {
-    background: rgba(252, 60, 68, 0.2);
-    border-color: rgba(252, 60, 68, 0.3);
+    background: rgba(252, 60, 68, 0.1);
 }
 
 .platform-link.youtube {
     color: #ff0000;
-}
-
-.platform-link.youtube:hover {
-    background: rgba(255, 0, 0, 0.2);
-    border-color: rgba(255, 0, 0, 0.3);
+    background: rgba(255, 0, 0, 0.1);
 }
 
 .platform-icon {
