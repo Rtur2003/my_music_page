@@ -223,6 +223,19 @@
   to = "/admin.html"
   status = 200
 
+# SEO Files - Sitemap & Robots
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Content-Type = "application/xml"
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Content-Type = "text/plain"
+    Cache-Control = "public, max-age=86400"
+
 # Function headers
 [[headers]]
   for = "/.netlify/functions/*"
