@@ -103,11 +103,15 @@
     </script>
     
     <!-- Security Meta Tags -->
-    <!-- Cache Buster for CSP Update -->
-    <meta name="csp-version" content="v4.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <!-- FORCE NO CACHE - Every visitor gets fresh content -->
+    <meta name="cache-version" content="<?php echo time(); ?>">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
     <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Expires" content="-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSP WITH EXPLICIT YOUTUBE SUPPORT -->
+    <meta name="csp-updated" content="2024-12-17-v5">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://www.youtube.com https://youtube.com https://s.ytimg.com https://i.ytimg.com https://youtubei.googleapis.com; script-src-elem 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://www.youtube.com https://youtube.com https://s.ytimg.com https://i.ytimg.com https://youtubei.googleapis.com; frame-src 'self' https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com; connect-src 'self' https://www.youtube.com https://youtube.com https://youtubei.googleapis.com data: https:; img-src 'self' data: https: blob:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; object-src 'none'; base-uri 'self'; form-action 'self'; media-src 'self' https: data:; worker-src 'self' blob:">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
@@ -229,18 +233,18 @@
 
     <!-- HASAN ARTHUR DESIGN SYSTEM - SECTION-BASED CSS -->
     <!-- Base styles & variables (Critical - Load First) -->
-    <link rel="stylesheet" href="assets/css/sections/00-base.css" media="all">
+    <link rel="stylesheet" href="assets/css/sections/00-base.css?v=5.0" media="all">
 
     <!-- Section-based CSS Files (Load in order) -->
-    <link rel="stylesheet" href="assets/css/sections/01-navigation.css" media="all">
-    <link rel="stylesheet" href="assets/css/sections/02-hero.css" media="all">
-    <link rel="stylesheet" href="assets/css/sections/03-about.css" media="all">
-    <link rel="stylesheet" href="assets/css/sections/04-music.css?v=2.0" media="all">
-    <link rel="stylesheet" href="assets/css/sections/05-software.css" media="all">
-    <link rel="stylesheet" href="assets/css/sections/06-gallery.css" media="all">
-    <link rel="stylesheet" href="assets/css/sections/07-updates.css" media="all">
-    <link rel="stylesheet" href="assets/css/sections/08-contact.css" media="all">
-    <link rel="stylesheet" href="assets/css/sections/09-footer.css" media="all">
+    <link rel="stylesheet" href="assets/css/sections/01-navigation.css?v=5.0" media="all">
+    <link rel="stylesheet" href="assets/css/sections/02-hero.css?v=5.0" media="all">
+    <link rel="stylesheet" href="assets/css/sections/03-about.css?v=5.0" media="all">
+    <link rel="stylesheet" href="assets/css/sections/04-music.css?v=5.0" media="all">
+    <link rel="stylesheet" href="assets/css/sections/05-software.css?v=5.0" media="all">
+    <link rel="stylesheet" href="assets/css/sections/06-gallery.css?v=5.0" media="all">
+    <link rel="stylesheet" href="assets/css/sections/07-updates.css?v=5.0" media="all">
+    <link rel="stylesheet" href="assets/css/sections/08-contact.css?v=5.0" media="all">
+    <link rel="stylesheet" href="assets/css/sections/09-footer.css?v=5.0" media="all">
 
     
     
@@ -939,40 +943,40 @@
     <!-- Modal and scroll elements are created dynamically by JavaScript -->
 
     <!-- PERFORMANCE OPTIMIZER (Load first for critical optimizations) -->
-    <script src="assets/js/performance-optimizer.js"></script>
+    <script src="assets/js/performance-optimizer.js?v=5.0"></script>
 
     <!-- ACCESSIBILITY ENHANCER (Critical for a11y) -->
-    <script src="assets/js/accessibility-enhancer.js"></script>
+    <script src="assets/js/accessibility-enhancer.js?v=5.0"></script>
 
     <!-- ERROR HANDLING (Critical - Load first) -->
-    <script src="assets/js/error-handler.js" defer></script>
+    <script src="assets/js/error-handler.js?v=5.0" defer></script>
     
     <!-- SECURITY & PROTECTION (Critical - Load early) -->
-    <script src="assets/js/security.js" defer></script>
+    <script src="assets/js/security.js?v=5.0" defer></script>
     
     <!-- FORM VALIDATION (Critical - Load after security) -->
-    <script src="assets/js/form-validator.js" defer></script>
+    <script src="assets/js/form-validator.js?v=5.0" defer></script>
     
     <!-- MUSIC SYSTEM (Final Clean Version) -->
-    <script src="assets/js/music-final.js?v=3.0" defer></script>
+    <script src="assets/js/music-final.js?v=5.0" defer></script>
 
     <!-- CORE FUNCTIONALITY -->
-    <script src="assets/js/theme-and-navigation.js" defer></script>
+    <script src="assets/js/theme-and-navigation.js?v=5.0" defer></script>
     
     <!-- UI ENHANCEMENTS -->
-    <script src="assets/js/gallery.js" defer></script>
-    <script src="assets/js/contact-form.js" defer></script>
-    <script src="assets/js/sonic-interactions.js" defer></script>
+    <script src="assets/js/gallery.js?v=5.0" defer></script>
+    <script src="assets/js/contact-form.js?v=5.0" defer></script>
+    <script src="assets/js/sonic-interactions.js?v=5.0" defer></script>
     <!-- <script src="assets/js/dynamic-effects.js" defer></script> <!-- Disabled - creates duplicate floating actions -->
-    <script src="assets/js/redirect-warning.js" defer></script>
+    <script src="assets/js/redirect-warning.js?v=5.0" defer></script>
     <!-- <script src="assets/js/console-debug.js" defer></script> <!-- Disabled for production -->
     <!-- <script src="assets/js/modern-features.js" defer></script> <!-- Disabled - creates duplicate sections -->
     
     <!-- GITHUB STATS -->
-    <script src="assets/js/github-stats.js" defer></script>
+    <script src="assets/js/github-stats.js?v=5.0" defer></script>
 
     <!-- LANGUAGE SYSTEM (Load last) -->
-    <script src="assets/js/language-simple.js" defer></script>
+    <script src="assets/js/language-simple.js?v=5.0" defer></script>
 
     <!-- PWA SERVICE WORKER REGISTRATION -->
     <script>
