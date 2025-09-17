@@ -5,38 +5,45 @@
     
     <url>
         <loc>https://hasanarthuraltuntas.com.tr/</loc>
-        <lastmod>2025-01-26</lastmod>
+        <lastmod>2024-12-17</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
         <image:image>
-            <image:loc>https://hasanarthuraltuntas.com.tr/assets/images/hero-musician.jpg</image:loc>
-            <image:title>Hasan Arthur Altuntaş - Profesyonel Müzisyen</image:title>
-            <image:caption>Profesyonel müzik sanatçısı portföy fotoğrafı</image:caption>
+            <image:loc>https://hasanarthuraltuntas.com.tr/assets/images/hasan-arthur-profile.jpg</image:loc>
+            <image:title>Hasan Arthur Altuntaş - Music Producer & AI Developer</image:title>
+            <image:caption>Professional music producer and computer engineer portfolio photo</image:caption>
         </image:image>
     </url>
     
     <url>
         <loc>https://hasanarthuraltuntas.com.tr/#about</loc>
-        <lastmod>2025-01-26</lastmod>
+        <lastmod>2024-12-17</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
         <image:image>
-            <image:loc>https://hasanarthuraltuntas.com.tr/assets/images/about-me.jpg</image:loc>
-            <image:title>Hakkımda</image:title>
-            <image:caption>Müzik sanatçısının kişisel fotoğrafı</image:caption>
+            <image:loc>https://hasanarthuraltuntas.com.tr/assets/images/logo-main.png</image:loc>
+            <image:title>About Hasan Arthur</image:title>
+            <image:caption>Pianist and Computer Engineering student from Turkey</image:caption>
         </image:image>
     </url>
     
     <url>
         <loc>https://hasanarthuraltuntas.com.tr/#music</loc>
-        <lastmod>2025-01-26</lastmod>
+        <lastmod>2024-12-17</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://hasanarthuraltuntas.com.tr/#software</loc>
+        <lastmod>2024-12-17</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
     </url>
     
     <url>
         <loc>https://hasanarthuraltuntas.com.tr/#gallery</loc>
-        <lastmod>2025-01-26</lastmod>
+        <lastmod>2024-12-17</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
         <image:image>
@@ -73,7 +80,7 @@
     
     <url>
         <loc>https://hasanarthuraltuntas.com.tr/#contact</loc>
-        <lastmod>2025-01-26</lastmod>
+        <lastmod>2024-12-17</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
