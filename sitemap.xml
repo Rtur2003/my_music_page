@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
-        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-    
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
     <url>
         <loc>https://hasanarthuraltuntas.com.tr/</loc>
         <lastmod>2024-12-17</lastmod>
@@ -13,20 +12,20 @@
             <image:title>Hasan Arthur Altuntaş - Music Producer & AI Developer</image:title>
             <image:caption>Professional music producer and computer engineer portfolio photo</image:caption>
         </image:image>
+        <image:image>
+            <image:loc>https://hasanarthuraltuntas.com.tr/assets/images/logo-main.png</image:loc>
+            <image:title>Hasan Arthur Logo</image:title>
+            <image:caption>Professional brand logo</image:caption>
+        </image:image>
     </url>
-    
+
     <url>
         <loc>https://hasanarthuraltuntas.com.tr/#about</loc>
         <lastmod>2024-12-17</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
-        <image:image>
-            <image:loc>https://hasanarthuraltuntas.com.tr/assets/images/logo-main.png</image:loc>
-            <image:title>About Hasan Arthur</image:title>
-            <image:caption>Pianist and Computer Engineering student from Turkey</image:caption>
-        </image:image>
     </url>
-    
+
     <url>
         <loc>https://hasanarthuraltuntas.com.tr/#music</loc>
         <lastmod>2024-12-17</lastmod>
@@ -40,49 +39,19 @@
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
-    
+
     <url>
         <loc>https://hasanarthuraltuntas.com.tr/#gallery</loc>
         <lastmod>2024-12-17</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
-        <image:image>
-            <image:loc>https://hasanarthuraltuntas.com.tr/assets/images/gallery-1.jpg</image:loc>
-            <image:title>Konser Anı</image:title>
-            <image:caption>İstanbul Konseri - 2024</image:caption>
-        </image:image>
-        <image:image>
-            <image:loc>https://hasanarthuraltuntas.com.tr/assets/images/gallery-2.jpg</image:loc>
-            <image:title>Stüdyo Çalışması</image:title>
-            <image:caption>Yeni Albüm Kayıtları</image:caption>
-        </image:image>
-        <image:image>
-            <image:loc>https://hasanarthuraltuntas.com.tr/assets/images/gallery-3.jpg</image:loc>
-            <image:title>Sahne Arkası</image:title>
-            <image:caption>Video Çekimi</image:caption>
-        </image:image>
-        <image:image>
-            <image:loc>https://hasanarthuraltuntas.com.tr/assets/images/gallery-4.jpg</image:loc>
-            <image:title>Sahne Performansı</image:title>
-            <image:caption>Ankara Konseri - 2024</image:caption>
-        </image:image>
-        <image:image>
-            <image:loc>https://hasanarthuraltuntas.com.tr/assets/images/gallery-5.jpg</image:loc>
-            <image:title>Kayıt Anı</image:title>
-            <image:caption>Single Kaydı</image:caption>
-        </image:image>
-        <image:image>
-            <image:loc>https://hasanarthuraltuntas.com.tr/assets/images/gallery-6.jpg</image:loc>
-            <image:title>Backstage</image:title>
-            <image:caption>Konser Hazırlığı</image:caption>
-        </image:image>
     </url>
-    
+
     <url>
         <loc>https://hasanarthuraltuntas.com.tr/#contact</loc>
         <lastmod>2024-12-17</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
-    
+
 </urlset>
