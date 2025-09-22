@@ -31,7 +31,27 @@ class MusicSystem {
                 youtube: "https://youtu.be/ZnOMJ9E0LmA",
                 spotify: "https://open.spotify.com/intl-tr/track/27q14aJw81Qr5XBGV4JlNp",
                 apple: "https://music.apple.com/tr/song/oppenheimer-but-my-version/1776487184"
-            }
+            },
+            {
+                id: 5,
+                title: "Alicia But My Version",
+                artist: "Hasan Arthur Altuntaş",
+                duration: "1:57",
+                artwork: "assets/images/logo-main.png",
+                youtube: "https://youtu.be/x8lcJsuDR8A",
+                spotify: "https://open.spotify.com/intl-tr/track/4vLu7LEv9KE5wPp4h1ldc8?si=c0491e04580140eb",
+                apple: "https://music.apple.com/tr/song/alicia-version3/1841276639"
+                },
+                {
+                id: 6,
+                title: "Clair Obscur  Expedition 33  But My Version",
+                artist: "Hasan Arthur Altuntaş",
+                duration: "2:44",
+                artwork: "assets/images/logo-main.png",
+                youtube: "https://youtu.be/AINP-Y82LsA",
+                spotify: "https://open.spotify.com/intl-tr/track/3uYE4LHqPv3vA7MzLW99ij?si=800c32542d254e7e",
+                apple: "https://music.apple.com/tr/song/lumiere-and-alicia-piano/1841276636"
+                }
         ];
 
         this.albums = [
