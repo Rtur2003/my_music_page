@@ -52,6 +52,28 @@ class MusicSystem {
                 spotify: "https://open.spotify.com/intl-tr/track/3uYE4LHqPv3vA7MzLW99ij?si=800c32542d254e7e",
                 apple: "https://music.apple.com/tr/song/lumiere-and-alicia-piano/1841276636"
                 }
+                ,
+                {
+                id: 7,
+                title: "Une Vie à Peindre - Clair Obscur Expedition 33(Cover)",
+                artist: "Hasan Arthur Altuntaş",
+                duration: "1:32",
+                artwork: "assets/images/logo-main.png",
+                youtube: "https://www.youtube.com/watch?v=gCuVMsRgqWI&list=OLAK5uy_m7d_zBzSRcJtMt1Xw7yzZtKbNfJ4Zmb5U",
+                spotify: "https://open.spotify.com/intl-tr/track/5dT1GEBSXVVPtxxqtaWzLn?si=54db5d2fa0704893",
+                apple: "https://music.apple.com/tr/song/une-vie-%C3%A0-peindre-clair-obscur-expedition-33-cover/1848749673"
+                },
+                {
+                id: 8,
+                title: "Feel, S Z I, Run, Shakra, TODASI, Yassaite",
+                artist: "Hasan Arthur Altuntaş",
+                duration: "11:51",
+                artwork: "assets/images/logo-main.png",
+                youtube: "https://www.youtube.com/watch?v=vQGDk2ItC2o",
+                spotify: "",
+                apple: ""
+                }
+                
         ];
 
         this.albums = [
