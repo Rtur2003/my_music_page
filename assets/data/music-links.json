@@ -58,6 +58,17 @@
         "youtube": "https://youtu.be/AINP-Y82LsA",
         "spotify": "https://open.spotify.com/intl-tr/track/3uYE4LHqPv3vA7MzLW99ij?si=800c32542d254e7e",
         "apple": "https://music.apple.com/tr/song/lumiere-and-alicia-piano/1841276636"
+      },
+     {
+      "id": 7,
+      "title": "Clair Obscur  Expedition 33  But My Version",
+      "artist": "Hasan Arthur Altuntaş",
+      "duration": "2:44",
+      "artwork": "assets/images/logo-main.png",
+      "links": {
+        "youtube": "https://youtu.be/wXls8MK43YE",
+        "spotify": "https://open.spotify.com/intl-tr/track/6rUQeD55dGjftITfftKjAc?si=3ba10003088b4bc9",
+        "apple": "https://music.apple.com/tr/album/yara-kintsugi-single/1855442979"
       }
     }
   ],
