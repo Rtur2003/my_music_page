@@ -99,6 +99,7 @@ MyPage/
 
 ### Gereksinimler
 - Modern web tarayıcısı (Chrome, Firefox, Safari, Edge)
+- Python 3.7+ (geliştirme araçları için)
 - Yerel web sunucusu (isteğe bağlı, file:// protokolü de çalışır)
 
 ### Hızlı Başlangıç
@@ -109,9 +110,24 @@ MyPage/
    cd portfolio
    ```
 
-2. **Yerel Sunucu Başlatın** (İsteğe bağlı)
+2. **Python Araçlarını Kurun** (Önerilen)
    ```bash
-   # Python kullanarak
+   # Bağımlılıkları yükle
+   make install
+   
+   # Veya direkt pip ile
+   pip install -r requirements.txt
+   ```
+
+3. **Yerel Sunucu Başlatın**
+   ```bash
+   # Python geliştirme sunucusu (Önerilen)
+   make serve
+   
+   # Veya direkt python ile
+   python3 tools/dev_server.py
+   
+   # Alternatif: Standart Python sunucusu
    python -m http.server 8000
 
    # Node.js kullanarak
@@ -121,9 +137,30 @@ MyPage/
    php -S localhost:8000
    ```
 
-3. **Tarayıcıda Açın**
+4. **Kod Doğrulama** (Geliştirme sırasında)
+   ```bash
+   # Tüm doğrulamaları çalıştır
+   make validate
+   
+   # Tam build süreci
+   make build
+   ```
+
+5. **Tarayıcıda Açın**
    - Yerel sunucu: `http://localhost:8000`
    - Doğrudan dosya: `index.html` dosyasına çift tıklayın
+
+### 🐍 Python Geliştirme Araçları
+
+Proje Python-first yaklaşımıyla geliştirilmiştir:
+
+- **HTML Validator**: HTML dosyalarını doğrular
+- **JSON Validator**: JSON dosyalarını doğrular
+- **Build Tool**: Otomatik build ve doğrulama
+- **Dev Server**: Geliştirme sunucusu
+- **Pre-commit Hooks**: Otomatik kod kontrolü
+
+Detaylı kullanım için: [tools/README.md](tools/README.md)
 
 ---
 
