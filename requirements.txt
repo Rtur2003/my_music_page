@@ -1,0 +1,33 @@
+# Python tooling dependencies for development
+# Web validation and linting
+html5lib==1.1
+cssutils==2.9.0
+jsbeautifier==1.14.11
+
+# Security scanning
+bandit==1.7.5
+safety==3.0.1
+
+# Code formatting and quality
+black==23.12.1
+isort==5.13.2
+pylint==3.0.3
+
+# Testing framework
+pytest==7.4.3
+pytest-cov==4.1.0
+
+# HTTP server for local development
+http-server-py==0.1.0
+
+# File watching and automation
+watchdog==3.0.0
+
+# JSON validation
+jsonschema==4.20.0
+
+# YAML support for configuration
+PyYAML==6.0.1
+
+# Markdown processing
+markdown==3.5.1
