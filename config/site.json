@@ -1,0 +1,39 @@
+{
+  "site": {
+    "name": "Hasan Arthur Altuntaş Portfolio",
+    "title": "Hasan Arthur Altuntaş - Music Producer & AI Developer",
+    "description": "Music Producer & AI Developer from Sakarya, Turkey. Creating cinematic music & building AI projects.",
+    "url": "https://hasanarthuraltuntas.com.tr",
+    "author": "Hasan Arthur Altuntaş",
+    "language": "en"
+  },
+  "contact": {
+    "email": "hasannarthurrr@gmail.com",
+    "location": "Sakarya, Turkey"
+  },
+  "social": {
+    "spotify": "https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef",
+    "youtube": "https://www.youtube.com/channel/UCA7E1X_uGUqtSJeIxvBeTQA",
+    "instagram": "https://www.instagram.com/rthur_hsn",
+    "twitter": "https://x.com/Rthur__1",
+    "tiktok": "https://www.tiktok.com/@hasnarthur_piano",
+    "linkedin": "https://tr.linkedin.com/in/hasan-arthur-altuntas",
+    "github": "https://github.com/Rtur2003"
+  },
+  "features": {
+    "darkMode": true,
+    "multiLanguage": true,
+    "analytics": false,
+    "pwa": true
+  },
+  "performance": {
+    "lazyLoading": true,
+    "imageOptimization": true,
+    "caching": true
+  },
+  "development": {
+    "port": 8000,
+    "host": "localhost",
+    "liveReload": false
+  }
+}
