@@ -14,9 +14,10 @@ assets/js/metadata-fetcher.js
 .claude/**
 
 # DATABASE VE KONFIG DOSYALARI - GUVENLİK
-config/
 database/
 backups/
+config/*.local.json
+config/secrets*.json
 
 # Node.js Dependencies
 node_modules/
