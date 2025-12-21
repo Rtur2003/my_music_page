@@ -4,6 +4,35 @@
    =============================================== */
 
 /* ===============================================
+   LOCAL FONT FACES
+   =============================================== */
+
+@font-face {
+    font-family: 'Portmanteau';
+    src: url("../../../FONT/PORTMANTEAU-REGULAR.OTF") format('opentype'),
+        url("../../../FONT/PORTMANTEAU REGULAR.TTF") format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'IM Fell Double Pica';
+    src: url("../../../FONT/IMFELLDOUBLEPICA-REGULAR.TTF") format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'IM Fell Double Pica';
+    src: url("../../../FONT/IMFELLDOUBLEPICA-ITALIC.TTF") format('truetype');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+/* ===============================================
    CSS VARIABLES & THEME
    =============================================== */
 
@@ -34,7 +63,8 @@
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     /* Typography */
-    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-family: 'IM Fell Double Pica', 'Times New Roman', serif;
+    --font-display: 'Portmanteau', 'IM Fell Double Pica', serif;
 }
 
 /* Light theme variables */
@@ -692,4 +722,21 @@ select:focus:not(:focus-visible) {
     .loader-ring {
         animation: none;
     }
+}
+
+/* ===============================================
+   TYPOGRAPHY ACCENTS
+   =============================================== */
+
+h1,
+h2,
+h3,
+h4,
+.hero-title,
+.section-title,
+.updates-title,
+.footer-title,
+.music-section-title,
+.status-title {
+    font-family: var(--font-display);
 }
