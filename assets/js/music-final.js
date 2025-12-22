@@ -2,7 +2,6 @@
 class MusicSystem {
     constructor() {
         this.defaultArtwork = "assets/images/logo-main.png";
-        this.defaultArtist = "Hasan Arthur AltuntaY";
         this.catalogUrl = "assets/data/music-links.json";
         this.configUrl = "config/site.json";
         this.catalogCacheKey = "musicCatalogCache";
@@ -85,6 +84,7 @@ class MusicSystem {
                 }
                 
         ];
+        this.defaultArtist = this.defaultTracks[0]?.artist || "Hasan Arthur Altuntas";
 
         this.defaultAlbums = [
             {
