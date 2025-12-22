@@ -548,21 +548,21 @@ class MusicSystem {
             const playDisabled = !youtubeUrl;
 
             const spotifyLink = spotifyUrl ? `
-                        <a href="${spotifyUrl}" target="_blank" rel="noopener noreferrer" class="platform-link spotify" title="Spotify'da Dinle">
+                        <a href="${spotifyUrl}" target="_blank" rel="noopener noreferrer" class="platform-link spotify" title="Listen on Spotify">
                             <svg viewBox="0 0 24 24" fill="currentColor" class="platform-icon">
                                 <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.42 1.56-.299.421-1.02.599-1.559.3z"/>
                             </svg>
                         </a>` : '';
 
             const appleLink = appleUrl ? `
-                        <a href="${appleUrl}" target="_blank" rel="noopener noreferrer" class="platform-link apple" title="Apple Music'te Dinle">
+                        <a href="${appleUrl}" target="_blank" rel="noopener noreferrer" class="platform-link apple" title="Listen on Apple Music">
                             <svg viewBox="0 0 24 24" fill="currentColor" class="platform-icon">
                                 <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
                             </svg>
                         </a>` : '';
 
             const youtubeLink = youtubeUrl ? `
-                        <a href="${youtubeUrl}" target="_blank" rel="noopener noreferrer" class="platform-link youtube" title="YouTube'da ??zle">
+                        <a href="${youtubeUrl}" target="_blank" rel="noopener noreferrer" class="platform-link youtube" title="Watch on YouTube">
                             <svg viewBox="0 0 24 24" fill="currentColor" class="platform-icon">
                                 <path d="M23.498 6.186a2.999 2.999 0 0 0-2.111-2.135C19.505 3.546 12 3.546 12 3.546s-7.505 0-9.387.505A2.999 2.999 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a2.999 2.999 0 0 0 2.111 2.135c1.882.505 9.387.505 9.387.505s7.505 0 9.387-.505a2.999 2.999 0 0 0 2.111-2.135C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                             </svg>
@@ -570,13 +570,13 @@ class MusicSystem {
 
             card.innerHTML = `
                 <div class="card-content">
-                    <!-- Sol: Alb??m Kapa?Y?? -->
+                    <!-- Left: Album Art -->
                     <div class="track-artwork">
                         <img src="${artworkUrl}" alt="${titleText}" loading="lazy" decoding="async">
                         <div class="duration-badge">${durationText}</div>
                     </div>
 
-                    <!-- Orta: ??ark?? Bilgileri -->
+                    <!-- Center: Track Info -->
                     <div class="track-main">
                         <div class="track-info">
                             <h3 class="track-name" title="${titleText}">${titleText}</h3>
@@ -584,9 +584,9 @@ class MusicSystem {
                         </div>
                     </div>
 
-                    <!-- Sa?Y: Sabit Kontroller -->
+                    <!-- Right: Controls -->
                     <div class="track-controls-fixed">
-                        <button class="play-pause-btn" data-track-index="${index}" ${playDisabled ? 'disabled aria-disabled="true"' : ''} title="??al/Durdur">
+                        <button class="play-pause-btn" data-track-index="${index}" ${playDisabled ? 'disabled aria-disabled="true"' : ''} title="Play/Pause">
                             <svg viewBox="0 0 24 24" fill="currentColor" class="play-icon" id="playIcon-${domId}">
                                 <path d="M8 5v14l11-7z"/>
                             </svg>
@@ -641,7 +641,7 @@ class MusicSystem {
                         <div class="album-info">
                             <h4 class="album-title" title="${titleText}">${titleText}</h4>
                             <p class="album-artist" title="${artistText}">${artistText}</p>
-                            <span class="album-type">2024 ??? Playlist</span>
+                            <span class="album-type">2024 Playlist</span>
                         </div>
                     </a>
                 </div>
@@ -673,7 +673,7 @@ class MusicSystem {
 
         const playIcon = document.getElementById(`playIcon-${domId}`);
 
-        // E?Yer ayn?? ?Yark?? ??al??n??yorsa, duraklat/devam ettir
+        // If the same track is playing, toggle pause/resume
         if (this.currentTrack?.domId === domId) {
             if (this.isPlaying) {
                 this.pauseCurrentTrack();
@@ -683,7 +683,7 @@ class MusicSystem {
             return;
         }
 
-        // Farkl?? ?Yark??ya ge??i?Y
+        // Switch to a new track
         this.stopCurrentTrack();
         this.loadYouTubeAPI();
         await this.playYouTubeAudio(track, playIcon);
@@ -698,19 +698,19 @@ class MusicSystem {
         const domId = track.domId || this.normalizeDomId(track.id, track.id);
         track.domId = domId;
 
-        // Player yoksa olu?Ytur
+        // Create player if missing
         if (!this.youtubePlayers.has(domId)) {
             await this.createYouTubePlayer(domId, videoId);
         }
 
         const player = this.youtubePlayers.get(domId);
 
-        // Play icon'unu g??ncelle
+        // Update play icon
         if (playIcon) {
             playIcon.innerHTML = '<path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>';
         }
 
-        // ??almaya ba?Yla
+        // Start playback
         if (player) {
             player.playVideo();
             this.isPlaying = true;
@@ -719,7 +719,7 @@ class MusicSystem {
 
     async createYouTubePlayer(trackId, videoId) {
         return new Promise((resolve) => {
-            // YouTube API haz??r de?Yilse bekleyelim
+            // Wait for YouTube API if not ready
             if (!window.YT || !window.YT.Player) {
                 const checkInterval = setInterval(() => {
                     if (window.YT && window.YT.Player) {
@@ -774,19 +774,19 @@ class MusicSystem {
             case YT.PlayerState.PLAYING:
                 this.isPlaying = true;
                 this.updateAllPlayIcons();
-                console.log('?-???? Playing:', this.currentTrack.title);
+                console.log('Playing:', this.currentTrack.title);
                 break;
 
             case YT.PlayerState.PAUSED:
                 this.isPlaying = false;
                 this.updateAllPlayIcons();
-                console.log('?????? Paused:', this.currentTrack.title);
+                console.log('Paused:', this.currentTrack.title);
                 break;
 
             case YT.PlayerState.ENDED:
                 this.isPlaying = false;
                 this.updateAllPlayIcons();
-                console.log('?????? Ended:', this.currentTrack.title);
+                console.log('Ended:', this.currentTrack.title);
                 this.applyPendingCatalogIfIdle();
                 break;
         }
@@ -819,7 +819,7 @@ class MusicSystem {
     }
 
     updateAllPlayIcons() {
-        // T??m play icon'lar??n?? g??ncelle
+        // Update all play icons
         this.tracks.forEach(track => {
             const domId = track.domId || this.normalizeDomId(track.id, track.id);
             track.domId = domId;
