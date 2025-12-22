@@ -76,6 +76,10 @@ class SimpleLanguageSystem {
                 'updates.subscribe.placeholder': 'Enter your email',
                 'updates.subscribe.button': 'Subscribe',
 
+                // Panels
+                'panels.title': 'Community Panels',
+                'panels.subtitle': 'Quick links to socials and support',
+
                 // About Section
                 'about.title': 'Who Am I?',
                 'about.subtitle': 'Music, Code & Everything In Between',
