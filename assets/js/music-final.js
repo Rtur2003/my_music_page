@@ -1,7 +1,17 @@
 // Final Clean Music System - YouTube MP3 & Modal Video
 class MusicSystem {
     constructor() {
-        this.tracks = [
+        this.defaultArtwork = "assets/images/logo-main.png";
+        this.defaultArtist = "Hasan Arthur AltuntaY";
+        this.catalogUrl = "assets/data/music-links.json";
+        this.configUrl = "config/site.json";
+        this.catalogCacheKey = "musicCatalogCache";
+        this.catalogCacheTtlMs = 6 * 60 * 60 * 1000;
+        this.maxRemoteTracks = 12;
+        this.youtubeApiInjected = false;
+        this.pendingCatalog = null;
+
+        this.defaultTracks = [
             {
                 id: 1,
                 title: "LIAR",
@@ -76,7 +86,7 @@ class MusicSystem {
                 
         ];
 
-        this.albums = [
+        this.defaultAlbums = [
             {
                 id: 1,
                 title: "My Compositions",
@@ -93,6 +103,9 @@ class MusicSystem {
             }
         ];
 
+        this.tracks = this.normalizeTracks(this.defaultTracks);
+        this.albums = this.normalizeAlbums(this.defaultAlbums);
+
         this.currentTrack = null;
         this.isPlaying = false;
         this.youtubePlayers = new Map();
@@ -103,7 +116,7 @@ class MusicSystem {
     init() {
         this.renderMusic();
         this.setupEventListeners();
-        this.loadYouTubeAPI();
+        this.deferCatalogLoad();
         console.log('🎵 Music System Ready - YouTube API Version');
     }
 
