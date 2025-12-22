@@ -20,6 +20,11 @@
     "linkedin": "https://tr.linkedin.com/in/hasan-arthur-altuntas",
     "github": "https://github.com/Rtur2003"
   },
+  "music": {
+    "youtubeChannelId": "UCA7E1X_uGUqtSJeIxvBeTQA",
+    "spotifyArtistId": "6D5NDnftFDOelT5ssMe0ef",
+    "spotifyMarket": "TR"
+  },
   "features": {
     "darkMode": true,
     "multiLanguage": true,

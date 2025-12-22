@@ -543,20 +543,27 @@ class MusicSystem {
 
         const merged = baseList.map((track) => ({ ...track }));
         const indexByYouTubeId = new Map();
+        const indexByTitle = new Map();
 
         merged.forEach((track, index) => {
             const youtubeId = this.extractYouTubeId(track.youtube || '');
             if (youtubeId) {
                 indexByYouTubeId.set(youtubeId, index);
             }
+
+            const titleKey = this.normalizeTitleKey(track.title || '');
+            if (titleKey && !indexByTitle.has(titleKey)) {
+                indexByTitle.set(titleKey, index);
+            }
         });
 
         remoteList.forEach((remoteTrack) => {
             const youtubeId = this.extractYouTubeId(remoteTrack.youtube || '');
+            const titleKey = this.normalizeTitleKey(remoteTrack.title || '');
             if (youtubeId && indexByYouTubeId.has(youtubeId)) {
                 const target = merged[indexByYouTubeId.get(youtubeId)];
 
-                if (remoteTrack.title && remoteTrack.title !== 'Untitled') {
+                if (remoteTrack.title && remoteTrack.title !== 'Untitled' && target.title === 'Untitled') {
                     target.title = remoteTrack.title;
                 }
 
@@ -568,13 +575,58 @@ class MusicSystem {
                     target.artwork = remoteTrack.artwork;
                 }
 
+                if (remoteTrack.spotify && !target.spotify) {
+                    target.spotify = remoteTrack.spotify;
+                }
+
+                if (remoteTrack.apple && !target.apple) {
+                    target.apple = remoteTrack.apple;
+                }
+
                 return;
             }
 
-            merged.push(remoteTrack);
+            if (titleKey && indexByTitle.has(titleKey)) {
+                const target = merged[indexByTitle.get(titleKey)];
+
+                if (remoteTrack.duration && remoteTrack.duration !== '--:--') {
+                    target.duration = remoteTrack.duration;
+                }
+
+                if (remoteTrack.artwork && remoteTrack.artwork !== this.defaultArtwork) {
+                    target.artwork = remoteTrack.artwork;
+                }
+
+                if (remoteTrack.spotify && !target.spotify) {
+                    target.spotify = remoteTrack.spotify;
+                }
+
+                if (remoteTrack.apple && !target.apple) {
+                    target.apple = remoteTrack.apple;
+                }
+
+                return;
+            }
+
+            if (remoteTrack.youtube) {
+                merged.push(remoteTrack);
+            }
         });
 
         return this.normalizeTracks(merged);
+    }
+
+    normalizeTitleKey(title) {
+        if (!title || typeof title !== 'string') {
+            return '';
+        }
+
+        return title
+            .toLowerCase()
+            .replace(/\([^)]*\)/g, ' ')
+            .replace(/\[[^\]]*\]/g, ' ')
+            .replace(/[^a-z0-9]+/g, ' ')
+            .trim();
     }
 
     normalizeAlbums(rawAlbums) {
