@@ -121,15 +121,403 @@ class MusicSystem {
     }
 
     loadYouTubeAPI() {
-        if (window.YT) {
-            console.log('YouTube API already loaded');
+        if (window.YT || this.youtubeApiInjected) {
+            if (window.YT) {
+                console.log('YouTube API already loaded');
+            }
             return;
         }
 
+        this.youtubeApiInjected = true;
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
+        tag.onerror = () => {
+            this.youtubeApiInjected = false;
+            console.warn('YouTube API failed to load');
+        };
         const firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    }
+
+    deferCatalogLoad() {
+        const startLoad = () => this.loadCatalog();
+
+        if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(() => startLoad(), { timeout: 1500 });
+            return;
+        }
+
+        setTimeout(startLoad, 300);
+    }
+
+    async loadCatalog() {
+        const config = await this.fetchSiteConfig();
+        const channelId = this.getYouTubeChannelId(config);
+
+        const cachedTracks = this.readCatalogCache(channelId);
+        if (cachedTracks && cachedTracks.length) {
+            this.applyCatalog({
+                tracks: this.normalizeTracks(cachedTracks),
+                albums: this.albums
+            });
+        }
+
+        const localCatalog = await this.fetchLocalCatalog();
+        if (localCatalog) {
+            this.applyCatalog(localCatalog);
+        }
+
+        const remoteCatalog = await this.fetchYouTubeCatalog(channelId);
+        if (remoteCatalog && remoteCatalog.tracks.length) {
+            const albums = localCatalog?.albums?.length ? localCatalog.albums : this.albums;
+            this.applyCatalog({
+                tracks: remoteCatalog.tracks,
+                albums: albums
+            });
+        }
+    }
+
+    async fetchSiteConfig() {
+        try {
+            const response = await fetch(this.configUrl, { cache: 'force-cache' });
+            if (!response.ok) {
+                throw new Error('Config not found');
+            }
+            return await response.json();
+        } catch (error) {
+            console.warn('Site config unavailable:', error);
+            return null;
+        }
+    }
+
+    getYouTubeChannelId(config) {
+        const explicitChannelId = config?.music?.youtubeChannelId;
+        if (explicitChannelId) {
+            return explicitChannelId;
+        }
+
+        const youtubeUrl = config?.social?.youtube || '';
+        const match = youtubeUrl.match(/channel\/([a-zA-Z0-9_-]+)/);
+        return match ? match[1] : '';
+    }
+
+    readCatalogCache(channelId) {
+        if (!channelId) {
+            return null;
+        }
+
+        try {
+            const raw = localStorage.getItem(this.catalogCacheKey);
+            if (!raw) {
+                return null;
+            }
+
+            const cached = JSON.parse(raw);
+            if (!cached || cached.channelId !== channelId) {
+                return null;
+            }
+
+            if (Date.now() - cached.timestamp > this.catalogCacheTtlMs) {
+                return null;
+            }
+
+            return Array.isArray(cached.tracks) ? cached.tracks : null;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    writeCatalogCache(channelId, tracks) {
+        if (!channelId || !Array.isArray(tracks)) {
+            return;
+        }
+
+        try {
+            const payload = {
+                channelId: channelId,
+                timestamp: Date.now(),
+                tracks: tracks
+            };
+            localStorage.setItem(this.catalogCacheKey, JSON.stringify(payload));
+        } catch (error) {
+            return;
+        }
+    }
+
+    async fetchYouTubeCatalog(channelId) {
+        if (!channelId) {
+            return null;
+        }
+
+        const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+
+        try {
+            const response = await fetch(feedUrl);
+            if (!response.ok) {
+                throw new Error('YouTube feed request failed');
+            }
+
+            const feedText = await response.text();
+            const feedTracks = this.parseYouTubeFeed(feedText);
+            if (!feedTracks.length) {
+                return null;
+            }
+
+            this.writeCatalogCache(channelId, feedTracks);
+
+            return {
+                tracks: this.normalizeTracks(feedTracks)
+            };
+        } catch (error) {
+            console.warn('YouTube feed error, using fallback data:', error);
+            return null;
+        }
+    }
+
+    parseYouTubeFeed(feedText) {
+        if (!feedText) {
+            return [];
+        }
+
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(feedText, 'text/xml');
+        const entries = Array.from(xml.getElementsByTagName('entry'));
+
+        if (!entries.length) {
+            return [];
+        }
+
+        return entries.slice(0, this.maxRemoteTracks).map((entry, index) => {
+            const titleNode = entry.getElementsByTagName('title')[0];
+            const title = titleNode ? titleNode.textContent.trim() : 'Untitled';
+
+            const authorNode = entry.getElementsByTagName('name')[0];
+            const artist = authorNode ? authorNode.textContent.trim() : this.defaultArtist;
+
+            const videoIdNode = entry.getElementsByTagName('yt:videoId')[0];
+            const videoId = videoIdNode ? videoIdNode.textContent.trim() : '';
+
+            let link = '';
+            const linkNodes = entry.getElementsByTagName('link');
+            for (let i = 0; i < linkNodes.length; i += 1) {
+                const rel = linkNodes[i].getAttribute('rel');
+                if (!rel || rel === 'alternate') {
+                    link = linkNodes[i].getAttribute('href') || '';
+                    if (link) {
+                        break;
+                    }
+                }
+            }
+
+            const thumbNode = entry.getElementsByTagName('media:thumbnail')[0];
+            const artwork = thumbNode ? thumbNode.getAttribute('url') : '';
+
+            let durationSeconds = 0;
+            const durationNode = entry.getElementsByTagName('yt:duration')[0];
+            if (durationNode) {
+                durationSeconds = parseInt(durationNode.getAttribute('seconds'), 10);
+            }
+            if (!durationSeconds) {
+                const mediaContent = entry.getElementsByTagName('media:content')[0];
+                if (mediaContent) {
+                    durationSeconds = parseInt(mediaContent.getAttribute('duration'), 10);
+                }
+            }
+
+            return {
+                id: videoId || `yt-${index + 1}`,
+                title: title,
+                artist: artist,
+                duration: durationSeconds ? this.formatDuration(durationSeconds) : '--:--',
+                artwork: artwork,
+                youtube: link || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : '')
+            };
+        });
+    }
+
+    async fetchLocalCatalog() {
+        try {
+            const response = await fetch(this.catalogUrl, { cache: 'no-store' });
+            if (!response.ok) {
+                throw new Error('Catalog not found');
+            }
+
+            const data = await response.json();
+            const tracks = this.normalizeTracks(data.tracks || []);
+            const albums = this.normalizeAlbums(data.albums || []);
+
+            if (!tracks.length && !albums.length) {
+                return null;
+            }
+
+            return {
+                tracks: tracks,
+                albums: albums
+            };
+        } catch (error) {
+            console.warn('Local catalog unavailable, using fallback data:', error);
+            return null;
+        }
+    }
+
+    applyCatalog(catalog) {
+        if (!catalog || !Array.isArray(catalog.tracks) || !catalog.tracks.length) {
+            return;
+        }
+
+        if (this.isPlaying) {
+            this.pendingCatalog = catalog;
+            return;
+        }
+
+        this.tracks = catalog.tracks;
+        if (Array.isArray(catalog.albums) && catalog.albums.length) {
+            this.albums = catalog.albums;
+        }
+
+        this.currentTrack = null;
+        this.youtubePlayers.clear();
+        this.renderMusic();
+    }
+
+    applyPendingCatalogIfIdle() {
+        if (!this.isPlaying && this.pendingCatalog) {
+            const pending = this.pendingCatalog;
+            this.pendingCatalog = null;
+            this.applyCatalog(pending);
+        }
+    }
+
+    normalizeTracks(rawTracks) {
+        if (!Array.isArray(rawTracks)) {
+            return [];
+        }
+
+        return rawTracks.map((track, index) => {
+            const title = typeof track.title === 'string' && track.title.trim() ? track.title.trim() : 'Untitled';
+            const artist = typeof track.artist === 'string' && track.artist.trim() ? track.artist.trim() : this.defaultArtist;
+            const duration = typeof track.duration === 'string' && track.duration.trim() ? track.duration.trim() : '--:--';
+            const links = track.links || {};
+            const youtube = this.safeUrl(track.youtube || links.youtube || '');
+            const spotify = this.safeUrl(track.spotify || links.spotify || '');
+            const apple = this.safeUrl(track.apple || links.apple || '');
+            const artwork = this.resolveArtwork({
+                artwork: track.artwork,
+                youtube: youtube,
+                spotify: spotify,
+                apple: apple
+            });
+            const id = track.id || `track-${index + 1}`;
+            const domId = this.normalizeDomId(id, `track-${index + 1}`);
+
+            return {
+                id: id,
+                domId: domId,
+                title: title,
+                artist: artist,
+                duration: duration,
+                artwork: artwork,
+                youtube: youtube,
+                spotify: spotify,
+                apple: apple
+            };
+        });
+    }
+
+    normalizeAlbums(rawAlbums) {
+        if (!Array.isArray(rawAlbums)) {
+            return [];
+        }
+
+        return rawAlbums.map((album, index) => {
+            const title = typeof album.title === 'string' && album.title.trim() ? album.title.trim() : 'Untitled';
+            const artist = typeof album.artist === 'string' && album.artist.trim() ? album.artist.trim() : this.defaultArtist;
+            const links = album.links || {};
+            const youtube = this.safeUrl(album.youtube || links.youtube || '');
+            const artwork = this.safeUrl(album.artwork) || this.defaultArtwork;
+            const id = album.id || `album-${index + 1}`;
+            const domId = this.normalizeDomId(id, `album-${index + 1}`);
+
+            return {
+                id: id,
+                domId: domId,
+                title: title,
+                artist: artist,
+                artwork: artwork,
+                youtube: youtube,
+                release_date: album.release_date || ''
+            };
+        });
+    }
+
+    resolveArtwork(track) {
+        const provided = this.safeUrl(track.artwork);
+        if (provided && provided !== this.defaultArtwork) {
+            return provided;
+        }
+
+        const youtubeThumb = this.getYouTubeThumbnail(track.youtube);
+        if (youtubeThumb) {
+            return youtubeThumb;
+        }
+
+        return this.defaultArtwork;
+    }
+
+    getYouTubeThumbnail(url) {
+        const videoId = this.extractYouTubeId(url || '');
+        if (!videoId) {
+            return '';
+        }
+
+        return `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+    }
+
+    formatDuration(totalSeconds) {
+        if (!Number.isFinite(totalSeconds) || totalSeconds <= 0) {
+            return '--:--';
+        }
+
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = Math.floor(totalSeconds % 60);
+        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    safeUrl(url) {
+        if (!url || typeof url !== 'string') {
+            return '';
+        }
+
+        const trimmed = url.trim();
+        if (!trimmed) {
+            return '';
+        }
+
+        const lowered = trimmed.toLowerCase();
+        if (lowered.startsWith('javascript:')) {
+            return '';
+        }
+
+        return trimmed;
+    }
+
+    escapeHtml(value) {
+        if (value === null || value === undefined) {
+            return '';
+        }
+
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    normalizeDomId(value, fallback) {
+        const base = value ? String(value) : String(fallback);
+        const sanitized = base.replace(/[^a-zA-Z0-9_-]/g, '');
+        return sanitized || String(fallback);
     }
 
     renderMusic() {
