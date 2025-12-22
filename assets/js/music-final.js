@@ -6,6 +6,7 @@ class MusicSystem {
         this.configUrl = "config/site.json";
         this.catalogCacheKey = "musicCatalogCache";
         this.catalogCacheTtlMs = 6 * 60 * 60 * 1000;
+        this.catalogFunctionUrl = "/.netlify/functions/music-catalog";
         this.maxRemoteTracks = 12;
         this.youtubeApiInjected = false;
         this.pendingCatalog = null;
@@ -153,6 +154,8 @@ class MusicSystem {
     async loadCatalog() {
         const config = await this.fetchSiteConfig();
         const channelId = this.getYouTubeChannelId(config);
+        const spotifyArtistId = this.getSpotifyArtistId(config);
+        const spotifyMarket = this.getSpotifyMarket(config);
 
         const cachedTracks = this.readCatalogCache(channelId);
         const localCatalog = await this.fetchLocalCatalog();
@@ -174,9 +177,15 @@ class MusicSystem {
             });
         }
 
-        const remoteCatalog = await this.fetchYouTubeCatalog(channelId);
-        if (remoteCatalog && remoteCatalog.tracks.length) {
-            const mergedTracks = this.mergeTracks(baseTracks, remoteCatalog.tracks);
+        const remoteCatalog = await this.fetchRemoteCatalog(channelId, spotifyArtistId, spotifyMarket);
+        if (remoteCatalog) {
+            let mergedTracks = baseTracks;
+            if (remoteCatalog.tracks?.length) {
+                mergedTracks = this.mergeTracks(mergedTracks, remoteCatalog.tracks);
+            }
+            if (remoteCatalog.spotifyTracks?.length) {
+                mergedTracks = this.mergeTracks(mergedTracks, remoteCatalog.spotifyTracks);
+            }
             this.applyCatalog({
                 tracks: mergedTracks,
                 albums: baseAlbums
@@ -206,6 +215,26 @@ class MusicSystem {
         const youtubeUrl = config?.social?.youtube || '';
         const match = youtubeUrl.match(/channel\/([a-zA-Z0-9_-]+)/);
         return match ? match[1] : '';
+    }
+
+    getSpotifyArtistId(config) {
+        const explicitArtistId = config?.music?.spotifyArtistId;
+        if (explicitArtistId) {
+            return explicitArtistId;
+        }
+
+        const spotifyUrl = config?.social?.spotify || '';
+        const match = spotifyUrl.match(/artist\/([a-zA-Z0-9]+)/);
+        return match ? match[1] : '';
+    }
+
+    getSpotifyMarket(config) {
+        const market = config?.music?.spotifyMarket;
+        if (typeof market === 'string' && market.trim()) {
+            return market.trim().toUpperCase();
+        }
+
+        return 'TR';
     }
 
     readCatalogCache(channelId) {
@@ -248,6 +277,69 @@ class MusicSystem {
             localStorage.setItem(this.catalogCacheKey, JSON.stringify(payload));
         } catch (error) {
             return;
+        }
+    }
+
+    async fetchRemoteCatalog(channelId, spotifyArtistId, spotifyMarket) {
+        const functionCatalog = await this.fetchFunctionCatalog(channelId, spotifyArtistId, spotifyMarket);
+        if (functionCatalog) {
+            if (functionCatalog.tracks?.length && channelId) {
+                this.writeCatalogCache(channelId, functionCatalog.tracks);
+            }
+            return functionCatalog;
+        }
+
+        const youtubeCatalog = await this.fetchYouTubeCatalog(channelId);
+        if (!youtubeCatalog) {
+            return null;
+        }
+
+        return {
+            tracks: youtubeCatalog.tracks,
+            spotifyTracks: []
+        };
+    }
+
+    async fetchFunctionCatalog(channelId, spotifyArtistId, spotifyMarket) {
+        if (!channelId && !spotifyArtistId) {
+            return null;
+        }
+
+        const params = new URLSearchParams();
+        if (channelId) {
+            params.set('channelId', channelId);
+        }
+        if (spotifyArtistId) {
+            params.set('spotifyArtistId', spotifyArtistId);
+        }
+        if (spotifyMarket) {
+            params.set('market', spotifyMarket);
+        }
+        params.set('max', String(this.maxRemoteTracks));
+
+        const url = `${this.catalogFunctionUrl}?${params.toString()}`;
+
+        try {
+            const response = await fetch(url, { cache: 'no-store' });
+            if (!response.ok) {
+                throw new Error('Function catalog request failed');
+            }
+
+            const data = await response.json();
+            const tracks = this.normalizeTracks(data.tracks || data.youtube?.tracks || []);
+            const spotifyTracks = this.normalizeTracks(data.spotifyTracks || data.spotify?.tracks || []);
+
+            if (!tracks.length && !spotifyTracks.length) {
+                return null;
+            }
+
+            return {
+                tracks: tracks,
+                spotifyTracks: spotifyTracks
+            };
+        } catch (error) {
+            console.warn('Function catalog unavailable, using fallback data:', error);
+            return null;
         }
     }
 
@@ -403,7 +495,13 @@ class MusicSystem {
         return rawTracks.map((track, index) => {
             const title = typeof track.title === 'string' && track.title.trim() ? track.title.trim() : 'Untitled';
             const artist = typeof track.artist === 'string' && track.artist.trim() ? track.artist.trim() : this.defaultArtist;
-            const duration = typeof track.duration === 'string' && track.duration.trim() ? track.duration.trim() : '--:--';
+            let duration = '--:--';
+            if (typeof track.duration === 'number' && Number.isFinite(track.duration)) {
+                const seconds = track.duration > 1000 ? Math.round(track.duration / 1000) : Math.round(track.duration);
+                duration = this.formatDuration(seconds);
+            } else if (typeof track.duration === 'string' && track.duration.trim()) {
+                duration = track.duration.trim();
+            }
             const links = track.links || {};
             const youtube = this.safeUrl(track.youtube || links.youtube || '');
             const spotify = this.safeUrl(track.spotify || links.spotify || '');
