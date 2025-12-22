@@ -155,24 +155,31 @@ class MusicSystem {
         const channelId = this.getYouTubeChannelId(config);
 
         const cachedTracks = this.readCatalogCache(channelId);
-        if (cachedTracks && cachedTracks.length) {
+        const localCatalog = await this.fetchLocalCatalog();
+        const baseTracks = localCatalog?.tracks?.length ? localCatalog.tracks : this.tracks;
+        const baseAlbums = localCatalog?.albums?.length ? localCatalog.albums : this.albums;
+
+        if (localCatalog) {
             this.applyCatalog({
-                tracks: this.normalizeTracks(cachedTracks),
-                albums: this.albums
+                tracks: baseTracks,
+                albums: baseAlbums
             });
         }
 
-        const localCatalog = await this.fetchLocalCatalog();
-        if (localCatalog) {
-            this.applyCatalog(localCatalog);
+        if (cachedTracks && cachedTracks.length) {
+            const mergedCached = this.mergeTracks(baseTracks, this.normalizeTracks(cachedTracks));
+            this.applyCatalog({
+                tracks: mergedCached,
+                albums: baseAlbums
+            });
         }
 
         const remoteCatalog = await this.fetchYouTubeCatalog(channelId);
         if (remoteCatalog && remoteCatalog.tracks.length) {
-            const albums = localCatalog?.albums?.length ? localCatalog.albums : this.albums;
+            const mergedTracks = this.mergeTracks(baseTracks, remoteCatalog.tracks);
             this.applyCatalog({
-                tracks: remoteCatalog.tracks,
-                albums: albums
+                tracks: mergedTracks,
+                albums: baseAlbums
             });
         }
     }
@@ -422,6 +429,54 @@ class MusicSystem {
                 apple: apple
             };
         });
+    }
+
+    mergeTracks(baseTracks, remoteTracks) {
+        const baseList = Array.isArray(baseTracks) ? baseTracks : [];
+        const remoteList = Array.isArray(remoteTracks) ? remoteTracks : [];
+
+        if (!remoteList.length) {
+            return baseList;
+        }
+
+        if (!baseList.length) {
+            return remoteList;
+        }
+
+        const merged = baseList.map((track) => ({ ...track }));
+        const indexByYouTubeId = new Map();
+
+        merged.forEach((track, index) => {
+            const youtubeId = this.extractYouTubeId(track.youtube || '');
+            if (youtubeId) {
+                indexByYouTubeId.set(youtubeId, index);
+            }
+        });
+
+        remoteList.forEach((remoteTrack) => {
+            const youtubeId = this.extractYouTubeId(remoteTrack.youtube || '');
+            if (youtubeId && indexByYouTubeId.has(youtubeId)) {
+                const target = merged[indexByYouTubeId.get(youtubeId)];
+
+                if (remoteTrack.title && remoteTrack.title !== 'Untitled') {
+                    target.title = remoteTrack.title;
+                }
+
+                if (remoteTrack.duration && remoteTrack.duration !== '--:--') {
+                    target.duration = remoteTrack.duration;
+                }
+
+                if (remoteTrack.artwork && remoteTrack.artwork !== this.defaultArtwork) {
+                    target.artwork = remoteTrack.artwork;
+                }
+
+                return;
+            }
+
+            merged.push(remoteTrack);
+        });
+
+        return this.normalizeTracks(merged);
     }
 
     normalizeAlbums(rawAlbums) {
@@ -835,7 +890,7 @@ class MusicSystem {
     }
 
     extractYouTubeId(url) {
-        const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/;
+        const regex = /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([^&\n?#]+)/;
         const match = url.match(regex);
         return match ? match[1] : null;
     }
