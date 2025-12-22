@@ -663,10 +663,18 @@ class MusicSystem {
 
     async togglePlay(index) {
         const track = this.tracks[index];
-        const playIcon = document.getElementById(`playIcon-${track.id}`);
+        if (!track) return;
 
-        // Eğer aynı şarkı çalınıyorsa, duraklat/devam ettir
-        if (this.currentTrack?.id === track.id) {
+        const youtubeUrl = this.safeUrl(track.youtube);
+        if (!youtubeUrl) return;
+
+        const domId = track.domId || this.normalizeDomId(track.id, `track-${index + 1}`);
+        track.domId = domId;
+
+        const playIcon = document.getElementById(`playIcon-${domId}`);
+
+        // E?Yer ayn?? ?Yark?? ??al??n??yorsa, duraklat/devam ettir
+        if (this.currentTrack?.domId === domId) {
             if (this.isPlaying) {
                 this.pauseCurrentTrack();
             } else {
@@ -675,8 +683,9 @@ class MusicSystem {
             return;
         }
 
-        // Farklı şarkıya geçiş
+        // Farkl?? ?Yark??ya ge??i?Y
         this.stopCurrentTrack();
+        this.loadYouTubeAPI();
         await this.playYouTubeAudio(track, playIcon);
     }
 
@@ -686,26 +695,31 @@ class MusicSystem {
 
         this.currentTrack = track;
 
-        // Player yoksa oluştur
-        if (!this.youtubePlayers.has(track.id)) {
-            await this.createYouTubePlayer(track.id, videoId);
+        const domId = track.domId || this.normalizeDomId(track.id, track.id);
+        track.domId = domId;
+
+        // Player yoksa olu?Ytur
+        if (!this.youtubePlayers.has(domId)) {
+            await this.createYouTubePlayer(domId, videoId);
         }
 
-        const player = this.youtubePlayers.get(track.id);
+        const player = this.youtubePlayers.get(domId);
 
-        // Play icon'unu güncelle
+        // Play icon'unu g??ncelle
         if (playIcon) {
             playIcon.innerHTML = '<path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>';
         }
 
-        // Çalmaya başla
-        player.playVideo();
-        this.isPlaying = true;
+        // ??almaya ba?Yla
+        if (player) {
+            player.playVideo();
+            this.isPlaying = true;
+        }
     }
 
     async createYouTubePlayer(trackId, videoId) {
         return new Promise((resolve) => {
-            // YouTube API hazır değilse bekleyelim
+            // YouTube API haz??r de?Yilse bekleyelim
             if (!window.YT || !window.YT.Player) {
                 const checkInterval = setInterval(() => {
                     if (window.YT && window.YT.Player) {
@@ -760,54 +774,58 @@ class MusicSystem {
             case YT.PlayerState.PLAYING:
                 this.isPlaying = true;
                 this.updateAllPlayIcons();
-                console.log('▶️ Playing:', this.currentTrack.title);
+                console.log('?-???? Playing:', this.currentTrack.title);
                 break;
 
             case YT.PlayerState.PAUSED:
                 this.isPlaying = false;
                 this.updateAllPlayIcons();
-                console.log('⏸️ Paused:', this.currentTrack.title);
+                console.log('?????? Paused:', this.currentTrack.title);
                 break;
 
             case YT.PlayerState.ENDED:
                 this.isPlaying = false;
                 this.updateAllPlayIcons();
-                console.log('⏹️ Ended:', this.currentTrack.title);
+                console.log('?????? Ended:', this.currentTrack.title);
+                this.applyPendingCatalogIfIdle();
                 break;
         }
     }
 
     pauseCurrentTrack() {
-        if (this.currentTrack && this.youtubePlayers.has(this.currentTrack.id)) {
-            const player = this.youtubePlayers.get(this.currentTrack.id);
+        if (this.currentTrack && this.youtubePlayers.has(this.currentTrack.domId)) {
+            const player = this.youtubePlayers.get(this.currentTrack.domId);
             player.pauseVideo();
             this.isPlaying = false;
         }
     }
 
     resumeCurrentTrack() {
-        if (this.currentTrack && this.youtubePlayers.has(this.currentTrack.id)) {
-            const player = this.youtubePlayers.get(this.currentTrack.id);
+        if (this.currentTrack && this.youtubePlayers.has(this.currentTrack.domId)) {
+            const player = this.youtubePlayers.get(this.currentTrack.domId);
             player.playVideo();
             this.isPlaying = true;
         }
     }
 
     stopCurrentTrack() {
-        if (this.currentTrack && this.youtubePlayers.has(this.currentTrack.id)) {
-            const player = this.youtubePlayers.get(this.currentTrack.id);
+        if (this.currentTrack && this.youtubePlayers.has(this.currentTrack.domId)) {
+            const player = this.youtubePlayers.get(this.currentTrack.domId);
             player.stopVideo();
         }
         this.isPlaying = false;
         this.updateAllPlayIcons();
+        this.applyPendingCatalogIfIdle();
     }
 
     updateAllPlayIcons() {
-        // Tüm play icon'larını güncelle
+        // T??m play icon'lar??n?? g??ncelle
         this.tracks.forEach(track => {
-            const playIcon = document.getElementById(`playIcon-${track.id}`);
+            const domId = track.domId || this.normalizeDomId(track.id, track.id);
+            track.domId = domId;
+            const playIcon = document.getElementById(`playIcon-${domId}`);
             if (playIcon) {
-                if (this.isPlaying && this.currentTrack?.id === track.id) {
+                if (this.isPlaying && this.currentTrack?.domId === domId) {
                     playIcon.innerHTML = '<path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>'; // Pause
                 } else {
                     playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>'; // Play
@@ -815,8 +833,6 @@ class MusicSystem {
             }
         });
     }
-
-
 
     extractYouTubeId(url) {
         const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/;
