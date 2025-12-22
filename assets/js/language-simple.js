@@ -210,6 +210,10 @@ class SimpleLanguageSystem {
                 'updates.subscribe.placeholder': 'E-posta adresin',
                 'updates.subscribe.button': 'Abone Ol',
 
+                // Panels
+                'panels.title': 'Topluluk Panelleri',
+                'panels.subtitle': 'Sosyal hesaplar ve destek icin hizli baglantilar',
+
                 // About Section
                 'about.title': 'Ben Kimim?',
                 'about.subtitle': 'Müzik, Kod ve Aradaki Her Şey',
