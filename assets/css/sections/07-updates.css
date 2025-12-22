@@ -531,6 +531,39 @@
         margin-bottom: 3rem;
     }
 
+    .panel-hub {
+        margin: 2rem auto 3rem;
+    }
+
+    .panel-hub-title {
+        font-size: 1.5rem;
+    }
+
+    .panel-hub-subtitle {
+        font-size: 0.85rem;
+    }
+
+    .panel-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+    }
+
+    .panel-card {
+        padding: 0.4rem 0.6rem;
+        border-radius: 14px;
+    }
+
+    .panel-badge {
+        width: 32px;
+        height: 32px;
+        border-radius: 9px;
+    }
+
+    .panel-badge img {
+        width: 16px;
+        height: 16px;
+    }
+
     .social-post {
         padding: 1.25rem;
         border-radius: 12px;
@@ -614,6 +647,14 @@
 
     .updates-title {
         font-size: 1.8rem;
+    }
+
+    .panel-hub-title {
+        font-size: 1.3rem;
+    }
+
+    .panel-grid {
+        grid-template-columns: 1fr;
     }
 
     .social-post {
