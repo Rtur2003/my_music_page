@@ -170,7 +170,8 @@ class MusicSystem {
         }
 
         if (cachedTracks && cachedTracks.length) {
-            const mergedCached = this.mergeTracks(baseTracks, this.normalizeTracks(cachedTracks));
+            const cachedList = this.normalizeTracks(cachedTracks);
+            const mergedCached = this.buildTrackList(baseTracks, cachedList, []);
             this.applyCatalog({
                 tracks: mergedCached,
                 albums: baseAlbums
@@ -179,13 +180,11 @@ class MusicSystem {
 
         const remoteCatalog = await this.fetchRemoteCatalog(channelId, spotifyArtistId, spotifyMarket);
         if (remoteCatalog) {
-            let mergedTracks = baseTracks;
-            if (remoteCatalog.tracks?.length) {
-                mergedTracks = this.mergeTracks(mergedTracks, remoteCatalog.tracks);
-            }
-            if (remoteCatalog.spotifyTracks?.length) {
-                mergedTracks = this.mergeTracks(mergedTracks, remoteCatalog.spotifyTracks);
-            }
+            const mergedTracks = this.buildTrackList(
+                baseTracks,
+                remoteCatalog.tracks || [],
+                remoteCatalog.spotifyTracks || []
+            );
             this.applyCatalog({
                 tracks: mergedTracks,
                 albums: baseAlbums
