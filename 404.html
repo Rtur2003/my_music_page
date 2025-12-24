@@ -14,7 +14,7 @@
         }
         
         body {
-            font-family: 'IM Fell Double Pica', 'Times New Roman', serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
             color: #fff;
             min-height: 100vh;
@@ -156,12 +156,27 @@
     </div>
     
     <script>
-        // Auto redirect to home after 10 seconds
-        setTimeout(() => {
-            if (confirm('Page not found. Redirect to homepage?')) {
+        // Visual countdown for redirect
+        let countdown = 15;
+        const countdownText = document.createElement('p');
+        countdownText.style.cssText = 'margin-top: 2rem; font-size: 0.9rem; color: rgba(255, 255, 255, 0.6);';
+        countdownText.innerHTML = `Redirecting to homepage in <span id="countdown">${countdown}</span> seconds...`;
+        document.querySelector('.error-container').appendChild(countdownText);
+        
+        const interval = setInterval(() => {
+            countdown--;
+            document.getElementById('countdown').textContent = countdown;
+            if (countdown <= 0) {
+                clearInterval(interval);
                 window.location.href = '/';
             }
-        }, 10000);
+        }, 1000);
+        
+        // Allow users to stop redirect by interacting with page
+        document.addEventListener('click', () => {
+            clearInterval(interval);
+            countdownText.style.display = 'none';
+        }, { once: true });
     </script>
 </body>
 </html>
