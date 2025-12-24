@@ -51,8 +51,8 @@ class MusicSystem {
                 youtube: "https://youtu.be/x8lcJsuDR8A",
                 spotify: "https://open.spotify.com/intl-tr/track/4vLu7LEv9KE5wPp4h1ldc8?si=c0491e04580140eb",
                 apple: "https://music.apple.com/tr/song/alicia-version3/1841276639"
-                },
-                {
+            },
+            {
                 id: 6,
                 title: "Clair Obscur  Expedition 33  But My Version",
                 artist: "Hasan Arthur Altuntaş",
@@ -61,9 +61,8 @@ class MusicSystem {
                 youtube: "https://youtu.be/AINP-Y82LsA",
                 spotify: "https://open.spotify.com/intl-tr/track/3uYE4LHqPv3vA7MzLW99ij?si=800c32542d254e7e",
                 apple: "https://music.apple.com/tr/song/lumiere-and-alicia-piano/1841276636"
-                }
-                ,
-                {
+            },
+            {
                 id: 7,
                 title: "Une Vie à Peindre - Clair Obscur Expedition 33(Cover)",
                 artist: "Hasan Arthur Altuntaş",
@@ -82,8 +81,7 @@ class MusicSystem {
                 youtube: "https://www.youtube.com/watch?v=vQGDk2ItC2o",
                 spotify: "",
                 apple: ""
-                }
-                
+            }
         ];
         this.defaultArtist = this.defaultTracks[0]?.artist || "Hasan Arthur Altuntas";
 
