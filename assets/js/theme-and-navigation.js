@@ -13,7 +13,7 @@ class ThemeAndNavigationManager {
             if (typeof Storage !== 'undefined' && window.localStorage) {
                 return localStorage.getItem('theme');
             }
-        } catch (error) {
+        } catch {
             console.log('Theme storage not available');
         }
         return null;
@@ -24,7 +24,7 @@ class ThemeAndNavigationManager {
             if (typeof Storage !== 'undefined' && window.localStorage) {
                 localStorage.setItem('theme', theme);
             }
-        } catch (error) {
+        } catch {
             console.log('Cannot save theme preference');
         }
     }
@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         sections.forEach(section => {
             const sectionTop = section.offsetTop - 100;
-            if (scrollY >= sectionTop) {
+            if (window.scrollY >= sectionTop) {
                 currentSection = section.getAttribute('id');
             }
         });

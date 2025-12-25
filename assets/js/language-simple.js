@@ -284,7 +284,7 @@ class SimpleLanguageSystem {
             if (typeof Storage !== 'undefined' && window.localStorage) {
                 return localStorage.getItem('siteLanguage');
             }
-        } catch (error) {
+        } catch {
             console.log('Language storage not available');
         }
         return null;
@@ -295,7 +295,7 @@ class SimpleLanguageSystem {
             if (typeof Storage !== 'undefined' && window.localStorage) {
                 localStorage.setItem('siteLanguage', lang);
             }
-        } catch (error) {
+        } catch {
             console.log('Cannot save language preference');
         }
     }
