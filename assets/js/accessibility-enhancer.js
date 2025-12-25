@@ -195,12 +195,25 @@ class AccessibilityEnhancer {
                 const href = link.getAttribute('href') || '';
 
                 if (href.includes('instagram')) {platform = 'Instagram';}
-                else if (href.includes('linkedin')) {platform = 'LinkedIn';}
-                else if (href.includes('github')) {platform = 'GitHub';}
-                else if (href.includes('youtube')) {platform = 'YouTube';}
-                else if (href.includes('tiktok')) {platform = 'TikTok';}
-                else if (href.includes('spotify')) {platform = 'Spotify';}
-                else if (href.includes('twitter') || href.includes('x.com')) {platform = 'X (Twitter)';}
+                else if (href.includes('linkedin')) {
+                    platform = 'LinkedIn';
+                }
+                else if (href.includes('github')) {
+                    platform = 'GitHub';
+                }
+                else if (href.includes('youtube')) {
+                    platform = 'YouTube';
+                }
+                else if (href.includes('tiktok')) {
+                    platform = 'TikTok';
+                }
+                else if (href.includes('spotify')) {
+                    platform = 'Spotify';
+                }
+                // Note: Substring matching is safe here - only used for display/ARIA labels, not security decisions
+                else if (href.includes('twitter.com') || href.includes('//x.com/') || href.includes('//www.x.com/')) {
+                    platform = 'X (Twitter)';
+                }
 
                 const ariaLabel = `Visit my ${platform} profile`;
                 link.setAttribute('aria-label', ariaLabel);
