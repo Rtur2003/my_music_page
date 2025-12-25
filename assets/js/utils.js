@@ -112,7 +112,7 @@ export const DOMUtils = {
      * Create element with attributes
      * @param {string} tag - Element tag name
      * @param {Object} attributes - Element attributes
-     * @param {string} content - Inner HTML content
+     * @param {string} content - Text content (will be sanitized)
      * @returns {Element} Created element
      */
     createElement(tag, attributes = {}, content = '') {
@@ -121,7 +121,7 @@ export const DOMUtils = {
         Object.keys(attributes).forEach(key => {
             if (key === 'className') {
                 element.className = attributes[key];
-            } else if (key === 'dataset') {
+            } else if (key === 'dataset' && attributes.dataset) {
                 Object.keys(attributes.dataset).forEach(dataKey => {
                     element.dataset[dataKey] = attributes.dataset[dataKey];
                 });
@@ -131,7 +131,8 @@ export const DOMUtils = {
         });
         
         if (content) {
-            element.innerHTML = content;
+            // Use textContent for safety - caller should use DOM methods for HTML
+            element.textContent = content;
         }
         
         return element;
@@ -269,7 +270,7 @@ export const EnvironmentUtils = {
      * @returns {boolean} Production status
      */
     isProduction() {
-        return !this.isDevelopment();
+        return !EnvironmentUtils.isDevelopment();
     },
 
     /**

@@ -91,7 +91,11 @@
                 // Cross-origin iframe detected
                 console.warn('Cross-origin iframe detected');
                 if (!isDevelopment()) {
-                    document.body.innerHTML = '<h1>This page cannot be displayed in a frame</h1>';
+                    // Safely clear and replace content without breaking event listeners
+                    document.body.textContent = '';
+                    const message = document.createElement('h1');
+                    message.textContent = 'This page cannot be displayed in a frame';
+                    document.body.appendChild(message);
                 }
             }
         }

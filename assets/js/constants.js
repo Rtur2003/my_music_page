@@ -96,11 +96,13 @@ export const CONSTANTS = {
 
     // Development
     DEV: {
-        LOCALHOST: ['localhost', '127.0.0.1', ''],
-        isLocalhost: () => {
-            return CONSTANTS.DEV.LOCALHOST.includes(window.location.hostname);
-        }
+        LOCALHOST: ['localhost', '127.0.0.1', '']
     }
+};
+
+// Add helper method after object is created to avoid circular reference
+CONSTANTS.DEV.isLocalhost = () => {
+    return CONSTANTS.DEV.LOCALHOST.includes(window.location.hostname);
 };
 
 // Freeze the constants object to prevent modifications
