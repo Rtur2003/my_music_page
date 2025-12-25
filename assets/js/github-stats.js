@@ -38,7 +38,7 @@ class GitHubStats {
     }
 
     async updateStats() {
-        if (this.statsLoaded) return;
+        if (this.statsLoaded) {return;}
 
         const stats = await this.fetchGitHubStats();
 

@@ -29,7 +29,12 @@ export default [
                 FileReader: 'readonly',
                 ServiceWorker: 'readonly',
                 caches: 'readonly',
-                self: 'readonly'
+                self: 'readonly',
+                DOMParser: 'readonly',
+                YT: 'readonly',
+                Image: 'readonly',
+                PerformanceObserver: 'readonly',
+                CustomEvent: 'readonly'
             }
         },
         rules: {

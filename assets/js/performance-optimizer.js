@@ -230,15 +230,15 @@ class PerformanceOptimizer {
         const sectionId = section.id;
 
         switch (sectionId) {
-            case 'music':
-                this.optimizeMusicSection();
-                break;
-            case 'gallery':
-                this.optimizeGallerySection();
-                break;
-            case 'contact':
-                this.optimizeContactSection();
-                break;
+        case 'music':
+            this.optimizeMusicSection();
+            break;
+        case 'gallery':
+            this.optimizeGallerySection();
+            break;
+        case 'contact':
+            this.optimizeContactSection();
+            break;
         }
     }
 

@@ -2,19 +2,29 @@
 // CONTACT FORM HANDLER
 // ===============================================
 
+/**
+ * Handles contact form submission with validation and feedback
+ * @class ContactFormHandler
+ */
 class ContactFormHandler {
     constructor() {
         this.form = document.getElementById('contactForm');
         this.init();
     }
 
+    /**
+     * Initializes the contact form handler
+     */
     init() {
         if (this.form) {
             this.form.addEventListener('submit', (e) => this.handleSubmit(e));
-            // console.log('📧 Contact form handler initialized'); // Disabled for production
         }
     }
 
+    /**
+     * Handles form submission
+     * @param {Event} e - Submit event
+     */
     async handleSubmit(e) {
         e.preventDefault();
 
@@ -22,10 +32,9 @@ class ContactFormHandler {
         const originalText = submitBtn.innerHTML;
 
         // Show loading state
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-        submitBtn.disabled = true;
+        this.setButtonLoading(submitBtn, true);
 
-        // Get form data
+        // Get and validate form data
         const formData = new FormData(this.form);
         const data = {
             name: formData.get('name'),
@@ -35,29 +44,58 @@ class ContactFormHandler {
         };
 
         try {
-            // For Netlify Forms or custom endpoint
             const response = await this.submitForm(data);
             
             if (response.success) {
-                this.showMessage('Message sent successfully! I\'ll get back to you soon.', 'success');
+                this.showMessage(
+                    'Message sent successfully! I\'ll get back to you soon.', 
+                    'success'
+                );
                 this.form.reset();
             } else {
-                this.showMessage('Failed to send message. Please try again.', 'error');
+                this.showMessage(
+                    'Failed to send message. Please try again.', 
+                    'error'
+                );
             }
         } catch (error) {
             console.error('Contact form error:', error);
-            this.showMessage('An error occurred. Please try again later.', 'error');
+            this.showMessage(
+                'An error occurred. Please try again later.', 
+                'error'
+            );
+        } finally {
+            // Reset button state
+            this.setButtonLoading(submitBtn, false, originalText);
         }
-
-        // Reset button state
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
     }
 
+    /**
+     * Sets button loading state
+     * @param {Element} button - Button element
+     * @param {boolean} loading - Loading state
+     * @param {string} originalText - Original button text
+     */
+    setButtonLoading(button, loading, originalText = null) {
+        if (loading) {
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            button.disabled = true;
+        } else {
+            button.innerHTML = originalText || button.innerHTML;
+            button.disabled = false;
+        }
+    }
+
+    /**
+     * Submits form data to server
+     * @param {Object} data - Form data
+     * @returns {Promise<Object>} Response object with success status
+     */
     async submitForm(data) {
-        // For Netlify Forms, we'll use the built-in form handling
-        if (window.location.hostname.includes('netlify') || !this.isDevelopment()) {
-            // Use Netlify Forms
+        const isDev = this.isDevelopment();
+        
+        // Use Netlify Forms in production or when on netlify domain
+        if (!isDev || window.location.hostname.includes('netlify')) {
             const form = new FormData();
             form.append('form-name', 'contact');
             Object.keys(data).forEach(key => {
@@ -70,13 +108,18 @@ class ContactFormHandler {
             });
 
             return { success: response.ok };
-        } else {
-            // Development mode - simulate success
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            return { success: true };
         }
+        
+        // Development mode - simulate success
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        return { success: true };
     }
 
+    /**
+     * Displays feedback message to user
+     * @param {string} message - Message text
+     * @param {string} type - Message type ('success' or 'error')
+     */
     showMessage(message, type) {
         // Remove any existing messages
         const existingMessage = this.form.querySelector('.form-message');
@@ -87,8 +130,10 @@ class ContactFormHandler {
         // Create new message
         const messageDiv = document.createElement('div');
         messageDiv.className = `form-message status-message status-${type}`;
+        
+        const icon = type === 'success' ? 'check-circle' : 'exclamation-triangle';
         messageDiv.innerHTML = `
-            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
+            <i class="fas fa-${icon}"></i>
             ${message}
         `;
 
@@ -96,22 +141,37 @@ class ContactFormHandler {
         this.form.parentNode.insertBefore(messageDiv, this.form.nextSibling);
 
         // Auto-hide after 5 seconds
-        setTimeout(() => {
-            messageDiv.style.opacity = '0';
-            setTimeout(() => {
-                if (messageDiv.parentNode) {
-                    messageDiv.parentNode.removeChild(messageDiv);
-                }
-            }, 300);
-        }, 5000);
+        this.scheduleMessageRemoval(messageDiv);
 
         console.log(`📧 Contact form message: ${type} - ${message}`);
     }
 
+    /**
+     * Schedules message removal with fade out animation
+     * @param {Element} messageElement - Message element to remove
+     */
+    scheduleMessageRemoval(messageElement) {
+        setTimeout(() => {
+            messageElement.style.opacity = '0';
+            setTimeout(() => {
+                if (messageElement.parentNode) {
+                    messageElement.parentNode.removeChild(messageElement);
+                }
+            }, 300);
+        }, 5000);
+    }
+
+    /**
+     * Checks if running in development environment
+     * @returns {boolean} True if development environment
+     */
     isDevelopment() {
-        return window.location.hostname === 'localhost' || 
-               window.location.hostname === '127.0.0.1' ||
-               window.location.hostname === '';
+        if (window.EnvironmentUtils) {
+            return window.EnvironmentUtils.isDevelopment();
+        }
+        // Fallback
+        const devHosts = ['localhost', '127.0.0.1', ''];
+        return devHosts.includes(window.location.hostname);
     }
 }
 

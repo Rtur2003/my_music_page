@@ -41,7 +41,7 @@ class SonicInteractions {
     // NAVIGATION EFFECTS
     // ===============================================
     setupNavigation() {
-        if (!this.nav) return;
+        if (!this.nav) {return;}
         
         let lastScrollTop = 0;
         
@@ -108,17 +108,17 @@ class SonicInteractions {
         const sectionId = section.id;
         
         switch(sectionId) {
-            case 'home':
-                this.animateHeroElements();
-                break;
-            case 'music':
-                this.animateMusicPlayer();
-                break;
-            case 'about':
-                this.animateSkillBars();
-                break;
-            default:
-                this.genericSectionAnimation(section);
+        case 'home':
+            this.animateHeroElements();
+            break;
+        case 'music':
+            this.animateMusicPlayer();
+            break;
+        case 'about':
+            this.animateSkillBars();
+            break;
+        default:
+            this.genericSectionAnimation(section);
         }
     }
     
@@ -209,7 +209,7 @@ class SonicInteractions {
             const intensity = Math.abs(e.movementX + e.movementY) / 20;
             
             // React visualizer to mouse movement
-            this.visualizerBars.forEach((bar, index) => {
+            this.visualizerBars.forEach((bar) => {
                 const reaction = intensity * (Math.random() * 2);
                 bar.style.transform = `scaleY(${1 + reaction})`;
             });
@@ -284,7 +284,7 @@ const MaintenanceMode = {
     isEnabled: false, // Set to true to enable maintenance mode
     
     checkBypass() {
-        if (!this.isEnabled) return true;
+        if (!this.isEnabled) {return true;}
         
         const bypass = localStorage.getItem('maintenance_bypass');
         const timestamp = localStorage.getItem('bypass_timestamp');
@@ -389,8 +389,3 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.head.appendChild(style);
 });
-
-// Export for module systems
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = SonicInteractions;
-}
