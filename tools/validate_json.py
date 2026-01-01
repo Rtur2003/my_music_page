@@ -45,11 +45,11 @@ def validate_directory(directory: str = '.') -> bool:
         
         if not valid:
             all_valid = False
-            print(f"✗ {rel_path}")
+            print(f"[FAIL] {rel_path}")
             for error in errors:
                 print(f"  ERROR: {error}")
         else:
-            print(f"✓ {rel_path}")
+            print(f"[PASS] {rel_path}")
     
     return all_valid
 
@@ -63,8 +63,8 @@ if __name__ == '__main__':
     success = validate_directory(directory)
     
     if success:
-        print("\n✓ All JSON files are valid")
+        print("\n[PASS] All JSON files are valid")
         sys.exit(0)
     else:
-        print("\n✗ JSON validation failed")
+        print("\n[FAIL] JSON validation failed")
         sys.exit(1)
