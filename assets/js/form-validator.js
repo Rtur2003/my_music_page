@@ -118,14 +118,14 @@ class FormValidator {
 
                 // Add autocomplete attributes
                 if (!field.getAttribute('autocomplete')) {
-                    if (field.type === 'email') field.setAttribute('autocomplete', 'email');
-                    if (field.name === 'name') field.setAttribute('autocomplete', 'name');
-                    if (field.type === 'password') field.setAttribute('autocomplete', 'current-password');
+                    if (field.type === 'email') {field.setAttribute('autocomplete', 'email');}
+                    if (field.name === 'name') {field.setAttribute('autocomplete', 'name');}
+                    if (field.type === 'password') {field.setAttribute('autocomplete', 'current-password');}
                 }
 
                 // Add input mode for better mobile keyboards
-                if (field.type === 'email') field.setAttribute('inputmode', 'email');
-                if (field.type === 'url') field.setAttribute('inputmode', 'url');
+                if (field.type === 'email') {field.setAttribute('inputmode', 'email');}
+                if (field.type === 'url') {field.setAttribute('inputmode', 'url');}
             });
 
             // Add form role
@@ -210,7 +210,7 @@ class FormValidator {
 
     getFieldLabel(field) {
         const label = document.querySelector(`label[for="${field.id}"]`);
-        if (label) return label.textContent.replace(' *', '').trim();
+        if (label) {return label.textContent.replace(' *', '').trim();}
         
         return field.placeholder || field.name || field.id || 'Field';
     }
@@ -232,8 +232,8 @@ class FormValidator {
             fields.forEach(field => {
                 const issues = [];
                 
-                if (!field.id) issues.push('Missing ID');
-                if (!field.name) issues.push('Missing name attribute');
+                if (!field.id) {issues.push('Missing ID');}
+                if (!field.name) {issues.push('Missing name attribute');}
                 if (field.required && !field.getAttribute('aria-label') && !document.querySelector(`label[for="${field.id}"]`)) {
                     issues.push('Missing label');
                 }

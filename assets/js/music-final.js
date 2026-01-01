@@ -1,12 +1,12 @@
 // Final Clean Music System - YouTube MP3 & Modal Video
 class MusicSystem {
     constructor() {
-        this.defaultArtwork = "assets/images/logo-main.png";
-        this.catalogUrl = "assets/data/music-links.json";
-        this.configUrl = "config/site.json";
-        this.catalogCacheKey = "musicCatalogCache";
+        this.defaultArtwork = 'assets/images/logo-main.png';
+        this.catalogUrl = 'assets/data/music-links.json';
+        this.configUrl = 'config/site.json';
+        this.catalogCacheKey = 'musicCatalogCache';
         this.catalogCacheTtlMs = 6 * 60 * 60 * 1000;
-        this.catalogFunctionUrl = "/.netlify/functions/music-catalog";
+        this.catalogFunctionUrl = '/.netlify/functions/music-catalog';
         this.maxRemoteTracks = 12;
         this.youtubeApiInjected = false;
         this.pendingCatalog = null;
@@ -14,93 +14,91 @@ class MusicSystem {
         this.defaultTracks = [
             {
                 id: 1,
-                title: "LIAR",
-                artist: "Hasan Arthur Altuntaş",
-                duration: "2:57",
-                artwork: "assets/images/logo-main.png",
-                youtube: "https://www.youtube.com/watch?v=u3malJJSGds",
-                spotify: "https://open.spotify.com/intl-tr/track/2VhpoqJKPMTz2cHYcaAX2j",
-                apple: "https://music.apple.com/tr/song/liar/1833771404"
+                title: 'LIAR',
+                artist: 'Hasan Arthur Altuntaş',
+                duration: '2:57',
+                artwork: 'assets/images/logo-main.png',
+                youtube: 'https://www.youtube.com/watch?v=u3malJJSGds',
+                spotify: 'https://open.spotify.com/intl-tr/track/2VhpoqJKPMTz2cHYcaAX2j',
+                apple: 'https://music.apple.com/tr/song/liar/1833771404'
             },
             {
                 id: 2,
-                title: "Interstellar But My Version",
-                artist: "Hasan Arthur Altuntaş",
-                duration: "2:32",
-                artwork: "assets/images/logo-main.png",
-                youtube: "https://www.youtube.com/watch?v=4vDvuFldYiM",
-                spotify: "https://open.spotify.com/intl-tr/track/5fwzfwMJtVANQotGtmdv3C",
-                apple: "https://music.apple.com/tr/song/interstellar-but-my-version/1773902252"
+                title: 'Interstellar But My Version',
+                artist: 'Hasan Arthur Altuntaş',
+                duration: '2:32',
+                artwork: 'assets/images/logo-main.png',
+                youtube: 'https://www.youtube.com/watch?v=4vDvuFldYiM',
+                spotify: 'https://open.spotify.com/intl-tr/track/5fwzfwMJtVANQotGtmdv3C',
+                apple: 'https://music.apple.com/tr/song/interstellar-but-my-version/1773902252'
             },
             {
                 id: 3,
-                title: "Oppenheimer But My Version",
-                artist: "Hasan Arthur Altuntaş",
-                duration: "2:44",
-                artwork: "assets/images/logo-main.png",
-                youtube: "https://youtu.be/ZnOMJ9E0LmA",
-                spotify: "https://open.spotify.com/intl-tr/track/27q14aJw81Qr5XBGV4JlNp",
-                apple: "https://music.apple.com/tr/song/oppenheimer-but-my-version/1776487184"
+                title: 'Oppenheimer But My Version',
+                artist: 'Hasan Arthur Altuntaş',
+                duration: '2:44',
+                artwork: 'assets/images/logo-main.png',
+                youtube: 'https://youtu.be/ZnOMJ9E0LmA',
+                spotify: 'https://open.spotify.com/intl-tr/track/27q14aJw81Qr5XBGV4JlNp',
+                apple: 'https://music.apple.com/tr/song/oppenheimer-but-my-version/1776487184'
             },
             {
                 id: 5,
-                title: "Alicia But My Version",
-                artist: "Hasan Arthur Altuntaş",
-                duration: "1:57",
-                artwork: "assets/images/logo-main.png",
-                youtube: "https://youtu.be/x8lcJsuDR8A",
-                spotify: "https://open.spotify.com/intl-tr/track/4vLu7LEv9KE5wPp4h1ldc8?si=c0491e04580140eb",
-                apple: "https://music.apple.com/tr/song/alicia-version3/1841276639"
-                },
-                {
+                title: 'Alicia But My Version',
+                artist: 'Hasan Arthur Altuntaş',
+                duration: '1:57',
+                artwork: 'assets/images/logo-main.png',
+                youtube: 'https://youtu.be/x8lcJsuDR8A',
+                spotify: 'https://open.spotify.com/intl-tr/track/4vLu7LEv9KE5wPp4h1ldc8?si=c0491e04580140eb',
+                apple: 'https://music.apple.com/tr/song/alicia-version3/1841276639'
+            },
+            {
                 id: 6,
-                title: "Clair Obscur  Expedition 33  But My Version",
-                artist: "Hasan Arthur Altuntaş",
-                duration: "2:44",
-                artwork: "assets/images/logo-main.png",
-                youtube: "https://youtu.be/AINP-Y82LsA",
-                spotify: "https://open.spotify.com/intl-tr/track/3uYE4LHqPv3vA7MzLW99ij?si=800c32542d254e7e",
-                apple: "https://music.apple.com/tr/song/lumiere-and-alicia-piano/1841276636"
-                }
-                ,
-                {
+                title: 'Clair Obscur  Expedition 33  But My Version',
+                artist: 'Hasan Arthur Altuntaş',
+                duration: '2:44',
+                artwork: 'assets/images/logo-main.png',
+                youtube: 'https://youtu.be/AINP-Y82LsA',
+                spotify: 'https://open.spotify.com/intl-tr/track/3uYE4LHqPv3vA7MzLW99ij?si=800c32542d254e7e',
+                apple: 'https://music.apple.com/tr/song/lumiere-and-alicia-piano/1841276636'
+            },
+            {
                 id: 7,
-                title: "Une Vie à Peindre - Clair Obscur Expedition 33(Cover)",
-                artist: "Hasan Arthur Altuntaş",
-                duration: "1:32",
-                artwork: "assets/images/logo-main.png",
-                youtube: "https://www.youtube.com/watch?v=gCuVMsRgqWI&list=OLAK5uy_m7d_zBzSRcJtMt1Xw7yzZtKbNfJ4Zmb5U",
-                spotify: "https://open.spotify.com/intl-tr/track/5dT1GEBSXVVPtxxqtaWzLn?si=54db5d2fa0704893",
-                apple: "https://music.apple.com/tr/song/une-vie-%C3%A0-peindre-clair-obscur-expedition-33-cover/1848749673"
-                },
-                {
+                title: 'Une Vie à Peindre - Clair Obscur Expedition 33(Cover)',
+                artist: 'Hasan Arthur Altuntaş',
+                duration: '1:32',
+                artwork: 'assets/images/logo-main.png',
+                youtube: 'https://www.youtube.com/watch?v=gCuVMsRgqWI&list=OLAK5uy_m7d_zBzSRcJtMt1Xw7yzZtKbNfJ4Zmb5U',
+                spotify: 'https://open.spotify.com/intl-tr/track/5dT1GEBSXVVPtxxqtaWzLn?si=54db5d2fa0704893',
+                apple: 'https://music.apple.com/tr/song/une-vie-%C3%A0-peindre-clair-obscur-expedition-33-cover/1848749673'
+            },
+            {
                 id: 8,
-                title: "Feel, S Z I, Run, Shakra, TODASI, Yassaite",
-                artist: "Hasan Arthur Altuntaş",
-                duration: "11:51",
-                artwork: "assets/images/logo-main.png",
-                youtube: "https://www.youtube.com/watch?v=vQGDk2ItC2o",
-                spotify: "",
-                apple: ""
-                }
-                
+                title: 'Feel, S Z I, Run, Shakra, TODASI, Yassaite',
+                artist: 'Hasan Arthur Altuntaş',
+                duration: '11:51',
+                artwork: 'assets/images/logo-main.png',
+                youtube: 'https://www.youtube.com/watch?v=vQGDk2ItC2o',
+                spotify: '',
+                apple: ''
+            }
         ];
-        this.defaultArtist = this.defaultTracks[0]?.artist || "Hasan Arthur Altuntas";
+        this.defaultArtist = this.defaultTracks[0]?.artist || 'Hasan Arthur Altuntas';
 
         this.defaultAlbums = [
             {
                 id: 1,
-                title: "My Compositions",
-                artist: "Hasan Arthur Altuntaş",
-                artwork: "assets/images/logo-main.png",
-                youtube: "https://www.youtube.com/playlist?list=PLuQhIRvxCsFxFF8wW3UWcSbXA0b6fGWim"
+                title: 'My Compositions',
+                artist: 'Hasan Arthur Altuntaş',
+                artwork: 'assets/images/logo-main.png',
+                youtube: 'https://www.youtube.com/playlist?list=PLuQhIRvxCsFxFF8wW3UWcSbXA0b6fGWim'
             },
             {
                 id: 2,
-                title: "Film Composition Covers",
-                artist: "Hasan Arthur Altuntaş",
-                artwork: "assets/images/logo-main.png",
-                youtube: "https://www.youtube.com/playlist?list=PLuQhIRvxCsFxyR4zeWWhVheUeUHJY5MLq"
+                title: 'Film Composition Covers',
+                artist: 'Hasan Arthur Altuntaş',
+                artwork: 'assets/images/logo-main.png',
+                youtube: 'https://www.youtube.com/playlist?list=PLuQhIRvxCsFxyR4zeWWhVheUeUHJY5MLq'
             }
         ];
 
@@ -131,7 +129,7 @@ class MusicSystem {
 
         this.youtubeApiInjected = true;
         const tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
+        tag.src = 'https://www.youtube.com/iframe_api';
         tag.onerror = () => {
             this.youtubeApiInjected = false;
             console.warn('YouTube API failed to load');
@@ -257,7 +255,7 @@ class MusicSystem {
             }
 
             return Array.isArray(cached.tracks) ? cached.tracks : null;
-        } catch (error) {
+        } catch {
             return null;
         }
     }
@@ -274,7 +272,7 @@ class MusicSystem {
                 tracks: tracks
             };
             localStorage.setItem(this.catalogCacheKey, JSON.stringify(payload));
-        } catch (error) {
+        } catch {
             return;
         }
     }
@@ -731,10 +729,14 @@ class MusicSystem {
 
     renderTracks() {
         const container = document.getElementById('tracks-container');
+<<<<<<< HEAD
         if (!container) {
             console.warn('MusicSystem: Track container not found (#tracks-container)');
             return;
         }
+=======
+        if (!container) {return;}
+>>>>>>> 12112a705fa545f84579dc5e61d8262f7dfe5dab
 
         container.innerHTML = '';
 
@@ -813,10 +815,14 @@ class MusicSystem {
 
     renderAlbums() {
         const container = document.getElementById('albums-container');
+<<<<<<< HEAD
         if (!container) {
             console.warn('MusicSystem: Album container not found (#albums-container)');
             return;
         }
+=======
+        if (!container) {return;}
+>>>>>>> 12112a705fa545f84579dc5e61d8262f7dfe5dab
 
         container.innerHTML = '';
 
@@ -873,10 +879,10 @@ class MusicSystem {
 
     async togglePlay(index) {
         const track = this.tracks[index];
-        if (!track) return;
+        if (!track) {return;}
 
         const youtubeUrl = this.safeUrl(track.youtube);
-        if (!youtubeUrl) return;
+        if (!youtubeUrl) {return;}
 
         const domId = track.domId || this.normalizeDomId(track.id, `track-${index + 1}`);
         track.domId = domId;
@@ -901,7 +907,7 @@ class MusicSystem {
 
     async playYouTubeAudio(track, playIcon) {
         const videoId = this.extractYouTubeId(track.youtube);
-        if (!videoId) return;
+        if (!videoId) {return;}
 
         this.currentTrack = track;
 
@@ -946,9 +952,11 @@ class MusicSystem {
 
     initializePlayer(trackId, videoId, resolve) {
         const playerDiv = document.getElementById(`youtube-audio-${trackId}`);
-        if (!playerDiv) return resolve(null);
+        if (!playerDiv) {
+            return resolve(null);
+        }
 
-        const player = new YT.Player(playerDiv, {
+        new YT.Player(playerDiv, {
             height: '0',
             width: '0',
             videoId: videoId,
@@ -979,26 +987,26 @@ class MusicSystem {
         });
     }
 
-    handlePlayerStateChange(event, trackId) {
+    handlePlayerStateChange(event) {
         switch (event.data) {
-            case YT.PlayerState.PLAYING:
-                this.isPlaying = true;
-                this.updateAllPlayIcons();
-                console.log('Playing:', this.currentTrack.title);
-                break;
+        case YT.PlayerState.PLAYING:
+            this.isPlaying = true;
+            this.updateAllPlayIcons();
+            console.log('Playing:', this.currentTrack.title);
+            break;
 
-            case YT.PlayerState.PAUSED:
-                this.isPlaying = false;
-                this.updateAllPlayIcons();
-                console.log('Paused:', this.currentTrack.title);
-                break;
+        case YT.PlayerState.PAUSED:
+            this.isPlaying = false;
+            this.updateAllPlayIcons();
+            console.log('Paused:', this.currentTrack.title);
+            break;
 
-            case YT.PlayerState.ENDED:
-                this.isPlaying = false;
-                this.updateAllPlayIcons();
-                console.log('Ended:', this.currentTrack.title);
-                this.applyPendingCatalogIfIdle();
-                break;
+        case YT.PlayerState.ENDED:
+            this.isPlaying = false;
+            this.updateAllPlayIcons();
+            console.log('Ended:', this.currentTrack.title);
+            this.applyPendingCatalogIfIdle();
+            break;
         }
     }
 

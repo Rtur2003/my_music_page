@@ -2,6 +2,10 @@
 // GLOBAL ERROR HANDLER & PERFORMANCE MONITOR
 // ===============================================
 
+/**
+ * Handles global errors and monitors performance metrics
+ * @class ErrorHandler
+ */
 class ErrorHandler {
     constructor() {
         this.errors = [];
@@ -13,6 +17,9 @@ class ErrorHandler {
         this.init();
     }
 
+    /**
+     * Initializes error handler and performance monitoring
+     */
     init() {
         this.setupGlobalErrorHandling();
         this.setupPerformanceMonitoring();
@@ -20,6 +27,9 @@ class ErrorHandler {
         console.log('🛡️ Error handler and performance monitor initialized');
     }
 
+    /**
+     * Sets up global error handling for JavaScript errors, promise rejections, and resource errors
+     */
     setupGlobalErrorHandling() {
         // Handle JavaScript errors
         window.addEventListener('error', (event) => {
@@ -55,49 +65,87 @@ class ErrorHandler {
         }, true);
     }
 
+    /**
+     * Sets up performance monitoring
+     * Tracks page load times and memory usage
+     */
     setupPerformanceMonitoring() {
         // Page load timing
         window.addEventListener('load', () => {
             setTimeout(() => {
-                const perfData = performance.timing;
-                this.performanceMetrics = {
-                    loadTime: perfData.loadEventEnd - perfData.navigationStart,
-                    domReady: perfData.domContentLoadedEventEnd - perfData.navigationStart,
-                    resourcesLoaded: perfData.loadEventEnd - perfData.domContentLoadedEventEnd
-                };
-                
-                console.log('⚡ Performance metrics:', this.performanceMetrics);
-                
-                // Warn if page is slow
-                if (this.performanceMetrics.loadTime > 3000) {
-                    console.warn('⚠️ Page load time is slow:', this.performanceMetrics.loadTime + 'ms');
+                try {
+                    const perfData = performance.timing;
+                    this.performanceMetrics = {
+                        loadTime: perfData.loadEventEnd - perfData.navigationStart,
+                        domReady: perfData.domContentLoadedEventEnd - perfData.navigationStart,
+                        resourcesLoaded: perfData.loadEventEnd - perfData.domContentLoadedEventEnd
+                    };
+                    
+                    this.logPerformanceMetrics();
+                } catch (error) {
+                    console.error('Performance monitoring error:', error);
                 }
             }, 100);
         });
 
         // Monitor memory usage (if available)
+        this.setupMemoryMonitoring();
+    }
+
+    /**
+     * Logs performance metrics
+     */
+    logPerformanceMetrics() {
+        if (this.isDevelopment()) {
+            console.log('⚡ Performance metrics:', this.performanceMetrics);
+            
+            // Warn if page is slow
+            if (this.performanceMetrics.loadTime > 3000) {
+                console.warn('⚠️ Page load time is slow:', this.performanceMetrics.loadTime + 'ms');
+            }
+        }
+    }
+
+    /**
+     * Sets up memory usage monitoring
+     */
+    setupMemoryMonitoring() {
         if ('memory' in performance) {
             setInterval(() => {
-                const memory = performance.memory;
-                if (memory.usedJSHeapSize > memory.jsHeapSizeLimit * 0.9) {
-                    console.warn('⚠️ High memory usage detected');
+                try {
+                    const memory = performance.memory;
+                    if (memory.usedJSHeapSize > memory.jsHeapSizeLimit * 0.9) {
+                        console.warn('⚠️ High memory usage detected');
+                    }
+                } catch {
+                    // Memory API not available or error occurred
                 }
             }, 30000);
         }
     }
 
+    /**
+     * Sets up minimal console protection in production
+     * Allows important logs with emoji markers
+     */
     setupConsoleProtection() {
-        // Minimal console protection in production
-        if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        // Only in production
+        if (this.isProduction()) {
             const originalLog = console.log;
             console.log = (...args) => {
-                if (args[0] && typeof args[0] === 'string' && args[0].includes('🎵')) {
+                // Allow logs with special markers
+                if (args[0] && typeof args[0] === 'string' && 
+                    (args[0].includes('🎵') || args[0].includes('⚡') || args[0].includes('🖼️'))) {
                     originalLog(...args);
                 }
             };
         }
     }
 
+    /**
+     * Logs error with context
+     * @param {Object} errorData - Error data object
+     */
     logError(errorData) {
         this.errors.push(errorData);
         
@@ -107,11 +155,15 @@ class ErrorHandler {
         }
 
         // Log to console in development
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        if (this.isDevelopment()) {
             console.error('🚨 Error logged:', errorData);
         }
     }
 
+    /**
+     * Gets complete error report
+     * @returns {Object} Error report with metrics
+     */
     getErrorReport() {
         return {
             errors: this.errors,
@@ -121,7 +173,12 @@ class ErrorHandler {
         };
     }
 
-    // Safe fallback for critical functions
+    /**
+     * Safely executes function with error handling
+     * @param {Function} fn - Function to execute
+     * @param {Function} fallback - Fallback function
+     * @returns {*} Function result or fallback result
+     */
     safeFunctionCall(fn, fallback = () => {}) {
         try {
             return fn();
@@ -136,7 +193,10 @@ class ErrorHandler {
         }
     }
 
-    // Prevent page breaking on critical errors
+    /**
+     * Prevents page breaking on critical errors
+     * Ensures critical UI elements remain functional
+     */
     preventPageBreak() {
         const criticalElements = document.querySelectorAll('.sonic-hero, .sonic-nav, .music-player');
         criticalElements.forEach(element => {
@@ -145,6 +205,23 @@ class ErrorHandler {
                 element.style.overflow = 'hidden';
             }
         });
+    }
+
+    /**
+     * Checks if running in development mode
+     * @returns {boolean} True if development
+     */
+    isDevelopment() {
+        const devHosts = ['localhost', '127.0.0.1', ''];
+        return devHosts.includes(window.location.hostname);
+    }
+
+    /**
+     * Checks if running in production mode
+     * @returns {boolean} True if production
+     */
+    isProduction() {
+        return !this.isDevelopment();
     }
 }
 

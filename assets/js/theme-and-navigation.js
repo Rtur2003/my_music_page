@@ -2,33 +2,57 @@
 // THEME SWITCHING & MOBILE NAVIGATION
 // ===============================================
 
+/**
+ * Manages theme switching and mobile navigation functionality
+ * @class ThemeAndNavigationManager
+ */
 class ThemeAndNavigationManager {
     constructor() {
         this.currentTheme = this.getStoredTheme() || 'dark';
         this.init();
     }
     
+    /**
+     * Retrieves stored theme preference from localStorage
+     * @returns {string|null} Stored theme or null
+     */
     getStoredTheme() {
+        if (window.StorageUtils) {
+            return window.StorageUtils.getItem('theme');
+        }
+        // Fallback for when utils not loaded
         try {
             if (typeof Storage !== 'undefined' && window.localStorage) {
                 return localStorage.getItem('theme');
             }
-        } catch (error) {
+        } catch {
             console.log('Theme storage not available');
         }
         return null;
     }
     
+    /**
+     * Saves theme preference to localStorage
+     * @param {string} theme - Theme to save
+     */
     saveTheme(theme) {
-        try {
-            if (typeof Storage !== 'undefined' && window.localStorage) {
-                localStorage.setItem('theme', theme);
+        if (window.StorageUtils) {
+            window.StorageUtils.setItem('theme', theme);
+        } else {
+            // Fallback for when utils not loaded
+            try {
+                if (typeof Storage !== 'undefined' && window.localStorage) {
+                    localStorage.setItem('theme', theme);
+                }
+            } catch {
+                console.log('Cannot save theme preference');
             }
-        } catch (error) {
-            console.log('Cannot save theme preference');
         }
     }
 
+    /**
+     * Initializes theme and navigation components
+     */
     init() {
         this.setupThemeToggle();
         this.setupMobileNavigation();
@@ -36,6 +60,9 @@ class ThemeAndNavigationManager {
         console.log('🎨 Theme and Navigation Manager initialized');
     }
 
+    /**
+     * Sets up theme toggle button event listener
+     */
     setupThemeToggle() {
         const themeToggle = document.getElementById('themeToggle');
         if (themeToggle) {
@@ -45,50 +72,71 @@ class ThemeAndNavigationManager {
         }
     }
 
+    /**
+     * Sets up mobile navigation menu functionality
+     */
     setupMobileNavigation() {
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const navMenu = document.querySelector('.nav-menu');
 
         if (mobileMenuToggle && navMenu) {
+            // Toggle menu on button click
             mobileMenuToggle.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
 
-                console.log('Mobile menu toggle clicked');
-                navMenu.classList.toggle('active');
-                const icon = mobileMenuToggle.querySelector('i');
-
-                if (navMenu.classList.contains('active')) {
-                    console.log('Menu opened');
-                    icon.className = 'fas fa-times';
-                } else {
-                    console.log('Menu closed');
-                    icon.className = 'fas fa-bars';
-                }
+                this.toggleMobileMenu(navMenu, mobileMenuToggle);
             });
 
             // Close mobile menu when clicking on links
             const navLinks = document.querySelectorAll('.nav-link');
             navLinks.forEach(link => {
                 link.addEventListener('click', () => {
-                    navMenu.classList.remove('active');
-                    const icon = mobileMenuToggle.querySelector('i');
-                    icon.className = 'fas fa-bars';
+                    this.closeMobileMenu(navMenu, mobileMenuToggle);
                 });
             });
 
             // Close mobile menu when clicking outside
             document.addEventListener('click', (e) => {
-                if (!navMenu.contains(e.target) && !mobileMenuToggle.contains(e.target) && navMenu.classList.contains('active')) {
-                    console.log('Closing menu - clicked outside');
-                    navMenu.classList.remove('active');
-                    const icon = mobileMenuToggle.querySelector('i');
-                    icon.className = 'fas fa-bars';
+                if (!navMenu.contains(e.target) && 
+                    !mobileMenuToggle.contains(e.target) && 
+                    navMenu.classList.contains('active')) {
+                    this.closeMobileMenu(navMenu, mobileMenuToggle);
                 }
             });
         }
     }
 
+    /**
+     * Toggles mobile menu open/closed
+     * @param {Element} navMenu - Navigation menu element
+     * @param {Element} toggleButton - Toggle button element
+     */
+    toggleMobileMenu(navMenu, toggleButton) {
+        navMenu.classList.toggle('active');
+        const icon = toggleButton.querySelector('i');
+        
+        if (navMenu.classList.contains('active')) {
+            icon.className = 'fas fa-times';
+        } else {
+            icon.className = 'fas fa-bars';
+        }
+    }
+
+    /**
+     * Closes mobile menu
+     * @param {Element} navMenu - Navigation menu element
+     * @param {Element} toggleButton - Toggle button element
+     */
+    closeMobileMenu(navMenu, toggleButton) {
+        navMenu.classList.remove('active');
+        const icon = toggleButton.querySelector('i');
+        icon.className = 'fas fa-bars';
+    }
+
+    /**
+     * Toggles between light and dark themes
+     */
     toggleTheme() {
         this.currentTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
         this.applyTheme(this.currentTheme);
@@ -96,6 +144,10 @@ class ThemeAndNavigationManager {
         console.log(`🎨 Theme switched to: ${this.currentTheme}`);
     }
 
+    /**
+     * Applies theme to the document
+     * @param {string} theme - Theme name ('dark' or 'light')
+     */
     applyTheme(theme) {
         const root = document.documentElement;
         const themeToggle = document.getElementById('themeToggle');
@@ -113,24 +165,29 @@ class ThemeAndNavigationManager {
             }
         }
 
+        // Dispatch theme change event for other components
+        this.updateThemeComponents(theme);
+
         console.log(`🎨 Theme applied: ${theme}`);
     }
 
+    /**
+     * Notifies other components of theme change
+     * @param {string} theme - New theme name
+     */
     updateThemeComponents(theme) {
-        // Dispatch theme change event for other components
         document.dispatchEvent(new CustomEvent('themeChanged', {
             detail: { theme }
         }));
     }
 }
 
-// Initialize when DOM is ready - Combined initialization
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize theme manager
-    window.themeManager = new ThemeAndNavigationManager();
-    
-    // Setup smooth scrolling for navigation links
+/**
+ * Sets up smooth scrolling for navigation links
+ */
+function setupSmoothScrolling() {
     const navLinks = document.querySelectorAll('.nav-link');
+    const NAV_OFFSET = 80; // Fixed navigation height
     
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
@@ -140,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const targetSection = document.getElementById(targetId);
             
             if (targetSection) {
-                const offsetTop = targetSection.offsetTop - 80; // Account for fixed nav
+                const offsetTop = targetSection.offsetTop - NAV_OFFSET;
                 
                 window.scrollTo({
                     top: offsetTop,
@@ -148,21 +205,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 
                 // Update active nav link
-                navLinks.forEach(nl => nl.classList.remove('active'));
-                link.classList.add('active');
+                updateActiveNavLink(navLinks, link);
             }
         });
     });
     
     // Setup scroll-based active link updates
+    setupScrollBasedNavigation(navLinks);
+}
+
+/**
+ * Updates active navigation link
+ * @param {NodeList} navLinks - All navigation links
+ * @param {Element} activeLink - Link to set as active
+ */
+function updateActiveNavLink(navLinks, activeLink) {
+    navLinks.forEach(nl => nl.classList.remove('active'));
+    activeLink.classList.add('active');
+}
+
+/**
+ * Sets up scroll-based navigation highlighting
+ * @param {NodeList} navLinks - All navigation links
+ */
+function setupScrollBasedNavigation(navLinks) {
+    const SCROLL_OFFSET = 100;
+    
     window.addEventListener('scroll', () => {
         const sections = document.querySelectorAll('section[id]');
-        
         let currentSection = '';
         
         sections.forEach(section => {
-            const sectionTop = section.offsetTop - 100;
-            if (scrollY >= sectionTop) {
+            const sectionTop = section.offsetTop - SCROLL_OFFSET;
+            if (window.scrollY >= sectionTop) {
                 currentSection = section.getAttribute('id');
             }
         });
@@ -174,4 +249,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize theme manager
+    window.themeManager = new ThemeAndNavigationManager();
+    
+    // Setup smooth scrolling for navigation
+    setupSmoothScrolling();
 });

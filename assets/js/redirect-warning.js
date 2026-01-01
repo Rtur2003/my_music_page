@@ -19,7 +19,7 @@ class RedirectWarning {
 
         externalLinks.forEach(link => {
             // Skip if already has warning
-            if (link.dataset.warningAdded) return;
+            if (link.dataset.warningAdded) {return;}
 
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -30,7 +30,7 @@ class RedirectWarning {
         });
     }
 
-    showWarning(url, originalLink) {
+    showWarning(url) {
         // Create warning modal
         const modal = document.createElement('div');
         modal.className = 'redirect-warning-modal';
@@ -210,8 +210,8 @@ class RedirectWarning {
     closeWarning(modal, style) {
         modal.style.animation = 'fadeOut 0.3s ease';
         setTimeout(() => {
-            if (modal.parentNode) modal.parentNode.removeChild(modal);
-            if (style.parentNode) style.parentNode.removeChild(style);
+            if (modal.parentNode) {modal.parentNode.removeChild(modal);}
+            if (style.parentNode) {style.parentNode.removeChild(style);}
         }, 300);
 
         // Add fadeOut animation

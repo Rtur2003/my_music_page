@@ -1,0 +1,9 @@
+{
+  "name": "my-music-page",
+  "version": "5.0.0",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "eslint": "^9.39.2"
+  }
+}

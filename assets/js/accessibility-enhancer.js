@@ -42,7 +42,7 @@ class AccessibilityEnhancer {
     fixButtonAccessibility() {
         // Fix play buttons on music cards
         const playButtons = document.querySelectorAll('.card-play-btn');
-        playButtons.forEach((button, index) => {
+        playButtons.forEach((button) => {
             if (!button.hasAttribute('aria-label')) {
                 // Try to get track title from parent card
                 const musicCard = button.closest('.music-card');
@@ -141,10 +141,10 @@ class AccessibilityEnhancer {
             if (!link.hasAttribute('aria-label')) {
                 // Determine platform from class
                 let platform = 'Platform';
-                if (link.classList.contains('youtube')) platform = 'YouTube';
-                else if (link.classList.contains('spotify')) platform = 'Spotify';
-                else if (link.classList.contains('apple')) platform = 'Apple Music';
-                else if (link.classList.contains('soundcloud')) platform = 'SoundCloud';
+                if (link.classList.contains('youtube')) {platform = 'YouTube';}
+                else if (link.classList.contains('spotify')) {platform = 'Spotify';}
+                else if (link.classList.contains('apple')) {platform = 'Apple Music';}
+                else if (link.classList.contains('soundcloud')) {platform = 'SoundCloud';}
 
                 // Get track title from parent card
                 const musicCard = link.closest('.music-card');
@@ -176,10 +176,10 @@ class AccessibilityEnhancer {
         mainPlatformLinks.forEach(link => {
             if (!link.hasAttribute('aria-label')) {
                 let platform = 'Platform';
-                if (link.classList.contains('spotify-link')) platform = 'Spotify';
-                else if (link.classList.contains('youtube-link')) platform = 'YouTube';
-                else if (link.classList.contains('apple-link')) platform = 'Apple Music';
-                else if (link.classList.contains('soundcloud-link')) platform = 'SoundCloud';
+                if (link.classList.contains('spotify-link')) {platform = 'Spotify';}
+                else if (link.classList.contains('youtube-link')) {platform = 'YouTube';}
+                else if (link.classList.contains('apple-link')) {platform = 'Apple Music';}
+                else if (link.classList.contains('soundcloud-link')) {platform = 'SoundCloud';}
 
                 const ariaLabel = `Listen on ${platform}`;
                 link.setAttribute('aria-label', ariaLabel);
@@ -194,13 +194,26 @@ class AccessibilityEnhancer {
                 let platform = 'Social platform';
                 const href = link.getAttribute('href') || '';
 
-                if (href.includes('instagram')) platform = 'Instagram';
-                else if (href.includes('linkedin')) platform = 'LinkedIn';
-                else if (href.includes('github')) platform = 'GitHub';
-                else if (href.includes('youtube')) platform = 'YouTube';
-                else if (href.includes('tiktok')) platform = 'TikTok';
-                else if (href.includes('spotify')) platform = 'Spotify';
-                else if (href.includes('twitter') || href.includes('x.com')) platform = 'X (Twitter)';
+                if (href.includes('instagram')) {platform = 'Instagram';}
+                else if (href.includes('linkedin')) {
+                    platform = 'LinkedIn';
+                }
+                else if (href.includes('github')) {
+                    platform = 'GitHub';
+                }
+                else if (href.includes('youtube')) {
+                    platform = 'YouTube';
+                }
+                else if (href.includes('tiktok')) {
+                    platform = 'TikTok';
+                }
+                else if (href.includes('spotify')) {
+                    platform = 'Spotify';
+                }
+                // Note: Substring matching is safe here - only used for display/ARIA labels, not security decisions
+                else if (href.includes('twitter.com') || href.includes('//x.com/') || href.includes('//www.x.com/')) {
+                    platform = 'X (Twitter)';
+                }
 
                 const ariaLabel = `Visit my ${platform} profile`;
                 link.setAttribute('aria-label', ariaLabel);

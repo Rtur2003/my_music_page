@@ -23,7 +23,8 @@ class HTMLValidator(HTMLParser):
         self.tag_stack = []
         self.self_closing_tags = {
             'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 
-            'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'
+            'input', 'link', 'meta', 'param', 'source', 'track', 'wbr',
+            'path', 'circle', 'rect', 'line', 'polyline', 'polygon'  # SVG elements
         }
         
     def handle_starttag(self, tag, attrs):

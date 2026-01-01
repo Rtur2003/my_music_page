@@ -1,33 +1,32 @@
 // Service Worker for Hasan Arthur Altuntaş Portfolio PWA
-// Version 1.0.0
+// Version 5.0.0
 
-const CACHE_NAME = 'hasan-arthur-portfolio-v1.0.0';
+const CACHE_NAME = 'hasan-arthur-portfolio-v5.0.0';
 const urlsToCache = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/hasan-arthur-design.css',
-  './assets/css/critical-inline.css',
-  './assets/css/image-optimization.css',
-  './assets/css/theme-consistency.css',
-  './assets/css/critical-icon-fix.css',
-  './assets/css/lighthouse-performance-fix.css',
-  './assets/css/mobile-layout-fix.css',
-  './assets/css/specific-icon-fixes.css',
-  './assets/css/accessibility-enhancements.css',
+  './assets/css/sections/00-base.css',
+  './assets/css/sections/01-navigation.css',
+  './assets/css/sections/02-hero.css',
+  './assets/css/sections/03-about.css',
+  './assets/css/sections/04-music.css',
+  './assets/css/sections/05-software.css',
+  './assets/css/sections/06-gallery.css',
+  './assets/css/sections/07-updates.css',
+  './assets/css/sections/08-contact.css',
+  './assets/css/sections/09-footer.css',
   './assets/js/performance-optimizer.js',
   './assets/js/accessibility-enhancer.js',
   './assets/js/error-handler.js',
   './assets/js/security.js',
   './assets/js/form-validator.js',
-  './assets/js/youtube-player.js',
+  './assets/js/music-final.js',
   './assets/js/theme-and-navigation.js',
-  './assets/js/music-loader.js',
   './assets/js/gallery.js',
   './assets/js/contact-form.js',
   './assets/js/sonic-interactions.js',
-  './assets/js/dynamic-effects.js',
-  './assets/js/modern-features.js',
+  './assets/js/redirect-warning.js',
   './assets/js/github-stats.js',
   './assets/js/language-simple.js',
   './assets/images/logo-main.png',
@@ -37,7 +36,7 @@ const urlsToCache = [
 
 // Install event - cache resources
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing Service Worker v1.0.0');
+  console.log('[SW] Installing Service Worker v5.0.0');
 
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -58,7 +57,7 @@ self.addEventListener('install', (event) => {
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating Service Worker v1.0.0');
+  console.log('[SW] Activating Service Worker v5.0.0');
 
   event.waitUntil(
     caches.keys().then((cacheNames) => {

@@ -83,7 +83,7 @@ class GalleryManager {
         const img = item.querySelector('img');
         const info = item.querySelector('.gallery-info');
         
-        if (!img) return;
+        if (!img) {return;}
 
         // Create lightbox overlay
         const lightbox = document.createElement('div');
@@ -113,7 +113,7 @@ class GalleryManager {
 
         closeBtn.addEventListener('click', () => this.closeLightbox(lightbox));
         overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) this.closeLightbox(lightbox);
+            if (e.target === overlay) {this.closeLightbox(lightbox);}
         });
 
         // Keyboard controls

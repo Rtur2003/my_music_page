@@ -8,15 +8,6 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "rules": {
-    "indent": ["error", 4],
-    "linebreak-style": ["error", "unix"],
-    "quotes": ["error", "single"],
-    "semi": ["error", "always"],
-    "no-unused-vars": "warn",
-    "no-console": "off",
-    "no-undef": "error"
-  },
   "globals": {
     "console": "readonly",
     "document": "readonly",
@@ -24,6 +15,28 @@
     "localStorage": "readonly",
     "fetch": "readonly",
     "navigator": "readonly",
-    "performance": "readonly"
+    "performance": "readonly",
+    "DOMParser": "readonly",
+    "YT": "readonly",
+    "Image": "readonly",
+    "PerformanceObserver": "readonly",
+    "CustomEvent": "readonly",
+    "scrollY": "readonly",
+    "FormData": "readonly",
+    "setTimeout": "readonly",
+    "setInterval": "readonly",
+    "clearTimeout": "readonly",
+    "clearInterval": "readonly",
+    "module": "readonly"
+  },
+  "rules": {
+    "indent": ["error", 4],
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "single"],
+    "semi": ["error", "always"],
+    "no-unused-vars": "warn",
+    "no-console": "off",
+    "no-undef": "error",
+    "curly": ["error", "all"]
   }
 }
