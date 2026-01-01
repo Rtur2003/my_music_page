@@ -83,11 +83,11 @@ def validate_directory(directory='.'):
         
         if not valid:
             all_valid = False
-            print(f"✗ {rel_path}")
+            print(f"[FAIL] {rel_path}")
             for error in errors:
                 print(f"  ERROR: {error}")
         else:
-            print(f"✓ {rel_path}")
+            print(f"[PASS] {rel_path}")
             
         for warning in warnings:
             print(f"  WARNING: {warning}")
@@ -104,8 +104,8 @@ if __name__ == '__main__':
     success = validate_directory(directory)
     
     if success:
-        print("\n✓ All HTML files are valid")
+        print("\n[PASS] All HTML files are valid")
         sys.exit(0)
     else:
-        print("\n✗ HTML validation failed")
+        print("\n[FAIL] HTML validation failed")
         sys.exit(1)
