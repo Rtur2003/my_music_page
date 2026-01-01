@@ -613,6 +613,18 @@ class MusicSystem {
         return this.normalizeTracks(merged);
     }
 
+    buildTrackList(baseTracks, remoteTracks, spotifyTracks) {
+        // First merge base with remote (YouTube) tracks
+        let merged = this.mergeTracks(baseTracks, remoteTracks);
+
+        // Then merge with Spotify tracks for additional metadata
+        if (Array.isArray(spotifyTracks) && spotifyTracks.length) {
+            merged = this.mergeTracks(merged, spotifyTracks);
+        }
+
+        return merged;
+    }
+
     normalizeTitleKey(title) {
         if (!title || typeof title !== 'string') {
             return '';
