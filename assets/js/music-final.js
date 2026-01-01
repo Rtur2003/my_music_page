@@ -731,7 +731,10 @@ class MusicSystem {
 
     renderTracks() {
         const container = document.getElementById('tracks-container');
-        if (!container) return;
+        if (!container) {
+            console.warn('MusicSystem: Track container not found (#tracks-container)');
+            return;
+        }
 
         container.innerHTML = '';
 
@@ -810,7 +813,10 @@ class MusicSystem {
 
     renderAlbums() {
         const container = document.getElementById('albums-container');
-        if (!container) return;
+        if (!container) {
+            console.warn('MusicSystem: Album container not found (#albums-container)');
+            return;
+        }
 
         container.innerHTML = '';
 
