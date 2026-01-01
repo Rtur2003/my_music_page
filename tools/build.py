@@ -71,17 +71,17 @@ class BuildTool:
         print()
         
         for task, success in results.items():
-            status = "✓ PASS" if success else "✗ FAIL"
+            status = "[PASS]" if success else "[FAIL]"
             print(f"{status} - {task}")
         
         print()
         
         all_passed = all(results.values())
         if all_passed:
-            print("✓ Build completed successfully")
+            print("[PASS] Build completed successfully")
             return 0
         else:
-            print("✗ Build failed")
+            print("[FAIL] Build failed")
             return 1
     
     def build(self):
