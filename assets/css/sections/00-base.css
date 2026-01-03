@@ -46,6 +46,11 @@
     --card-bg: rgba(255, 255, 255, 0.08);
     --section-bg: transparent;
     --darker-surface: rgba(10, 10, 10, 0.9);
+    
+    /* Platform Colors */
+    --youtube-red: #ff0000;
+    --youtube-red-dark: #cc0000;
+    --success-green: #4caf50;
 
     /* Gradients */
     --gradient-gold: linear-gradient(135deg, #d4b078 0%, #f4d03f 100%);
@@ -111,6 +116,41 @@ body {
 
 [data-theme="light"] body {
     background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #e9ecef 100%);
+}
+
+/* ===============================================
+   UTILITY CLASSES
+   =============================================== */
+
+/* Pulse Dot Animation - Used for live indicators */
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--success-green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1.2);
+    }
+}
+
+/* Live Indicator */
+.live-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: var(--success-green);
 }
 
 /* ===============================================
