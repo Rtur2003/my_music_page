@@ -311,7 +311,7 @@
 }
 
 .studio-btn.primary {
-    background: linear-gradient(135deg, #ff0000, #cc0000);
+    background: linear-gradient(135deg, var(--youtube-red), var(--youtube-red-dark));
     color: white;
     box-shadow: 0 4px 20px rgba(255, 0, 0, 0.3);
 }

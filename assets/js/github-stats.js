@@ -4,6 +4,10 @@
    =============================================== */
 
 class GitHubStats {
+    // Constants for profile data
+    static YEARS_CODING = 2;
+    static CODING_START_YEAR = 2022;
+
     constructor() {
         this.username = 'Rtur2003';
         this.statsLoaded = false;
@@ -134,21 +138,20 @@ class GitHubStats {
                 this.animateCounter(langsEl, stats.languages);
             }
 
-            // Years Coding
+            // Years Coding - Use class constant
             const yearsEl = statItems[3]?.querySelector('.stat-number');
             if (yearsEl) {
-                this.animateCounter(yearsEl, 2);
+                this.animateCounter(yearsEl, GitHubStats.YEARS_CODING);
             }
         }
 
-        // Add data source indicator if real data
+        // Add data source indicator if real data (styles defined in CSS)
         if (stats.isRealData) {
             const softwareStats = document.querySelector('.software-stats');
             if (softwareStats && !softwareStats.querySelector('.live-indicator')) {
                 const indicator = document.createElement('div');
                 indicator.className = 'live-indicator';
                 indicator.innerHTML = '<span class="pulse-dot"></span> Live Data';
-                indicator.style.cssText = 'display: flex; align-items: center; gap: 0.5rem; justify-content: center; margin-top: 1rem; font-size: 0.8rem; color: #4caf50;';
                 softwareStats.appendChild(indicator);
             }
         }
