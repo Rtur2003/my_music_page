@@ -115,6 +115,59 @@
 }
 
 /* ===============================================
+   HERO SOUND WAVE ANIMATION
+   =============================================== */
+
+.hero-sound-wave {
+    position: absolute;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.sound-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 50px;
+    padding: 10px 20px;
+    background: rgba(10, 10, 10, 0.7);
+    border-radius: 25px;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(212, 176, 120, 0.3);
+}
+
+.sound-bars span {
+    width: 4px;
+    background: linear-gradient(to top, var(--accent-gold), var(--rich-gold));
+    border-radius: 2px;
+    animation: soundWave 1.2s ease-in-out infinite;
+}
+
+.sound-bars span:nth-child(1) { animation-delay: 0s; height: 15px; }
+.sound-bars span:nth-child(2) { animation-delay: 0.1s; height: 25px; }
+.sound-bars span:nth-child(3) { animation-delay: 0.2s; height: 20px; }
+.sound-bars span:nth-child(4) { animation-delay: 0.15s; height: 35px; }
+.sound-bars span:nth-child(5) { animation-delay: 0.3s; height: 25px; }
+.sound-bars span:nth-child(6) { animation-delay: 0.25s; height: 30px; }
+.sound-bars span:nth-child(7) { animation-delay: 0.1s; height: 20px; }
+.sound-bars span:nth-child(8) { animation-delay: 0.35s; height: 25px; }
+.sound-bars span:nth-child(9) { animation-delay: 0.2s; height: 15px; }
+
+@keyframes soundWave {
+    0%, 100% {
+        transform: scaleY(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scaleY(0.4);
+        opacity: 1;
+    }
+}
+
+/* ===============================================
    HERO CONTENT
    =============================================== */
 
@@ -323,12 +376,27 @@
 
     .hero-visual {
         margin-bottom: 3rem;
+        position: relative;
     }
 
     .hero-profile {
         width: 280px;
         height: 280px;
         margin: 0 auto;
+    }
+
+    .hero-sound-wave {
+        bottom: -50px;
+    }
+
+    .sound-bars {
+        height: 40px;
+        padding: 8px 16px;
+        gap: 3px;
+    }
+
+    .sound-bars span {
+        width: 3px;
     }
 
     .hero-content {
@@ -391,6 +459,20 @@
     .hero-profile {
         width: 220px;
         height: 220px;
+    }
+
+    .hero-sound-wave {
+        bottom: -45px;
+    }
+
+    .sound-bars {
+        height: 35px;
+        padding: 6px 12px;
+        gap: 2px;
+    }
+
+    .sound-bars span {
+        width: 2px;
     }
 
     .hero-title {
