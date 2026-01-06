@@ -1,30 +1,101 @@
 /* ===============================================
    GITHUB REAL TIME STATS
+   Enhanced with real API support and fallback
    =============================================== */
 
 class GitHubStats {
+    // Constants for profile data
+    static YEARS_CODING = 2;
+    static CODING_START_YEAR = 2022;
+
     constructor() {
         this.username = 'Rtur2003';
         this.statsLoaded = false;
+        this.apiUrl = 'https://api.github.com';
+        // Cache data in localStorage for 1 hour
+        this.cacheKey = 'github_stats_cache';
+        this.cacheDuration = 60 * 60 * 1000; // 1 hour
+    }
+
+    getCachedStats() {
+        try {
+            const cached = localStorage.getItem(this.cacheKey);
+            if (cached) {
+                const { data, timestamp } = JSON.parse(cached);
+                if (Date.now() - timestamp < this.cacheDuration) {
+                    console.log('📦 Using cached GitHub stats');
+                    return data;
+                }
+            }
+        } catch {
+            console.log('⚠️ Cache read error');
+        }
+        return null;
+    }
+
+    setCachedStats(data) {
+        try {
+            localStorage.setItem(this.cacheKey, JSON.stringify({
+                data,
+                timestamp: Date.now()
+            }));
+        } catch {
+            console.log('⚠️ Cache write error');
+        }
     }
 
     async fetchGitHubStats() {
-        // Skip API due to CSP restrictions, use static realistic values
-        console.log('🔒 GitHub API disabled due to CSP, using static values');
+        // Check cache first
+        const cached = this.getCachedStats();
+        if (cached) {
+            return cached;
+        }
+
+        try {
+            // Try fetching real data from GitHub API
+            const [userResponse, reposResponse] = await Promise.all([
+                fetch(`${this.apiUrl}/users/${this.username}`),
+                fetch(`${this.apiUrl}/users/${this.username}/repos?per_page=100`)
+            ]);
+
+            if (userResponse.ok && reposResponse.ok) {
+                const userData = await userResponse.json();
+                const reposData = await reposResponse.json();
+
+                const stats = {
+                    repos: userData.public_repos || reposData.length,
+                    followers: userData.followers || 0,
+                    commits: this.calculateCommits(reposData),
+                    languages: this.getLanguages(reposData),
+                    isRealData: true
+                };
+
+                console.log('✅ GitHub API data fetched successfully', stats);
+                this.setCachedStats(stats);
+                return stats;
+            }
+        } catch (error) {
+            console.log('⚠️ GitHub API fetch failed, using fallback:', error.message);
+        }
+
+        // Fallback to realistic static values
+        console.log('📊 Using static GitHub stats fallback');
         return {
             repos: 15,
-            followers: 8,
+            followers: 12,
             commits: 127,
-            languages: 6
+            languages: 6,
+            isRealData: false
         };
     }
 
     calculateCommits(repoData) {
-        // Basit bir tahmin - aktif repo sayısı * ortalama commit
+        // Estimate commits based on active repos
         const activeRepos = repoData.filter(repo =>
             new Date(repo.updated_at) > new Date(Date.now() - 365 * 24 * 60 * 60 * 1000)
         );
-        return Math.min(activeRepos.length * 15, 200); // Max 200 commit göster
+        // More realistic calculation: active repos * average commits
+        return Math.min(activeRepos.length * 12 + 50, 200);
     }
 
     getLanguages(repoData) {
@@ -34,7 +105,7 @@ class GitHubStats {
                 languages.add(repo.language);
             }
         });
-        return Math.min(languages.size, 8); // Max 8 dil göster
+        return Math.min(languages.size, 8);
     }
 
     async updateStats() {
@@ -42,7 +113,7 @@ class GitHubStats {
 
         const stats = await this.fetchGitHubStats();
 
-        // Stats elementi bul ve güncelle
+        // Update software stats
         const statItems = document.querySelectorAll('.software-stats .stat-item');
 
         if (statItems.length >= 4) {
@@ -67,17 +138,21 @@ class GitHubStats {
                 this.animateCounter(langsEl, stats.languages);
             }
 
-            // GitHub Followers (yeni)
-            const followersEl = statItems[3]?.querySelector('.stat-number');
-            if (followersEl) {
-                followersEl.setAttribute('data-count', stats.followers);
-                this.animateCounter(followersEl, stats.followers);
+            // Years Coding - Use class constant
+            const yearsEl = statItems[3]?.querySelector('.stat-number');
+            if (yearsEl) {
+                this.animateCounter(yearsEl, GitHubStats.YEARS_CODING);
+            }
+        }
 
-                // Label'ı da güncelle
-                const followersLabel = statItems[3]?.querySelector('.stat-label');
-                if (followersLabel) {
-                    followersLabel.textContent = 'GitHub Followers';
-                }
+        // Add data source indicator if real data (styles defined in CSS)
+        if (stats.isRealData) {
+            const softwareStats = document.querySelector('.software-stats');
+            if (softwareStats && !softwareStats.querySelector('.live-indicator')) {
+                const indicator = document.createElement('div');
+                indicator.className = 'live-indicator';
+                indicator.innerHTML = '<span class="pulse-dot"></span> Live Data';
+                softwareStats.appendChild(indicator);
             }
         }
 
@@ -92,12 +167,17 @@ class GitHubStats {
         const animate = (currentTime) => {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
+            
+            // Easing function for smooth animation
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
 
-            const currentValue = Math.floor(startValue + (targetValue - startValue) * progress);
+            const currentValue = Math.floor(startValue + (targetValue - startValue) * easeOutQuart);
             element.textContent = currentValue;
 
             if (progress < 1) {
                 requestAnimationFrame(animate);
+            } else {
+                element.textContent = targetValue;
             }
         };
 
@@ -116,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 githubStats.updateStats();
             }
         });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.3 });
 
     const softwareSection = document.getElementById('software');
     if (softwareSection) {
