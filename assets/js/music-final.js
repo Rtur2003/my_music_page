@@ -755,6 +755,11 @@ class MusicSystem {
         this.tracks.forEach((track, index) => {
             const card = document.createElement('div');
             card.className = 'modern-music-card music-card';
+            // Motion and Stagger
+            card.setAttribute('data-motion', 'fade-up');
+            if (index < 10) {
+                card.classList.add(`stagger-${index + 1}`);
+            }
 
             const domId = track.domId || this.normalizeDomId(track.id, `track-${index + 1}`);
             track.domId = domId;
@@ -837,6 +842,11 @@ class MusicSystem {
         this.albums.forEach((album, index) => {
             const card = document.createElement('div');
             card.className = 'modern-album-card music-card';
+            // Motion and Stagger
+            card.setAttribute('data-motion', 'fade-up');
+            if (index < 10) {
+                card.classList.add(`stagger-${index + 1}`);
+            }
 
             const domId = album.domId || this.normalizeDomId(album.id, `album-${index + 1}`);
             album.domId = domId;
