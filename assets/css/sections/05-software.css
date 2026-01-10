@@ -388,9 +388,10 @@
 }
 
 .link-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-gold);
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
     border-color: rgba(212, 176, 120, 0.4);
+    background: rgba(255, 255, 255, 0.12);
 }
 
 .link-icon {
