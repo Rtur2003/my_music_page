@@ -88,28 +88,55 @@ class GalleryManager {
         // Create lightbox overlay
         const lightbox = document.createElement('div');
         lightbox.className = 'gallery-lightbox';
-        lightbox.innerHTML = `
-            <div class="lightbox-overlay">
-                <div class="lightbox-content">
-                    <button class="lightbox-close" aria-label="Close">
-                        <i class="fas fa-times"></i>
-                    </button>
-                    <img src="${img.src}" alt="${img.alt}" class="lightbox-image">
-                    <div class="lightbox-info">
-                        <h3>${info?.querySelector('h4')?.textContent || 'Gallery Image'}</h3>
-                        <p>${info?.querySelector('p')?.textContent || 'Music portfolio gallery'}</p>
-                    </div>
-                </div>
-            </div>
-        `;
+
+        // Build structure safely without using innerHTML
+        const overlay = document.createElement('div');
+        overlay.className = 'lightbox-overlay';
+
+        const content = document.createElement('div');
+        content.className = 'lightbox-content';
+
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'lightbox-close';
+        closeBtn.setAttribute('aria-label', 'Close');
+
+        const closeIcon = document.createElement('i');
+        closeIcon.className = 'fas fa-times';
+        closeBtn.appendChild(closeIcon);
+
+        const lightboxImage = document.createElement('img');
+        lightboxImage.className = 'lightbox-image';
+        lightboxImage.src = img.src;
+        lightboxImage.alt = img.alt || '';
+
+        const lightboxInfo = document.createElement('div');
+        lightboxInfo.className = 'lightbox-info';
+
+        const titleEl = document.createElement('h3');
+        const descEl = document.createElement('p');
+
+        const titleText = info?.querySelector('h4')?.textContent || 'Gallery Image';
+        const descText = info?.querySelector('p')?.textContent || 'Music portfolio gallery';
+
+        titleEl.textContent = titleText;
+        descEl.textContent = descText;
+
+        lightboxInfo.appendChild(titleEl);
+        lightboxInfo.appendChild(descEl);
+
+        content.appendChild(closeBtn);
+        content.appendChild(lightboxImage);
+        content.appendChild(lightboxInfo);
+
+        overlay.appendChild(content);
+        lightbox.appendChild(overlay);
 
         // Add to page
         document.body.appendChild(lightbox);
         document.body.style.overflow = 'hidden';
 
         // Setup close functionality
-        const closeBtn = lightbox.querySelector('.lightbox-close');
-        const overlay = lightbox.querySelector('.lightbox-overlay');
+        // closeBtn and overlay are already created above
 
         closeBtn.addEventListener('click', () => this.closeLightbox(lightbox));
         overlay.addEventListener('click', (e) => {
