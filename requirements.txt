@@ -9,7 +9,7 @@ bandit==1.7.5
 safety==3.0.1
 
 # Code formatting and quality
-black==23.12.1
+black==24.3.0
 isort==5.13.2
 pylint==3.0.3
 
