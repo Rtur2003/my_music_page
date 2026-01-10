@@ -780,3 +780,30 @@ h4,
 .status-title {
     font-family: var(--font-display);
 }
+
+/* ===============================================
+   MOTION UTILITIES
+   =============================================== */
+
+[data-motion] {
+    opacity: 0;
+    will-change: opacity, transform;
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), 
+                transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-motion].in-view {
+    opacity: 1;
+    transform: none;
+}
+
+[data-motion="fade-up"] { transform: translateY(30px); }
+[data-motion="fade-in"] { transform: scale(0.95); }
+[data-motion="slide-right"] { transform: translateX(-30px); }
+
+/* Stagger Delays */
+.stagger-1 { transition-delay: 100ms; }
+.stagger-2 { transition-delay: 200ms; }
+.stagger-3 { transition-delay: 300ms; }
+.stagger-4 { transition-delay: 400ms; }
+.stagger-5 { transition-delay: 500ms; }
