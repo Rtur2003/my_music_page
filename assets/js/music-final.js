@@ -708,7 +708,11 @@ class MusicSystem {
         }
 
         const lowered = trimmed.toLowerCase();
-        if (lowered.startsWith('javascript:')) {
+        if (
+            lowered.startsWith('javascript:') ||
+            lowered.startsWith('data:') ||
+            lowered.startsWith('vbscript:')
+        ) {
             return '';
         }
 
