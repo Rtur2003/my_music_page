@@ -72,6 +72,12 @@
         0 20px 60px rgba(0, 0, 0, 0.4),
         0 0 80px rgba(212, 176, 120, 0.2);
     transition: var(--transition);
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
 }
 
 .hero-profile::before {
@@ -89,8 +95,9 @@
         var(--accent-gold),
         transparent
     );
-    animation: rotate 8s linear infinite;
+    animation: rotate 10s linear infinite;
     z-index: -1;
+    opacity: 0.6;
 }
 
 .hero-profile-img {
@@ -102,7 +109,6 @@
 }
 
 .hero-profile:hover {
-    transform: scale(1.05);
     box-shadow:
         0 0 0 12px rgba(212, 176, 120, 0.15),
         0 30px 80px rgba(0, 0, 0, 0.5),
