@@ -194,24 +194,50 @@ class AccessibilityEnhancer {
                 let platform = 'Social platform';
                 const href = link.getAttribute('href') || '';
 
-                if (href.includes('instagram')) {platform = 'Instagram';}
-                else if (href.includes('linkedin')) {
+                let hostname = '';
+                let pathname = '';
+                if (href) {
+                    try {
+                        const url = new URL(href, document.baseURI);
+                        hostname = (url.hostname || '').toLowerCase();
+                        pathname = (url.pathname || '').toLowerCase();
+                    } catch (e) {
+                        // If URL parsing fails, fall back to simple substring checks on href
+                        const hrefLower = href.toLowerCase();
+                        if (hrefLower.includes('instagram')) { hostname = 'instagram.com'; }
+                        else if (hrefLower.includes('linkedin')) { hostname = 'linkedin.com'; }
+                        else if (hrefLower.includes('github')) { hostname = 'github.com'; }
+                        else if (hrefLower.includes('youtube')) { hostname = 'youtube.com'; }
+                        else if (hrefLower.includes('tiktok')) { hostname = 'tiktok.com'; }
+                        else if (hrefLower.includes('spotify')) { hostname = 'spotify.com'; }
+                        else if (hrefLower.includes('twitter.com')) { hostname = 'twitter.com'; }
+                        else if (hrefLower.includes('x.com')) { hostname = 'x.com'; }
+                    }
+                }
+
+                if (hostname === 'instagram.com' || hostname.endsWith('.instagram.com')) {
+                    platform = 'Instagram';
+                }
+                else if (hostname === 'linkedin.com' || hostname.endsWith('.linkedin.com')) {
                     platform = 'LinkedIn';
                 }
-                else if (href.includes('github')) {
+                else if (hostname === 'github.com' || hostname.endsWith('.github.com')) {
                     platform = 'GitHub';
                 }
-                else if (href.includes('youtube')) {
+                else if (hostname === 'youtube.com' || hostname.endsWith('.youtube.com')) {
                     platform = 'YouTube';
                 }
-                else if (href.includes('tiktok')) {
+                else if (hostname === 'tiktok.com' || hostname.endsWith('.tiktok.com')) {
                     platform = 'TikTok';
                 }
-                else if (href.includes('spotify')) {
+                else if (hostname === 'spotify.com' || hostname.endsWith('.spotify.com')) {
                     platform = 'Spotify';
                 }
-                // Note: Substring matching is safe here - only used for display/ARIA labels, not security decisions
-                else if (href.includes('twitter.com') || href.includes('//x.com/') || href.includes('//www.x.com/')) {
+                // Host-based detection for X (Twitter)
+                else if (
+                    hostname === 'twitter.com' || hostname.endsWith('.twitter.com') ||
+                    hostname === 'x.com' || hostname.endsWith('.x.com')
+                ) {
                     platform = 'X (Twitter)';
                 }
 
