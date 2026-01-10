@@ -202,16 +202,8 @@ class AccessibilityEnhancer {
                         hostname = (url.hostname || '').toLowerCase();
                         pathname = (url.pathname || '').toLowerCase();
                     } catch (e) {
-                        // If URL parsing fails, fall back to simple substring checks on href
-                        const hrefLower = href.toLowerCase();
-                        if (hrefLower.includes('instagram')) { hostname = 'instagram.com'; }
-                        else if (hrefLower.includes('linkedin')) { hostname = 'linkedin.com'; }
-                        else if (hrefLower.includes('github')) { hostname = 'github.com'; }
-                        else if (hrefLower.includes('youtube')) { hostname = 'youtube.com'; }
-                        else if (hrefLower.includes('tiktok')) { hostname = 'tiktok.com'; }
-                        else if (hrefLower.includes('spotify')) { hostname = 'spotify.com'; }
-                        else if (hrefLower.includes('twitter.com')) { hostname = 'twitter.com'; }
-                        else if (hrefLower.includes('x.com')) { hostname = 'x.com'; }
+                        // If URL parsing fails, do not attempt substring-based hostname detection
+                        // to avoid misclassifying arbitrary URLs as social platforms.
                     }
                 }
 
