@@ -364,6 +364,14 @@
     transition: var(--music-transition);
 }
 
+.modern-music-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: var(--music-shadow-hover);
+    border-color: rgba(212, 176, 120, 0.4);
+    z-index: 2;
+    background: var(--music-hover-glass);
+}
+
 .card-content {
     display: grid;
     grid-template-columns: 80px 1fr auto;
