@@ -87,32 +87,63 @@ class ContactFormHandler {
     }
 
     /**
-     * Submits form data to server
+     * Submits form data to server using Web3Forms
      * @param {Object} data - Form data
      * @returns {Promise<Object>} Response object with success status
      */
     async submitForm(data) {
-        const isDev = this.isDevelopment();
-        
-        // Use Netlify Forms in production or when on netlify domain
-        if (!isDev || window.location.hostname.includes('netlify')) {
-            const form = new FormData();
-            form.append('form-name', 'contact');
-            Object.keys(data).forEach(key => {
-                form.append(key, data[key]);
-            });
+        // Web3Forms - Works on any hosting
+        // Get your free access key from: https://web3forms.com/
+        const WEB3FORMS_ACCESS_KEY = '8a34bbd4-78d9-4a92-a6bc-e11244985839';
 
-            const response = await fetch('/', {
-                method: 'POST',
-                body: form
-            });
-
-            return { success: response.ok };
+        // Check if access key is configured
+        if (!WEB3FORMS_ACCESS_KEY || WEB3FORMS_ACCESS_KEY === 'YOUR_ACCESS_KEY_HERE') {
+            console.warn('⚠️ Web3Forms access key not configured.');
+            this.fallbackToMailto(data);
+            return { success: true, fallback: true };
         }
-        
-        // Development mode - simulate success
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        return { success: true };
+
+        const formData = {
+            access_key: WEB3FORMS_ACCESS_KEY,
+            name: data.name,
+            email: data.email,
+            subject: data.subject || 'New Contact Form Submission',
+            message: data.message,
+            from_name: 'Hasan Arthur Portfolio',
+            // Spam protection
+            botcheck: ''
+        };
+
+        try {
+            const response = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+            return { success: result.success };
+        } catch (error) {
+            console.error('Web3Forms error:', error);
+            // Fallback to mailto on error
+            this.fallbackToMailto(data);
+            return { success: true, fallback: true };
+        }
+    }
+
+    /**
+     * Fallback to mailto if form service unavailable
+     * @param {Object} data - Form data
+     */
+    fallbackToMailto(data) {
+        const subject = encodeURIComponent(data.subject || 'Contact from Portfolio');
+        const body = encodeURIComponent(
+            `Name: ${data.name}\nEmail: ${data.email}\n\nMessage:\n${data.message}`
+        );
+        window.location.href = `mailto:hasannarthurrr@gmail.com?subject=${subject}&body=${body}`;
     }
 
     /**
