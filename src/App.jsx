@@ -4,6 +4,7 @@ import MagneticCursor from './components/MagneticCursor';
 import NoiseOverlay from './components/NoiseOverlay';
 import ProjectCanvas from './components/ProjectCanvas';
 import Preloader from './components/Preloader';
+import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import ProjectList from './components/ProjectList';
 
@@ -23,6 +24,8 @@ function App() {
         {isLoading && (
           <Preloader onComplete={() => setIsLoading(false)} />
         )}
+        
+        {!isLoading && <Navbar />}
         
         <Hero />
         <ProjectList setHoveredProject={setHoveredProject} />
