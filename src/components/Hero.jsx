@@ -45,7 +45,7 @@ export default function Hero() {
       position: 'relative',
       zIndex: 10
     }}>
-      <div style={{
+      <div className="hero-grid" style={{
         maxWidth: '1400px',
         margin: '0 auto',
         width: '100%',

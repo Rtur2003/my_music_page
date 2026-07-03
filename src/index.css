@@ -110,3 +110,21 @@ section {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+@media (max-width: 768px) {
+  .hero-grid, .about-grid, .software-grid, .footer-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .hero-image-wrapper {
+    height: 50vh !important;
+  }
+
+  .nav-item {
+    font-size: var(--text-sm) !important;
+  }
+
+  .nav-item.nav-links {
+    display: none !important;
+  }
+}

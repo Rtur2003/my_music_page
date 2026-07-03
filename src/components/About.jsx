@@ -45,7 +45,7 @@ export default function About() {
       backgroundColor: 'var(--color-bg)'
     }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-2xl)', alignItems: 'center' }}>
+        <div className="about-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-2xl)', alignItems: 'center' }}>
           
           <div>
             <h2 className="font-display about-text-reveal" style={{

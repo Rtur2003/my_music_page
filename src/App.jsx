@@ -39,7 +39,7 @@ function App() {
           <Preloader onComplete={() => setIsLoading(false)} />
         )}
         
-        {!isLoading && <Navbar />}
+        {!isLoading && <Navbar isPlaying={isPlaying} />}
         
         <Hero />
         <About />

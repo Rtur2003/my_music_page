@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
-import * as THREE from 'three';
 import gsap from 'gsap';
 
 const vertexShader = `
