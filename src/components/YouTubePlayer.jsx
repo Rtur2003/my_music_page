@@ -1,13 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import YouTube from 'react-youtube';
 import { musicCatalog } from '../data/music-catalog';
 
-// Context or props can be used. We'll export a simple event bus to trigger plays from anywhere.
-export const audioController = {
-  play: null,
-  pause: null,
-  setVolume: null,
-};
+// Context or props can be used. We'll pass state from App.jsx
 
 export default function YouTubePlayer({ currentTrackId, isPlaying, onTrackEnd }) {
   const [player, setPlayer] = useState(null);
