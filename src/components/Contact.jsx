@@ -84,9 +84,8 @@ export default function Contact() {
               color: 'black',
               borderRadius: '30px',
               fontWeight: 600,
-              textDecoration: 'none',
-              cursor: 'none'
-            }} data-cursor-text="Email">
+              textDecoration: 'none'
+            }}>
               <Mail size={20} />
               Say Hello
             </a>
@@ -101,9 +100,8 @@ export default function Contact() {
               border: '1px solid rgba(255,255,255,0.2)',
               borderRadius: '30px',
               fontWeight: 600,
-              textDecoration: 'none',
-              cursor: 'none'
-            }} data-cursor-text="Support">
+              textDecoration: 'none'
+            }}>
               <Coffee size={20} />
               Support My Art
             </a>
@@ -134,10 +132,8 @@ export default function Contact() {
                   gap: '8px',
                   color: 'var(--color-text-muted)',
                   textDecoration: 'none',
-                  transition: 'color 0.3s ease',
-                  cursor: 'none'
+                  transition: 'color 0.3s ease'
                 }}
-                data-cursor-text="Visit"
                 onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-primary)' }}
                 onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-text-muted)' }}
               >
@@ -156,10 +152,8 @@ export default function Contact() {
                 gap: '8px',
                 color: 'var(--color-text-muted)',
                 textDecoration: 'none',
-                transition: 'color 0.3s ease',
-                cursor: 'none'
+                transition: 'color 0.3s ease'
               }}
-              data-cursor-text="Visit"
               onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-primary)' }}
               onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-text-muted)' }}
             >
@@ -187,7 +181,7 @@ export default function Contact() {
           &copy; {new Date().getFullYear()} Hasan Arthur Altuntaş. All rights reserved.
         </div>
         <div style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
-          Crafted with passion in Sakarya, TR
+          Crafted with passion
         </div>
       </div>
     </section>
