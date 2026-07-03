@@ -1,7 +1,8 @@
 import React from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { Github, Linkedin, Youtube, Instagram, Twitter, Coffee, Mail, Globe } from 'lucide-react';
+import { Coffee, Mail, Globe } from 'lucide-react';
+import { FaSpotify, FaYoutube, FaInstagram, FaTwitter, FaLinkedin, FaGithub } from 'react-icons/fa';
 
 export default function Contact() {
   useGSAP(() => {
@@ -19,12 +20,12 @@ export default function Contact() {
   });
 
   const socials = [
-    { name: 'Spotify', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.54.659.301 1.02zm1.44-3.3c-.301.42-.84.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.84.241 1.2zM19.081 10.2c-3.959-2.34-10.44-2.52-14.22-1.38-.6.18-1.2-.18-1.38-.78-.18-.6.18-1.2.78-1.38 4.32-1.32 11.52-1.08 16.08 1.62.54.3.72 1.02.42 1.56-.24.54-.9.72-1.68.36z"/></svg>, url: 'https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef' },
-    { name: 'YouTube', icon: <Youtube size={24} />, url: 'https://www.youtube.com/channel/UCA7E1X_uGUqtSJeIxvBeTQA' },
-    { name: 'Instagram', icon: <Instagram size={24} />, url: 'https://www.instagram.com/rthur_hsn' },
-    { name: 'X', icon: <Twitter size={24} />, url: 'https://x.com/Rthur__1' },
-    { name: 'LinkedIn', icon: <Linkedin size={24} />, url: 'https://tr.linkedin.com/in/hasan-arthur-altuntas' },
-    { name: 'GitHub', icon: <Github size={24} />, url: 'https://github.com/Rtur2003' }
+    { name: 'Spotify', icon: <FaSpotify size={24} />, url: 'https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef' },
+    { name: 'YouTube', icon: <FaYoutube size={24} />, url: 'https://www.youtube.com/channel/UCA7E1X_uGUqtSJeIxvBeTQA' },
+    { name: 'Instagram', icon: <FaInstagram size={24} />, url: 'https://www.instagram.com/rthur_hsn' },
+    { name: 'X', icon: <FaTwitter size={24} />, url: 'https://x.com/Rthur__1' },
+    { name: 'LinkedIn', icon: <FaLinkedin size={24} />, url: 'https://tr.linkedin.com/in/hasan-arthur-altuntas' },
+    { name: 'GitHub', icon: <FaGithub size={24} />, url: 'https://github.com/Rtur2003' }
   ];
 
   return (

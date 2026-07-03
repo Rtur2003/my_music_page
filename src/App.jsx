@@ -9,6 +9,7 @@ import Hero from './components/Hero';
 import About from './components/About';
 import ProjectList from './components/ProjectList';
 import Software from './components/Software';
+import Contact from './components/Contact';
 import YouTubePlayer from './components/YouTubePlayer';
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
           onTogglePlay={togglePlay}
         />
         <Software />
+        <Contact />
         
         {playingTrackId && (
           <YouTubePlayer 
