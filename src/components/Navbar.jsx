@@ -33,7 +33,7 @@ export default function Navbar({ isPlaying }) {
       zIndex: 100,
       mixBlendMode: 'difference'
     }}>
-      <div className="nav-item font-display" style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'none' }} data-cursor-text="Home" onClick={(e) => handleScroll(e, 'root')}>
+      <div className="nav-item font-display" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }} onClick={(e) => handleScroll(e, 'root')}>
         <img src="/assets/images/logo-transparent.png" alt="Hasan Arthur Logo" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
         <span style={{ fontWeight: 700, fontSize: 'var(--text-lg)', letterSpacing: '0.05em', color: 'white' }}>
           HASAN ARTHUR
@@ -56,11 +56,10 @@ export default function Navbar({ isPlaying }) {
                 letterSpacing: '0.1em',
                 color: 'white',
                 textDecoration: 'none',
-                position: 'relative',
-                cursor: 'none'
+                textDecoration: 'none',
+                position: 'relative'
               }}
               className="nav-link"
-              data-cursor-text="Go"
             >
               {item}
             </a>
@@ -83,7 +82,6 @@ export default function Navbar({ isPlaying }) {
             <span style={{ width: '4px', height: '4px', backgroundColor: 'rgba(255,255,255,0.5)', borderRadius: '2px' }}></span>
           </div>
         )}
-        <span>Sakarya, TR</span>
       </div>
     </nav>
   );
