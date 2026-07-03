@@ -33,7 +33,7 @@ export default function Navbar({ isPlaying }) {
       zIndex: 100,
       mixBlendMode: 'difference'
     }}>
-      <div className="nav-item font-display" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }} onClick={(e) => handleScroll(e, 'root')}>
+      <div className="nav-item font-display" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }} onClick={(e) => handleScroll(e, 'hero')}>
         <img src="/assets/images/logo-transparent.png" alt="Hasan Arthur Logo" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
         <span style={{ fontWeight: 700, fontSize: 'var(--text-lg)', letterSpacing: '0.05em', color: 'white' }}>
           HASAN ARTHUR
