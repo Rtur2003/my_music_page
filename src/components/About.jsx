@@ -1,7 +1,7 @@
 import React from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { Music, SlidersHorizontal, Film, Headphones } from 'lucide-react';
+import { Music, Code, Film, Headphones } from 'lucide-react';
 
 export default function About() {
   useGSAP(() => {
@@ -32,9 +32,9 @@ export default function About() {
 
   const skills = [
     { icon: <Music size={24} />, title: "Multi-Instrumentalist" },
-    { icon: <SlidersHorizontal size={24} />, title: "Music Production" },
-    { icon: <Film size={24} />, title: "Music Composition" },
-    { icon: <Headphones size={24} />, title: "Mixing & Mastering" }
+    { icon: <Code size={24} />, title: "Software Engineering" },
+    { icon: <Film size={24} />, title: "Cinematic Composition" },
+    { icon: <Headphones size={24} />, title: "Audio Engineering" }
   ];
 
   return (
@@ -56,7 +56,7 @@ export default function About() {
               letterSpacing: '0.05em',
               marginBottom: 'var(--space-lg)'
             }}>
-              Musical Journey & Vision
+              Bridging Logic & Emotion
             </h2>
             
             <h3 className="font-display about-text-reveal" style={{
@@ -66,7 +66,7 @@ export default function About() {
               marginBottom: 'var(--space-xl)',
               textTransform: 'uppercase'
             }}>
-              Every note is an emotion,<br/>every melody is a memory.
+              Where algorithms meet <br/> cinematic soundscapes.
             </h3>
             
             <p className="about-text-reveal" style={{
@@ -75,7 +75,11 @@ export default function About() {
               lineHeight: 1.8,
               marginBottom: 'var(--space-xl)'
             }}>
-              I tell stories in the universal language of music. In the world of cinematic and instrumental music, I express myself while taking listeners on an emotional journey.
+              I tell stories through the universal language of music and the precise structure of code. 
+              As a Cinematic Music Producer and AI Architect, I thrive at the intersection of art and technology. 
+              Whether it's composing emotionally driven instrumental tracks like <em>"LIAR"</em> or building advanced 
+              machine learning systems like <strong>AURIS</strong> (Wav2vec2 Audio Analysis) under the 
+              <strong>CrownCode</strong> ecosystem, my focus is always on creating an immersive, memorable experience.
             </p>
           </div>
 
@@ -88,25 +92,25 @@ export default function About() {
               <div key={i} className="skill-card" style={{
                 padding: 'var(--space-xl)',
                 backgroundColor: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.05)',
+                border: '1px solid var(--color-border)',
                 borderRadius: '16px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 textAlign: 'center',
                 gap: 'var(--space-md)',
-                transition: 'all 0.3s ease',
-                cursor: 'none'
+                transition: 'all 0.3s ease'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.08)';
                 e.currentTarget.style.borderColor = 'var(--color-primary)';
+                e.currentTarget.style.transform = 'translateY(-5px)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.03)';
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)';
-              }}
-              data-cursor-text="Explore">
+                e.currentTarget.style.borderColor = 'var(--color-border)';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}>
                 <div style={{ color: 'var(--color-primary)' }}>{skill.icon}</div>
                 <div style={{ fontWeight: 600, fontSize: 'var(--text-base)' }}>{skill.title}</div>
               </div>
