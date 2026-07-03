@@ -18,7 +18,7 @@ export default function Hero() {
   });
 
   return (
-    <section id="root" style={{
+    <section id="hero" style={{
       minHeight: '100vh',
       display: 'flex',
       alignItems: 'center',
