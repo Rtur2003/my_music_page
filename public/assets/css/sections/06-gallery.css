@@ -1,0 +1,553 @@
+/* ===============================================
+   06 - GALLERY SECTION (STUDIO SESSIONS)
+   Classes: gallery, container, glass-container, section-header,
+            section-title, section-subtitle, studio-sessions-gallery,
+            studio-showcase, showcase-header, showcase-accent,
+            showcase-title, studio-grid, studio-item, studio-visual,
+            lofi-video-placeholder, audio-wave-animation, studio-info,
+            creative-stats, creative-stat-item, creative-stat-number,
+            creative-stat-label, studio-actions, studio-btn,
+            gallery-grid
+   =============================================== */
+
+/* ===============================================
+   DESKTOP GALLERY SECTION
+   =============================================== */
+
+.section.gallery {
+    padding: 6rem 0;
+    position: relative;
+    background: var(--section-bg);
+    transition: var(--transition);
+}
+
+.section.gallery .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.section.gallery .glass-container {
+    background: var(--card-bg);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    border: 1px solid rgba(212, 176, 120, 0.2);
+    padding: 3rem;
+    box-shadow: var(--shadow-strong);
+    transition: var(--transition);
+}
+
+/* ===============================================
+   GALLERY SECTION HEADER
+   =============================================== */
+
+.section.gallery .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.section.gallery .section-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 4px 20px rgba(212, 176, 120, 0.3);
+    letter-spacing: -1px;
+}
+
+.section.gallery .section-subtitle {
+    font-size: 1.2rem;
+    color: var(--accent-gold);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* ===============================================
+   STUDIO SESSIONS GALLERY
+   =============================================== */
+
+.studio-sessions-gallery {
+    margin: 2rem 0;
+}
+
+.studio-showcase {
+    background: linear-gradient(145deg,
+        rgba(255, 255, 255, 0.08),
+        rgba(255, 255, 255, 0.02));
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(212, 176, 120, 0.3);
+    border-radius: 24px;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.studio-showcase::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 0%,
+        rgba(212, 176, 120, 0.1) 0%,
+        transparent 50%);
+    z-index: 0;
+}
+
+.studio-showcase > * {
+    position: relative;
+    z-index: 1;
+}
+
+.showcase-header {
+    margin-bottom: 2.5rem;
+}
+
+.showcase-accent {
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-gold), var(--rich-gold));
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+}
+
+.showcase-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+}
+
+/* ===============================================
+   STUDIO GRID
+   =============================================== */
+
+.studio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.studio-item {
+    background: linear-gradient(145deg,
+        rgba(255, 255, 255, 0.05),
+        rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(212, 176, 120, 0.2);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.studio-item:hover {
+    transform: translateY(-8px);
+    border-color: rgba(212, 176, 120, 0.5);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+.studio-visual {
+    aspect-ratio: 16/10;
+    position: relative;
+    overflow: hidden;
+}
+
+.lofi-video-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg,
+        rgba(20, 20, 20, 0.9) 0%,
+        rgba(40, 40, 40, 0.9) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    position: relative;
+}
+
+.lofi-video-placeholder::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center,
+        rgba(212, 176, 120, 0.1) 0%,
+        transparent 70%);
+}
+
+.lofi-video-placeholder i {
+    font-size: 2.5rem;
+    color: var(--accent-gold);
+    z-index: 2;
+    transition: transform 0.3s ease;
+}
+
+.studio-item:hover .lofi-video-placeholder i {
+    transform: scale(1.1);
+}
+
+/* ===============================================
+   AUDIO WAVE ANIMATION
+   =============================================== */
+
+.audio-wave-animation {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 40px;
+    position: relative;
+    z-index: 2;
+}
+
+.audio-wave-animation span {
+    width: 4px;
+    background: linear-gradient(to top, var(--accent-gold), var(--rich-gold));
+    border-radius: 2px;
+    animation: wave 1.2s ease-in-out infinite;
+}
+
+.audio-wave-animation span:nth-child(1) { animation-delay: 0s; height: 20px; }
+.audio-wave-animation span:nth-child(2) { animation-delay: 0.1s; height: 30px; }
+.audio-wave-animation span:nth-child(3) { animation-delay: 0.2s; height: 25px; }
+.audio-wave-animation span:nth-child(4) { animation-delay: 0.3s; height: 35px; }
+.audio-wave-animation span:nth-child(5) { animation-delay: 0.4s; height: 20px; }
+
+@keyframes wave {
+    0%, 100% {
+        transform: scaleY(1);
+    }
+    50% {
+        transform: scaleY(0.5);
+    }
+}
+
+.studio-info {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.studio-info h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.studio-info p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* ===============================================
+   CREATIVE STATS
+   =============================================== */
+
+.creative-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    border: 1px solid rgba(212, 176, 120, 0.15);
+}
+
+.creative-stat-item {
+    text-align: center;
+}
+
+.creative-stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent-gold);
+    margin-bottom: 0.5rem;
+}
+
+.creative-stat-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ===============================================
+   STUDIO ACTIONS
+   =============================================== */
+
+.studio-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.studio-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.studio-btn.primary {
+    background: linear-gradient(135deg, var(--youtube-red), var(--youtube-red-dark));
+    color: white;
+    box-shadow: 0 4px 20px rgba(255, 0, 0, 0.3);
+}
+
+.studio-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(255, 0, 0, 0.4);
+}
+
+.studio-btn.secondary {
+    background: linear-gradient(135deg,
+        rgba(212, 176, 120, 0.2),
+        rgba(212, 176, 120, 0.1));
+    color: var(--accent-gold);
+    border: 1px solid rgba(212, 176, 120, 0.3);
+}
+
+.studio-btn.secondary:hover {
+    background: linear-gradient(135deg, var(--accent-gold), var(--rich-gold));
+    color: var(--primary-black);
+    transform: translateY(-2px);
+}
+
+/* ===============================================
+   GALLERY GRID (FUTURE USE)
+   =============================================== */
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.gallery-grid.hidden {
+    display: none;
+}
+
+.gallery-item {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.gallery-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-strong);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.gallery-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.gallery-item:hover .gallery-overlay {
+    opacity: 1;
+}
+
+.gallery-info {
+    text-align: center;
+    color: white;
+}
+
+.gallery-info h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.gallery-info p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* ===============================================
+   DARK MODE GALLERY
+   =============================================== */
+
+[data-theme="dark"] .section.gallery {
+    background: var(--gradient-dark);
+}
+
+/* ===============================================
+   LIGHT MODE GALLERY
+   =============================================== */
+
+[data-theme="light"] .section.gallery {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+[data-theme="light"] .section.gallery .section-title {
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .section.gallery .glass-container {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(184, 149, 95, 0.3);
+}
+
+[data-theme="light"] .studio-showcase {
+    background: linear-gradient(145deg,
+        rgba(255, 255, 255, 0.9),
+        rgba(255, 255, 255, 0.7));
+    border-color: rgba(184, 149, 95, 0.3);
+}
+
+[data-theme="light"] .studio-item {
+    background: rgba(255, 255, 255, 0.5);
+    border-color: rgba(184, 149, 95, 0.2);
+}
+
+/* ===============================================
+   MOBILE GALLERY RESPONSIVE
+   =============================================== */
+
+@media (max-width: 768px) {
+    .section.gallery {
+        padding: 4rem 0;
+    }
+
+    .section.gallery .container {
+        padding: 0 1rem;
+    }
+
+    .section.gallery .glass-container {
+        padding: 2rem 1.5rem;
+        border-radius: 20px;
+    }
+
+    .section.gallery .section-title {
+        font-size: 2.2rem;
+        margin-bottom: 0.8rem;
+        letter-spacing: -0.5px;
+    }
+
+    .section.gallery .section-subtitle {
+        font-size: 1rem;
+        letter-spacing: 1px;
+    }
+
+    .studio-showcase {
+        padding: 2rem 1.5rem;
+        border-radius: 20px;
+    }
+
+    .showcase-title {
+        font-size: 1.4rem;
+    }
+
+    .studio-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .creative-stats {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        padding: 1.5rem 1rem;
+    }
+
+    .creative-stat-number {
+        font-size: 1.8rem;
+    }
+
+    .creative-stat-label {
+        font-size: 0.75rem;
+    }
+
+    .studio-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .studio-btn {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+        padding: 0.9rem 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .section.gallery .glass-container {
+        padding: 1.5rem 1rem;
+    }
+
+    .section.gallery .section-title {
+        font-size: 1.8rem;
+    }
+
+    .studio-showcase {
+        padding: 1.5rem 1rem;
+    }
+
+    .showcase-title {
+        font-size: 1.2rem;
+    }
+
+    .lofi-video-placeholder i {
+        font-size: 2rem;
+    }
+
+    .audio-wave-animation {
+        height: 30px;
+    }
+
+    .audio-wave-animation span {
+        width: 3px;
+    }
+
+    .creative-stats {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+
+    .creative-stat-item {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid rgba(212, 176, 120, 0.1);
+    }
+
+    .creative-stat-item:last-child {
+        border-bottom: none;
+    }
+}
