@@ -1,77 +1,125 @@
 import React from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { Play, Pause } from 'lucide-react';
+import { musicCatalog } from '../data/music-catalog';
 
-const projects = [
-  { id: 1, title: 'Nebula', role: 'WebGL & React', year: '2026' },
-  { id: 2, title: 'Echoes', role: 'Creative Direction', year: '2025' },
-  { id: 3, title: 'Aura', role: 'Fullstack', year: '2025' },
-  { id: 4, title: 'Prism', role: 'Three.js / GLSL', year: '2024' },
-];
+export default function ProjectList({ setHoveredProject, playingTrackId, isPlaying, onTogglePlay }) {
+  useGSAP(() => {
+    // Basic reveal for the project list
+    gsap.from('.project-item', {
+      scrollTrigger: {
+        trigger: '#project-list',
+        start: 'top 75%',
+      },
+      y: 50,
+      opacity: 0,
+      stagger: 0.1,
+      duration: 1,
+      ease: 'power3.out'
+    });
+  });
 
-export default function ProjectList({ setHoveredProject }) {
   return (
-    <section className="container" style={{ minHeight: '100vh', paddingBottom: 'var(--space-xl)' }}>
-      <h2 className="font-display" style={{ fontSize: 'var(--text-5xl)', marginBottom: 'var(--space-xl)' }}>Case Studies</h2>
-      
-      <div className="project-list" style={{ display: 'flex', flexDirection: 'column' }}>
-        {projects.map(proj => (
-          <div 
-            key={proj.id}
-            className="project-row"
-            data-cursor-text="View Case"
-            onMouseEnter={() => setHoveredProject(proj.id)}
-            onMouseLeave={() => setHoveredProject(null)}
-            style={{ 
-              display: 'grid', 
-              /* Using minmax to enforce clamp and prevent text overlap */
-              gridTemplateColumns: 'minmax(0, 1fr) auto auto', 
-              alignItems: 'center', 
-              gap: 'var(--space-md)',
-              padding: 'var(--space-md) 0',
-              borderBottom: '1px solid var(--color-border)',
-              cursor: 'none'
-            }}
-          >
-            <h3 
-              className="font-display no-overlap-title" 
-              style={{ 
-                fontSize: 'var(--text-4xl)', 
-                fontWeight: 700,
-                transition: 'transform 0.5s var(--ease-out-expo)',
+    <section id="project-list" style={{
+      padding: 'var(--space-2xl) var(--space-md)',
+      position: 'relative',
+      zIndex: 10
+    }}>
+      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+        <h2 className="font-display" style={{
+          fontSize: 'var(--text-xl)',
+          fontWeight: 700,
+          marginBottom: 'var(--space-xl)',
+          color: 'var(--color-primary)',
+          textTransform: 'uppercase',
+          letterSpacing: '0.05em'
+        }}>
+          Selected Works
+        </h2>
+        
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          {musicCatalog.map((track) => (
+            <div 
+              key={track.id}
+              className="project-item"
+              onMouseEnter={() => setHoveredProject(track.id)}
+              onMouseLeave={() => setHoveredProject(null)}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'auto 1fr auto',
+                alignItems: 'center',
+                gap: 'var(--space-lg)',
+                padding: 'var(--space-lg) 0',
+                borderBottom: '1px solid rgba(255,255,255,0.1)',
+                cursor: 'none',
+                position: 'relative'
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateX(20px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateX(0)';
-              }}
+              data-cursor-text="Play"
             >
-              {proj.title}
-            </h3>
-            
-            <span 
-              className="text-muted" 
-              style={{ 
-                fontSize: 'var(--text-sm)', 
-                paddingLeft: 'var(--space-lg)',
-                whiteSpace: 'nowrap'
-              }}
-            >
-              {proj.role}
-            </span>
-            
-            <span 
-              className="text-muted" 
-              style={{ 
-                fontSize: 'var(--text-sm)',
-                whiteSpace: 'nowrap',
-                minWidth: '60px',
-                textAlign: 'right'
-              }}
-            >
-              {proj.year}
-            </span>
-          </div>
-        ))}
+              {/* Play Button */}
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onTogglePlay(track.id);
+                }}
+                style={{
+                  background: 'transparent',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  borderRadius: '50%',
+                  width: '50px',
+                  height: '50px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  cursor: 'none',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--color-primary)';
+                  e.currentTarget.style.color = 'var(--color-primary)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
+                  e.currentTarget.style.color = 'white';
+                }}
+              >
+                {playingTrackId === track.id && isPlaying ? <Pause size={20} /> : <Play size={20} style={{ marginLeft: '4px' }} />}
+              </button>
+
+              <div>
+                <h3 className="font-display" style={{
+                  fontSize: 'clamp(2rem, 5vw, 4rem)',
+                  fontWeight: 900,
+                  margin: 0,
+                  lineHeight: 1,
+                  textTransform: 'uppercase',
+                  color: playingTrackId === track.id ? 'var(--color-primary)' : 'white',
+                  transition: 'color 0.3s ease'
+                }}>
+                  {track.title}
+                </h3>
+                <p style={{
+                  fontSize: 'var(--text-md)',
+                  color: 'var(--color-text-muted)',
+                  marginTop: '0.5rem'
+                }}>
+                  {track.genre} — {track.artist}
+                </p>
+              </div>
+
+              <div style={{
+                textAlign: 'right',
+                color: 'var(--color-text-muted)',
+                fontFamily: 'monospace',
+                fontSize: 'var(--text-md)'
+              }}>
+                {track.duration}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -6,11 +6,25 @@ import ProjectCanvas from './components/ProjectCanvas';
 import Preloader from './components/Preloader';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import About from './components/About';
 import ProjectList from './components/ProjectList';
+import Software from './components/Software';
+import YouTubePlayer from './components/YouTubePlayer';
 
 function App() {
   const [hoveredProject, setHoveredProject] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [playingTrackId, setPlayingTrackId] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const togglePlay = (trackId) => {
+    if (playingTrackId === trackId) {
+      setIsPlaying(!isPlaying);
+    } else {
+      setPlayingTrackId(trackId);
+      setIsPlaying(true);
+    }
+  };
 
   return (
     <SmoothScroll>
@@ -28,8 +42,22 @@ function App() {
         {!isLoading && <Navbar />}
         
         <Hero />
-        <ProjectList setHoveredProject={setHoveredProject} />
+        <About />
+        <ProjectList 
+          setHoveredProject={setHoveredProject} 
+          playingTrackId={playingTrackId}
+          isPlaying={isPlaying}
+          onTogglePlay={togglePlay}
+        />
+        <Software />
         
+        {playingTrackId && (
+          <YouTubePlayer 
+            currentTrackId={playingTrackId} 
+            isPlaying={isPlaying} 
+            onTrackEnd={() => setIsPlaying(false)}
+          />
+        )}
       </main>
     </SmoothScroll>
   );
