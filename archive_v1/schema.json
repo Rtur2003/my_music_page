@@ -1,0 +1,76 @@
+{
+    "@context": "https://schema.org",
+    "@type": "MusicGroup",
+    "name": "Hasan Arthur Altuntaş",
+    "alternateName": "Hasan Arthur",
+    "url": "https://hasanarthuraltuntas.com.tr",
+    "image": "https://hasanarthuraltuntas.com.tr/assets/images/hero-musician.jpg",
+    "description": "Profesyonel müzisyen, prodüktör ve piyanist. Sinematik müzik, enstrümantal eserler ve modern prodüksiyon teknikleri konusunda uzman.",
+    "genre": [
+        "Instrumental Music",
+        "Cinematic Music", 
+        "Electronic Music",
+        "Piano Music",
+        "Contemporary Classical"
+    ],
+    "foundingDate": "2019",
+    "foundingLocation": {
+        "@type": "Place",
+        "name": "Turkey"
+    },
+    "member": {
+        "@type": "Person",
+        "name": "Hasan Arthur Altuntaş",
+        "jobTitle": "Musician, Producer, Pianist",
+        "knowsAbout": [
+            "Music Production",
+            "Piano Performance", 
+            "Cinematic Music Composition",
+            "Electronic Music Production",
+            "Audio Engineering"
+        ]
+    },
+    "sameAs": [
+        "https://www.youtube.com/@hasanarthuraltuntas",
+        "https://open.spotify.com/artist/hasanarthuraltuntas", 
+        "https://music.apple.com/artist/hasan-arthur-altuntas"
+    ],
+    "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Professional Inquiries",
+        "url": "https://hasanarthuraltuntas.com.tr/#contact"
+    },
+    "makesOffer": [
+        {
+            "@type": "Offer",
+            "itemOffered": {
+                "@type": "Service",
+                "name": "Music Production Services",
+                "description": "Professional music production, mixing and mastering services"
+            }
+        },
+        {
+            "@type": "Offer", 
+            "itemOffered": {
+                "@type": "Service",
+                "name": "Cinematic Music Composition",
+                "description": "Custom cinematic music composition for films, games and media"
+            }
+        },
+        {
+            "@type": "Offer",
+            "itemOffered": {
+                "@type": "Service", 
+                "name": "Piano Performances",
+                "description": "Live piano performances and recordings"
+            }
+        }
+    ],
+    "award": "Professional Music Producer Certification",
+    "keywords": "hasan arthur altuntaş, müzik prodüktörü, piyanist, sinematik müzik, enstrümantal müzik, music producer, pianist, cinematic music, instrumental music",
+    "inLanguage": ["tr", "en"],
+    "audience": {
+        "@type": "Audience",
+        "audienceType": "Music Lovers, Film Makers, Content Creators"
+    }
+}
