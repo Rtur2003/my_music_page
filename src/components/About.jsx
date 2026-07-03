@@ -8,25 +8,28 @@ export default function About() {
     gsap.from('.about-text-reveal', {
       scrollTrigger: {
         trigger: '#about',
-        start: 'top 70%',
+        start: 'top 75%',
       },
-      x: -100,
+      y: 40,
       opacity: 0,
+      filter: 'blur(10px)',
       stagger: 0.15,
-      duration: 1,
+      duration: 1.5,
       ease: 'power3.out'
     });
 
     gsap.from('.skill-card', {
       scrollTrigger: {
         trigger: '.skills-grid',
-        start: 'top 80%',
+        start: 'top 85%',
       },
-      x: 100,
+      y: 50,
+      scale: 0.95,
       opacity: 0,
+      filter: 'blur(10px)',
       stagger: 0.1,
-      duration: 0.8,
-      ease: 'back.out(1.5)'
+      duration: 1.2,
+      ease: 'back.out(1.2)'
     });
   });
 

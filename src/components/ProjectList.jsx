@@ -91,7 +91,7 @@ export default function ProjectList({ setHoveredProject, playingTrackId, isPlayi
               left: '5%',
               right: '5%',
               bottom: '5%',
-              background: `linear-gradient(rgba(10,10,10,0.4), rgba(10,10,10,0.9)), url(${track.coverImage}) center/cover no-repeat`,
+              background: track.backgroundGradient,
               borderRadius: '30px',
               border: '1px solid var(--color-border)',
               filter: 'grayscale(30%)',

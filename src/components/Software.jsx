@@ -170,15 +170,15 @@ export default function Software() {
           )}
           <div style={{ textAlign: 'center' }}>
             <div className="font-display" style={{ fontSize: '3.5rem', fontWeight: 900, color: 'var(--color-primary)', lineHeight: 1 }}>{stats.commits}</div>
-            <div style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', textTransform: 'uppercase', marginTop: '8px', letterSpacing: '0.05em' }}>GitHub Commits</div>
+            <div style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', textTransform: 'uppercase', marginTop: '12px', letterSpacing: '0.05em' }}>GitHub Commits</div>
           </div>
           <div style={{ textAlign: 'center' }}>
             <div className="font-display" style={{ fontSize: '3.5rem', fontWeight: 900, color: 'var(--color-primary)', lineHeight: 1 }}>{stats.repos}</div>
-            <div style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', textTransform: 'uppercase', marginTop: '8px', letterSpacing: '0.05em' }}>Public Repositories</div>
+            <div style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', textTransform: 'uppercase', marginTop: '12px', letterSpacing: '0.05em' }}>Public Repositories</div>
           </div>
           <div style={{ textAlign: 'center' }}>
             <div className="font-display" style={{ fontSize: '3.5rem', fontWeight: 900, color: 'var(--color-primary)', lineHeight: 1 }}>{stats.languages}</div>
-            <div style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', textTransform: 'uppercase', marginTop: '8px', letterSpacing: '0.05em' }}>Tech Stack Languages</div>
+            <div style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', textTransform: 'uppercase', marginTop: '12px', letterSpacing: '0.05em' }}>Tech Stack Languages</div>
           </div>
         </div>
 
@@ -189,7 +189,7 @@ export default function Software() {
           gap: 'var(--space-md)' 
         }}>
           {crownProjects.map((project, idx) => (
-            <div key={idx} className="project-card" style={{
+            <div key={idx} className="project-card glow-card" style={{
               backgroundColor: '#111',
               border: '1px solid var(--color-border)',
               borderRadius: '16px',
