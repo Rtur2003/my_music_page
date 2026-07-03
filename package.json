@@ -19,8 +19,7 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-icons": "^5.7.0",
-    "react-youtube": "^10.1.0",
-    "three": "^0.185.1"
+    "react-youtube": "^10.1.0"
   },
   "devDependencies": {
     "@types/react": "^19.2.17",
