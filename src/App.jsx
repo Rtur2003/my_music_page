@@ -11,7 +11,6 @@ import Contact from './components/Contact';
 import YouTubePlayer from './components/YouTubePlayer';
 
 function App() {
-  const [hoveredProject, setHoveredProject] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [playingTrackId, setPlayingTrackId] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -33,24 +32,23 @@ function App() {
         {isLoading && (
           <Preloader onComplete={() => setIsLoading(false)} />
         )}
-        
+
         {!isLoading && <Navbar isPlaying={isPlaying} />}
-        
+
         <Hero />
         <About />
-        <ProjectList 
-          setHoveredProject={setHoveredProject} 
+        <ProjectList
           playingTrackId={playingTrackId}
           isPlaying={isPlaying}
           onTogglePlay={togglePlay}
         />
         <Software />
         <Contact />
-        
+
         {playingTrackId && (
-          <YouTubePlayer 
-            currentTrackId={playingTrackId} 
-            isPlaying={isPlaying} 
+          <YouTubePlayer
+            currentTrackId={playingTrackId}
+            isPlaying={isPlaying}
             onTrackEnd={() => setIsPlaying(false)}
           />
         )}

@@ -1,0 +1,272 @@
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-top: 9rem;
+  padding-bottom: var(--space-xl);
+  overflow: hidden;
+  background:
+    radial-gradient(60% 50% at 82% 18%, rgba(204, 155, 74, 0.14), transparent 70%),
+    radial-gradient(45% 40% at 8% 85%, rgba(138, 44, 34, 0.12), transparent 70%);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: var(--space-xl);
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.copy {
+  max-width: 640px;
+}
+
+.eyebrow {
+  margin-bottom: var(--space-md);
+}
+
+.title {
+  font-size: var(--text-6xl);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+  margin-bottom: var(--space-sm);
+}
+
+.titleLineWrap {
+  display: block;
+  overflow: hidden;
+}
+
+.titleLine {
+  display: block;
+}
+
+.titleLine:last-child {
+  color: var(--color-primary);
+}
+
+.role {
+  font-size: var(--text-sm);
+  letter-spacing: 0.08em;
+  color: var(--color-text-faint);
+  margin-bottom: var(--space-md);
+}
+
+.lede {
+  font-size: var(--text-xl);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  max-width: 34ch;
+  margin-bottom: var(--space-lg);
+}
+
+.stats {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.statCard {
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(244, 239, 228, 0.03);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  min-width: 130px;
+}
+
+.statValue {
+  display: block;
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-primary);
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+
+.statLabel {
+  font-size: var(--text-xs);
+  color: var(--color-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.primaryCta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0.4rem 0.4rem 0.4rem 1.6rem;
+  background: var(--color-primary);
+  color: #14100a;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: var(--text-base);
+  transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo);
+}
+
+.primaryCta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px -10px rgba(204, 155, 74, 0.55);
+}
+
+.ctaIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(20, 16, 10, 0.14);
+  transform: rotate(-90deg);
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.primaryCta:hover .ctaIcon {
+  transform: rotate(-90deg) translateX(3px);
+}
+
+.secondaryCta {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 1.75rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: var(--text-base);
+  color: var(--color-text);
+  transition: border-color 0.35s var(--ease-out-expo), background 0.35s var(--ease-out-expo);
+}
+
+.secondaryCta:hover {
+  border-color: var(--color-primary);
+  background: rgba(204, 155, 74, 0.08);
+}
+
+/* ---- Visual: emblem seal, not a portrait ---- */
+.visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 420px;
+}
+
+.sealRing {
+  position: absolute;
+  width: clamp(300px, 32vw, 420px);
+  height: clamp(300px, 32vw, 420px);
+  border-radius: 50%;
+  border: 1px solid var(--color-primary-border);
+  animation: rotateRing 40s linear infinite;
+}
+
+.sealRing::before,
+.sealRing::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+.sealRing::before { top: -3px; left: 50%; transform: translateX(-50%); }
+.sealRing::after { bottom: -3px; left: 50%; transform: translateX(-50%); }
+
+@keyframes rotateRing {
+  to { transform: rotate(360deg); }
+}
+
+.seal {
+  position: relative;
+  width: clamp(230px, 22vw, 300px);
+  height: clamp(230px, 22vw, 300px);
+  border-radius: 50%;
+  background: linear-gradient(150deg, var(--color-bg-raised), var(--color-bg-inset));
+  border: 1px solid var(--color-border-strong);
+  box-shadow:
+    inset 0 1px 1px rgba(244, 239, 228, 0.08),
+    0 30px 60px -20px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  z-index: 2;
+}
+
+.sealMark {
+  width: 42%;
+  filter: invert(0.92) brightness(1.15) sepia(0.3) saturate(2) hue-rotate(-10deg);
+  opacity: 0.92;
+}
+
+.sealCaption {
+  font-size: var(--text-xs);
+  letter-spacing: 0.14em;
+  color: var(--color-text-faint);
+}
+
+.waveform {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 60px;
+  padding: 0.75rem 1.25rem;
+  background: rgba(10, 9, 8, 0.75);
+  border: 1px solid var(--color-primary-border);
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 3;
+}
+
+.waveBar {
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(to top, var(--color-primary), var(--color-primary-bright));
+  transform-origin: center;
+}
+
+.grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    text-align: center;
+  }
+  .copy { max-width: 100%; margin: 0 auto; }
+  .lede { margin-left: auto; margin-right: auto; }
+  .stats, .actions { justify-content: center; }
+  .visual { min-height: 340px; order: -1; }
+}
+
+@media (max-width: 480px) {
+  .sealRing { width: 260px; height: 260px; }
+  .seal { width: 190px; height: 190px; }
+  .stats { flex-direction: column; align-items: center; }
+}

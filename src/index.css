@@ -1,40 +1,61 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --color-bg: #0a0a0a;
-  --color-text: #F3F4F6;
-  --color-text-muted: rgba(255, 255, 255, 0.7);
-  --color-primary: #d4b078;
-  --color-accent: #b8955f;
-  --color-border: rgba(212, 176, 120, 0.2);
-  
-  /* Font Families */
-  --font-sans: 'Inter', sans-serif;
-  --font-display: 'Outfit', sans-serif;
+  /* ---- Color: "Cinematic Code" palette ---- */
+  --color-bg: #0a0908;
+  --color-bg-raised: #131110;
+  --color-bg-inset: #0d0c0a;
+  --color-text: #f4efe4;
+  --color-text-muted: rgba(244, 239, 228, 0.64);
+  --color-text-faint: rgba(244, 239, 228, 0.38);
 
-  /* Typography Scale using Clamp for perfect responsiveness */
-  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
-  --text-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
-  --text-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
-  --text-lg: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
-  --text-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
-  --text-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
-  --text-3xl: clamp(1.875rem, 1.5rem + 1.875vw, 2.5rem);
-  --text-4xl: clamp(2.25rem, 1.7rem + 2.75vw, 3.5rem);
-  --text-5xl: clamp(3rem, 2.2rem + 4vw, 5rem);
-  --text-6xl: clamp(3.75rem, 2.5rem + 6vw, 7rem);
-  --text-7xl: clamp(4.5rem, 3rem + 8vw, 10rem);
+  --color-primary: #cc9b4a;      /* refined cinematic amber */
+  --color-primary-bright: #e8bd72;
+  --color-accent: #8a2c22;       /* deep film-red, used sparingly */
+  --color-accent-bright: #b8412f;
 
-  /* Spacing */
-  --space-xs: 0.5rem;
-  --space-sm: 1rem;
+  --color-border: rgba(244, 239, 228, 0.1);
+  --color-border-strong: rgba(244, 239, 228, 0.18);
+  --color-primary-border: rgba(204, 155, 74, 0.35);
+
+  /* ---- Type families ---- */
+  --font-display: 'Bricolage Grotesque', 'Manrope', sans-serif;
+  --font-editorial: 'Newsreader', 'Georgia', serif;
+  --font-sans: 'Manrope', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+
+  /* ---- Fluid type scale ---- */
+  --text-xs: clamp(0.7rem, 0.67rem + 0.15vw, 0.8rem);
+  --text-sm: clamp(0.825rem, 0.78rem + 0.2vw, 0.95rem);
+  --text-base: clamp(1rem, 0.94rem + 0.3vw, 1.15rem);
+  --text-lg: clamp(1.15rem, 1.05rem + 0.4vw, 1.4rem);
+  --text-xl: clamp(1.4rem, 1.25rem + 0.6vw, 1.85rem);
+  --text-2xl: clamp(1.75rem, 1.5rem + 1vw, 2.5rem);
+  --text-3xl: clamp(2.2rem, 1.8rem + 1.6vw, 3.4rem);
+  --text-4xl: clamp(2.75rem, 2.1rem + 2.6vw, 4.75rem);
+  --text-5xl: clamp(3.4rem, 2.4rem + 4vw, 6.5rem);
+  --text-6xl: clamp(4rem, 2.6rem + 5.6vw, 8.5rem);
+
+  /* ---- Spacing ---- */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1.25rem;
   --space-md: 2rem;
-  --space-lg: 4rem;
-  --space-xl: 8rem;
-  
-  /* Easing */
-  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --space-lg: 3.5rem;
+  --space-xl: 6rem;
+  --space-2xl: 9rem;
+
+  /* ---- Motion ---- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ---- Radii ---- */
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.75rem;
+  --radius-full: 999px;
 }
 
 *, *::before, *::after {
@@ -47,6 +68,7 @@ html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color-scheme: dark;
 }
 
 body {
@@ -55,160 +77,91 @@ body {
   font-family: var(--font-sans);
   line-height: 1.5;
   overflow-x: hidden;
-  /* Prevent Lenis jump during load */
   overscroll-behavior: none;
 }
 
-/* Hide scrollbar for clean Awwwards aesthetic */
-::-webkit-scrollbar {
-  display: none;
-}
+::-webkit-scrollbar { display: none; }
+* { scrollbar-width: none; }
 
-/* Removed custom cursor logic to improve performance */
 a, button {
   color: inherit;
   text-decoration: none;
+  font-family: inherit;
 }
 
-/* Layout Utilities */
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+img { max-width: 100%; display: block; }
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+/* ---- Layout utilities ---- */
 .container {
   width: 100%;
-  max-width: 1600px;
+  max-width: 1560px;
   margin: 0 auto;
   padding: 0 var(--space-md);
 }
 
-.grid-12 {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: var(--space-sm);
+.font-display { font-family: var(--font-display); }
+.font-editorial { font-family: var(--font-editorial); }
+.font-mono { font-family: var(--font-mono); }
+.text-muted { color: var(--color-text-muted); }
+
+section { position: relative; }
+
+/* ---- Eyebrow label (structural device: signals section identity) ---- */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--color-primary);
 }
 
-/* Typography Classes */
-.font-display {
-  font-family: var(--font-display);
+.eyebrow::before {
+  content: '';
+  width: 20px;
+  height: 1px;
+  background: var(--color-primary);
 }
 
-.text-muted {
-  color: var(--color-text-muted);
-}
-
-/* Section Spacing */
-section {
-  padding-top: var(--space-xl);
-  padding-bottom: var(--space-xl);
-}
-
-/* Prevent Overlaps using strong clamping rules */
-.no-overlap-title {
-  min-width: 0; 
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
+/* ---- Sound wave indicator (used in navbar when playing) ---- */
 .sound-wave-bar {
-  width: 4px;
+  width: 3px;
   height: 10px;
-  background-color: var(--color-primary, #fff);
+  background-color: var(--color-primary);
   border-radius: 2px;
   display: inline-block;
-  margin: 0 2px;
+  margin: 0 1.5px;
   animation: wave 1s ease-in-out infinite;
 }
-
-.sound-wave-bar:nth-child(2) { animation-delay: 0.1s; }
-.sound-wave-bar:nth-child(3) { animation-delay: 0.2s; }
-.sound-wave-bar:nth-child(4) { animation-delay: 0.3s; }
+.sound-wave-bar:nth-child(2) { animation-delay: 0.12s; }
+.sound-wave-bar:nth-child(3) { animation-delay: 0.24s; }
+.sound-wave-bar:nth-child(4) { animation-delay: 0.36s; }
 
 @keyframes wave {
-  0%, 100% { height: 10px; }
-  50% { height: 20px; }
+  0%, 100% { height: 6px; }
+  50% { height: 16px; }
 }
 
-@media (max-width: 1100px) {
-  :root {
-    --space-2xl: 4rem; /* Reduce massive padding on medium screens */
-    --space-xl: 3rem;
-    --space-lg: 2rem;
+/* ---- Reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
-
-  .hero-grid, .about-grid, .software-grid, .footer-grid {
-    grid-template-columns: 1fr !important;
-    gap: var(--space-xl) !important;
-  }
-  
-  .hero-image-wrapper {
-    height: 40vh !important;
-    margin-top: var(--space-md);
-  }
-
-  /* Fix for Horizontal Panel inner content overlap */
-  .project-panel-content {
-    grid-template-columns: 1fr !important;
-    text-align: center !important;
-    gap: var(--space-md) !important;
-    justify-items: center;
-  }
-
-  /* Center the platform links on small screens */
-  .project-panel-content > div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .project-panel-content .font-display {
-    text-align: center !important;
-    font-size: clamp(2rem, 8vw, 4rem) !important;
-  }
-
-  .skills-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .nav-links {
-    display: none !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-halo {
-    width: 250px !important;
-    height: 250px !important;
-  }
-  .hero-profile {
-    width: 200px !important;
-    height: 200px !important;
-  }
-}
-
-/* Glowing Card Effect */
-.glow-card {
-  position: relative;
-  z-index: 1;
-}
-
-.glow-card::before {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  border-radius: 18px;
-  background: linear-gradient(45deg, transparent, var(--color-primary), rgba(212, 176, 120, 0.4), transparent);
-  background-size: 400%;
-  z-index: -1;
-  filter: blur(12px);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-.glow-card:hover::before {
-  opacity: 1;
-  animation: animate-glow 6s linear infinite;
-}
-
-@keyframes animate-glow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
 }

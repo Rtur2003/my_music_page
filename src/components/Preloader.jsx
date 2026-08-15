@@ -1,68 +1,41 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import styles from './Preloader.module.css';
 
 export default function Preloader({ onComplete }) {
   const [progress, setProgress] = useState(0);
-  const preloaderRef = useRef(null);
-  const textRef = useRef(null);
+  const rootRef = useRef(null);
 
   useEffect(() => {
     const tl = gsap.timeline({
       onComplete: () => {
-        // Slide up the preloader
-        gsap.to(preloaderRef.current, {
-          y: '-100%',
+        gsap.to(rootRef.current, {
+          yPercent: -100,
           duration: 1,
           ease: 'power4.inOut',
-          onComplete: onComplete
+          onComplete,
         });
-      }
+      },
     });
 
-    // Fake loading progress
-    const dummyObj = { p: 0 };
-    tl.to(dummyObj, {
+    const dummy = { p: 0 };
+    tl.to(dummy, {
       p: 100,
-      duration: 2,
+      duration: 1.8,
       ease: 'power2.inOut',
-      onUpdate: () => {
-        setProgress(Math.round(dummyObj.p));
-      }
+      onUpdate: () => setProgress(Math.round(dummy.p)),
     });
-
   }, [onComplete]);
 
   return (
-    <div
-      ref={preloaderRef}
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100vh',
-        backgroundColor: '#050505',
-        color: '#F3F4F6',
-        zIndex: 99999, // Above everything
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <div 
-        ref={textRef}
-        className="font-display" 
-        style={{ 
-          fontSize: 'var(--text-6xl)',
-          fontWeight: 900,
-          lineHeight: 1
-        }}
-      >
-        {progress}%
+    <div ref={rootRef} className={styles.preloader}>
+      <div className={styles.mark}>
+        <span className={`${styles.progress} font-display`}>{progress}</span>
+        <span className={styles.percent}>%</span>
       </div>
-      <div style={{ marginTop: 'var(--space-md)', fontSize: 'var(--text-sm)', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-text-muted)' }}>
-        Loading Experience
+      <div className={`${styles.label} font-mono`}>loading_experience()</div>
+      <div className={styles.barTrack}>
+        <div className={styles.barFill} style={{ transform: `scaleX(${progress / 100})` }} />
       </div>
     </div>
   );
