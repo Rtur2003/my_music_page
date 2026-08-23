@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { BrainCircuit, MessageSquare, TestTube2, Terminal, Database } from 'lucide-react';
+import { BrainCircuit, MessageSquare, TestTube2, Terminal, Database, ArrowUpRight } from 'lucide-react';
 import { useTranslation } from '../i18n/LanguageContext';
 import styles from './Software.module.css';
 
@@ -78,6 +78,14 @@ export default function Software() {
       duration: 0.8,
       ease: 'power3.out',
     });
+
+    gsap.from(`.${styles.platformBand}`, {
+      scrollTrigger: { trigger: `.${styles.platformBand}`, start: 'top 88%' },
+      y: 30,
+      opacity: 0,
+      duration: 0.9,
+      ease: 'power3.out',
+    });
   }, { scope: rootRef });
 
   return (
@@ -146,6 +154,23 @@ export default function Software() {
             );
           })}
         </div>
+
+        <a
+          href="https://hasan-arthur-altuntas.xyz"
+          target="_blank"
+          rel="noreferrer"
+          className={styles.platformBand}
+        >
+          <div className={styles.platformText}>
+            <span className="eyebrow">{t('software.platformEyebrow')}</span>
+            <h3 className={`${styles.platformHeading} font-display`}>{t('software.platformHeading')}</h3>
+            <p className={styles.platformDesc}>{t('software.platformDesc')}</p>
+          </div>
+          <span className={styles.platformCta}>
+            {t('software.platformCta')}
+            <ArrowUpRight size={18} />
+          </span>
+        </a>
       </div>
     </section>
   );
