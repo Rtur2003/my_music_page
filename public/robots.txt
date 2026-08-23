@@ -1,0 +1,7 @@
+# Hasan Arthur Altuntaş - Music & Engineering
+# Allow all search engines to crawl the site
+
+User-agent: *
+Allow: /
+
+Sitemap: https://hasan-arthur-altuntas.com.tr/sitemap.xml
