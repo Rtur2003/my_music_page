@@ -2,16 +2,18 @@ import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { Play, Pause } from 'lucide-react';
-import { FaSpotify, FaYoutube, FaApple } from 'react-icons/fa';
+import { ExternalLink } from 'lucide-react';
+import { FaSpotify } from 'react-icons/fa';
 import { musicCatalog } from '../data/music-catalog';
+import { useTranslation } from '../i18n/LanguageContext';
 import styles from './ProjectList.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function ProjectList({ playingTrackId, isPlaying, onTogglePlay }) {
+export default function ProjectList() {
   const containerRef = useRef();
   const sliderRef = useRef();
+  const { t } = useTranslation();
 
   useGSAP(() => {
     const panels = gsap.utils.toArray(`.${styles.panel}`);
@@ -40,63 +42,52 @@ export default function ProjectList({ playingTrackId, isPlaying, onTogglePlay })
   return (
     <section id="project-list" ref={containerRef} className={styles.section}>
       <div className={styles.sectionLabel}>
-        <span className="eyebrow">Selected Works</span>
+        <span className="eyebrow">{t('works.eyebrow')}</span>
         <span className={`${styles.counter} font-mono`}>
-          {String(musicCatalog.length).padStart(2, '0')} tracks
+          {String(musicCatalog.length).padStart(2, '0')} {t('works.counterSuffix')}
         </span>
       </div>
 
       <div ref={sliderRef} className={styles.slider} style={{ width: `${musicCatalog.length * 100}vw` }}>
-        {musicCatalog.map((track) => {
-          const isActive = playingTrackId === track.id && isPlaying;
-          return (
-            <div key={track.id} className={styles.panel}>
-              <div className={styles.panelBg} style={{ background: track.backgroundGradient }} />
+        {musicCatalog.map((track) => (
+          <div key={track.id} className={styles.panel}>
+            <div className={styles.panelBg} style={{ background: track.backgroundGradient }} />
 
-              <div className={styles.panelContent}>
-                <button
-                  onClick={(e) => { e.stopPropagation(); onTogglePlay(track.id); }}
-                  className={`${styles.playButton} ${isActive ? styles.playing : ''}`}
-                  aria-label={isActive ? `Pause ${track.title}` : `Play ${track.title}`}
-                >
-                  {isActive ? <Pause size={32} /> : <Play size={32} style={{ marginLeft: 4 }} />}
-                </button>
+            <div className={styles.panelContent}>
+              <a
+                href={track.spotifyUrl}
+                target="_blank"
+                rel="noreferrer"
+                className={styles.playButton}
+                aria-label={`${track.title} — Spotify'da dinle`}
+              >
+                <FaSpotify size={32} />
+              </a>
 
-                <div className={styles.info}>
-                  <div className={styles.meta}>
-                    <span className={styles.genreTag}>{track.genre}</span>
-                    <span className={`${styles.duration} font-mono`}>{track.duration}</span>
-                  </div>
+              <div className={styles.info}>
+                <div className={styles.meta}>
+                  <span className={styles.genreTag}>{track.genre}</span>
+                </div>
 
-                  <h3 className={`${styles.trackTitle} font-display`}>{track.title}</h3>
+                <h3 className={`${styles.trackTitle} font-display`}>{track.title}</h3>
+                {track.description && (
                   <p className={styles.description}>{track.description}</p>
+                )}
 
-                  <div className={styles.platforms}>
-                    {track.spotifyUrl && (
-                      <a href={track.spotifyUrl} target="_blank" rel="noreferrer" className={`${styles.platformLink} ${styles.spotify}`}>
-                        <FaSpotify size={20} /> Spotify
-                      </a>
-                    )}
-                    {track.youtubeUrl && (
-                      <a href={track.youtubeUrl} target="_blank" rel="noreferrer" className={`${styles.platformLink} ${styles.youtube}`}>
-                        <FaYoutube size={20} /> YouTube
-                      </a>
-                    )}
-                    {track.appleUrl && (
-                      <a href={track.appleUrl} target="_blank" rel="noreferrer" className={`${styles.platformLink} ${styles.apple}`}>
-                        <FaApple size={20} /> Apple Music
-                      </a>
-                    )}
-                  </div>
+                <div className={styles.platforms}>
+                  <a href={track.spotifyUrl} target="_blank" rel="noreferrer" className={`${styles.platformLink} ${styles.spotify}`}>
+                    <FaSpotify size={20} /> Spotify
+                    <ExternalLink size={13} />
+                  </a>
                 </div>
               </div>
-
-              <span className={`${styles.panelIndex} font-mono`}>
-                {String(track.id).padStart(2, '0')}
-              </span>
             </div>
-          );
-        })}
+
+            <span className={`${styles.panelIndex} font-mono`}>
+              {String(track.id).padStart(2, '0')}
+            </span>
+          </div>
+        ))}
       </div>
     </section>
   );

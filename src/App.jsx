@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { LanguageProvider } from './i18n/LanguageContext';
 import SmoothScroll from './components/SmoothScroll';
 import NoiseOverlay from './components/NoiseOverlay';
 import Preloader from './components/Preloader';
@@ -8,52 +9,30 @@ import About from './components/About';
 import ProjectList from './components/ProjectList';
 import Software from './components/Software';
 import Contact from './components/Contact';
-import YouTubePlayer from './components/YouTubePlayer';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [playingTrackId, setPlayingTrackId] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const togglePlay = (trackId) => {
-    if (playingTrackId === trackId) {
-      setIsPlaying(!isPlaying);
-    } else {
-      setPlayingTrackId(trackId);
-      setIsPlaying(true);
-    }
-  };
 
   return (
-    <SmoothScroll>
-      <NoiseOverlay />
+    <LanguageProvider>
+      <SmoothScroll>
+        <NoiseOverlay />
 
-      <main style={{ position: 'relative', zIndex: 1 }}>
-        {isLoading && (
-          <Preloader onComplete={() => setIsLoading(false)} />
-        )}
+        <main style={{ position: 'relative', zIndex: 1 }}>
+          {isLoading && (
+            <Preloader onComplete={() => setIsLoading(false)} />
+          )}
 
-        {!isLoading && <Navbar isPlaying={isPlaying} />}
+          {!isLoading && <Navbar isPlaying={false} />}
 
-        <Hero />
-        <About />
-        <ProjectList
-          playingTrackId={playingTrackId}
-          isPlaying={isPlaying}
-          onTogglePlay={togglePlay}
-        />
-        <Software />
-        <Contact />
-
-        {playingTrackId && (
-          <YouTubePlayer
-            currentTrackId={playingTrackId}
-            isPlaying={isPlaying}
-            onTrackEnd={() => setIsPlaying(false)}
-          />
-        )}
-      </main>
-    </SmoothScroll>
+          <Hero />
+          <About />
+          <ProjectList />
+          <Software />
+          <Contact />
+        </main>
+      </SmoothScroll>
+    </LanguageProvider>
   );
 }
 

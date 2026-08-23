@@ -1,18 +1,20 @@
 import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { Music, Code, Film, Headphones } from 'lucide-react';
+import { Code, Cpu, Wrench, Globe } from 'lucide-react';
+import { useTranslation } from '../i18n/LanguageContext';
 import styles from './About.module.css';
 
-const SKILLS = [
-  { icon: Music, title: 'Multi-Instrumentalist', detail: 'Piano, strings & synthesis' },
-  { icon: Code, title: 'Software Engineering', detail: 'Next.js, FastAPI, Kotlin' },
-  { icon: Film, title: 'Cinematic Composition', detail: 'Score & sound design' },
-  { icon: Headphones, title: 'Audio Engineering', detail: 'Mix, master & analysis' },
-];
+const SKILL_ICONS = {
+  programming: Code,
+  web: Globe,
+  ai: Cpu,
+  tools: Wrench,
+};
 
 export default function About() {
   const rootRef = useRef(null);
+  const { t } = useTranslation();
 
   useGSAP(() => {
     gsap.from(`.${styles.reveal}`, {
@@ -34,36 +36,36 @@ export default function About() {
     });
   }, { scope: rootRef });
 
+  const skillKeys = ['programming', 'web', 'ai', 'tools'];
+
   return (
     <section id="about" ref={rootRef} className={styles.about}>
       <div className="container">
         <div className={styles.grid}>
           <div className={styles.textCol}>
-            <span className={`${styles.reveal} eyebrow`}>Bridging Logic &amp; Emotion</span>
+            <span className={`${styles.reveal} eyebrow`}>{t('about.eyebrow')}</span>
 
             <h2 className={`${styles.reveal} ${styles.heading} font-display`}>
-              Where algorithms meet cinematic soundscapes.
+              {t('about.heading')}
             </h2>
 
-            <p className={`${styles.reveal} ${styles.body} font-editorial`}>
-              I tell stories through the universal language of music and the precise
-              structure of code. As a cinematic music producer and AI architect, I thrive
-              at the intersection of art and technology — whether composing emotionally
-              driven instrumental tracks like <em>"LIAR"</em>, or building machine learning
-              systems like <strong className={styles.strong}>AURIS</strong> under the{' '}
-              <strong className={styles.strong}>CrownCode</strong> ecosystem. The focus is
-              always the same: an immersive, memorable experience.
-            </p>
+            <p
+              className={`${styles.reveal} ${styles.body} font-editorial`}
+              dangerouslySetInnerHTML={{ __html: t('about.body') }}
+            />
           </div>
 
           <div className={`${styles.skillsGrid} ${styles.reveal}`}>
-            {SKILLS.map(({ icon: Icon, title, detail }) => (
-              <div key={title} className={styles.skillCard}>
-                <Icon size={22} strokeWidth={1.5} className={styles.skillIcon} />
-                <div className={`${styles.skillTitle} font-display`}>{title}</div>
-                <div className={styles.skillDetail}>{detail}</div>
-              </div>
-            ))}
+            {skillKeys.map((key) => {
+              const Icon = SKILL_ICONS[key];
+              return (
+                <div key={key} className={styles.skillCard}>
+                  <Icon size={22} strokeWidth={1.5} className={styles.skillIcon} />
+                  <div className={`${styles.skillTitle} font-display`}>{t(`about.skills.${key}.title`)}</div>
+                  <div className={styles.skillDetail}>{t(`about.skills.${key}.detail`)}</div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

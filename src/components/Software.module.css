@@ -144,3 +144,57 @@
   line-height: 1.6;
   flex-grow: 1;
 }
+
+/* ---- Experience section ---- */
+.expHeader {
+  margin-top: var(--space-2xl);
+  margin-bottom: var(--space-md);
+}
+
+.expHeading {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.expGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-sm);
+}
+
+.expCard {
+  padding: var(--space-md);
+  background: rgba(244, 239, 228, 0.03);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  transition: border-color 0.4s var(--ease-out-expo);
+}
+
+.expCard:hover {
+  border-color: var(--color-primary-border);
+}
+
+.expTitle {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.expOrg {
+  font-size: var(--text-xs);
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+
+.expDesc {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  line-height: 1.55;
+  margin-top: 0.3rem;
+}

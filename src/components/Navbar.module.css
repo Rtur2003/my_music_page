@@ -100,6 +100,28 @@
   opacity: 0.5;
 }
 
+.langToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 30px;
+  padding: 0 0.5rem;
+  border-radius: var(--radius-full);
+  background: rgba(244, 239, 228, 0.06);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: background 0.3s var(--ease-out-expo), color 0.3s var(--ease-out-expo);
+}
+
+.langToggle:hover {
+  background: rgba(204, 155, 74, 0.14);
+  color: var(--color-primary);
+}
+
 .menuToggle {
   display: none;
   align-items: center;
