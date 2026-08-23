@@ -1,39 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { Code2, BrainCircuit, Sparkles, TerminalSquare } from 'lucide-react';
+import { BrainCircuit, MessageSquare, TestTube2, Terminal, Database } from 'lucide-react';
+import { useTranslation } from '../i18n/LanguageContext';
 import styles from './Software.module.css';
 
-const CROWN_PROJECTS = [
-  {
-    title: 'AURIS',
-    subtitle: 'AI Audio Detection Model',
-    desc: 'Built on the Wav2vec2 architecture, classifying deepfake AI-generated music from authentic human compositions.',
-    icon: BrainCircuit,
-  },
-  {
-    title: 'CrownCode',
-    subtitle: 'Monorepo Ecosystem',
-    desc: 'A modular architecture using Next.js, FastAPI, and Kotlin Native for cross-platform, scalable AI tooling.',
-    icon: Code2,
-  },
-  {
-    title: 'Crown Dreams',
-    subtitle: 'Neural Dream Diary',
-    desc: 'An experimental platform leveraging LLMs to interpret and archive human dreams through atmospheric narratives.',
-    icon: Sparkles,
-  },
-  {
-    title: 'VOTRYX',
-    subtitle: 'Automated Voting System',
-    desc: 'A high-performance decision architecture designed for rapid, automated community consensus.',
-    icon: TerminalSquare,
-  },
+const PROJECT_ORDER = [
+  { key: 'auris', icon: BrainCircuit },
+  { key: 'commendai', icon: MessageSquare },
+  { key: 'webtestai', icon: TestTube2 },
+  { key: 'votryx', icon: Terminal },
+  { key: 'musicdatasettool', icon: Database },
 ];
+
+const EXPERIENCE_ORDER = ['teknofest2025', 'teknofest2024', 'sosmart', 'sakarya'];
 
 export default function Software() {
   const rootRef = useRef(null);
-  const [stats, setStats] = useState({ commits: 120, repos: 15, languages: 6, isLive: false });
+  const { t } = useTranslation();
+  const [stats, setStats] = useState({ repos: 24, languages: 7, isLive: false });
 
   useEffect(() => {
     let cancelled = false;
@@ -49,17 +34,12 @@ export default function Software() {
           const userData = await userRes.json();
           const reposData = await reposRes.json();
 
-          const activeRepos = reposData.filter(
-            (r) => new Date(r.updated_at) > new Date(Date.now() - 365 * 24 * 60 * 60 * 1000)
-          );
-          const estimatedCommits = Math.min(activeRepos.length * 12 + 50, 200);
           const languages = new Set();
           reposData.forEach((r) => { if (r.language) languages.add(r.language); });
 
           setStats({
-            commits: estimatedCommits,
-            repos: userData.public_repos || reposData.length,
-            languages: Math.min(languages.size, 8),
+            repos: userData.public_repos ?? reposData.length,
+            languages: languages.size,
             isLive: true,
           });
         }
@@ -89,18 +69,27 @@ export default function Software() {
       duration: 0.8,
       ease: 'power3.out',
     });
+
+    gsap.from(`.${styles.expCard}`, {
+      scrollTrigger: { trigger: `.${styles.expGrid}`, start: 'top 85%' },
+      y: 24,
+      opacity: 0,
+      stagger: 0.1,
+      duration: 0.8,
+      ease: 'power3.out',
+    });
   }, { scope: rootRef });
 
   return (
     <section id="software" ref={rootRef} className={styles.software}>
       <div className="container">
         <div className={styles.header}>
-          <span className={`${styles.reveal} eyebrow`}>CrownCode Ecosystem</span>
+          <span className={`${styles.reveal} eyebrow`}>{t('software.eyebrow')}</span>
           <h2 className={`${styles.reveal} ${styles.heading} font-display`}>
-            Architecting the future
+            {t('software.heading')}
           </h2>
           <p className={`${styles.reveal} ${styles.subheading}`}>
-            Where machine learning systems and scalable software architecture meet creative vision.
+            {t('software.subheading')}
           </p>
         </div>
 
@@ -109,37 +98,53 @@ export default function Software() {
             {stats.isLive && (
               <div className={styles.liveBadge}>
                 <span className={styles.liveDot} />
-                Live from GitHub
+                {t('software.liveBadge')}
               </div>
             )}
             <div className={styles.statsRow}>
               <div className={styles.statBlock}>
-                <div className={`${styles.statNumber} font-display`}>{stats.commits}</div>
-                <div className={styles.statLabel}>Commits / yr</div>
-              </div>
-              <div className={styles.statBlock}>
                 <div className={`${styles.statNumber} font-display`}>{stats.repos}</div>
-                <div className={styles.statLabel}>Repositories</div>
+                <div className={styles.statLabel}>{t('software.statRepos')}</div>
               </div>
               <div className={styles.statBlock}>
                 <div className={`${styles.statNumber} font-display`}>{stats.languages}</div>
-                <div className={styles.statLabel}>Languages</div>
+                <div className={styles.statLabel}>{t('software.statLanguages')}</div>
               </div>
             </div>
           </div>
         </div>
 
         <div className={styles.cardGrid}>
-          {CROWN_PROJECTS.map(({ title, subtitle, desc, icon: Icon }) => (
-            <div key={title} className={styles.cardShell}>
-              <div className={styles.card}>
-                <Icon size={26} strokeWidth={1.5} className={styles.cardIcon} />
-                <h3 className={`${styles.cardTitle} font-display`}>{title}</h3>
-                <h4 className={styles.cardSubtitle}>{subtitle}</h4>
-                <p className={styles.cardDesc}>{desc}</p>
+          {PROJECT_ORDER.map(({ key, icon: Icon }) => {
+            const project = t(`software.projects.${key}`);
+            return (
+              <div key={key} className={styles.cardShell}>
+                <div className={styles.card}>
+                  <Icon size={26} strokeWidth={1.5} className={styles.cardIcon} />
+                  <h3 className={`${styles.cardTitle} font-display`}>{project.title}</h3>
+                  <h4 className={styles.cardSubtitle}>{project.subtitle}</h4>
+                  <p className={styles.cardDesc}>{project.desc}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
+        </div>
+
+        <div className={styles.expHeader}>
+          <h3 className={`${styles.expHeading} font-display`}>{t('software.expHeading')}</h3>
+        </div>
+
+        <div className={styles.expGrid}>
+          {EXPERIENCE_ORDER.map((key) => {
+            const exp = t(`software.experience.${key}`);
+            return (
+              <div key={key} className={styles.expCard}>
+                <h4 className={styles.expTitle}>{exp.title}</h4>
+                <span className={`${styles.expOrg} font-mono`}>{exp.org}</span>
+                <p className={styles.expDesc}>{exp.desc}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

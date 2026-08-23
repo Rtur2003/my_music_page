@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { Coffee, Mail, Globe } from 'lucide-react';
 import { FaSpotify, FaYoutube, FaInstagram, FaTwitter, FaLinkedin, FaGithub } from 'react-icons/fa';
+import { useTranslation } from '../i18n/LanguageContext';
 import styles from './Contact.module.css';
 
 const SOCIALS = [
@@ -16,6 +17,7 @@ const SOCIALS = [
 
 export default function Contact() {
   const rootRef = useRef(null);
+  const { t } = useTranslation();
 
   useGSAP(() => {
     gsap.from(`.${styles.reveal}`, {
@@ -32,23 +34,27 @@ export default function Contact() {
     <section id="contact" ref={rootRef} className={styles.contact}>
       <div className={`${styles.grid} container`}>
         <div>
-          <span className={`${styles.reveal} eyebrow`}>Let's Collaborate</span>
+          <span className={`${styles.reveal} eyebrow`}>{t('contact.eyebrow')}</span>
           <h2 className={`${styles.reveal} ${styles.heading} font-display`}>
-            Create the next<br />masterpiece.
+            {t('contact.heading').split('\n').map((line, i) => (
+              <React.Fragment key={i}>
+                {i > 0 && <br />}
+                {line}
+              </React.Fragment>
+            ))}
           </h2>
           <p className={`${styles.reveal} ${styles.lede}`}>
-            Whether it's a cinematic score for your next film or a technical
-            solution built with the same care, I'm here to bring the vision to life.
+            {t('contact.lede')}
           </p>
 
           <div className={`${styles.reveal} ${styles.actions}`}>
-            <a href="mailto:contact@hasanarthuraltuntas.xyz" className={styles.primaryCta}>
+            <a href="mailto:hasannarthurrr@gmail.com" className={styles.primaryCta}>
               <Mail size={18} />
-              Say Hello
+              {t('contact.ctaEmail')}
             </a>
             <a href="https://iyzi.link/AJspVg" target="_blank" rel="noreferrer" className={styles.secondaryCta}>
               <Coffee size={18} />
-              Support the Art
+              {t('contact.ctaSupport')}
             </a>
           </div>
         </div>
@@ -61,17 +67,17 @@ export default function Contact() {
                 <span>{name}</span>
               </a>
             ))}
-            <a href="https://hasanarthuraltuntas.xyz" target="_blank" rel="noreferrer" className={styles.socialLink}>
+            <a href="https://hasan-arthur-altuntas.xyz" target="_blank" rel="noreferrer" className={styles.socialLink}>
               <Globe size={22} />
-              <span>Portfolio</span>
+              <span>{t('contact.linkPortfolio')}</span>
             </a>
           </div>
         </div>
       </div>
 
       <div className={`${styles.reveal} ${styles.footerBar} container`}>
-        <span>&copy; {new Date().getFullYear()} Hasan Arthur Altuntaş. All rights reserved.</span>
-        <span className="font-mono">crafted with passion &amp; precision</span>
+        <span>&copy; {new Date().getFullYear()} Hasan Arthur Altuntaş. {t('contact.footerRights')}</span>
+        <span className="font-mono">{t('contact.footerTagline')}</span>
       </div>
     </section>
   );

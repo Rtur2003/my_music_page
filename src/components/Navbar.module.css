@@ -85,19 +85,26 @@
   gap: var(--space-sm);
 }
 
-.waveIndicator {
+.langToggle {
   display: flex;
   align-items: center;
-  height: 16px;
-  padding: 0 0.35rem;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 0.7rem;
+  border-radius: var(--radius-full);
+  background: rgba(244, 239, 228, 0.06);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  transition: background 0.3s var(--ease-out-expo), border-color 0.3s var(--ease-out-expo);
 }
 
-.idleDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--color-primary);
-  opacity: 0.5;
+.langToggle:hover {
+  background: rgba(244, 239, 228, 0.12);
+  border-color: var(--color-primary-border);
 }
 
 .menuToggle {

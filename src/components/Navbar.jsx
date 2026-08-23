@@ -2,18 +2,20 @@ import React, { useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { Menu, X } from 'lucide-react';
+import { useTranslation } from '../i18n/LanguageContext';
 import styles from './Navbar.module.css';
 
-const NAV_ITEMS = [
-  { label: 'About', id: 'about' },
-  { label: 'Works', id: 'project-list' },
-  { label: 'Software', id: 'software' },
-  { label: 'Contact', id: 'contact' },
-];
-
-export default function Navbar({ isPlaying }) {
+export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { t, lang, toggleLang } = useTranslation();
+
+  const NAV_ITEMS = [
+    { label: t('nav.about'), id: 'about' },
+    { label: t('nav.works'), id: 'project-list' },
+    { label: t('nav.software'), id: 'software' },
+    { label: t('nav.contact'), id: 'contact' },
+  ];
 
   useGSAP(() => {
     gsap.from(`.${styles.navShell}`, {
@@ -69,16 +71,13 @@ export default function Navbar({ isPlaying }) {
         </div>
 
         <div className={styles.status}>
-          {isPlaying ? (
-            <div className={styles.waveIndicator} aria-label="Playing">
-              <span className="sound-wave-bar" />
-              <span className="sound-wave-bar" />
-              <span className="sound-wave-bar" />
-              <span className="sound-wave-bar" />
-            </div>
-          ) : (
-            <span className={styles.idleDot} aria-hidden="true" />
-          )}
+          <button
+            className={styles.langToggle}
+            onClick={toggleLang}
+            aria-label={lang === 'tr' ? 'Switch to English' : 'Türkçeye geç'}
+          >
+            {lang === 'tr' ? 'EN' : 'TR'}
+          </button>
           <button
             className={styles.menuToggle}
             onClick={() => setMenuOpen((v) => !v)}

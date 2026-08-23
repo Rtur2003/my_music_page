@@ -2,12 +2,15 @@ import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ArrowDown } from 'lucide-react';
+import { useTranslation } from '../i18n/LanguageContext';
 import styles from './Hero.module.css';
 
 const WAVE_HEIGHTS = [22, 40, 30, 58, 38, 48, 28, 44, 24, 36, 20];
 
 export default function Hero() {
   const rootRef = useRef(null);
+  const { t } = useTranslation();
+  const titleLines = t('hero.titleLines');
 
   useGSAP(() => {
     const tl = gsap.timeline({ delay: 0.15, defaults: { ease: 'power3.out' } });
@@ -41,39 +44,38 @@ export default function Hero() {
     <section id="hero" ref={rootRef} className={styles.hero}>
       <div className={`${styles.grid} container`}>
         <div className={styles.copy}>
-          <span className={`${styles.eyebrow} eyebrow`}>Hasan Arthur Altuntaş</span>
+          <span className={`${styles.eyebrow} eyebrow`}>{t('hero.eyebrow')}</span>
 
           <h1 className={`${styles.title} font-display`}>
-            <span className={styles.titleLineWrap}><span className={styles.titleLine}>Cinematic</span></span>
-            <span className={styles.titleLineWrap}><span className={styles.titleLine}>Scores,</span></span>
-            <span className={styles.titleLineWrap}><span className={styles.titleLine}>Compiled.</span></span>
+            {titleLines.map((line) => (
+              <span key={line} className={styles.titleLineWrap}>
+                <span className={styles.titleLine}>{line}</span>
+              </span>
+            ))}
           </h1>
 
-          <p className={`${styles.role} font-mono`}>music_producer &amp; ai_architect</p>
+          <p className={`${styles.role} font-mono`}>{t('hero.role')}</p>
 
-          <p className={`${styles.lede} font-editorial`}>
-            Atmospheric soundscapes and reimagined film scores, composed with the same
-            precision I bring to building machine learning systems.
-          </p>
+          <p className={`${styles.lede} font-editorial`}>{t('hero.lede')}</p>
 
           <div className={styles.stats}>
             <div className={styles.statCard}>
-              <span className={`${styles.statValue} font-display`}>10+</span>
-              <span className={styles.statLabel}>Original Tracks</span>
+              <span className={`${styles.statValue} font-display`}>{t('hero.statPublications')}</span>
+              <span className={styles.statLabel}>{t('hero.statPublicationsLabel')}</span>
             </div>
             <div className={styles.statCard}>
-              <span className={`${styles.statValue} font-display`}>12K+</span>
-              <span className={styles.statLabel}>Total Plays</span>
+              <span className={`${styles.statValue} font-display`}>{t('hero.statFollowers')}</span>
+              <span className={styles.statLabel}>{t('hero.statFollowersLabel')}</span>
             </div>
           </div>
 
           <div className={styles.actions}>
             <a href="#project-list" className={styles.primaryCta}>
-              <span>Listen to the Work</span>
+              <span>{t('hero.ctaPrimary')}</span>
               <span className={styles.ctaIcon}><ArrowDown size={16} /></span>
             </a>
             <a href="#about" className={styles.secondaryCta}>
-              About the Architect
+              {t('hero.ctaSecondary')}
             </a>
           </div>
         </div>

@@ -1,0 +1,208 @@
+export const translations = {
+  tr: {
+    nav: {
+      about: 'Hakkımda',
+      works: 'Müzik',
+      software: 'Yazılım',
+      contact: 'İletişim',
+    },
+    hero: {
+      eyebrow: 'Hasan Arthur Altuntaş',
+      titleLines: ['Sinematik', 'Müzik,', 'Kod.'],
+      role: 'müzik_yapımcısı & yapay_zeka_mühendisi',
+      lede: 'Düzce Üniversitesi Bilgisayar Mühendisliği son sınıf öğrencisiyim. Bir yandan film müziği tarzında besteler yapıyorum, bir yandan da makine öğrenmesi sistemleri geliştiriyorum — ikisinde de aynı titizlikle çalışıyorum.',
+      statPublications: '12',
+      statPublicationsLabel: 'Yayın',
+      statFollowers: '952',
+      statFollowersLabel: 'Takipçi',
+      ctaPrimary: 'Müzikleri Dinle',
+      ctaSecondary: 'Hakkımda',
+    },
+    about: {
+      eyebrow: 'Mantık ve Duygu Arasında',
+      heading: 'Algoritmalarla sinematik ses tasarımının kesiştiği yer.',
+      body: 'Hikayeleri iki dilde anlatıyorum: müziğin evrensel dili ve kodun net yapısı. Bir yandan <em>"Going into Pywel"</em> gibi sinematik parçalar besteliyorum, bir yandan <strong>AURIS</strong> gibi yapay zeka ile üretilmiş müziği tespit eden sistemler geliştiriyorum. İkisinde de peşinde olduğum şey aynı: iyi kurulmuş, iz bırakan bir deneyim.',
+      skills: {
+        programming: { title: 'Programlama', detail: 'Python, TypeScript, Java, C++' },
+        web: { title: 'Web & Backend', detail: 'Next.js, React, FastAPI, Node.js' },
+        ai: { title: 'Yapay Zeka & ML', detail: 'PyTorch, scikit-learn, LightGBM, wav2vec2' },
+        tools: { title: 'Araçlar', detail: 'Docker, Git, Selenium, Playwright' },
+      },
+    },
+    works: {
+      eyebrow: 'Seçilmiş Eserler',
+      counterSuffix: 'yayın',
+    },
+    software: {
+      eyebrow: 'CrownCode Ekosistemi',
+      heading: 'Yazılımla kurduğum şeyler',
+      subheading: 'Makine öğrenmesi sistemleri ile ölçeklenebilir yazılım mimarisinin buluştuğu projeler.',
+      liveBadge: "GitHub'dan canlı",
+      statRepos: 'Repo',
+      statLanguages: 'Dil',
+      projects: {
+        auris: {
+          title: 'AURIS',
+          subtitle: 'Yapay Zeka Müzik Tespit Sistemi',
+          desc: "Lisans bitirme projem. wav2vec2 tabanlı ses öznitelikleri, CLAP gömme vektörleri ve harici bir Fundamental Frequency Stability testini birleştirerek yapay zeka ile üretilmiş müziği insan yapımı müzikten ayırt eden bir topluluk (ensemble) modeli — RF, XGBoost, LightGBM, SVM ve MLP'yi bir meta-sınıflandırıcıda birleştiriyor.",
+        },
+        commendai: {
+          title: 'CommendAI',
+          subtitle: 'YouTube Yorum Analiz Aracı',
+          desc: 'Flask ve React ile kurulmuş, Gemini API ve OAuth2 kullanarak YouTube yorumlarını toplayıp özetleyen bir analiz platformu.',
+        },
+        webtestai: {
+          title: 'Web Test AI',
+          subtitle: 'Otomatik Test Platformu',
+          desc: 'Node.js, Express ve Socket.io üzerine kurulu, Playwright ile web sitelerinde uçtan uca test senaryolarını otomatik çalıştıran bir platform.',
+        },
+        votryx: {
+          title: 'VOTRYX',
+          subtitle: 'Masaüstü Otomasyon Aracı',
+          desc: 'Python, Selenium ve Tkinter ile yazılmış bir masaüstü otomasyon uygulaması. Sistem tepsisinden çalışır, hata durumunda otomatik yeniden dener (retry/backoff) ve CI/CD ile test edilir.',
+        },
+        musicdatasettool: {
+          title: 'MusicDataSetTool',
+          subtitle: 'Veri Seti Toplama Aracı',
+          desc: 'AURIS için eğitim verisi toplayan Selenium ve Pandas tabanlı bir kazıma (scraping) aracı — ham ses kaynaklarını etiketli veri setlerine dönüştürüyor.',
+        },
+      },
+      expHeading: 'Deneyim',
+      experience: {
+        teknofest2025: {
+          title: 'TEKNOFEST 2025 — İnsansız Kara Aracı',
+          org: 'IEEE Düzce Üniversitesi "Aksolotl" Takımı',
+          desc: 'Final yarışmasına kalan takımda yazılım geliştirici olarak görev aldım.',
+        },
+        teknofest2024: {
+          title: 'TEKNOFEST 2024 — Kritik Görev Ekipmanları Tasarım Yarışması',
+          org: 'IEEE Düzce Üniversitesi "Aksolotl" Takımı',
+          desc: '78.33 puanla dereceye giren proje ekibinde yer aldım.',
+        },
+        sosmart: {
+          title: 'Yazılım Geliştirici Stajyeri',
+          org: 'SoSmart Teknoloji',
+          desc: 'Şirket içi projelerde backend ve otomasyon geliştirmelerinde görev aldım.',
+        },
+        sakarya: {
+          title: 'Bilgi İşlem Stajyeri',
+          org: 'Sakarya Büyükşehir Belediyesi',
+          desc: 'Kurumsal bilgi işlem süreçlerinde teknik destek ve geliştirme çalışmalarına katıldım.',
+        },
+      },
+    },
+    contact: {
+      eyebrow: 'Birlikte Çalışalım',
+      heading: 'Bir sonraki\nişi konuşalım.',
+      lede: 'İster bir sahne için sinematik bir müzik, ister özenle kurulmuş bir teknik çözüm — fikrini hayata geçirmek için buradayım.',
+      ctaEmail: 'Merhaba De',
+      ctaSupport: 'Sanatı Destekle',
+      linkPortfolio: 'Portfolyo',
+      footerRights: 'Tüm hakları saklıdır.',
+      footerTagline: 'özenle kodlandı & bestelendi',
+    },
+  },
+  en: {
+    nav: {
+      about: 'About',
+      works: 'Music',
+      software: 'Software',
+      contact: 'Contact',
+    },
+    hero: {
+      eyebrow: 'Hasan Arthur Altuntaş',
+      titleLines: ['Cinematic', 'Music,', 'Code.'],
+      role: 'music_producer & ai_engineer',
+      lede: "I'm a final-year Computer Engineering student at Düzce University. I compose film-score style music on one side and build machine learning systems on the other — with the same care for both.",
+      statPublications: '12',
+      statPublicationsLabel: 'Releases',
+      statFollowers: '952',
+      statFollowersLabel: 'Followers',
+      ctaPrimary: 'Listen to the Work',
+      ctaSecondary: 'About Me',
+    },
+    about: {
+      eyebrow: 'Between Logic & Emotion',
+      heading: 'Where algorithms meet cinematic sound design.',
+      body: 'I tell stories in two languages: the universal language of music and the precise structure of code. On one side I write cinematic pieces like <em>"Going into Pywel"</em>, on the other I build systems like <strong>AURIS</strong> that detect AI-generated music. What I\'m chasing is the same in both: something well-built that leaves a mark.',
+      skills: {
+        programming: { title: 'Programming', detail: 'Python, TypeScript, Java, C++' },
+        web: { title: 'Web & Backend', detail: 'Next.js, React, FastAPI, Node.js' },
+        ai: { title: 'AI & ML', detail: 'PyTorch, scikit-learn, LightGBM, wav2vec2' },
+        tools: { title: 'Tools', detail: 'Docker, Git, Selenium, Playwright' },
+      },
+    },
+    works: {
+      eyebrow: 'Selected Works',
+      counterSuffix: 'releases',
+    },
+    software: {
+      eyebrow: 'CrownCode Ecosystem',
+      heading: 'What I build with software',
+      subheading: 'Projects where machine learning systems meet scalable software architecture.',
+      liveBadge: 'Live from GitHub',
+      statRepos: 'Repos',
+      statLanguages: 'Languages',
+      projects: {
+        auris: {
+          title: 'AURIS',
+          subtitle: 'AI Music Detection System',
+          desc: 'My senior thesis project. An ensemble model that tells AI-generated music apart from human-made music by combining wav2vec2 audio features, CLAP embeddings, and an external Fundamental Frequency Stability test — RF, XGBoost, LightGBM, SVM, and MLP combined in a meta-classifier.',
+        },
+        commendai: {
+          title: 'CommendAI',
+          subtitle: 'YouTube Comment Analysis Tool',
+          desc: 'An analysis platform built with Flask and React that collects and summarizes YouTube comments using the Gemini API and OAuth2.',
+        },
+        webtestai: {
+          title: 'Web Test AI',
+          subtitle: 'Automated Testing Platform',
+          desc: 'A platform built on Node.js, Express, and Socket.io that runs end-to-end web test scenarios automatically with Playwright.',
+        },
+        votryx: {
+          title: 'VOTRYX',
+          subtitle: 'Desktop Automation Tool',
+          desc: 'A desktop automation app written in Python with Selenium and Tkinter. Runs from the system tray, retries automatically on failure with backoff, and is tested through CI/CD.',
+        },
+        musicdatasettool: {
+          title: 'MusicDataSetTool',
+          subtitle: 'Dataset Collection Tool',
+          desc: "A Selenium and Pandas-based scraping tool that collects training data for AURIS — turning raw audio sources into labeled datasets.",
+        },
+      },
+      expHeading: 'Experience',
+      experience: {
+        teknofest2025: {
+          title: 'TEKNOFEST 2025 — Unmanned Ground Vehicle',
+          org: 'IEEE Düzce University "Aksolotl" Team',
+          desc: 'Worked as a software developer on the team that reached the final round.',
+        },
+        teknofest2024: {
+          title: 'TEKNOFEST 2024 — Critical Mission Equipment Design Contest',
+          org: 'IEEE Düzce University "Aksolotl" Team',
+          desc: 'Part of the project team that placed with a score of 78.33.',
+        },
+        sosmart: {
+          title: 'Software Developer Intern',
+          org: 'SoSmart Teknoloji',
+          desc: 'Worked on backend and automation development for internal company projects.',
+        },
+        sakarya: {
+          title: 'IT Intern',
+          org: 'Sakarya Metropolitan Municipality',
+          desc: 'Contributed to technical support and development work in the municipality\'s IT operations.',
+        },
+      },
+    },
+    contact: {
+      eyebrow: "Let's Collaborate",
+      heading: "Let's talk about\nthe next project.",
+      lede: "Whether it's a cinematic score for your project or a technical solution built with the same care, I'm here to bring the idea to life.",
+      ctaEmail: 'Say Hello',
+      ctaSupport: 'Support the Art',
+      linkPortfolio: 'Portfolio',
+      footerRights: 'All rights reserved.',
+      footerTagline: 'built & composed with care',
+    },
+  },
+};
