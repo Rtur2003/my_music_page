@@ -1,88 +1,110 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { Menu, X } from 'lucide-react';
+import styles from './Navbar.module.css';
+
+const NAV_ITEMS = [
+  { label: 'About', id: 'about' },
+  { label: 'Works', id: 'project-list' },
+  { label: 'Software', id: 'software' },
+  { label: 'Contact', id: 'contact' },
+];
 
 export default function Navbar({ isPlaying }) {
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
   useGSAP(() => {
-    gsap.from('.nav-item', {
-      y: -20,
+    gsap.from(`.${styles.navShell}`, {
+      y: -40,
       opacity: 0,
       duration: 1,
-      stagger: 0.1,
       ease: 'power3.out',
-      delay: 2.5
+      delay: 2.3,
     });
   });
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
+
   const handleScroll = (e, targetId) => {
     e.preventDefault();
+    setMenuOpen(false);
     const target = document.getElementById(targetId);
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <nav style={{
-      position: 'fixed',
-      top: 0, left: 0, right: 0,
-      padding: 'var(--space-md) var(--space-xl)',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      zIndex: 100,
-      mixBlendMode: 'difference'
-    }}>
-      <div className="nav-item font-display" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }} onClick={(e) => handleScroll(e, 'hero')}>
-        <img src="/assets/images/logo-transparent.png" alt="Hasan Arthur Logo" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
-        <span style={{ fontWeight: 700, fontSize: 'var(--text-lg)', letterSpacing: '0.05em', color: 'white' }}>
-          HASAN ARTHUR
-        </span>
-      </div>
-      
-      <div className="nav-item nav-links font-display" style={{ display: 'flex', gap: 'var(--space-lg)' }}>
-        {['About', 'Selected Works', 'Software', 'Contact'].map((item) => {
-          const targetId = item.toLowerCase().replace(' ', '-');
-          const finalId = targetId === 'selected-works' ? 'project-list' : targetId;
-          
-          return (
-            <a 
-              key={item}
-              href={`#${finalId}`}
-              onClick={(e) => handleScroll(e, finalId)}
-              style={{
-                fontSize: 'var(--text-sm)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.1em',
-                color: 'white',
-                textDecoration: 'none',
-                textDecoration: 'none',
-                position: 'relative'
-              }}
-              className="nav-link"
-            >
-              {item}
-            </a>
-          );
-        })}
-      </div>
+    <>
+      <nav className={`${styles.navShell} ${scrolled ? styles.scrolled : ''}`}>
+        <a
+          href="#hero"
+          className={styles.brand}
+          onClick={(e) => handleScroll(e, 'hero')}
+        >
+          <img src="/assets/images/logo-transparent.png" alt="" className={styles.brandMark} />
+          <span className={`${styles.brandName} font-display`}>Hasan&nbsp;Arthur</span>
+        </a>
 
-      <div className="nav-item font-display" style={{ fontSize: 'var(--text-sm)', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'white', display: 'flex', alignItems: 'center', gap: '15px' }}>
-        {isPlaying ? (
-          <div style={{ display: 'flex', alignItems: 'center', height: '15px' }}>
-            <span className="sound-wave-bar"></span>
-            <span className="sound-wave-bar"></span>
-            <span className="sound-wave-bar"></span>
-            <span className="sound-wave-bar"></span>
-          </div>
-        ) : (
-          <div style={{ display: 'flex', alignItems: 'center', height: '15px', gap: '3px' }}>
-            <span style={{ width: '4px', height: '4px', backgroundColor: 'rgba(255,255,255,0.5)', borderRadius: '2px' }}></span>
-            <span style={{ width: '4px', height: '4px', backgroundColor: 'rgba(255,255,255,0.5)', borderRadius: '2px' }}></span>
-            <span style={{ width: '4px', height: '4px', backgroundColor: 'rgba(255,255,255,0.5)', borderRadius: '2px' }}></span>
-          </div>
-        )}
+        <div className={styles.links}>
+          {NAV_ITEMS.map((item) => (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              onClick={(e) => handleScroll(e, item.id)}
+              className={styles.link}
+            >
+              {item.label}
+            </a>
+          ))}
+        </div>
+
+        <div className={styles.status}>
+          {isPlaying ? (
+            <div className={styles.waveIndicator} aria-label="Playing">
+              <span className="sound-wave-bar" />
+              <span className="sound-wave-bar" />
+              <span className="sound-wave-bar" />
+              <span className="sound-wave-bar" />
+            </div>
+          ) : (
+            <span className={styles.idleDot} aria-hidden="true" />
+          )}
+          <button
+            className={styles.menuToggle}
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
+        </div>
+      </nav>
+
+      <div className={`${styles.overlay} ${menuOpen ? styles.overlayOpen : ''}`}>
+        <div className={styles.overlayLinks}>
+          {NAV_ITEMS.map((item, i) => (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              onClick={(e) => handleScroll(e, item.id)}
+              className={`${styles.overlayLink} font-display`}
+              style={{ transitionDelay: menuOpen ? `${i * 60 + 100}ms` : '0ms' }}
+            >
+              {item.label}
+            </a>
+          ))}
+        </div>
       </div>
-    </nav>
+    </>
   );
 }
