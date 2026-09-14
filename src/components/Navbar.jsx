@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
 import { Menu, X } from 'lucide-react';
 import { useTranslation } from '../i18n/LanguageContext';
 import styles from './Navbar.module.css';
@@ -17,15 +15,6 @@ export default function Navbar() {
     { label: t('nav.contact'), id: 'contact' },
   ];
 
-  useGSAP(() => {
-    gsap.from(`.${styles.navShell}`, {
-      y: -40,
-      opacity: 0,
-      duration: 1,
-      ease: 'power3.out',
-      delay: 2.3,
-    });
-  });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -38,11 +27,19 @@ export default function Navbar() {
     return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
 
+  useEffect(() => {
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setMenuOpen(false);
+    };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, []);
+
   const handleScroll = (e, targetId) => {
     e.preventDefault();
     setMenuOpen(false);
     const target = document.getElementById(targetId);
-    if (target) target.scrollIntoView({ behavior: 'smooth' });
+    if (target) target.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   };
 
   return (
@@ -89,7 +86,7 @@ export default function Navbar() {
         </div>
       </nav>
 
-      <div className={`${styles.overlay} ${menuOpen ? styles.overlayOpen : ''}`}>
+      <div className={`${styles.overlay} ${menuOpen ? styles.overlayOpen : ''}`} inert={!menuOpen}>
         <div className={styles.overlayLinks}>
           {NAV_ITEMS.map((item, i) => (
             <a
