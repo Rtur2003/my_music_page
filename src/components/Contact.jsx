@@ -20,6 +20,8 @@ export default function Contact() {
   const { t } = useTranslation();
 
   useGSAP(() => {
+    const media = gsap.matchMedia();
+    media.add('(prefers-reduced-motion: no-preference)', () => {
     gsap.from(`.${styles.reveal}`, {
       scrollTrigger: { trigger: rootRef.current, start: 'top 80%' },
       y: 28,
@@ -28,6 +30,8 @@ export default function Contact() {
       duration: 0.9,
       ease: 'power3.out',
     });
+    });
+    return () => media.revert();
   }, { scope: rootRef });
 
   return (
@@ -67,7 +71,7 @@ export default function Contact() {
                 <span>{name}</span>
               </a>
             ))}
-            <a href="https://hasan-arthur-altuntas.xyz" target="_blank" rel="noreferrer" className={styles.socialLink}>
+            <a href="https://hasanarthuraltuntas.xyz" target="_blank" rel="noreferrer" className={styles.socialLink}>
               <Globe size={22} />
               <span>{t('contact.linkPortfolio')}</span>
             </a>
