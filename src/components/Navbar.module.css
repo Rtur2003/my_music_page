@@ -172,3 +172,7 @@
   .links { display: none; }
   .menuToggle { display: flex; }
 }
+
+.navShell { top: 20px; width: calc(100% - 10vw); max-width: none; padding: 12px 0; border: 0; border-radius: 0; background: transparent; backdrop-filter: none; }
+.navShell.scrolled { padding: 12px 20px; border-radius: 8px; background: #17120ded; backdrop-filter: blur(16px); }
+.brandMark { filter: invert(1); }
