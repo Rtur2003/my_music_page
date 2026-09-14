@@ -1,109 +1,115 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, ArrowUpRight } from 'lucide-react';
 import { useTranslation } from '../i18n/LanguageContext';
+import { artistProfile } from '../data/music-catalog';
 import styles from './Hero.module.css';
-
-const WAVE_HEIGHTS = [22, 40, 30, 58, 38, 48, 28, 44, 24, 36, 20];
 
 export default function Hero() {
   const rootRef = useRef(null);
-  const { t } = useTranslation();
-  const titleLines = t('hero.titleLines');
+  const { lang } = useTranslation();
+  const english = lang === 'en';
 
-  useGSAP(() => {
-    const tl = gsap.timeline({ delay: 0.15, defaults: { ease: 'power3.out' } });
-
-    tl.from(`.${styles.eyebrow}`, { y: 20, opacity: 0, duration: 0.7 })
-      .from(`.${styles.titleLine}`, {
-        yPercent: 110,
-        opacity: 0,
-        duration: 1.1,
-        stagger: 0.08,
-      }, '-=0.35')
-      .from(`.${styles.role}`, { y: 24, opacity: 0, duration: 0.8 }, '-=0.6')
-      .from(`.${styles.lede}`, { y: 20, opacity: 0, duration: 0.8 }, '-=0.55')
-      .from(`.${styles.statCard}`, { y: 20, opacity: 0, duration: 0.7, stagger: 0.1 }, '-=0.5')
-      .from(`.${styles.actions} > *`, { y: 16, opacity: 0, duration: 0.6, stagger: 0.08 }, '-=0.45')
-      .from(`.${styles.seal}`, { scale: 0.85, opacity: 0, duration: 1, ease: 'power4.out' }, '-=0.9')
-      .from(`.${styles.waveBar}`, { scaleY: 0, opacity: 0, duration: 0.6, stagger: 0.03, ease: 'power2.out' }, '-=0.5');
-
-    gsap.to(`.${styles.waveBar}`, {
-      scaleY: 0.5,
-      duration: 1,
-      ease: 'sine.inOut',
-      repeat: -1,
-      yoyo: true,
-      stagger: { each: 0.09, from: 'center' },
-      delay: 2,
-    });
-  }, { scope: rootRef });
+  useGSAP(
+    () => {
+      const media = gsap.matchMedia();
+      media.add('(prefers-reduced-motion: no-preference)', () => {
+        gsap.from(`.${styles.title} span`, {
+          yPercent: 105,
+          stagger: 0.12,
+          duration: 1.25,
+          ease: 'power4.out',
+        });
+        gsap.from(`.${styles.record}`, {
+          rotation: -35,
+          scale: 0.85,
+          opacity: 0,
+          duration: 1.5,
+          ease: 'power3.out',
+        });
+        gsap.to(`.${styles.record}`, {
+          rotation: 95,
+          yPercent: 18,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: rootRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1,
+          },
+        });
+        gsap.to(`.${styles.title}`, {
+          yPercent: -18,
+          opacity: 0.3,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: rootRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+          },
+        });
+      });
+      return () => media.revert();
+    },
+    { scope: rootRef },
+  );
 
   return (
     <section id="hero" ref={rootRef} className={styles.hero}>
-      <div className={`${styles.grid} container`}>
-        <div className={styles.copy}>
-          <span className={`${styles.eyebrow} eyebrow`}>{t('hero.eyebrow')}</span>
-
-          <h1 className={`${styles.title} font-display`}>
-            {titleLines.map((line) => (
-              <span key={line} className={styles.titleLineWrap}>
-                <span className={styles.titleLine}>{line}</span>
-              </span>
-            ))}
-          </h1>
-
-          <p className={`${styles.role} font-mono`}>{t('hero.role')}</p>
-
-          <p className={`${styles.lede} font-editorial`}>{t('hero.lede')}</p>
-
-          <div className={styles.stats}>
-            <div className={styles.statCard}>
-              <span className={`${styles.statValue} font-display`}>{t('hero.statPublications')}</span>
-              <span className={styles.statLabel}>{t('hero.statPublicationsLabel')}</span>
-            </div>
-            <div className={styles.statCard}>
-              <span className={`${styles.statValue} font-display`}>{t('hero.statFollowers')}</span>
-              <span className={styles.statLabel}>{t('hero.statFollowersLabel')}</span>
-            </div>
-          </div>
-
-          <div className={styles.actions}>
-            <a href="#project-list" className={styles.primaryCta}>
-              <span>{t('hero.ctaPrimary')}</span>
-              <span className={styles.ctaIcon}><ArrowDown size={16} /></span>
-            </a>
-            <a href="#about" className={styles.secondaryCta}>
-              {t('hero.ctaSecondary')}
-            </a>
-          </div>
-        </div>
-
-        <div className={styles.visual}>
-          <div className={styles.sealRing} aria-hidden="true" />
-          <div className={styles.seal}>
-            <img
-              src="/assets/images/logo-transparent.png"
-              alt="Hasan Arthur Altuntaş — CrownCode emblem"
-              className={styles.sealMark}
-            />
-            <span className={`${styles.sealCaption} font-mono`}>crowncode.est</span>
-          </div>
-
-          <div className={styles.waveform} role="img" aria-label="Audio waveform visual">
-            {WAVE_HEIGHTS.map((h, i) => (
-              <span
-                key={i}
-                className={styles.waveBar}
-                style={{ height: `${h}px` }}
-              />
-            ))}
-          </div>
-        </div>
+      <div className={styles.topline}>
+        <span>
+          {english
+            ? 'Composer & creative engineer'
+            : 'Besteci & yaratıcı mühendis'}
+        </span>
+        <span>
+          {english ? 'Independent, by nature.' : 'Doğası gereği bağımsız.'}
+        </span>
       </div>
-
-      <div className={styles.grain} aria-hidden="true" />
+      <h1 className={styles.title}>
+        <span>Hasan</span>
+        <span>
+          Arthur<span className={styles.period}>.</span>
+        </span>
+      </h1>
+      <div className={styles.recordStage} aria-hidden="true">
+        <div className={styles.record}>
+          <div className={styles.recordLabel}>
+            <span>Hasan Arthur Altuntaş</span>
+            <strong>
+              Sound
+              <br />& silence.
+            </strong>
+            <span>Scores & reinterpretations</span>
+            <i />
+          </div>
+        </div>
+        <span className={styles.recordNote}>
+          Cinematic music / Independent releases
+        </span>
+      </div>
+      <div className={styles.bottomline}>
+        <p>
+          {english
+            ? 'Music for the worlds you haven’t seen yet.'
+            : 'Henüz görmediğin dünyaların müziği.'}
+        </p>
+        <a
+          className={styles.listen}
+          href={artistProfile.spotifyUrl}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {english ? 'Listen on Spotify' : 'Spotify’da dinle'}
+          <ArrowUpRight size={19} />
+        </a>
+        <a className={styles.explore} href="#project-list">
+          {english ? 'Explore the records' : 'Kayıtları keşfet'}
+          <ArrowDown size={19} />
+        </a>
+      </div>
     </section>
   );
 }
