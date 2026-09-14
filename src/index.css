@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 
 :root {
   /* ---- Color: "Cinematic Code" palette ---- */
@@ -80,8 +80,8 @@ body {
   overscroll-behavior: none;
 }
 
-::-webkit-scrollbar { display: none; }
-* { scrollbar-width: none; }
+::-webkit-scrollbar { width: 6px; }
+* { scrollbar-width: thin; }
 
 a, button {
   color: inherit;
@@ -165,3 +165,11 @@ section { position: relative; }
     scroll-behavior: auto !important;
   }
 }
+
+
+section[id] { scroll-margin-top: 90px; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+.eyebrow { text-transform: none; letter-spacing: 0; font-family: var(--font-sans); }
+.eyebrow::before { display: none; }
