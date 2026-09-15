@@ -41,7 +41,7 @@ export default function About() {
       <div className={styles.portrait}>
         <img
           src="/assets/images/hasan-arthur-profile.jpg"
-          alt="Hasan Arthur Altuntaş"
+          alt="Hasan Arthur Altuntaş marka logosu"
           width="600"
           height="750"
           loading="lazy"
