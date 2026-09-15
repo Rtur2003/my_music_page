@@ -3,7 +3,8 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
 import { useTranslation } from '../i18n/LanguageContext';
-import { artistProfile } from '../data/music-catalog';
+import { artistProfile, musicCatalog } from '../data/music-catalog';
+import artwork from '../data/artwork.json';
 import styles from './Hero.module.css';
 
 export default function Hero() {
@@ -15,7 +16,7 @@ export default function Hero() {
     () => {
       const media = gsap.matchMedia();
       media.add('(prefers-reduced-motion: no-preference)', () => {
-        gsap.from(`.${styles.title} span`, {
+        gsap.from(`.${styles.title} > span`, {
           yPercent: 105,
           stagger: 0.12,
           duration: 1.25,
@@ -30,7 +31,7 @@ export default function Hero() {
         });
         gsap.to(`.${styles.record}`, {
           rotation: 95,
-          yPercent: 18,
+          yPercent: 12,
           ease: 'none',
           scrollTrigger: {
             trigger: rootRef.current,
@@ -38,6 +39,10 @@ export default function Hero() {
             end: 'bottom top',
             scrub: 1,
           },
+        });
+        gsap.fromTo(`.${styles.sleeve}`, { yPercent: 15, rotation: -12 }, {
+          yPercent: -15, rotation: -4, ease: 'none',
+          scrollTrigger: { trigger: rootRef.current, start: 'top top', end: 'bottom top', scrub: 0.7 },
         });
         gsap.to(`.${styles.title}`, {
           yPercent: -18,
@@ -61,8 +66,8 @@ export default function Hero() {
       <div className={styles.topline}>
         <span>
           {english
-            ? 'Composer & creative engineer'
-            : 'Besteci & yaratıcı mühendis'}
+            ? 'Music by Hasan Arthur Altuntaş'
+            : 'Hasan Arthur Altuntaş’ın müziği'}
         </span>
         <span>
           {english ? 'Independent, by nature.' : 'Doğası gereği bağımsız.'}
@@ -75,20 +80,16 @@ export default function Hero() {
         </span>
       </h1>
       <div className={styles.recordStage} aria-hidden="true">
+        <div className={styles.sleeve}>
+          <img src={artwork[musicCatalog[0].spotifyUrl]} alt="" width="600" height="600" fetchPriority="high" />
+        </div>
         <div className={styles.record}>
           <div className={styles.recordLabel}>
+            <img src="/assets/images/logo-transparent.png" alt="" width="140" height="140" />
             <span>Hasan Arthur Altuntaş</span>
-            <strong>
-              Sound
-              <br />& silence.
-            </strong>
-            <span>Scores & reinterpretations</span>
             <i />
           </div>
         </div>
-        <span className={styles.recordNote}>
-          Cinematic music / Independent releases
-        </span>
       </div>
       <div className={styles.bottomline}>
         <p>
