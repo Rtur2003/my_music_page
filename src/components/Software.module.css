@@ -1,6 +1,6 @@
 .software {
-  background: #15110e;
-  padding: 110px 8vw;
+  background: linear-gradient(#0a0908, #1a130d 65%, #20160e);
+  padding: 130px 8vw;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10vw;
@@ -15,7 +15,7 @@
   font-family: var(--font-display);
   font-size: clamp(44px, 6vw, 88px);
   line-height: 1;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.04em;
   font-weight: 500;
   margin: 28px 0;
 }
@@ -33,13 +33,23 @@
   border-bottom: 1px solid #aaa8;
 }
 .feature {
-  padding: 38px;
-  background: #262019;
-  border-radius: 5px;
+  position: relative;
+  isolation: isolate;
+  padding: 65px 10px;
   color: #e8d9bd;
 }
+.crownMark {
+  position: absolute;
+  top: -35%;
+  right: -9%;
+  width: min(85%, 430px);
+  height: auto;
+  filter: invert(1) sepia(.7);
+  opacity: .12;
+  z-index: -1;
+}
 .signal {
-  height: 155px;
+  height: clamp(150px, 20vw, 280px);
   margin: 25px 0 40px;
   display: flex;
   align-items: center;
@@ -47,7 +57,7 @@
 }
 .signal i {
   flex: 1;
-  background: #c3a46e;
+  background: linear-gradient(#ead9b5, #c99347 55%, #785026);
   border-radius: 5px;
 }
 .featureTitle {
@@ -76,6 +86,6 @@
     gap: 45px;
   }
   .feature {
-    padding: 28px;
+    padding: 28px 0;
   }
 }
