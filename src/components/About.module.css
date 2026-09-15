@@ -1,22 +1,23 @@
 .about {
-  padding: 110px 8vw;
+  padding: 100px 8vw 130px;
   display: grid;
   grid-template-columns: 0.85fr 1fr;
   gap: 10vw;
   align-items: center;
-  background: #c8bda7;
-  color: #292318;
+  background: #0a0908;
+  color: #f4efe4;
 }
 .portrait {
   aspect-ratio: 4 / 5;
   overflow: hidden;
-  background: #978b76;
+  background: #0a0908;
+  mask-image: linear-gradient(to bottom, transparent, black 12%, black 78%, transparent);
 }
 .portrait img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(1);
+  filter: grayscale(.65) sepia(.15);
 }
 .name {
   font-size: 13px;
@@ -27,7 +28,7 @@
   font-family: var(--font-display);
   font-size: clamp(45px, 6vw, 92px);
   line-height: 1;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.04em;
   font-weight: 500;
   margin-bottom: 38px;
 }
@@ -36,7 +37,7 @@
   max-width: 45ch;
   line-height: 1.8;
   margin-bottom: 20px;
-  color: #514a3d;
+  color: #c3b7a4;
 }
 .copy a {
   display: inline-flex;
