@@ -16,7 +16,7 @@ export default function Software() {
             : 'Ses zekâsı, yaratıcı araçlar ve açık kaynak deneyler. Merakın mühendislik tarafı.'}
         </p>
         <a
-          href="https://hasanarthuraltuntas.xyz"
+          href="https://hasan-arthur-altuntas.xyz"
           target="_blank"
           rel="noreferrer"
         >
@@ -26,11 +26,12 @@ export default function Software() {
       </div>
       <a
         className={styles.feature}
-        href="https://hasanarthuraltuntas.xyz/ai-music-detection"
+        href="https://hasan-arthur-altuntas.xyz/ai-music-detection"
         target="_blank"
         rel="noreferrer"
       >
-        <AudioLines size={45} strokeWidth={1} />
+        <img src="/assets/images/logo-transparent.png" alt="" className={styles.crownMark} width="320" height="320" loading="lazy" />
+        <AudioLines size={32} strokeWidth={1} />
         <div className={styles.signal} aria-hidden="true">
           {Array.from({ length: 45 }, (_, i) => (
             <i
