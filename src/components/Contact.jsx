@@ -71,7 +71,7 @@ export default function Contact() {
                 <span>{name}</span>
               </a>
             ))}
-            <a href="https://hasanarthuraltuntas.xyz" target="_blank" rel="noreferrer" className={styles.socialLink}>
+            <a href="https://hasan-arthur-altuntas.xyz" target="_blank" rel="noreferrer" className={styles.socialLink}>
               <Globe size={22} />
               <span>{t('contact.linkPortfolio')}</span>
             </a>
