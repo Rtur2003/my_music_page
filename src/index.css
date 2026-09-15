@@ -81,7 +81,8 @@ body {
 }
 
 ::-webkit-scrollbar { width: 6px; }
-* { scrollbar-width: thin; }
+* { scrollbar-width: thin; scrollbar-color: #9a753c #0a0908; }
+::selection { background: #cfb885; color: #21190e; }
 
 a, button {
   color: inherit;
