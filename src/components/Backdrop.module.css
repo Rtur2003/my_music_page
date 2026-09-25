@@ -1,0 +1,70 @@
+/* Registered so the tone colours interpolate instead of snapping. */
+@property --bd-base { syntax: '<color>'; inherits: true; initial-value: #150f0a; }
+@property --bd-a { syntax: '<color>'; inherits: true; initial-value: rgb(159 112 51 / 0.36); }
+@property --bd-b { syntax: '<color>'; inherits: true; initial-value: rgb(138 44 34 / 0.2); }
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+  background-color: var(--bd-base);
+  transition:
+    --bd-base 1.6s var(--ease-out-quint),
+    --bd-a 1.6s var(--ease-out-quint),
+    --bd-b 1.6s var(--ease-out-quint);
+}
+
+/* Edge falloff keeps text contrast even where a glow drifts behind it. */
+.backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 90% at 50% 45%, transparent 45%, rgb(5 4 3 / 0.55));
+}
+
+.glowA,
+.glowB {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.glowA {
+  width: 115vmax;
+  height: 115vmax;
+  left: 30%;
+  top: -30%;
+  background: radial-gradient(closest-side, var(--bd-a), transparent);
+  animation: driftA 26s ease-in-out infinite alternate;
+}
+
+.glowB {
+  width: 95vmax;
+  height: 95vmax;
+  left: -45%;
+  top: 35%;
+  background: radial-gradient(closest-side, var(--bd-b), transparent);
+  animation: driftB 34s ease-in-out infinite alternate;
+}
+
+@keyframes driftA {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(-14vw, 12vh, 0) scale(1.14); }
+}
+
+@keyframes driftB {
+  from { transform: translate3d(0, 0, 0) scale(1.08); }
+  to { transform: translate3d(16vw, -14vh, 0) scale(0.94); }
+}
+
+/* ---- Tones: one per section, plus one per featured record ---- */
+.backdrop[data-tone='crimson'] { --bd-base: #130c08; --bd-a: rgb(182 104 44 / 0.36); --bd-b: rgb(128 40 26 / 0.3); }
+.backdrop[data-tone='odyssey'] { --bd-base: #0a0f10; --bd-a: rgb(52 104 112 / 0.36); --bd-b: rgb(159 112 51 / 0.14); }
+.backdrop[data-tone='nullvector'] { --bd-base: #0c0b10; --bd-a: rgb(86 84 128 / 0.34); --bd-b: rgb(120 44 64 / 0.2); }
+.backdrop[data-tone='archive'] { --bd-base: #0e0b09; --bd-a: rgb(122 92 50 / 0.24); --bd-b: rgb(52 72 76 / 0.14); }
+.backdrop[data-tone='about'] { --bd-base: #0c0a08; --bd-a: rgb(130 96 54 / 0.24); --bd-b: rgb(70 48 36 / 0.24); }
+.backdrop[data-tone='signal'] { --bd-base: #130d08; --bd-a: rgb(201 147 71 / 0.32); --bd-b: rgb(120 80 38 / 0.26); }
+.backdrop[data-tone='ember'] { --bd-base: #1e150e; --bd-a: rgb(184 65 47 / 0.22); --bd-b: rgb(204 155 74 / 0.24); }
