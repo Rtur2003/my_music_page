@@ -2,45 +2,57 @@
   min-height: max(760px, 100svh);
   padding: clamp(105px, 14vh, 155px) 5vw 50px;
   overflow: clip;
-  background: linear-gradient(180deg, #20160e 55%, #15100c 88%, #0a0908);
   isolation: isolate;
   display: flex;
   flex-direction: column;
 }
-.hero::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 75% 50%, #9f703329, transparent 65%); z-index: -1; }
-.topline { display: flex; justify-content: space-between; color: #cbbb9d; font-size: 13px; }
-.title { font-family: var(--font-display); font-size: clamp(108px, 16.5vw, 250px); font-weight: 500; line-height: .85; letter-spacing: -.045em; margin: 8vh 0 12vh; position: relative; z-index: 2; width: fit-content; }
+.topline { position: relative; z-index: 3; display: flex; justify-content: space-between; align-items: center; color: #cbbb9d; font-size: 13px; }
+.topline a { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; color: #e7d7b7; }
+.topline a:hover { color: var(--color-primary-bright); }
+.title { font-family: var(--font-display); font-size: clamp(96px, 14.5vw, 212px); font-weight: 500; line-height: .85; letter-spacing: -.04em; margin: 8vh 0 12vh; position: relative; z-index: 2; width: fit-content; }
 .title > span { display: block; }
 .period { color: #cc9b4a; }
-.recordStage { position: absolute; width: min(53vw, 760px); aspect-ratio: 1; right: -7vw; top: 20%; z-index: 1; }
-.sleeve { position: absolute; width: 65%; aspect-ratio: 1; left: -10%; top: 9%; transform: rotate(-12deg); box-shadow: -24px 38px 70px #0009; }
+.recordStage { position: absolute; width: min(53vw, 760px); aspect-ratio: 1; right: -7vw; top: 20%; z-index: 1; animation: stageIn 1.6s var(--ease-out-expo) var(--intro-delay, 0.1s) both; }
+/* The record slides in as the intro's letterbox opens. */
+html:has([data-intro]) { --intro-delay: 2.05s; }
+@keyframes stageIn { from { opacity: 0; transform: translate3d(10%, 4%, 0) rotate(-14deg); } }
+/* New release sleeve in front, the record sliding out of it behind. */
+.sleeve { position: absolute; z-index: 2; width: 60%; aspect-ratio: 1; left: -24%; top: 14%; transform: translateY(15%) rotate(-12deg); box-shadow: -24px 38px 70px #000a, 0 0 0 1px rgb(255 255 255 / .08); }
 .sleeve img { width: 100%; height: 100%; object-fit: cover; }
 .record {
-  position: relative; width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center;
+  position: relative;
+  z-index: 1; width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center;
   background: repeating-radial-gradient(circle, transparent 0 2px, #ffffff0c 3px, transparent 4px),
     conic-gradient(from 35deg, #101015, #37343b 12%, #111116 23%, #08080a 44%, #42404b 61%, #0b0b0e 73%, #24212b 91%, #101015);
-  box-shadow: -25px 35px 65px #0007, inset 0 0 0 2px #8883;
+  box-shadow: -25px 35px 65px #0007, inset 0 0 0 1px #fff3, inset 0 0 0 3px #0008;
 }
-.recordLabel { border-radius: 50%; width: 34%; aspect-ratio: 1; background: #cfb885; color: #21190e; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; transform: rotate(-16deg); }
-.recordLabel img { width: 66%; height: 66%; object-fit: contain; mix-blend-mode: multiply; }
-.recordLabel span { font-size: clamp(7px, .75vw, 12px); }
+.recordLabel { border-radius: 50%; width: 34%; aspect-ratio: 1; background: #cfb885; color: #21190e; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; transform: rotate(-16deg); animation: labelSpin 24s linear infinite; }
+@keyframes labelSpin { to { transform: rotate(344deg); } }
+.recordLabel img { width: auto; height: 50%; object-fit: contain; opacity: .88; }
+.recordLabel span { font-size: clamp(7px, .75vw, 12px); text-align: center; }
 .recordLabel i { width: 8px; height: 8px; margin-top: 8px; background: #17151b; border-radius: 50%; }
 .bottomline { display: flex; align-items: flex-end; gap: 36px; margin-top: auto; position: relative; z-index: 3; }
 .bottomline p { max-width: 25ch; font-size: clamp(20px, 2vw, 30px); line-height: 1.35; margin-right: auto; }
-.listen, .explore { display: inline-flex; align-items: center; gap: 18px; font-size: 14px; }
-.listen { background: #e7d7b7; color: #23190e; border-radius: 40px; padding: 17px 23px; white-space: nowrap; }
-.explore { padding: 17px 0; }
+.listen, .explore { display: inline-flex; align-items: center; gap: 18px; min-height: 48px; font-size: 14px; }
+.listen { gap: 10px; background: #e7d7b7; color: #23190e; border-radius: 40px; padding: 12px 24px 12px 20px; white-space: nowrap; font-weight: 600; transition: transform 0.4s var(--ease-out-expo), background-color 0.3s ease; }
+.listen:hover { background: #f1e4c8; transform: translateY(-2px); }
+.listenKicker { font-size: 12px; font-weight: 500; color: #6b5433; }
+.explore { padding: 17px 0; white-space: nowrap; }
+@media (min-width: 801px) {
+  .sleeve { left: -2%; top: 12%; width: 54%; }
+}
 @media (max-width: 800px) {
-  .hero { min-height: max(740px, 100svh); padding: 105px 6vw 40px; }
+  .hero { min-height: max(700px, 100svh); padding: 105px 6vw calc(32px + env(safe-area-inset-bottom)); }
   .topline { font-size: 12px; }
-  .topline span:last-child { display: none; }
+  .topline span { display: none; }
+  .topline { justify-content: flex-start; }
   .title { font-size: clamp(86px, 22.5vw, 170px); margin: 45px 0 260px; }
-  .recordStage { width: 80vw; right: -22vw; top: 35%; }
+  .recordStage { width: 84vw; right: -34vw; top: 33%; }
   .recordLabel { gap: 3px; }
   .recordLabel i { margin-top: 3px; width: 5px; height: 5px; }
   .bottomline { flex-wrap: wrap; gap: 14px 22px; }
   .bottomline p { width: 100%; max-width: 22ch; margin-bottom: 6px; }
-  .listen, .explore { font-size: 12px; gap: 10px; }
+  .listen, .explore { font-size: 14px; gap: 10px; }
   .listen { padding: 15px 17px; }
 }
 @media (max-height: 650px) and (min-width: 801px) {

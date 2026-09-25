@@ -1,0 +1,101 @@
+@property --tc-s { syntax: '<integer>'; inherits: false; initial-value: 0; }
+@property --tc-f { syntax: '<integer>'; inherits: false; initial-value: 0; }
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  animation: gone 0s linear 2.9s forwards;
+}
+
+/* Two halves of the frame; they part like a letterbox opening. */
+.curtain {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50.5%;
+  background: #0a0908;
+  animation: 1s var(--ease-in-out-expo) 1.85s forwards;
+}
+.top { top: 0; animation-name: openTop; }
+.bottom { bottom: 0; animation-name: openBottom; }
+
+.card {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  padding: 0 6vw;
+  text-align: center;
+  animation: cardOut 0.5s var(--ease-out-quint) 1.6s forwards;
+}
+
+.timecode {
+  display: flex;
+  gap: 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: rgb(244 239 228 / 0.55);
+  opacity: 0;
+  animation: fadeIn 0.4s ease 0.05s forwards;
+}
+
+.counter::after {
+  counter-reset: s var(--tc-s) f var(--tc-f);
+  content: '00:00:' counter(s, decimal-leading-zero) ':' counter(f, decimal-leading-zero);
+  animation: frames 1s steps(24) infinite, seconds 2s steps(2) forwards;
+}
+
+.title {
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 1.4rem + 3.6vw, 4.6rem);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: var(--color-text);
+}
+.title span {
+  display: block;
+  transform: translateY(105%);
+  animation: rise 0.9s var(--ease-out-expo) 0.3s forwards;
+}
+
+.line {
+  width: min(62vw, 560px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+  transform: scaleX(0);
+  animation: draw 1.2s var(--ease-out-expo) 0.2s forwards;
+}
+
+.presents {
+  font-size: 13px;
+  color: rgb(244 239 228 / 0.6);
+  opacity: 0;
+  animation: fadeIn 0.6s ease 0.75s forwards;
+}
+
+/* User input: get out of the way fast. */
+.skip { animation: skipOut 0.35s var(--ease-out-quint) forwards; }
+.skip .curtain, .skip .card { animation-play-state: paused; }
+
+@keyframes openTop { to { transform: translateY(-100%); } }
+@keyframes openBottom { to { transform: translateY(100%); } }
+@keyframes cardOut { to { opacity: 0; transform: scale(0.97); } }
+@keyframes fadeIn { to { opacity: 1; } }
+@keyframes rise { to { transform: translateY(0); } }
+@keyframes draw { to { transform: scaleX(1); } }
+@keyframes frames { from { --tc-f: 0; } to { --tc-f: 24; } }
+@keyframes seconds { from { --tc-s: 0; } to { --tc-s: 2; } }
+@keyframes gone { to { visibility: hidden; } }
+@keyframes skipOut { to { opacity: 0; visibility: hidden; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .intro { display: none; }
+}
