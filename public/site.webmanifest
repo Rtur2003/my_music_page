@@ -1,0 +1,16 @@
+{
+  "name": "Hasan Arthur Altuntaş — Music",
+  "short_name": "Hasan Arthur",
+  "description": "Cinematic music, film and game scores by Hasan Arthur Altuntaş.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0a0908",
+  "theme_color": "#20160e",
+  "lang": "tr",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

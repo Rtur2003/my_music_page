@@ -19,13 +19,12 @@
   --color-primary-border: rgba(204, 155, 74, 0.35);
 
   /* ---- Type families ---- */
-  --font-display: 'Bricolage Grotesque', 'Manrope', sans-serif;
-  --font-editorial: 'Newsreader', 'Georgia', serif;
-  --font-sans: 'Manrope', -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+  --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-sans: 'Bricolage Grotesque', system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Consolas, monospace;
 
   /* ---- Fluid type scale ---- */
-  --text-xs: clamp(0.7rem, 0.67rem + 0.15vw, 0.8rem);
+  --text-xs: clamp(0.75rem, 0.72rem + 0.15vw, 0.85rem);
   --text-sm: clamp(0.825rem, 0.78rem + 0.2vw, 0.95rem);
   --text-base: clamp(1rem, 0.94rem + 0.3vw, 1.15rem);
   --text-lg: clamp(1.15rem, 1.05rem + 0.4vw, 1.4rem);
@@ -66,6 +65,9 @@
 
 html {
   font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color-scheme: dark;
@@ -76,7 +78,7 @@ body {
   color: var(--color-text);
   font-family: var(--font-sans);
   line-height: 1.5;
-  overflow-x: hidden;
+  overflow-x: clip;
   overscroll-behavior: none;
 }
 
@@ -108,54 +110,28 @@ img { max-width: 100%; display: block; }
   width: 100%;
   max-width: 1560px;
   margin: 0 auto;
-  padding: 0 var(--space-md);
+  padding: 0 clamp(1.25rem, 6vw, 7rem);
 }
 
 .font-display { font-family: var(--font-display); }
-.font-editorial { font-family: var(--font-editorial); }
 .font-mono { font-family: var(--font-mono); }
 .text-muted { color: var(--color-text-muted); }
 
 section { position: relative; }
 
-/* ---- Eyebrow label (structural device: signals section identity) ---- */
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2xs);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--color-primary);
-}
-
-.eyebrow::before {
-  content: '';
-  width: 20px;
+.sr-only {
+  position: absolute;
+  width: 1px;
   height: 1px;
-  background: var(--color-primary);
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
-/* ---- Sound wave indicator (used in navbar when playing) ---- */
-.sound-wave-bar {
-  width: 3px;
-  height: 10px;
-  background-color: var(--color-primary);
-  border-radius: 2px;
-  display: inline-block;
-  margin: 0 1.5px;
-  animation: wave 1s ease-in-out infinite;
-}
-.sound-wave-bar:nth-child(2) { animation-delay: 0.12s; }
-.sound-wave-bar:nth-child(3) { animation-delay: 0.24s; }
-.sound-wave-bar:nth-child(4) { animation-delay: 0.36s; }
-
-@keyframes wave {
-  0%, 100% { height: 6px; }
-  50% { height: 16px; }
-}
+main:focus { outline: none; }
 
 /* ---- Reduced motion ---- */
 @media (prefers-reduced-motion: reduce) {
@@ -169,8 +145,10 @@ section { position: relative; }
 
 
 section[id] { scroll-margin-top: 90px; }
+/* Touch devices scroll natively; anchor jumps still glide. Lenis handles desktop. */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-stopped { overflow: hidden; }
-.eyebrow { text-transform: none; letter-spacing: 0; font-family: var(--font-sans); }
-.eyebrow::before { display: none; }

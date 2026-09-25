@@ -1,0 +1,147 @@
+/* ---- The record that follows the page ---- */
+.disc {
+  position: fixed;
+  left: max(20px, env(safe-area-inset-left));
+  bottom: max(20px, env(safe-area-inset-bottom));
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  opacity: 0;
+  transform: translateY(24px) scale(0.9);
+  pointer-events: none;
+  transition: opacity 0.5s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
+}
+
+.disc[data-away],
+.disc[data-open] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.turn {
+  display: block;
+  width: 60px;
+  height: 60px;
+  transform: rotate(var(--scroll-turn, 0deg));
+}
+
+.vinyl {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background:
+    repeating-radial-gradient(circle, transparent 0 1.5px, rgb(255 255 255 / 0.07) 2px, transparent 2.5px),
+    conic-gradient(from 35deg, #101015, #3a373f 14%, #0c0c10 36%, #45424e 62%, #0b0b0e 80%, #101015);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.55), inset 0 0 0 1px rgb(255 255 255 / 0.12);
+  animation: spin 1.8s linear infinite;
+  animation-play-state: paused;
+}
+
+.disc[data-open] .vinyl { animation-play-state: running; }
+
+.vinyl img {
+  width: 42%;
+  height: 42%;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 2px rgb(0 0 0 / 0.5);
+}
+
+.vinyl::after {
+  content: '';
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #0a0908;
+}
+
+.caption {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 200px;
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  background: rgb(23 18 13 / 0.9);
+  border: 1px solid var(--color-border);
+  font-size: 13px;
+  color: var(--color-text);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.caption span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.caption svg { flex-shrink: 0; color: var(--color-primary); }
+
+.disc:hover .vinyl { box-shadow: 0 10px 30px rgb(0 0 0 / 0.55), inset 0 0 0 1px rgb(255 255 255 / 0.12), 0 0 0 3px rgb(204 155 74 / 0.4); }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---- Player card ---- */
+.card {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 85;
+  width: min(420px, calc(100vw - 32px));
+  padding: 16px;
+  background: #211a13;
+  border: 1px solid rgb(255 255 255 / 0.16);
+  border-radius: 16px;
+  box-shadow: 0 15px 70px rgb(0 0 0 / 0.6);
+  animation: rise 0.5s var(--ease-out-expo);
+}
+
+.card:focus { outline: none; }
+.card:focus-visible { outline: 2px solid var(--color-primary); }
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+
+.heading span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.heading button {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin: -8px -8px -8px 0;
+}
+
+.embed { display: block; min-height: 152px; border: 0; border-radius: 12px; background: #17120d; }
+
+.card > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  margin-top: 6px;
+  font-size: 13px;
+  color: #e7d7b7;
+}
+
+@keyframes rise { from { opacity: 0; transform: translateY(16px); } }
+
+@media (max-width: 700px) {
+  /* Thumb zone on phones, and away from left-aligned text. */
+  .disc { left: auto; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); }
+  .caption { display: none; }
+  .turn { width: 52px; height: 52px; }
+  .card { right: 12px; left: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); width: auto; }
+  /* The card takes the bottom edge on phones; the record steps aside. */
+  .disc[data-open] { opacity: 0; transform: translateY(24px) scale(0.9); pointer-events: none; }
+}

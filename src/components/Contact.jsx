@@ -1,88 +1,95 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { Coffee, Mail, Globe } from 'lucide-react';
-import { FaSpotify, FaYoutube, FaInstagram, FaTwitter, FaLinkedin, FaGithub } from 'react-icons/fa';
+import { ArrowUp } from 'lucide-react';
 import { useTranslation } from '../i18n/LanguageContext';
 import styles from './Contact.module.css';
 
-const SOCIALS = [
-  { name: 'Spotify', icon: FaSpotify, url: 'https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef' },
-  { name: 'YouTube', icon: FaYoutube, url: 'https://www.youtube.com/channel/UCA7E1X_uGUqtSJeIxvBeTQA' },
-  { name: 'Instagram', icon: FaInstagram, url: 'https://www.instagram.com/rthur_hsn' },
-  { name: 'X', icon: FaTwitter, url: 'https://x.com/Rthur__1' },
-  { name: 'LinkedIn', icon: FaLinkedin, url: 'https://tr.linkedin.com/in/hasan-arthur-altuntas' },
-  { name: 'GitHub', icon: FaGithub, url: 'https://github.com/Rtur2003' },
+const EMAIL = 'hasannarthurrr@gmail.com';
+
+// End credits: role on the left, names on the right, centred on one gutter.
+const CREDITS = [
+  {
+    role: 'listen',
+    links: [
+      { name: 'Spotify', url: 'https://open.spotify.com/artist/6D5NDnftFDOelT5ssMe0ef' },
+      { name: 'YouTube', url: 'https://www.youtube.com/channel/UCA7E1X_uGUqtSJeIxvBeTQA' },
+    ],
+  },
+  {
+    role: 'follow',
+    links: [
+      { name: 'Instagram', url: 'https://www.instagram.com/rthur_hsn' },
+      { name: 'X', url: 'https://x.com/Rthur__1' },
+    ],
+  },
+  {
+    role: 'code',
+    links: [
+      { name: 'GitHub', url: 'https://github.com/Rtur2003' },
+      { name: 'LinkedIn', url: 'https://www.linkedin.com/in/hasan-arthur-altuntas' },
+      { name: 'CrownCode', url: 'https://hasan-arthur-altuntas.xyz' },
+    ],
+  },
+  {
+    role: 'support',
+    links: [{ nameKey: 'contact.supportLink', url: 'https://iyzi.link/AJspVg' }],
+  },
 ];
 
 export default function Contact() {
   const rootRef = useRef(null);
   const { t } = useTranslation();
 
+  // The credits drift up as they come into view, like a roll; never hidden.
   useGSAP(() => {
     const media = gsap.matchMedia();
     media.add('(prefers-reduced-motion: no-preference)', () => {
-    gsap.from(`.${styles.reveal}`, {
-      scrollTrigger: { trigger: rootRef.current, start: 'top 80%' },
-      y: 28,
-      opacity: 0,
-      stagger: 0.08,
-      duration: 0.9,
-      ease: 'power3.out',
-    });
+      gsap.fromTo(`.${styles.credit}`, { y: 48 }, {
+        y: 0,
+        ease: 'none',
+        stagger: 0.08,
+        scrollTrigger: { trigger: `.${styles.credits}`, start: 'top bottom', end: 'center 60%', scrub: true },
+      });
     });
     return () => media.revert();
   }, { scope: rootRef });
 
   return (
-    <section id="contact" ref={rootRef} className={styles.contact}>
-      <div className={`${styles.grid} container`}>
-        <div>
-          <span className={`${styles.reveal} eyebrow`}>{t('contact.eyebrow')}</span>
-          <h2 className={`${styles.reveal} ${styles.heading} font-display`}>
-            {t('contact.heading').split('\n').map((line, i) => (
-              <React.Fragment key={i}>
-                {i > 0 && <br />}
-                {line}
-              </React.Fragment>
-            ))}
-          </h2>
-          <p className={`${styles.reveal} ${styles.lede}`}>
-            {t('contact.lede')}
-          </p>
+    <section id="contact" ref={rootRef} className={styles.contact} aria-labelledby="contact-heading" data-tone="ember">
+      <div className={`${styles.inner} container`}>
+        <h2 id="contact-heading" className={styles.heading}>{t('contact.heading')}</h2>
+        <a className={styles.email} href={`mailto:${EMAIL}`}>{EMAIL}</a>
 
-          <div className={`${styles.reveal} ${styles.actions}`}>
-            <a href="mailto:hasannarthurrr@gmail.com" className={styles.primaryCta}>
-              <Mail size={18} />
-              {t('contact.ctaEmail')}
-            </a>
-            <a href="https://iyzi.link/AJspVg" target="_blank" rel="noreferrer" className={styles.secondaryCta}>
-              <Coffee size={18} />
-              {t('contact.ctaSupport')}
-            </a>
-          </div>
-        </div>
-
-        <div className={`${styles.reveal} ${styles.socialCol}`}>
-          <div className={styles.socialGrid}>
-            {SOCIALS.map(({ name, icon: Icon, url }) => (
-              <a key={name} href={url} target="_blank" rel="noreferrer" className={styles.socialLink}>
-                <Icon size={22} />
-                <span>{name}</span>
-              </a>
-            ))}
-            <a href="https://hasan-arthur-altuntas.xyz" target="_blank" rel="noreferrer" className={styles.socialLink}>
-              <Globe size={22} />
-              <span>{t('contact.linkPortfolio')}</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div className={`${styles.reveal} ${styles.footerBar} container`}>
-        <span>&copy; {new Date().getFullYear()} Hasan Arthur Altuntaş. {t('contact.footerRights')}</span>
-        <span className="font-mono">{t('contact.footerTagline')}</span>
+        <dl className={styles.credits} aria-label={t('contact.creditsLabel')}>
+          {CREDITS.map(({ role, links }) => (
+            <div key={role} className={styles.credit}>
+              <dt>{t(`contact.roles.${role}`)}</dt>
+              <dd>
+                {links.map(({ name, nameKey, url }) => (
+                  <a key={url} href={url} target="_blank" rel="me noopener">{nameKey ? t(nameKey) : name}</a>
+                ))}
+              </dd>
+            </div>
+          ))}
+        </dl>
       </div>
     </section>
+  );
+}
+
+export function Footer() {
+  const { t } = useTranslation();
+  return (
+    <footer className={styles.footer}>
+      <div className={`${styles.footerBar} container`}>
+        <small suppressHydrationWarning>&copy; {new Date().getFullYear()} Hasan Arthur Altuntaş</small>
+        <span>{t('contact.footerCredit')}</span>
+        <a href="#hero" className={styles.backToTop}>
+          {t('contact.backToTop')}
+          <ArrowUp size={15} aria-hidden="true" />
+        </a>
+      </div>
+    </footer>
   );
 }

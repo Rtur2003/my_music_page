@@ -1,16 +1,17 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { ArrowUpRight, X, Play } from 'lucide-react';
-import { musicCatalog } from '../data/music-catalog';
-import artwork from '../data/artwork.json';
+import { ArrowUpRight, Play } from 'lucide-react';
+import { albumUrl, artistProfile, coverArt, featured } from '../data/music-catalog';
+import { useReleases } from '../data/ReleasesContext';
+import { usePlayer } from '../player/PlayerContext';
 import { useTranslation } from '../i18n/LanguageContext';
 import styles from './ProjectList.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
-const selected = musicCatalog.slice(0, 3);
-const moods = ['#3b2c20', '#243337', '#28282d'];
+// Backdrop tone per featured record (see Backdrop.module.css).
+const tones = ['crimson', 'odyssey', 'nullvector'];
 const releaseNames = ['Crimson Desert', 'The Odyssey', 'NULL VECTOR'];
 
 export default function ProjectList() {
@@ -19,22 +20,17 @@ export default function ProjectList() {
   const railRef = useRef(null);
   const timelineRef = useRef(null);
   const [filter, setFilter] = useState('all');
-  const [playing, setPlaying] = useState(null);
+  const { play } = usePlayer();
   const { lang } = useTranslation();
   const en = lang === 'en';
-  useEffect(() => {
-    if (!playing) return;
-    const close = (event) => { if (event.key === 'Escape') setPlaying(null); };
-    window.addEventListener('keydown', close);
-    return () => window.removeEventListener('keydown', close);
-  }, [playing]);
-  const filtered = musicCatalog.filter(
-    (track) =>
-      filter === 'all' ||
-      (filter === 'albums'
-        ? track.genre.startsWith('Albüm')
-        : !track.genre.startsWith('Albüm')),
+  const { releases, live, updatedAt } = useReleases();
+  const filtered = releases.filter(
+    (release) => filter === 'all' || (filter === 'albums') === (release.type === 'album'),
   );
+  const typeLabel = { album: en ? 'Album' : 'Albüm', ep: 'EP', single: 'Single' };
+  const updatedLabel = updatedAt
+    ? new Intl.DateTimeFormat(en ? 'en-GB' : 'tr-TR', { day: 'numeric', month: 'long' }).format(new Date(updatedAt))
+    : null;
 
   useGSAP(
     () => {
@@ -46,7 +42,6 @@ export default function ProjectList() {
           const panels = [...railRef.current.children];
           const buttons = [...stage.querySelectorAll('[data-release-nav]')];
           stage.dataset.immersive = 'true';
-          gsap.set(panels.slice(1), { autoAlpha: 0 });
           let active = -1;
           const syncPanel = (time) => {
             const next = time < 1.1 ? 0 : time < 2.3 ? 1 : 2;
@@ -57,8 +52,15 @@ export default function ProjectList() {
               panel.setAttribute('aria-hidden', String(index !== next));
               buttons[index]?.setAttribute('aria-pressed', String(index === next));
             });
+            stage.dataset.tone = tones[next];
+            // Scrub catch-up keeps updating after the pin releases; only the
+            // pinned stage may retint the backdrop.
+            if (timeline?.scrollTrigger?.isActive) {
+              window.dispatchEvent(new CustomEvent('backdrop:tone', { detail: tones[next] }));
+            }
           };
-          const timeline = gsap.timeline({
+          let timeline;
+          timeline = gsap.timeline({
             scrollTrigger: {
               trigger: stage,
               start: 'top top',
@@ -89,6 +91,7 @@ export default function ProjectList() {
           syncPanel(0);
           return () => {
             delete stage.dataset.immersive;
+            stage.dataset.tone = tones[0];
             timelineRef.current = null;
             panels.forEach((panel) => {
               panel.inert = false;
@@ -97,9 +100,48 @@ export default function ProjectList() {
           };
         },
       );
+      // Stacked layout (phones, short screens): scroll-linked drift per record.
+      media.add(
+        '(max-width: 800px) and (prefers-reduced-motion: no-preference), (max-height: 639px) and (prefers-reduced-motion: no-preference)',
+        () => {
+          [...railRef.current.children].forEach((panel) => {
+            const along = () => ({ trigger: panel, start: 'top bottom', end: 'bottom top', scrub: true });
+            gsap.fromTo(panel.querySelector(`.${styles.atmosphere}`),
+              { yPercent: -5, scale: 1.22 }, { yPercent: 5, scale: 1.08, ease: 'none', scrollTrigger: along() });
+            gsap.fromTo(panel.querySelector(`.${styles.artwork}`),
+              { rotation: 6, yPercent: 10 }, { rotation: -5, yPercent: -8, ease: 'none', scrollTrigger: along() });
+          });
+        },
+      );
       return () => media.revert();
     },
     { scope: rootRef },
+  );
+
+  // Cover columns drift at different speeds while the archive scrolls past.
+  const gridRef = useRef(null);
+  useGSAP(
+    () => {
+      const media = gsap.matchMedia();
+      media.add('(prefers-reduced-motion: no-preference)', () => {
+        const items = [...gridRef.current.children];
+        const cols = window.matchMedia('(max-width: 700px)').matches ? 2 : 3;
+        const drift = cols === 2 ? [0, 70] : [0, 110, 45];
+        items.forEach((item, i) => {
+          const distance = drift[i % cols];
+          if (!distance) return;
+          gsap.fromTo(item, { y: distance }, {
+            y: -distance,
+            ease: 'none',
+            scrollTrigger: { trigger: gridRef.current, start: 'top bottom', end: 'bottom top', scrub: true },
+          });
+        });
+      });
+      // The archive's height changed: everything below needs fresh positions.
+      requestAnimationFrame(() => ScrollTrigger.refresh());
+      return () => media.revert();
+    },
+    { scope: rootRef, dependencies: [filter, releases], revertOnUpdate: true },
   );
 
   const showRelease = (index) => {
@@ -116,87 +158,84 @@ export default function ProjectList() {
 
   return (
     <section id="project-list" ref={rootRef} className={styles.section}>
-      <div ref={stageRef} className={styles.stage}>
+      <div ref={stageRef} className={styles.stage} data-tone={tones[0]}>
       <div className={styles.intro}>
         <h2>{en ? 'Selected recordings' : 'Seçili kayıtlar'}</h2>
         <a href="#discography">
           {en ? 'Browse all releases' : 'Tüm yayınlara göz at'}{' '}
-          <ArrowUpRight size={18} />
+          <ArrowUpRight size={18} aria-hidden="true" />
         </a>
       </div>
         <div ref={railRef} className={styles.rail}>
-          {selected.map((track, index) => (
+          {featured.map((track, index) => (
             <article
               key={track.id}
               className={styles.panel}
-              style={{ '--mood': moods[index] }}
+              data-tone={tones[index]}
             >
-              <img className={styles.atmosphere} src={artwork[track.spotifyUrl]} alt="" aria-hidden="true" width="640" height="640" loading="lazy" />
+              <div className={styles.atmosphereWrap}>
+                <img className={styles.atmosphere} src={coverArt(track, true)} alt="" width="640" height="640" loading="lazy" decoding="async" />
+              </div>
               <div className={styles.artwork}>
                 <img
-                  src={artwork[track.spotifyUrl]}
-                  alt={track.title}
-                  width="600"
-                  height="600"
+                  src={coverArt(track, true)}
+                  alt={en ? `${track.title} cover art` : `${track.title} kapak görseli`}
+                  width="640"
+                  height="640"
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div className={styles.info}>
                 <h3>{releaseNames[index]}</h3>
                 <span className={styles.artist}>{track.title}</span>
-                <p>
-                  {index === 0
-                    ? en
-                      ? 'Into Pywel. An orchestral journey through Crimson Desert.'
-                      : 'Pywel’e doğru. Crimson Desert dünyasında orkestral bir yolculuk.'
-                    : index === 1
-                      ? en
-                        ? 'The Odyssey, reimagined in sound.'
-                        : 'The Odyssey, seslerle yeniden.'
-                      : en
-                        ? 'Enter the world of NULL VECTOR.'
-                        : 'NULL VECTOR dünyasına gir.'}
-                </p>
-                <button onClick={() => setPlaying(track)}>
-                  <Play size={16} />
+                <button type="button" onClick={() => play(track)}>
+                  <Play size={16} aria-hidden="true" />
                   {en ? 'Listen to this record' : 'Bu kaydı dinle'}
                 </button>
-                <a href={track.spotifyUrl} target="_blank" rel="noreferrer">
-                  Spotify <ArrowUpRight size={15} />
+                <a href={albumUrl(track.id)} target="_blank" rel="noopener" aria-label={`${track.title}, Spotify`}>
+                  Spotify <ArrowUpRight size={15} aria-hidden="true" />
                 </a>
               </div>
             </article>
           ))}
         </div>
-        <div className={styles.releaseNav} aria-label={en ? 'Choose a recording' : 'Kayıt seç'}>
+        <div className={styles.releaseNav} role="group" aria-label={en ? 'Choose a recording' : 'Kayıt seç'}>
           {releaseNames.map((name, index) => (
-            <button key={name} data-release-nav aria-pressed={index === 0} onClick={() => showRelease(index)}>{name}</button>
+            <button key={name} type="button" data-release-nav aria-pressed={index === 0} onClick={() => showRelease(index)}>{name}</button>
           ))}
         </div>
         <div className={styles.progress} aria-hidden="true">
           <span />
         </div>
       </div>
-      <div id="discography" className={styles.catalog}>
+      <div id="discography" className={styles.catalog} data-tone="archive">
         <div className={styles.catalogHeader}>
           <div>
-            <p>{en ? 'From the release archive' : 'Yayın arşivinden'}</p>
             <h2>
               {en ? 'Discography' : 'Diskografi'}
-              <sup>{musicCatalog.length}</sup>
+              <sup aria-hidden="true">{releases.length}</sup>
             </h2>
+            {live && (
+              <p className={styles.liveNote}>
+                <i aria-hidden="true" />
+                {en ? `Live from Spotify · updated ${updatedLabel}` : `Spotify’dan canlı · ${updatedLabel} güncellendi`}
+              </p>
+            )}
           </div>
           <div
             className={styles.filters}
+            role="group"
             aria-label={en ? 'Filter releases' : 'Yayınları filtrele'}
           >
             {[
               ['all', en ? 'All' : 'Tümü'],
               ['albums', en ? 'Albums' : 'Albümler'],
-              ['singles', 'Singles & EP'],
+              ['singles', en ? 'Singles & EPs' : 'Single & EP'],
             ].map(([value, label]) => (
               <button
                 key={value}
+                type="button"
                 aria-pressed={filter === value}
                 onClick={() => setFilter(value)}
               >
@@ -208,67 +247,53 @@ export default function ProjectList() {
         <p className={styles.resultCount} aria-live="polite">
           {filtered.length} {en ? 'releases' : 'yayın'}
         </p>
-        <div className={styles.catalogGrid}>
+        <div className={styles.catalogBody}>
+        <aside className={styles.popular} aria-labelledby="popular-heading">
+          <h3 id="popular-heading">{en ? 'Most played right now' : 'Şu an en çok dinlenenler'}</h3>
+          <p>{en ? 'Straight from Spotify, always current.' : 'Doğrudan Spotify’dan, her zaman güncel.'}</p>
+          <iframe
+            title={en ? 'Hasan Arthur Altuntaş on Spotify: popular tracks' : 'Spotify’da Hasan Arthur Altuntaş: popüler parçalar'}
+            src={`https://open.spotify.com/embed/artist/${artistProfile.spotifyId}?utm_source=generator&theme=0`}
+            width="100%"
+            height="352"
+            loading="lazy"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          />
+        </aside>
+        <ul ref={gridRef} className={styles.catalogGrid}>
           {filtered.map((track) => (
+            <li key={track.id}>
             <button
-              key={track.id}
+              type="button"
               className={styles.release}
-              onClick={() => setPlaying(track)}
+              onClick={() => play(track)}
             >
               <span className={styles.cover}>
                 <img
-                  src={artwork[track.spotifyUrl]}
+                  src={coverArt(track)}
+                  srcSet={`${coverArt(track)} 300w, ${coverArt(track, true)} 640w`}
+                  sizes="(max-width: 700px) 44vw, 18vw"
                   alt=""
                   width="300"
                   height="300"
                   loading="lazy"
+                  decoding="async"
                 />
-                <span className={styles.coverPlay}>
+                <span className={styles.coverPlay} aria-hidden="true">
                   <Play size={22} />
                 </span>
               </span>
               <span className={styles.releaseTitle}>{track.title}</span>
               <span className={styles.releaseMeta}>
-                {track.genre
-                  .replace('Albüm', en ? 'Album' : 'Albüm')
-                  .replace(
-                    'En Çok Dinlenen',
-                    en ? 'Featured release' : 'Öne çıkan yayın',
-                  )}
+                {typeLabel[track.type]}
+                {track.year ? ` · ${track.year}` : ''}
               </span>
             </button>
+            </li>
           ))}
+        </ul>
         </div>
       </div>
-      {playing && (
-        <div
-          className={styles.player}
-          role="region"
-          aria-label={en ? 'Spotify player' : 'Spotify oynatıcı'}
-        >
-          <div className={styles.playerHeading}>
-            <span>{playing.title}</span>
-            <button
-              onClick={() => setPlaying(null)}
-              aria-label={en ? 'Close player' : 'Oynatıcıyı kapat'}
-            >
-              <X size={20} />
-            </button>
-          </div>
-          <iframe
-            key={playing.id}
-            title={`${playing.title} — Spotify`}
-            src={`https://open.spotify.com/embed/album/${playing.spotifyUrl.split('/').pop()}?utm_source=generator&theme=0`}
-            width="100%"
-            height="152"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-          />
-          <a href={playing.spotifyUrl} target="_blank" rel="noreferrer">
-            {en ? 'Open in Spotify' : 'Spotify’da aç'}{' '}
-            <ArrowUpRight size={14} />
-          </a>
-        </div>
-      )}
     </section>
   );
 }

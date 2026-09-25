@@ -1,15 +1,17 @@
 .software {
-  background: linear-gradient(#0a0908, #1a130d 65%, #20160e);
-  padding: 130px 8vw;
+  overflow-x: clip;
+  padding: clamp(96px, 14vh, 150px) 8vw;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10vw;
-  align-items: center;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 8vw;
+  align-items: start;
 }
-.copy > span {
-  font-size: 14px;
-  color: #b8aa94;
+
+.copy {
+  position: sticky;
+  top: 120px;
 }
+
 .copy h2 {
   white-space: pre-line;
   font-family: var(--font-display);
@@ -17,75 +19,118 @@
   line-height: 1;
   letter-spacing: -0.04em;
   font-weight: 500;
-  margin: 28px 0;
+  margin-bottom: 28px;
 }
+
 .copy p {
   max-width: 38ch;
-  color: #b8aa94;
-  line-height: 1.8;
+  color: #c3b7a4;
+  line-height: 1.75;
 }
-.copy > a {
-  display: inline-flex;
-  align-items: center;
-  gap: 30px;
-  margin-top: 30px;
-  padding: 15px 0;
-  border-bottom: 1px solid #aaa8;
-}
-.feature {
-  position: relative;
-  isolation: isolate;
-  padding: 65px 10px;
-  color: #e8d9bd;
-}
-.crownMark {
-  position: absolute;
-  top: -35%;
-  right: -9%;
-  width: min(85%, 430px);
-  height: auto;
-  filter: invert(1) sepia(.7);
-  opacity: .12;
-  z-index: -1;
-}
+
 .signal {
-  height: clamp(150px, 20vw, 280px);
-  margin: 25px 0 40px;
+  height: clamp(90px, 11vw, 150px);
+  transform: scaleY(var(--energy, 1));
+  transform-origin: center;
+  margin: 40px 0 32px;
   display: flex;
   align-items: center;
   gap: 4px;
 }
+
 .signal i {
   flex: 1;
   background: linear-gradient(#ead9b5, #c99347 55%, #785026);
   border-radius: 5px;
+  transform-origin: center;
+  animation: eq var(--d, 1.4s) ease-in-out calc(var(--i, 0) * -97ms) infinite alternate;
+  animation-play-state: paused;
 }
-.featureTitle {
+
+.signal[data-live] i { animation-play-state: running; }
+
+@keyframes eq {
+  from { transform: scaleY(0.45); }
+  to { transform: scaleY(1); }
+}
+
+.links {
   display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+}
+
+.links a {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 12px;
+  min-height: 48px;
+  border-bottom: 1px solid rgb(244 239 228 / 0.3);
+  transition: border-color 0.3s var(--ease-out-expo), color 0.3s var(--ease-out-expo);
 }
-.feature h3 {
-  font-family: var(--font-display);
-  font-size: 48px;
-  font-weight: 500;
-  letter-spacing: -0.04em;
+
+.links a:hover { color: var(--color-primary-bright); border-color: var(--color-primary); }
+
+/* ---- Tracklist ---- */
+.tracklist {
+  list-style: none;
+  border-top: 1px solid var(--color-border-strong);
 }
-.feature p {
-  font-size: 18px;
-  margin: 12px 0;
+
+.tracklist li { border-bottom: 1px solid var(--color-border-strong); }
+
+.track {
+  display: grid;
+  grid-template-columns: 3.2rem minmax(0, 1fr) auto;
+  gap: 8px 20px;
+  align-items: start;
+  padding: 30px 8px 30px 0;
+  transition: background-color 0.4s var(--ease-out-expo);
 }
-.feature > span {
+
+.side {
+  padding-top: 0.55em;
+  font-family: var(--font-mono);
   font-size: 12px;
-  color: #bbaa8e;
+  color: var(--color-primary);
 }
+
+.body { display: grid; gap: 6px; }
+
+.name {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 2.6vw, 40px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.hook { font-size: 17px; color: #e8d9bd; }
+
+.meta {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #a2957f;
+}
+
+.arrow {
+  margin-top: 0.5em;
+  color: #b8aa94;
+  transition: transform 0.35s var(--ease-out-expo), color 0.35s var(--ease-out-expo);
+}
+
+.track:hover { background-color: rgb(244 239 228 / 0.03); }
+.track:hover .name { color: var(--color-primary-bright); }
+.track:hover .arrow { color: var(--color-primary-bright); transform: translate(4px, -4px); }
+.name { transition: color 0.35s var(--ease-out-expo); }
+
+@media (max-width: 900px) {
+  .software { grid-template-columns: 1fr; gap: 48px; padding: 88px 7vw; }
+  .copy { position: static; }
+}
+
 @media (max-width: 700px) {
-  .software {
-    padding: 70px 7vw;
-    grid-template-columns: 1fr;
-    gap: 45px;
-  }
-  .feature {
-    padding: 28px 0;
-  }
+  .track { grid-template-columns: 2.4rem minmax(0, 1fr); padding: 24px 0; }
+  .arrow { display: none; }
+  .hook { font-size: 16px; }
 }
