@@ -1,6 +1,10 @@
 name = "my-music-page"
+main = "worker/index.js"
 compatibility_date = "2026-08-20"
 
 [assets]
 directory = "./dist"
+binding = "ASSETS"
 not_found_handling = "single-page-application"
+# /api/* must reach the Worker before the SPA fallback answers with index.html.
+run_worker_first = ["/api/*"]
