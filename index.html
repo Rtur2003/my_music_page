@@ -1,93 +1,56 @@
 <!doctype html>
-<html lang="tr">
+<html lang="tr" prefix="og: https://ogp.me/ns#">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/assets/images/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Hasan Arthur Altuntaş — Sinematik Müzik, Film ve Oyun Müziği</title>
+    <meta name="description" content="Hasan Arthur Altuntaş'ın sinematik müzikleri: Crimson Desert, The Odyssey ve NULL VECTOR gibi orkestral film ve oyun müziği yorumları. Spotify'da dinle.">
+    <meta name="author" content="Hasan Arthur Altuntaş">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <link rel="canonical" href="https://hasan-arthur-altuntas.com.tr/">
 
     <!-- Google Search Console verification -->
     <meta name="google-site-verification" content="FSf_RwDDIC5HpGdpeoOGQdPKLP7DZs2QbjQEqTvnP_Q" />
 
+    <meta name="theme-color" content="#0a0908">
+    <meta name="color-scheme" content="dark">
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
+    <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+    <link rel="preconnect" href="https://i.scdn.co" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..700&display=swap">
 
-    <!-- SEO & Metadata -->
-    <meta name="description" content="Hasan Arthur Altuntaş - Cinematic Music Producer & AI Architect. Building advanced machine learning models under the CrownCode ecosystem and composing emotional soundscapes.">
-    <meta name="keywords" content="Hasan Arthur Altuntaş, AI Architect, Music Producer, CrownCode, AURIS, cinematic music, Next.js, FastAPI, Wav2vec2">
-    <meta name="author" content="Hasan Arthur Altuntaş">
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <meta name="googlebot" content="index, follow">
-    <meta name="theme-color" content="#0a0908">
-    <link rel="canonical" href="https://hasan-arthur-altuntas.com.tr/">
-    <link rel="alternate" hreflang="tr" href="https://hasan-arthur-altuntas.com.tr/">
-    <link rel="alternate" hreflang="en" href="https://hasan-arthur-altuntas.com.tr/">
-    <link rel="alternate" hreflang="x-default" href="https://hasan-arthur-altuntas.com.tr/">
-
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Hasan Arthur Altuntaş | AI Architect & Cinematic Composer">
-    <meta property="og:description" content="Bridging logic and emotion. Explore advanced AI architectures like AURIS and cinematic music compositions.">
+    <!-- Open Graph -->
     <meta property="og:type" content="profile">
     <meta property="og:site_name" content="Hasan Arthur Altuntaş">
+    <meta property="og:title" content="Hasan Arthur Altuntaş — Sinematik Müzik">
+    <meta property="og:description" content="Henüz görmediğin dünyaların müziği. Orkestral film ve oyun müziği yorumları, albümler ve single'lar.">
     <meta property="og:url" content="https://hasan-arthur-altuntas.com.tr/">
     <meta property="og:image" content="https://hasan-arthur-altuntas.com.tr/assets/images/og-image.jpg">
-    <meta property="og:image:width" content="1536">
-    <meta property="og:image:height" content="1024">
-    <meta property="og:image:alt" content="Hasan Arthur Altuntaş — AI Architect & Cinematic Composer">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Hasan Arthur. yazısı ve altın etiketli bir plak">
     <meta property="og:locale" content="tr_TR">
     <meta property="og:locale:alternate" content="en_US">
+    <meta property="profile:first_name" content="Hasan Arthur">
+    <meta property="profile:last_name" content="Altuntaş">
+    <meta property="music:musician" content="https://open.spotify.com/artist/6D5NDnftFDOelT5ssMe0ef">
 
-    <!-- Twitter Meta Tags -->
+    <!-- X / Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Hasan Arthur Altuntaş | AI Architect & Composer">
-    <meta name="twitter:description" content="Bridging logic and emotion through advanced machine learning models and cinematic soundscapes.">
+    <meta name="twitter:site" content="@Rthur__1">
+    <meta name="twitter:creator" content="@Rthur__1">
+    <meta name="twitter:title" content="Hasan Arthur Altuntaş — Sinematik Müzik">
+    <meta name="twitter:description" content="Orkestral film ve oyun müziği yorumları. Henüz görmediğin dünyaların müziği.">
     <meta name="twitter:image" content="https://hasan-arthur-altuntas.com.tr/assets/images/og-image.jpg">
+    <meta name="twitter:image:alt" content="Hasan Arthur. yazısı ve altın etiketli bir plak">
 
-    <!-- JSON-LD Schema -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Hasan Arthur Altuntaş",
-        "alternateName": "Hasan Arthur",
-        "description": "Music Producer, AI Developer & Computer Science Student",
-        "url": "https://hasan-arthur-altuntas.com.tr",
-        "image": "https://hasan-arthur-altuntas.com.tr/assets/images/logo-main.png",
-        "sameAs": [
-            "https://open.spotify.com/intl-tr/artist/6D5NDnftFDOelT5ssMe0ef",
-            "https://www.youtube.com/channel/UCA7E1X_uGUqtSJeIxvBeTQA",
-            "https://www.instagram.com/rthur_hsn",
-            "https://x.com/Rthur__1",
-            "https://github.com/Rtur2003",
-            "https://tr.linkedin.com/in/hasan-arthur-altuntas",
-            "https://hasan-arthur-altuntas.xyz"
-        ],
-        "jobTitle": "Music Producer & AI Developer",
-        "worksFor": {
-            "@type": "Organization",
-            "name": "CrownCode",
-            "url": "https://hasan-arthur-altuntas.xyz"
-        }
-    }
-    </script>
-
-    <!-- JSON-LD Schema — WebSite -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "Hasan Arthur Altuntaş",
-        "url": "https://hasan-arthur-altuntas.com.tr",
-        "description": "Cinematic music production and AI engineering — the music side of Hasan Arthur Altuntaş's work.",
-        "inLanguage": ["tr-TR", "en-US"],
-        "author": {
-            "@type": "Person",
-            "name": "Hasan Arthur Altuntaş"
-        }
-    }
-    </script>
-
-    <title>Hasan Arthur Altuntaş | AI Architect & Composer</title>
+    <!-- JSON-LD is generated from src/data/music-catalog.js by vite.config.js -->
   </head>
   <body>
     <div id="root"></div>
