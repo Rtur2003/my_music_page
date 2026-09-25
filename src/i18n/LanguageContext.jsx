@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { translations } from './translations';
 
 const STORAGE_KEY = 'hasan-arthur-site-lang';
@@ -8,15 +8,35 @@ function resolvePath(obj, path) {
   return path.split('.').reduce((acc, key) => (acc == null ? acc : acc[key]), obj);
 }
 
+function readPreferredLang() {
+  try {
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    if (stored === 'tr' || stored === 'en') return stored;
+  } catch {
+    // storage blocked (private mode); fall through to the browser language
+  }
+  return navigator.language?.toLowerCase().startsWith('tr') ? 'tr' : 'en';
+}
+
 export function LanguageProvider({ children }) {
-  const [lang, setLang] = useState(() => {
-    if (typeof window === 'undefined') return 'tr';
-    return window.localStorage.getItem(STORAGE_KEY) || 'tr';
-  });
+  // Always start as 'tr' so the client matches the prerendered HTML,
+  // then switch before first paint if the visitor prefers English.
+  const [lang, setLang] = useState('tr');
+
+  useLayoutEffect(() => {
+    setLang(readPreferredLang());
+  }, []);
 
   useEffect(() => {
+    const meta = translations[lang].meta;
     document.documentElement.lang = lang;
-    window.localStorage.setItem(STORAGE_KEY, lang);
+    document.title = meta.title;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', meta.description);
+    try {
+      window.localStorage.setItem(STORAGE_KEY, lang);
+    } catch {
+      // ignore: preference just won't persist
+    }
   }, [lang]);
 
   const toggleLang = () => setLang((prev) => (prev === 'tr' ? 'en' : 'tr'));
@@ -33,6 +53,7 @@ export function LanguageProvider({ children }) {
   );
 }
 
+// eslint-disable-next-line react/only-export-components -- hook is colocated with its provider
 export function useTranslation() {
   const ctx = useContext(LanguageContext);
   if (!ctx) throw new Error('useTranslation must be used within a LanguageProvider');
