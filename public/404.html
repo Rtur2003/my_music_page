@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, follow">
+    <title>Sayfa bulunamadı · Page not found — Hasan Arthur Altuntaş</title>
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
+    <meta name="theme-color" content="#0b0b0c">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; margin: 0; }
+      body {
+        min-height: 100svh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: #0b0b0c;
+        color: #f1f1ef;
+        font-family: 'Archivo', system-ui, sans-serif;
+        text-align: center;
+      }
+      main { display: grid; justify-items: center; gap: 18px; max-width: 34rem; }
+      .record {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background:
+          radial-gradient(circle, #e9e8e4 0 18%, #0b0b0c 18.5% 20%, transparent 21%),
+          repeating-radial-gradient(circle, #16141a 0 2px, #2a272f 3px);
+        box-shadow: 0 20px 50px rgb(0 0 0 / 0.6);
+        margin-bottom: 8px;
+      }
+      h1 { font-size: clamp(2.2rem, 6vw, 3.4rem); font-weight: 700; font-stretch: 112%; letter-spacing: -0.03em; line-height: 1; }
+      p { color: #a8a8a5; line-height: 1.6; }
+      nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 12px; }
+      a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 48px;
+        padding: 0 22px;
+        border-radius: 2px;
+        background: #f1f1ef;
+        color: #0b0b0c;
+        font-weight: 600;
+        text-decoration: none;
+      }
+      a + a { background: transparent; color: #f1f1ef; border: 1px solid rgb(244 239 228 / 0.25); }
+      a:focus-visible { outline: 2px solid #f1f1ef; outline-offset: 3px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="record" aria-hidden="true"></div>
+      <h1>Sayfa bulunamadı.</h1>
+      <p>Aradığın sayfa yok ya da taşındı. <span lang="en">This page doesn’t exist or has moved.</span></p>
+      <nav>
+        <a href="/">Ana sayfa</a>
+        <a href="/en/" hreflang="en" lang="en">English</a>
+      </nav>
+    </main>
+  </body>
+</html>
