@@ -1,75 +1,69 @@
-import { useRef } from 'react';
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
 import { ArrowUpRight } from 'lucide-react';
 import { useTranslation } from '../i18n/LanguageContext';
+import { useReleases } from '../data/ReleasesContext';
+import { yearRange } from '../data/music-catalog';
 import styles from './About.module.css';
 
-// Two walls of type slide past each other as you scroll: the worlds he scores,
-// and the instruments he scores them with. One sentence carries the meaning.
-const WORLDS = ['Crimson Desert', 'The Odyssey', 'Interstellar', 'NULL VECTOR', 'Embermelody'];
-const CRAFT = {
-  tr: ['Piyano', 'Orkestra', 'Beat', 'Ambient', 'Film müziği'],
-  en: ['Piano', 'Orchestra', 'Beats', 'Ambient', 'Film score'],
-};
+// One statement and the liner notes beside it. Release count and years come
+// from the live catalog, so they never go stale.
+const WORLDS = 'Crimson Desert, The Odyssey, Interstellar, NULL VECTOR, Embermelody';
 
-function Row({ words, className }) {
-  // Rendered twice so the row never runs out while it slides.
-  const run = [...words, ...words];
-  return (
-    <div className={`${styles.row} ${className}`} aria-hidden="true">
-      {run.map((word, i) => (
-        <span key={i}>
-          {word}
-          <i />
-        </span>
-      ))}
-    </div>
-  );
+function yearSpan(releases) {
+  const range = yearRange(releases);
+  if (!range) return '';
+  return range[0] === range[1] ? `${range[0]}` : `${range[0]}–${range[1]}`;
 }
 
 export default function About() {
-  const rootRef = useRef(null);
   const { lang } = useTranslation();
   const en = lang === 'en';
+  const { releases } = useReleases();
+  const span = yearSpan(releases);
+  const recordings = `${releases.length} ${en ? 'releases' : 'yayın'}${span ? ` · ${span}` : ''}`;
 
-  useGSAP(
-    () => {
-      const media = gsap.matchMedia();
-      media.add('(prefers-reduced-motion: no-preference)', () => {
-        const along = () => ({ trigger: rootRef.current, start: 'top bottom', end: 'bottom top', scrub: 0.6 });
-        gsap.fromTo(`.${styles.worlds}`, { xPercent: 0 }, { xPercent: -28, ease: 'none', scrollTrigger: along() });
-        gsap.fromTo(`.${styles.craft}`, { xPercent: -30 }, { xPercent: -2, ease: 'none', scrollTrigger: along() });
-      });
-      return () => media.revert();
-    },
-    { scope: rootRef },
-  );
+  const notes = en
+    ? [
+        ['Role', 'Composer, pianist, producer'],
+        ['Worlds', WORLDS],
+        ['Instruments', 'Piano, orchestra, beats, ambient'],
+        ['Recordings', recordings],
+        ['Based in', 'Düzce, Türkiye'],
+      ]
+    : [
+        ['Rol', 'Besteci, piyanist, prodüktör'],
+        ['Dünyalar', WORLDS],
+        ['Çalgılar', 'Piyano, orkestra, beat, ambient'],
+        ['Kayıtlar', recordings],
+        ['Şehir', 'Düzce, Türkiye'],
+      ];
 
   return (
-    <section id="about" className={styles.about} ref={rootRef} aria-labelledby="about-heading" data-tone="about">
-      <h2 id="about-heading" className="sr-only">{en ? 'About' : 'Hakkımda'}</h2>
-      <div className={styles.walls}>
-        <Row words={WORLDS} className={styles.worlds} />
-        <Row words={CRAFT[lang]} className={styles.craft} />
+    <section id="about" className={`${styles.about}`} aria-labelledby="about-heading">
+      <div className={`section-head ${styles.head}`}>
+        <h2 id="about-heading">{en ? 'About' : 'Hakkımda'}</h2>
+        <span>Hasan Arthur Altuntaş</span>
       </div>
-      <div className={styles.inner}>
-        <p className={styles.statement}>
-          {en
-            ? 'I rewrite the worlds of films and games with piano, orchestra and beats, and build software that listens to sound with the same curiosity.'
-            : 'Film ve oyun dünyalarını piyano, orkestra ve beat ile yeniden yazıyorum; aynı merakla sesi dinleyen yazılımlar geliştiriyorum.'}
-        </p>
-        <div className={styles.signature}>
-          <p>
-            Hasan Arthur Altuntaş
-            <span>{en ? 'Composer & pianist · Düzce, Türkiye' : 'Besteci ve piyanist · Düzce'}</span>
-          </p>
-          <a href="https://medium.com/@hasannarthurrr" target="_blank" rel="me noopener">
-            {en ? 'Writing on Medium' : 'Medium’daki yazılarım'}
-            <ArrowUpRight size={18} aria-hidden="true" />
-          </a>
+      <p className={styles.statement}>
+        {en
+          ? 'I rework music from games and films for piano and orchestra, and write my own pieces. Away from the piano I build open-source software that works with sound.'
+          : 'Oyun ve film müziklerini piyano ve orkestra için yeniden düzenliyor, kendi parçalarımı yazıyorum. Piyanonun başında olmadığım zamanlarda sesle çalışan açık kaynak yazılımlar geliştiriyorum.'}
+      </p>
+      <dl className={styles.notes}>
+        {notes.map(([term, value]) => (
+          <div key={term}>
+            <dt>{term}</dt>
+            <dd>{value}</dd>
+          </div>
+        ))}
+        <div>
+          <dt>{en ? 'Writing' : 'Yazılar'}</dt>
+          <dd>
+            <a href="https://medium.com/@hasannarthurrr" target="_blank" rel="me noopener">
+              Medium <ArrowUpRight size={15} aria-hidden="true" />
+            </a>
+          </dd>
         </div>
-      </div>
+      </dl>
     </section>
   );
 }
