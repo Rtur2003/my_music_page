@@ -1,0 +1,103 @@
+.timeline { margin: 28px 0 8px; }
+
+.caption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 24px;
+  /* Headroom for the tooltip, so it never covers the caption. */
+  margin-bottom: 64px;
+  font-size: 13px;
+}
+
+.caption > span:first-child { font-weight: 600; }
+.key { color: var(--color-text-muted); }
+
+/* The plot: marks grow from one baseline; year lines are hairlines below everything. */
+.plot {
+  position: relative;
+  height: 112px;
+  margin-bottom: 26px;
+  border-bottom: 1px solid var(--color-border-strong);
+  cursor: crosshair;
+  touch-action: pan-y;
+}
+
+.plot:focus-visible { outline-offset: 6px; }
+
+.year {
+  position: absolute;
+  top: 0;
+  bottom: -22px;
+  padding-left: 6px;
+  border-left: 1px solid var(--color-border);
+  display: flex;
+  align-items: flex-end;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.mark {
+  position: absolute;
+  bottom: 0;
+  width: 3px;
+  height: calc(14px + var(--h) * (100% - 40px));
+  margin-left: -1.5px;
+  border-radius: 2px 2px 0 0;
+  background: rgb(241 241 239 / 0.55);
+  pointer-events: none;
+  transition: background-color 0.2s ease, transform 0.3s var(--ease-out-expo);
+  transform-origin: bottom;
+}
+
+.mark[data-active] { background: var(--color-text); transform: scaleY(1.06); }
+.mark[data-playing] { background: var(--color-signal); }
+
+.crosshair {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--color-border-strong);
+  pointer-events: none;
+}
+
+/* Anchored at its mark and shifted by the same fraction of its own width, so it
+   never leaves the plot at either end. */
+.tip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  z-index: 2;
+  display: grid;
+  gap: 2px;
+  width: max-content;
+  max-width: min(320px, 80vw);
+  padding: 8px 12px;
+  transform: translateX(calc(var(--x) * -1%));
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-raised);
+  font-size: 12px;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.tip strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+@media (max-width: 700px) {
+  .plot { height: 84px; }
+  .year { font-size: 11px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mark { transition: none; }
+}

@@ -1,5 +1,5 @@
 /* ---- The record that follows the page ---- */
-.disc {
+.deck {
   position: fixed;
   left: max(20px, env(safe-area-inset-left));
   bottom: max(20px, env(safe-area-inset-bottom));
@@ -7,19 +7,23 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 0;
   opacity: 0;
   transform: translateY(24px) scale(0.9);
+  transform-origin: left bottom;
   pointer-events: none;
   transition: opacity 0.5s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
 }
 
-.disc[data-away],
-.disc[data-open] {
+.deck[data-away],
+.deck[data-active] {
   opacity: 1;
   transform: none;
   pointer-events: auto;
 }
+
+.deck[data-hidden] { opacity: 0; transform: translateY(24px) scale(0.9); pointer-events: none; }
+
+.disc { flex: none; padding: 0; border-radius: 50%; }
 
 .turn {
   display: block;
@@ -43,7 +47,7 @@
   animation-play-state: paused;
 }
 
-.disc[data-open] .vinyl { animation-play-state: running; }
+.vinyl[data-spinning] { animation-play-state: running; }
 
 .vinyl img {
   width: 42%;
@@ -59,8 +63,10 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: #0a0908;
+  background: var(--color-bg);
 }
+
+.disc:hover .vinyl { box-shadow: 0 10px 30px rgb(0 0 0 / 0.55), inset 0 0 0 1px rgb(255 255 255 / 0.12), 0 0 0 3px rgb(241 241 239 / 0.35); }
 
 .caption {
   display: inline-flex;
@@ -68,23 +74,100 @@
   gap: 8px;
   max-width: 200px;
   padding: 8px 14px;
-  border-radius: var(--radius-full);
-  background: rgb(23 18 13 / 0.9);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-raised);
   border: 1px solid var(--color-border);
   font-size: 13px;
   color: var(--color-text);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
 }
 
 .caption span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.caption svg { flex-shrink: 0; color: var(--color-primary); }
-
-.disc:hover .vinyl { box-shadow: 0 10px 30px rgb(0 0 0 / 0.55), inset 0 0 0 1px rgb(255 255 255 / 0.12), 0 0 0 3px rgb(204 155 74 / 0.4); }
+.caption svg { flex-shrink: 0; color: var(--color-text); }
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ---- Player card ---- */
+/* ---- Transport: the record opened into controls ---- */
+.transport {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: min(440px, calc(100vw - 112px));
+  min-height: 60px;
+  padding: 6px 6px 8px 14px;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border-strong);
+  box-shadow: 0 18px 50px rgb(0 0 0 / 0.5);
+  animation: open 0.45s var(--ease-out-expo);
+}
+
+@keyframes open { from { opacity: 0; transform: translateX(-12px); } }
+
+.meta { display: grid; min-width: 0; flex: 1; gap: 2px; }
+.title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 600; }
+.time { font-size: 12px; color: var(--color-text-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.meter { flex: none; width: 64px; height: 26px; }
+
+.icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  transition: background-color 0.2s ease;
+}
+
+.icon:hover { background: rgb(241 241 239 / 0.08); }
+
+.full {
+  flex: none;
+  min-height: 40px;
+  padding: 0 10px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  color: var(--color-text);
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.full:hover { background: rgb(241 241 239 / 0.08); }
+
+/* The progress line doubles as a seek control. */
+.seek {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 12px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.seek::-webkit-slider-runnable-track {
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-text) calc(var(--p) * 100%), rgb(241 241 239 / 0.14) 0);
+}
+.seek::-moz-range-track {
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-text) calc(var(--p) * 100%), rgb(241 241 239 / 0.14) 0);
+}
+.seek::-webkit-slider-thumb { appearance: none; -webkit-appearance: none; width: 10px; height: 10px; margin-top: -4px; border-radius: 50%; background: var(--color-text); opacity: 0; transition: opacity 0.2s ease; }
+.seek::-moz-range-thumb { width: 10px; height: 10px; border: 0; border-radius: 50%; background: var(--color-text); opacity: 0; }
+.transport:hover .seek::-webkit-slider-thumb,
+.seek:focus-visible::-webkit-slider-thumb { opacity: 1; }
+.transport:hover .seek::-moz-range-thumb,
+.seek:focus-visible::-moz-range-thumb { opacity: 1; }
+.seek:focus-visible { outline-offset: 0; }
+
+/* ---- Embed card: full tracks, and releases without a preview ---- */
 .card {
   position: fixed;
   right: 24px;
@@ -92,9 +175,9 @@
   z-index: 85;
   width: min(420px, calc(100vw - 32px));
   padding: 16px;
-  background: #211a13;
+  background: var(--color-bg-raised);
   border: 1px solid rgb(255 255 255 / 0.16);
-  border-radius: 16px;
+  border-radius: var(--radius-md);
   box-shadow: 0 15px 70px rgb(0 0 0 / 0.6);
   animation: rise 0.5s var(--ease-out-expo);
 }
@@ -122,7 +205,7 @@
   margin: -8px -8px -8px 0;
 }
 
-.embed { display: block; min-height: 152px; border: 0; border-radius: 12px; background: #17120d; }
+.embed { display: block; min-height: 152px; border: 0; border-radius: 12px; background: var(--color-bg-raised); }
 
 .card > a {
   display: inline-flex;
@@ -131,17 +214,24 @@
   min-height: 40px;
   margin-top: 6px;
   font-size: 13px;
-  color: #e7d7b7;
+  color: var(--color-text);
 }
 
 @keyframes rise { from { opacity: 0; transform: translateY(16px); } }
 
 @media (max-width: 700px) {
   /* Thumb zone on phones, and away from left-aligned text. */
-  .disc { left: auto; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); }
+  .deck { left: auto; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); }
   .caption { display: none; }
   .turn { width: 52px; height: 52px; }
+  /* Playing: the transport takes the bottom edge, record first. */
+  .deck[data-active] { left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); }
+  .transport { flex: 1; width: auto; padding-left: 10px; }
+  .meter { display: none; }
   .card { right: 12px; left: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); width: auto; }
-  /* The card takes the bottom edge on phones; the record steps aside. */
-  .disc[data-open] { opacity: 0; transform: translateY(24px) scale(0.9); pointer-events: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vinyl { animation: none; }
+  .transport, .card { animation: none; }
 }
