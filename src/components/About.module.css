@@ -1,100 +1,67 @@
+/* A statement beside its liner notes. */
 .about {
-  overflow-x: clip;
-  padding: clamp(80px, 12vh, 140px) 0 clamp(96px, 14vh, 160px);
-  color: #f4efe4;
-}
-
-/* ---- Moving walls of type ---- */
-.walls {
   display: grid;
-  gap: 0.1em;
-  font-family: var(--font-display);
-  font-size: clamp(3.4rem, 1.6rem + 8vw, 10rem);
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: -0.04em;
-  white-space: nowrap;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 28px 8vw;
+  align-items: end;
+  padding: clamp(96px, 15vh, 170px) var(--gutter) clamp(72px, 11vh, 120px);
 }
 
-.row {
-  display: flex;
-  width: max-content;
-  will-change: transform;
-}
-
-.row span {
-  display: inline-flex;
-  align-items: center;
-}
-
-/* A small record between words instead of a bullet. */
-.row i {
-  width: 0.34em;
-  height: 0.34em;
-  margin: 0 0.42em;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle, #cfb885 0 26%, transparent 27%),
-    repeating-radial-gradient(circle, #16141a 0 2px, #2b2830 3px);
-  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.1);
-}
-
-.worlds { color: var(--color-text); }
-.craft { color: rgb(204 155 74 / 0.55); }
-
-/* ---- One sentence and a signature ---- */
-.inner {
-  width: min(100% - 16vw, 1100px);
-  margin: clamp(56px, 9vh, 96px) auto 0;
-}
+.head { grid-column: 1 / -1; }
 
 .statement {
-  max-width: 34ch;
+  max-width: 24ch;
+  padding-top: clamp(24px, 6vh, 64px);
   font-family: var(--font-display);
-  font-size: clamp(1.45rem, 1rem + 1.6vw, 2.5rem);
+  font-size: clamp(1.7rem, 1rem + 2.2vw, 3rem);
   font-weight: 500;
-  line-height: 1.25;
-  letter-spacing: -0.02em;
+  line-height: 1.18;
+  letter-spacing: -0.025em;
   text-wrap: pretty;
 }
 
-.signature {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 24px 48px;
-  margin-top: 40px;
-  padding-top: 24px;
-  border-top: 1px solid var(--color-border);
-}
-
-.signature p {
+.notes {
   display: grid;
-  gap: 4px;
-  font-size: 15px;
-  font-weight: 500;
+  border-top: 1px solid var(--color-border-strong);
 }
 
-.signature p span {
-  font-size: 13px;
-  font-weight: 400;
-  color: #b8aa94;
-}
-
-.signature a {
-  display: inline-flex;
+.notes > div {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
   gap: 16px;
+  align-items: baseline;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--color-border-strong);
+}
+
+.notes dt {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.notes dd {
+  font-size: 15px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.notes a {
+  display: inline-flex;
   align-items: center;
-  min-height: 44px;
-  font-size: 14px;
-  color: #e7d7b7;
+  gap: 6px;
+  min-height: 32px;
+  border-bottom: 1px solid currentColor;
   transition: color 0.3s var(--ease-out-expo);
 }
 
-.signature a:hover { color: var(--color-primary-bright); }
+.notes a:hover { color: var(--color-text-muted); }
 
-@media (max-width: 700px) {
-  .about { padding: 72px 0 80px; }
-  .inner { width: calc(100% - 14vw); }
+@media (max-width: 900px) {
+  .about { grid-template-columns: 1fr; padding: 80px var(--gutter) 72px; }
+  .statement { padding-top: 16px; }
+  .notes { margin-top: 24px; }
+}
+
+@media (max-width: 420px) {
+  .notes > div { grid-template-columns: 6rem minmax(0, 1fr); gap: 12px; }
 }
