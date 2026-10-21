@@ -1,0 +1,11 @@
+/* TEAM */
+Music, design and code: Hasan Arthur Altuntaş
+Contact: hasannarthurrr [at] gmail.com
+From: Düzce, Türkiye
+GitHub: https://github.com/Rtur2003
+
+/* SITE */
+Language: Türkçe, English
+Standards: HTML5, CSS3, schema.org JSON-LD
+Components: React, Vite, GSAP, Lenis, Spotify embeds
+Hosting: Cloudflare Workers
