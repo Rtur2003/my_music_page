@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { useTranslation } from '../i18n/LanguageContext';
+import { LANG_PREF_KEY, langPath } from '../i18n/lang';
 import styles from './Navbar.module.css';
 
 const SECTIONS = [
@@ -16,7 +17,8 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [sectionIndex, setSectionIndex] = useState(0);
-  const { t, lang, toggleLang } = useTranslation();
+  const { t, lang } = useTranslation();
+  const otherLang = lang === 'tr' ? 'en' : 'tr';
   const active = SECTIONS[sectionIndex].nav ?? null;
 
   const NAV_ITEMS = [
@@ -107,15 +109,18 @@ export default function Navbar() {
         </ul>
 
         <div className={styles.status}>
-          <button
-            type="button"
+          <a
+            href={langPath(otherLang)}
+            hrefLang={otherLang}
+            lang={otherLang}
             className={styles.langToggle}
-            onClick={toggleLang}
             aria-label={t('nav.switchLang')}
-            lang={lang === 'tr' ? 'en' : 'tr'}
+            onClick={() => {
+              try { window.localStorage.setItem(LANG_PREF_KEY, otherLang); } catch { /* storage blocked */ }
+            }}
           >
-            {lang === 'tr' ? 'EN' : 'TR'}
-          </button>
+            {otherLang.toUpperCase()}
+          </a>
           <button
             type="button"
             className={styles.menuToggle}
