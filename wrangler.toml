@@ -5,6 +5,8 @@ compatibility_date = "2026-08-20"
 [assets]
 directory = "./dist"
 binding = "ASSETS"
-not_found_handling = "single-page-application"
-# /api/* must reach the Worker before the SPA fallback answers with index.html.
+# Real 404s (served from dist/404.html) instead of a 200 copy of the homepage for
+# every unknown URL; the site is prerendered at / and /en/, so no SPA fallback is needed.
+not_found_handling = "404-page"
+# /api/* must reach the Worker before the asset layer answers.
 run_worker_first = ["/api/*"]
