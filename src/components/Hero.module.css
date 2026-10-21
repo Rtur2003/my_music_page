@@ -1,24 +1,32 @@
 .hero {
   min-height: max(760px, 100svh);
-  padding: clamp(105px, 14vh, 155px) 5vw 50px;
+  padding: clamp(105px, 14vh, 155px) var(--gutter) 50px;
   overflow: clip;
   isolation: isolate;
   display: flex;
   flex-direction: column;
 }
-.topline { position: relative; z-index: 3; display: flex; justify-content: space-between; align-items: center; color: #cbbb9d; font-size: 13px; }
-.topline a { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; color: #e7d7b7; }
-.topline a:hover { color: var(--color-primary-bright); }
-.title { font-family: var(--font-display); font-size: clamp(96px, 14.5vw, 212px); font-weight: 500; line-height: .85; letter-spacing: -.04em; margin: 8vh 0 12vh; position: relative; z-index: 2; width: fit-content; }
+.topline { position: relative; z-index: 3; display: flex; justify-content: space-between; align-items: center; color: var(--color-text-muted); font-size: 13px; }
+.topline a { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; color: var(--color-text); }
+.topline a:hover { color: var(--color-text-muted); }
+.title { font-family: var(--font-display); font-size: clamp(80px, 12.5vw, 190px); font-weight: 800; font-stretch: calc(108% + var(--beat, 0) * 14%); line-height: .86; letter-spacing: -.045em; margin: 8vh 0 12vh; position: relative; z-index: 2; width: fit-content; }
 .title > span { display: block; }
-.period { color: #cc9b4a; }
-.recordStage { position: absolute; width: min(53vw, 760px); aspect-ratio: 1; right: -7vw; top: 20%; z-index: 1; animation: stageIn 1.6s var(--ease-out-expo) var(--intro-delay, 0.1s) both; }
-/* The record slides in as the intro's letterbox opens. */
-html:has([data-intro]) { --intro-delay: 2.05s; }
+/* The full stop keeps time: it swells with the bass of whatever is playing. */
+.period { display: inline-block; color: var(--color-signal); transform: scale(calc(1 + var(--beat, 0) * .55)); transform-origin: 50% 80%; }
+.recordStage { position: absolute; width: min(53vw, 760px); aspect-ratio: 1; right: -7vw; top: 20%; z-index: 1; animation: stageIn 1.6s var(--ease-out-expo) 0.1s both; }
 @keyframes stageIn { from { opacity: 0; transform: translate3d(10%, 4%, 0) rotate(-14deg); } }
 /* New release sleeve in front, the record sliding out of it behind. */
-.sleeve { position: absolute; z-index: 2; width: 60%; aspect-ratio: 1; left: -24%; top: 14%; transform: translateY(15%) rotate(-12deg); box-shadow: -24px 38px 70px #000a, 0 0 0 1px rgb(255 255 255 / .08); }
+.sleeve { position: absolute; z-index: 2; width: 60%; aspect-ratio: 1; background: #17151b; left: -24%; top: 14%; transform: translateY(15%) rotate(-12deg); box-shadow: -24px 38px 70px #000a, 0 0 0 1px rgb(255 255 255 / .08); transition: translate 1.1s var(--ease-out-expo), opacity .8s ease; }
+/* Needle down: the sleeve slides off so the whole record shows. */
+.recordStage[data-playing] .sleeve { translate: -30% 26%; }
+.sleeve img { animation: sleeveIn .7s var(--ease-out-expo) both; }
+@keyframes sleeveIn { from { opacity: 0; scale: 1.04; } }
 .sleeve img { width: 100%; height: 100%; object-fit: cover; }
+@media (prefers-reduced-motion: reduce) {
+  .sleeve, .sleeve img { transition: none; animation: none; }
+  .period { transform: none; }
+  .title { font-stretch: 108%; }
+}
 .record {
   position: relative;
   z-index: 1; width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center;
@@ -26,23 +34,26 @@ html:has([data-intro]) { --intro-delay: 2.05s; }
     conic-gradient(from 35deg, #101015, #37343b 12%, #111116 23%, #08080a 44%, #42404b 61%, #0b0b0e 73%, #24212b 91%, #101015);
   box-shadow: -25px 35px 65px #0007, inset 0 0 0 1px #fff3, inset 0 0 0 3px #0008;
 }
-.recordLabel { border-radius: 50%; width: 34%; aspect-ratio: 1; background: #cfb885; color: #21190e; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; transform: rotate(-16deg); animation: labelSpin 24s linear infinite; }
-@keyframes labelSpin { to { transform: rotate(344deg); } }
+.recordLabel { position: relative; border-radius: 50%; width: 34%; aspect-ratio: 1; background: var(--label); color: var(--color-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; pointer-events: none; }
 .recordLabel img { width: auto; height: 50%; object-fit: contain; opacity: .88; }
 .recordLabel span { font-size: clamp(7px, .75vw, 12px); text-align: center; }
 .recordLabel i { width: 8px; height: 8px; margin-top: 8px; background: #17151b; border-radius: 50%; }
 .bottomline { display: flex; align-items: flex-end; gap: 36px; margin-top: auto; position: relative; z-index: 3; }
-.bottomline p { max-width: 25ch; font-size: clamp(20px, 2vw, 30px); line-height: 1.35; margin-right: auto; }
+.bottomline p { max-width: 28ch; font-size: clamp(18px, 1.6vw, 24px); line-height: 1.4; margin-right: auto; color: var(--color-text-muted); }
+.bottomline p strong { color: var(--color-text); font-weight: 600; }
 .listen, .explore { display: inline-flex; align-items: center; gap: 18px; min-height: 48px; font-size: 14px; }
-.listen { gap: 10px; background: #e7d7b7; color: #23190e; border-radius: 40px; padding: 12px 24px 12px 20px; white-space: nowrap; font-weight: 600; transition: transform 0.4s var(--ease-out-expo), background-color 0.3s ease; }
-.listen:hover { background: #f1e4c8; transform: translateY(-2px); }
-.listenKicker { font-size: 12px; font-weight: 500; color: #6b5433; }
+.listen { gap: 10px; min-width: 0; max-width: min(100%, 52ch); background: var(--color-text); color: var(--color-bg); border-radius: var(--radius-sm); padding: 12px 24px 12px 20px; white-space: nowrap; font-weight: 600; transition: transform 0.4s var(--ease-out-expo), background-color 0.3s ease; }
+.listen:hover { background: #ffffff; transform: translateY(-2px); }
+.listenKicker { flex: none; font-size: 12px; font-weight: 500; color: rgb(11 11 12 / 0.6); }
+/* Release titles come from the live catalog: any length must fit one line. */
+.listenTitle { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.listen svg { flex: none; }
 .explore { padding: 17px 0; white-space: nowrap; }
 @media (min-width: 801px) {
   .sleeve { left: -2%; top: 12%; width: 54%; }
 }
 @media (max-width: 800px) {
-  .hero { min-height: max(700px, 100svh); padding: 105px 6vw calc(32px + env(safe-area-inset-bottom)); }
+  .hero { min-height: max(700px, 100svh); padding: 105px var(--gutter) calc(32px + env(safe-area-inset-bottom)); }
   .topline { font-size: 12px; }
   .topline span { display: none; }
   .topline { justify-content: flex-start; }
