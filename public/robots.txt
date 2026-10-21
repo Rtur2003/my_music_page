@@ -1,4 +1,6 @@
+# https://hasan-arthur-altuntas.com.tr
 User-agent: *
 Allow: /
+Disallow: /api/
 
 Sitemap: https://hasan-arthur-altuntas.com.tr/sitemap.xml
