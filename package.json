@@ -8,7 +8,8 @@
     "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node scripts/prerender.js",
     "lint": "oxlint",
     "preview": "vite preview",
-    "prebuild": "node scripts/sync-spotify.js"
+    "prebuild": "node scripts/sync-catalog.js && node scripts/sync-repos.js",
+    "indexnow": "node scripts/indexnow.js"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
