@@ -1,18 +1,18 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { ArrowUpRight, Play } from 'lucide-react';
-import { albumUrl, artistProfile, coverArt, featured } from '../data/music-catalog';
+import { ArrowUpRight, Pause, Play } from 'lucide-react';
+import { albumService, albumUrl, artistProfile, coverArt, featured } from '../data/music-catalog';
 import { useReleases } from '../data/ReleasesContext';
 import { usePlayer } from '../player/PlayerContext';
 import { useTranslation } from '../i18n/LanguageContext';
+import Timeline from './Timeline';
 import styles from './ProjectList.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
-// Backdrop tone per featured record (see Backdrop.module.css).
-const tones = ['crimson', 'odyssey', 'nullvector'];
-const releaseNames = ['Crimson Desert', 'The Odyssey', 'NULL VECTOR'];
+// The archive shows this many covers until "show all"; the rest stay in the HTML for crawlers.
+const COLLAPSED_COUNT = 12;
 
 export default function ProjectList() {
   const rootRef = useRef(null);
@@ -20,7 +20,8 @@ export default function ProjectList() {
   const railRef = useRef(null);
   const timelineRef = useRef(null);
   const [filter, setFilter] = useState('all');
-  const { play } = usePlayer();
+  const [expanded, setExpanded] = useState(false);
+  const { release: current, playing, play } = usePlayer();
   const { lang } = useTranslation();
   const en = lang === 'en';
   const { releases, live, updatedAt } = useReleases();
@@ -52,15 +53,8 @@ export default function ProjectList() {
               panel.setAttribute('aria-hidden', String(index !== next));
               buttons[index]?.setAttribute('aria-pressed', String(index === next));
             });
-            stage.dataset.tone = tones[next];
-            // Scrub catch-up keeps updating after the pin releases; only the
-            // pinned stage may retint the backdrop.
-            if (timeline?.scrollTrigger?.isActive) {
-              window.dispatchEvent(new CustomEvent('backdrop:tone', { detail: tones[next] }));
-            }
           };
-          let timeline;
-          timeline = gsap.timeline({
+          const timeline = gsap.timeline({
             scrollTrigger: {
               trigger: stage,
               start: 'top top',
@@ -75,8 +69,9 @@ export default function ProjectList() {
           timeline.to({}, { duration: 3.3 });
           panels.forEach((panel, index) => {
             const start = index === 0 ? 0 : index * 1.2 - 0.4;
-            timeline.fromTo(panel.querySelector(`.${styles.atmosphere}`),
-              { scale: 1.12 }, { scale: 1, duration: index === 2 ? 1.3 : 1.7, ease: 'none' }, start);
+            // The record leaves its sleeve while the panel is on screen.
+            timeline.fromTo(panel.querySelector(`.${styles.panelDisc}`),
+              { xPercent: 4, rotation: 0 }, { xPercent: 40, rotation: 220, duration: index === 2 ? 1.3 : 1.7, ease: 'none' }, start);
             if (index === 0) return;
             timeline.to(panels[index - 1], { autoAlpha: 0, duration: 0.65 }, start)
               .fromTo(panel, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.65 }, start)
@@ -91,7 +86,6 @@ export default function ProjectList() {
           syncPanel(0);
           return () => {
             delete stage.dataset.immersive;
-            stage.dataset.tone = tones[0];
             timelineRef.current = null;
             panels.forEach((panel) => {
               panel.inert = false;
@@ -106,8 +100,8 @@ export default function ProjectList() {
         () => {
           [...railRef.current.children].forEach((panel) => {
             const along = () => ({ trigger: panel, start: 'top bottom', end: 'bottom top', scrub: true });
-            gsap.fromTo(panel.querySelector(`.${styles.atmosphere}`),
-              { yPercent: -5, scale: 1.22 }, { yPercent: 5, scale: 1.08, ease: 'none', scrollTrigger: along() });
+            gsap.fromTo(panel.querySelector(`.${styles.panelDisc}`),
+              { xPercent: 6, rotation: 0 }, { xPercent: 34, rotation: 200, ease: 'none', scrollTrigger: along() });
             gsap.fromTo(panel.querySelector(`.${styles.artwork}`),
               { rotation: 6, yPercent: 10 }, { rotation: -5, yPercent: -8, ease: 'none', scrollTrigger: along() });
           });
@@ -118,31 +112,11 @@ export default function ProjectList() {
     { scope: rootRef },
   );
 
-  // Cover columns drift at different speeds while the archive scrolls past.
-  const gridRef = useRef(null);
-  useGSAP(
-    () => {
-      const media = gsap.matchMedia();
-      media.add('(prefers-reduced-motion: no-preference)', () => {
-        const items = [...gridRef.current.children];
-        const cols = window.matchMedia('(max-width: 700px)').matches ? 2 : 3;
-        const drift = cols === 2 ? [0, 70] : [0, 110, 45];
-        items.forEach((item, i) => {
-          const distance = drift[i % cols];
-          if (!distance) return;
-          gsap.fromTo(item, { y: distance }, {
-            y: -distance,
-            ease: 'none',
-            scrollTrigger: { trigger: gridRef.current, start: 'top bottom', end: 'bottom top', scrub: true },
-          });
-        });
-      });
-      // The archive's height changed: everything below needs fresh positions.
-      requestAnimationFrame(() => ScrollTrigger.refresh());
-      return () => media.revert();
-    },
-    { scope: rootRef, dependencies: [filter, releases], revertOnUpdate: true },
-  );
+  // The archive's height changed: scroll-linked effects need fresh positions.
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => ScrollTrigger.refresh());
+    return () => cancelAnimationFrame(frame);
+  }, [filter, releases, expanded]);
 
   const showRelease = (index) => {
     const timeline = timelineRef.current;
@@ -158,25 +132,19 @@ export default function ProjectList() {
 
   return (
     <section id="project-list" ref={rootRef} className={styles.section}>
-      <div ref={stageRef} className={styles.stage} data-tone={tones[0]}>
-      <div className={styles.intro}>
+      <div ref={stageRef} className={styles.stage}>
+      <div className={`section-head ${styles.intro}`}>
         <h2>{en ? 'Selected recordings' : 'Seçili kayıtlar'}</h2>
         <a href="#discography">
-          {en ? 'Browse all releases' : 'Tüm yayınlara göz at'}{' '}
+          {en ? 'Full discography' : 'Tüm diskografi'}{' '}
           <ArrowUpRight size={18} aria-hidden="true" />
         </a>
       </div>
         <div ref={railRef} className={styles.rail}>
-          {featured.map((track, index) => (
-            <article
-              key={track.id}
-              className={styles.panel}
-              data-tone={tones[index]}
-            >
-              <div className={styles.atmosphereWrap}>
-                <img className={styles.atmosphere} src={coverArt(track, true)} alt="" width="640" height="640" loading="lazy" decoding="async" />
-              </div>
+          {featured.map((track) => (
+            <article key={track.id} className={styles.panel}>
               <div className={styles.artwork}>
+                <span className={styles.panelDisc} aria-hidden="true" />
                 <img
                   src={coverArt(track, true)}
                   alt={en ? `${track.title} cover art` : `${track.title} kapak görseli`}
@@ -187,42 +155,46 @@ export default function ProjectList() {
                 />
               </div>
               <div className={styles.info}>
-                <h3>{releaseNames[index]}</h3>
+                <h3>{track.name}</h3>
                 <span className={styles.artist}>{track.title}</span>
+                <span className={styles.facts}>
+                  {[
+                    typeLabel[track.type],
+                    track.date && new Intl.DateTimeFormat(en ? 'en-GB' : 'tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(track.date)),
+                    track.tracks && (en ? `${track.tracks} ${track.tracks === 1 ? 'track' : 'tracks'}` : `${track.tracks} parça`),
+                  ].filter(Boolean).join(' · ')}
+                </span>
                 <button type="button" onClick={() => play(track)}>
                   <Play size={16} aria-hidden="true" />
-                  {en ? 'Listen to this record' : 'Bu kaydı dinle'}
+                  {en ? 'Listen' : 'Dinle'}
                 </button>
-                <a href={albumUrl(track.id)} target="_blank" rel="noopener" aria-label={`${track.title}, Spotify`}>
-                  Spotify <ArrowUpRight size={15} aria-hidden="true" />
+                <a href={albumUrl(track)} target="_blank" rel="noopener" aria-label={`${track.title}, ${albumService(track)}`}>
+                  {albumService(track)} <ArrowUpRight size={15} aria-hidden="true" />
                 </a>
               </div>
             </article>
           ))}
         </div>
         <div className={styles.releaseNav} role="group" aria-label={en ? 'Choose a recording' : 'Kayıt seç'}>
-          {releaseNames.map((name, index) => (
-            <button key={name} type="button" data-release-nav aria-pressed={index === 0} onClick={() => showRelease(index)}>{name}</button>
+          {featured.map((track, index) => (
+            <button key={track.id} type="button" data-release-nav aria-pressed={index === 0} onClick={() => showRelease(index)}>{track.name}</button>
           ))}
         </div>
         <div className={styles.progress} aria-hidden="true">
           <span />
         </div>
       </div>
-      <div id="discography" className={styles.catalog} data-tone="archive">
+      <div id="discography" className={styles.catalog}>
+        <div className="section-head">
+          <h2>{en ? 'Discography' : 'Diskografi'}</h2>
+          <span>
+            {live && <i className="live-dot" aria-hidden="true" />}
+            {releases.length} {en ? 'releases' : 'yayın'}
+            {live && (en ? ` · updated ${updatedLabel}` : ` · güncellendi: ${updatedLabel}`)}
+          </span>
+        </div>
+        <Timeline releases={releases} current={current} playing={playing} onPlay={play} en={en} />
         <div className={styles.catalogHeader}>
-          <div>
-            <h2>
-              {en ? 'Discography' : 'Diskografi'}
-              <sup aria-hidden="true">{releases.length}</sup>
-            </h2>
-            {live && (
-              <p className={styles.liveNote}>
-                <i aria-hidden="true" />
-                {en ? `Live from Spotify · updated ${updatedLabel}` : `Spotify’dan canlı · ${updatedLabel} güncellendi`}
-              </p>
-            )}
-          </div>
           <div
             className={styles.filters}
             role="group"
@@ -245,12 +217,11 @@ export default function ProjectList() {
           </div>
         </div>
         <p className={styles.resultCount} aria-live="polite">
-          {filtered.length} {en ? 'releases' : 'yayın'}
+          {filtered.length} {en ? 'shown' : 'gösteriliyor'}
         </p>
         <div className={styles.catalogBody}>
         <aside className={styles.popular} aria-labelledby="popular-heading">
-          <h3 id="popular-heading">{en ? 'Most played right now' : 'Şu an en çok dinlenenler'}</h3>
-          <p>{en ? 'Straight from Spotify, always current.' : 'Doğrudan Spotify’dan, her zaman güncel.'}</p>
+          <h3 id="popular-heading">{en ? 'Most played on Spotify' : 'Spotify’da en çok dinlenenler'}</h3>
           <iframe
             title={en ? 'Hasan Arthur Altuntaş on Spotify: popular tracks' : 'Spotify’da Hasan Arthur Altuntaş: popüler parçalar'}
             src={`https://open.spotify.com/embed/artist/${artistProfile.spotifyId}?utm_source=generator&theme=0`}
@@ -260,38 +231,65 @@ export default function ProjectList() {
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
           />
         </aside>
-        <ul ref={gridRef} className={styles.catalogGrid}>
-          {filtered.map((track) => (
-            <li key={track.id}>
+        <ul
+          id="discography-list"
+          className={`${styles.catalogGrid} ${expanded ? '' : styles.collapsed}`}
+        >
+          {filtered.map((track) => {
+            const onDeck = current?.id === track.id;
+            const spinning = onDeck && playing;
+            return (
+            <li key={track.id} data-on-deck={onDeck ? '' : undefined} data-spinning={spinning ? '' : undefined}>
             <button
               type="button"
               className={styles.release}
               onClick={() => play(track)}
+              title={track.title}
+              aria-pressed={spinning}
             >
-              <span className={styles.cover}>
-                <img
-                  src={coverArt(track)}
-                  srcSet={`${coverArt(track)} 300w, ${coverArt(track, true)} 640w`}
-                  sizes="(max-width: 700px) 44vw, 18vw"
-                  alt=""
-                  width="300"
-                  height="300"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <span className={styles.coverPlay} aria-hidden="true">
-                  <Play size={22} />
+              {/* Each sleeve holds its record: it slides out on hover and spins while it plays. */}
+              <span className={styles.sleeve}>
+                <span className={styles.disc} aria-hidden="true">
+                  <img src={coverArt(track)} alt="" width="300" height="300" loading="lazy" decoding="async" />
+                </span>
+                <span className={styles.cover}>
+                  <img
+                    src={coverArt(track)}
+                    srcSet={`${coverArt(track)} 300w, ${coverArt(track, true)} 640w`}
+                    sizes="(max-width: 700px) 44vw, 18vw"
+                    alt=""
+                    width="300"
+                    height="300"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span className={styles.coverPlay} aria-hidden="true">
+                    {spinning ? <Pause size={20} /> : <Play size={20} />}
+                  </span>
                 </span>
               </span>
               <span className={styles.releaseTitle}>{track.title}</span>
               <span className={styles.releaseMeta}>
-                {typeLabel[track.type]}
-                {track.year ? ` · ${track.year}` : ''}
+                {[typeLabel[track.type], track.year].filter(Boolean).join(' · ')}
               </span>
             </button>
             </li>
-          ))}
+            );
+          })}
         </ul>
+        {filtered.length > COLLAPSED_COUNT && (
+          <button
+            type="button"
+            className={styles.showAll}
+            aria-expanded={expanded}
+            aria-controls="discography-list"
+            onClick={() => setExpanded((v) => !v)}
+          >
+            {expanded
+              ? (en ? 'Show fewer' : 'Daha az göster')
+              : (en ? `Show all ${filtered.length}` : `Tümünü göster (${filtered.length})`)}
+          </button>
+        )}
         </div>
       </div>
     </section>

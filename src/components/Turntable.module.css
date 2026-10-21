@@ -1,0 +1,23 @@
+/* Fills the record; JS turns it. The sleeve-and-record art lives in Hero.module.css. */
+.platter {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  cursor: grab;
+  /* Vertical swipes still scroll the page on phones; sideways ones spin the record. */
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.platter:active { cursor: grabbing; }
+
+.grooves {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  pointer-events: none;
+}
