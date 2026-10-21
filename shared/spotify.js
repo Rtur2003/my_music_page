@@ -1,5 +1,5 @@
 // Spotify Web API access shared by the Cloudflare Worker (live /api/releases)
-// and scripts/sync-spotify.js (build-time refresh). Client-credentials flow only:
+// and scripts/sync-catalog.js (build-time refresh). Client-credentials flow only:
 // no user data, just the public discography.
 export const ARTIST_ID = '6D5NDnftFDOelT5ssMe0ef';
 
@@ -21,6 +21,7 @@ export function normalizeAlbum(album) {
   const byClosestTo300 = [...(album.images ?? [])].sort((a, b) => Math.abs(a.width - 300) - Math.abs(b.width - 300));
   return {
     id: album.id,
+    spotifyId: album.id,
     title: album.name,
     type: album.album_type === 'album' ? 'album' : album.total_tracks >= 4 ? 'ep' : 'single',
     year: Number(album.release_date?.slice(0, 4)) || null,
