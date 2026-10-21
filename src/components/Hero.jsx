@@ -1,21 +1,33 @@
 import { useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { ArrowDown, ArrowUpRight, Play } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, Pause, Play } from 'lucide-react';
 import { useTranslation } from '../i18n/LanguageContext';
-import { artistProfile, coverArt } from '../data/music-catalog';
+import { artistProfile, coverArt, yearRange } from '../data/music-catalog';
 import { useReleases } from '../data/ReleasesContext';
 import { usePlayer } from '../player/PlayerContext';
+import Turntable from './Turntable';
 import styles from './Hero.module.css';
+
+// Turkish ablative after a year, by how the number is read aloud: 2023’ten, 2026’dan, 2030’dan.
+const LAST_DIGIT = ['', 'den', 'den', 'ten', 'ten', 'ten', 'dan', 'den', 'den', 'dan'];
+const TENS = ['den', 'dan', 'den', 'dan', 'tan', 'den', 'tan', 'ten', 'den', 'dan'];
+const since = (year) => LAST_DIGIT[year % 10] || TENS[Math.floor(year / 10) % 10];
 
 export default function Hero() {
   const rootRef = useRef(null);
   const { lang } = useTranslation();
   const english = lang === 'en';
   // The sleeve and the main call to action always point at the newest release.
-  const latest = useReleases().releases[0];
-  const { play } = usePlayer();
-  const latestKind = { album: english ? 'album' : 'albüm', ep: 'EP', single: 'single' }[latest.type];
+  const { releases } = useReleases();
+  const latest = releases[0];
+  const first = yearRange(releases)?.[0];
+  const { release, playing, play } = usePlayer();
+  // The turntable holds whatever is playing; at rest, the newest release.
+  const onDeck = release ?? latest;
+  const latestPlaying = playing && release?.id === latest.id;
+  const latestKind = { album: english ? 'album' : 'albüm', ep: 'EP', single: 'single' }[latest.type]
+    ?? (english ? 'release' : 'yayın');
 
   useGSAP(
     () => {
@@ -54,7 +66,7 @@ export default function Hero() {
   );
 
   return (
-    <section id="hero" ref={rootRef} className={styles.hero} data-tone="hero">
+    <section id="hero" ref={rootRef} className={styles.hero}>
       <div className={styles.topline}>
         <span>{english ? 'Composer · Pianist · Producer' : 'Besteci · Piyanist · Prodüktör'}</span>
         <a href={artistProfile.spotifyUrl} target="_blank" rel="noopener">
@@ -73,31 +85,45 @@ export default function Hero() {
             : ' Altuntaş, sinematik film ve oyun müziği bestecisi'}
         </small>
       </h1>
-      <div className={styles.recordStage} aria-hidden="true">
+      {/* Pointer-only extra: the play button below is the accessible control. */}
+      <div className={styles.recordStage} aria-hidden="true" data-playing={playing ? '' : undefined}>
         <div className={styles.sleeve}>
-          <img src={coverArt(latest, true)} alt="" width="640" height="640" fetchPriority="high" decoding="async" />
+          <img key={onDeck.id} src={coverArt(onDeck, true)} alt="" width="640" height="640" fetchPriority="high" decoding="async" />
         </div>
         <div className={styles.record}>
-          <div className={styles.recordLabel}>
-            <img src="/assets/images/logo-mark.webp" alt="" width="105" height="140" loading="lazy" />
-            <span>Hasan Arthur Altuntaş</span>
-            <i />
-          </div>
+          <Turntable onTap={() => play(onDeck)} beatTarget={rootRef}>
+            <div className={styles.recordLabel}>
+              <img src="/assets/images/logo-mark.webp" alt="" width="105" height="140" loading="lazy" />
+              <span>Hasan Arthur Altuntaş</span>
+              <i />
+            </div>
+          </Turntable>
         </div>
       </div>
       <div className={styles.bottomline}>
         <p>
+          {first && (
+            <strong>
+              {english ? `${releases.length} recordings since ${first}.` : `${first}’${since(first)} bu yana ${releases.length} kayıt.`}
+            </strong>
+          )}{' '}
           {english
-            ? 'Music for the worlds you haven’t seen yet.'
-            : 'Henüz görmediğin dünyaların müziği.'}
+            ? 'Film and game music reworked for piano and orchestra, and pieces of my own.'
+            : 'Piyano ve orkestra için yeniden düzenlenmiş film ve oyun müzikleri, bir de kendi parçalarım.'}
         </p>
-        <button type="button" className={styles.listen} onClick={() => play(latest)}>
-          <Play size={17} aria-hidden="true" />
+        <button
+          type="button"
+          className={styles.listen}
+          onClick={() => play(latest)}
+          title={latest.title}
+          aria-pressed={latestPlaying}
+        >
+          {latestPlaying ? <Pause size={17} aria-hidden="true" /> : <Play size={17} aria-hidden="true" />}
           <span className={styles.listenKicker}>{english ? `New ${latestKind}` : `Yeni ${latestKind}`}</span>
-          {latest.title}
+          <span className={styles.listenTitle}>{latest.title}</span>
         </button>
         <a className={styles.explore} href="#project-list">
-          {english ? 'Explore the records' : 'Kayıtları keşfet'}
+          {english ? 'Selected recordings' : 'Seçili kayıtlar'}
           <ArrowDown size={19} aria-hidden="true" />
         </a>
       </div>
