@@ -19,22 +19,38 @@ npm run lint     # oxlint
 - `src/player/PlayerContext.jsx` + `src/components/Player.jsx`: one Spotify player for the whole page (plain embed, no third-party script, strict CSP). Any "listen" button calls `usePlayer().play(release)`; the small record that follows the page opens and closes it.
 - Release data lives in `src/data/music-catalog.js`; cover URLs in `src/data/artwork.json` (Spotify CDN, 300px — `coverArt(url, true)` returns the 640px variant).
 
-## Live Spotify data
+## SEO
+
+Everything search engines read is generated from `src/seo/seo.js` and the release catalog:
+
+| URL | What it is |
+|---|---|
+| `/` and `/en/` | Prerendered Turkish and English pages, each with its own title, description, canonical, `hreflang` pair and JSON-LD (`Person`, `MusicGroup` + every release as `MusicAlbum`, `ProfilePage`, `WebSite`) |
+| `/sitemap.xml` | Both pages with `hreflang` alternates and cover images; regenerated every build |
+| `/robots.txt` | Allows everything except `/api/`, points to the sitemap |
+| `/llms.txt` | Plain-text summary for AI search (llmstxt.org) |
+| `/404.html` | Real 404 status (`not_found_handling = "404-page"`), `noindex` |
+| `/humans.txt`, `/.well-known/security.txt` | Credits and security contact (renew `Expires` before 2027-10-20) |
+| `/6860447ba78a1dfb9a9e413d239632de.txt` | IndexNow key; `npm run indexnow` after a deploy pings Bing, Yandex and others |
+
+The language comes from the URL; the TR/EN switch is a real link, so both pages are crawlable.
+
+## Live discography
 
 The page never goes stale, in three layers:
 
 1. **Always on, no setup:** the official Spotify artist embed in the discography shows the current popular tracks.
-2. **Runtime (Worker):** `worker/index.js` serves `GET /api/releases` from the Spotify Web API (6 h edge cache). On load the page swaps in the live discography, and the hero sleeve and "new release" button follow the newest release.
-3. **Build time:** `npm run build` runs `scripts/sync-spotify.js` first and rewrites `src/data/releases.json`, so the prerendered HTML and JSON-LD match Spotify.
+2. **Runtime (Worker):** `worker/index.js` serves `GET /api/releases`: every release from Apple's public iTunes API (exact dates, no key needed) merged by title with Spotify album ids (`shared/catalog.js`), cached 6 h at the edge. The page swaps it in on load; the hero follows the newest release. Releases with a Spotify id play in Spotify's embed, the rest in Apple Music's.
+3. **Build time:** `npm run build` runs `scripts/sync-catalog.js` first and rewrites `src/data/releases.json`, so the prerendered HTML, JSON-LD, sitemap and `llms.txt` list the full discography.
 
-Layers 2 and 3 need a Spotify app (developer.spotify.com, client-credentials; no user login):
+Spotify keys are optional; with them every release also gets its Spotify id (developer.spotify.com, client-credentials, no user login):
 
 ```bash
 npx wrangler secret put SPOTIFY_CLIENT_ID
 npx wrangler secret put SPOTIFY_CLIENT_SECRET
 ```
 
-For local or CI builds, export the same two variables. Without them, `/api/releases` answers 204 and the build keeps the committed `releases.json`; nothing breaks.
+For local or CI builds, export the same two variables. If a source is down, the committed `releases.json` is kept; nothing breaks.
 
 ## Deploy
 
