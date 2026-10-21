@@ -1,26 +1,28 @@
 
 
 :root {
-  /* ---- Color: "Cinematic Code" palette ---- */
-  --color-bg: #0a0908;
-  --color-bg-raised: #131110;
-  --color-bg-inset: #0d0c0a;
-  --color-text: #f4efe4;
-  --color-text-muted: rgba(244, 239, 228, 0.64);
-  --color-text-faint: rgba(244, 239, 228, 0.38);
+  /* ---- Colour: one surface, vinyl black. Album art brings the colour; the UI
+     itself stays neutral. Red means one thing: sound is on (or the data is live). ---- */
+  --color-bg: #0b0b0c;
+  --color-bg-raised: #151516;
+  --color-text: #f1f1ef;
+  --color-text-muted: rgba(241, 241, 239, 0.66);
+  --color-text-faint: rgba(241, 241, 239, 0.42);
 
-  --color-primary: #cc9b4a;      /* refined cinematic amber */
-  --color-primary-bright: #e8bd72;
-  --color-accent: #8a2c22;       /* deep film-red, used sparingly */
-  --color-accent-bright: #b8412f;
+  --color-signal: #ff4b2b;
+  --color-primary: var(--color-signal);
+  --color-primary-bright: #ff6d50;
 
-  --color-border: rgba(244, 239, 228, 0.1);
-  --color-border-strong: rgba(244, 239, 228, 0.18);
-  --color-primary-border: rgba(204, 155, 74, 0.35);
+  --color-border: rgba(241, 241, 239, 0.1);
+  --color-border-strong: rgba(241, 241, 239, 0.2);
+  --color-primary-border: rgba(255, 75, 43, 0.4);
 
-  /* ---- Type families ---- */
-  --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
-  --font-sans: 'Bricolage Grotesque', system-ui, -apple-system, sans-serif;
+  /* A white label, as on a test pressing. */
+  --label: #e9e8e4;
+
+  /* ---- Type: one family. Archivo's width axis does the display work. ---- */
+  --font-display: 'Archivo', system-ui, sans-serif;
+  --font-sans: 'Archivo', system-ui, -apple-system, sans-serif;
   --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Consolas, monospace;
 
   /* ---- Fluid type scale ---- */
@@ -50,10 +52,10 @@
   --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 
-  /* ---- Radii ---- */
-  --radius-sm: 0.5rem;
-  --radius-md: 1rem;
-  --radius-lg: 1.75rem;
+  /* ---- Radii: square-cut, like a sleeve or a label sticker ---- */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
   --radius-full: 999px;
 }
 
@@ -77,14 +79,15 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
+  font-synthesis: none;
   line-height: 1.5;
   overflow-x: clip;
   overscroll-behavior: none;
 }
 
 ::-webkit-scrollbar { width: 6px; }
-* { scrollbar-width: thin; scrollbar-color: #9a753c #0a0908; }
-::selection { background: #cfb885; color: #21190e; }
+* { scrollbar-width: thin; scrollbar-color: #4a4a4c #0b0b0c; }
+::selection { background: var(--color-text); color: var(--color-bg); }
 
 a, button {
   color: inherit;
@@ -101,7 +104,7 @@ button {
 img { max-width: 100%; display: block; }
 
 :focus-visible {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid var(--color-text);
   outline-offset: 3px;
 }
 
@@ -118,6 +121,57 @@ img { max-width: 100%; display: block; }
 .text-muted { color: var(--color-text-muted); }
 
 section { position: relative; }
+
+:root { --gutter: clamp(20px, 6vw, 96px); }
+
+/* Every section opens the same way: a hairline, its name, and a live fact on the
+   right. One system down the whole page instead of a new look per section. */
+.section-head {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px 24px;
+  flex-wrap: wrap;
+  padding-bottom: 14px;
+  font-size: 14px;
+}
+.section-head::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--color-border-strong);
+  transform-origin: left;
+}
+.section-head h2 { font-size: inherit; font-weight: 600; letter-spacing: 0; }
+.section-head > span { color: var(--color-text-muted); font-variant-numeric: tabular-nums; }
+/* The rule draws itself as it enters; browsers without scroll timelines just show it. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .section-head::after {
+      animation: drawRule linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 30%;
+    }
+  }
+}
+@keyframes drawRule { from { transform: scaleX(0); } }
+/* Red is the record light: the full stop in the name, and anything live
+   (sound playing, data fetched just now). Nothing else uses it. */
+.live-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--color-signal);
+  vertical-align: 1px;
+}
+
+
 
 .sr-only {
   position: absolute;
