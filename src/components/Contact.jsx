@@ -1,6 +1,3 @@
-import { useRef } from 'react';
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
 import { ArrowUp } from 'lucide-react';
 import { useTranslation } from '../i18n/LanguageContext';
 import styles from './Contact.module.css';
@@ -13,7 +10,9 @@ const CREDITS = [
     role: 'listen',
     links: [
       { name: 'Spotify', url: 'https://open.spotify.com/artist/6D5NDnftFDOelT5ssMe0ef' },
+      { name: 'Apple Music', url: 'https://music.apple.com/tr/artist/hasan-arthur-altunta%C5%9F/1758593368' },
       { name: 'YouTube', url: 'https://www.youtube.com/channel/UCA7E1X_uGUqtSJeIxvBeTQA' },
+      { name: 'Deezer', url: 'https://www.deezer.com/artist/274514701' },
     ],
   },
   {
@@ -38,27 +37,16 @@ const CREDITS = [
 ];
 
 export default function Contact() {
-  const rootRef = useRef(null);
   const { t } = useTranslation();
 
-  // The credits drift up as they come into view, like a roll; never hidden.
-  useGSAP(() => {
-    const media = gsap.matchMedia();
-    media.add('(prefers-reduced-motion: no-preference)', () => {
-      gsap.fromTo(`.${styles.credit}`, { y: 48 }, {
-        y: 0,
-        ease: 'none',
-        stagger: 0.08,
-        scrollTrigger: { trigger: `.${styles.credits}`, start: 'top bottom', end: 'center 60%', scrub: true },
-      });
-    });
-    return () => media.revert();
-  }, { scope: rootRef });
-
   return (
-    <section id="contact" ref={rootRef} className={styles.contact} aria-labelledby="contact-heading" data-tone="ember">
-      <div className={`${styles.inner} container`}>
-        <h2 id="contact-heading" className={styles.heading}>{t('contact.heading')}</h2>
+    <section id="contact" className={styles.contact} aria-labelledby="contact-heading">
+      <div className="section-head">
+        <h2 id="contact-heading">{t('nav.contact')}</h2>
+        <span>{t('contact.reply')}</span>
+      </div>
+      <div className={styles.inner}>
+        <p className={styles.lede}>{t('contact.heading')}</p>
         <a className={styles.email} href={`mailto:${EMAIL}`}>{EMAIL}</a>
 
         <dl className={styles.credits} aria-label={t('contact.creditsLabel')}>
@@ -82,7 +70,7 @@ export function Footer() {
   const { t } = useTranslation();
   return (
     <footer className={styles.footer}>
-      <div className={`${styles.footerBar} container`}>
+      <div className={styles.footerBar}>
         <small suppressHydrationWarning>&copy; {new Date().getFullYear()} Hasan Arthur Altuntaş</small>
         <span>{t('contact.footerCredit')}</span>
         <a href="#hero" className={styles.backToTop}>
