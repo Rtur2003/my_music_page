@@ -38,7 +38,7 @@ export default function About() {
       ];
 
   return (
-    <section id="about" className={`${styles.about}`} aria-labelledby="about-heading">
+    <section id="about" className={`${styles.about} defer-render`} aria-labelledby="about-heading">
       <div className={`section-head ${styles.head}`}>
         <h2 id="about-heading">{en ? 'About' : 'Hakkımda'}</h2>
         <span>Hasan Arthur Altuntaş</span>

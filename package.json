@@ -8,7 +8,7 @@
     "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node scripts/prerender.js",
     "lint": "oxlint",
     "preview": "vite preview",
-    "prebuild": "node scripts/sync-catalog.js && node scripts/sync-repos.js",
+    "prebuild": "node scripts/sync-catalog.js && node scripts/sync-repos.js && node scripts/sync-covers.js",
     "indexnow": "node scripts/indexnow.js"
   },
   "dependencies": {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { LanguageProvider } from './i18n/LanguageContext';
 import { ReleasesProvider } from './data/ReleasesContext';
 import { PlayerProvider } from './player/PlayerContext';
@@ -22,10 +22,12 @@ function App({ lang }) {
 
         <main id="main" tabIndex={-1} style={{ position: 'relative', zIndex: 1 }}>
           <Hero />
-          <ProjectList />
-          <About />
-          <Software />
-          <Contact />
+          {/* Each boundary hydrates as its own task, so the page stays responsive
+              while the sections below the fold come alive. */}
+          <Suspense fallback={null}><ProjectList /></Suspense>
+          <Suspense fallback={null}><About /></Suspense>
+          <Suspense fallback={null}><Software /></Suspense>
+          <Suspense fallback={null}><Contact /></Suspense>
         </main>
         <Footer />
         <Player />

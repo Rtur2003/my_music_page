@@ -9,10 +9,17 @@ const dist = `${root}dist`;
 const ssrDir = `${root}dist-ssr`;
 
 const { render, headTags, sitemapXml, llmsTxt } = await import(pathToFileURL(`${ssrDir}/entry-server.js`).href);
-const template = await readFile(`${dist}/index.html`, 'utf8');
 
 const ROOT_MARKER = '<div id="root"></div>';
+// The stylesheet is small (≈9 KB compressed) and every visit needs all of it:
+// inlined, the first paint no longer waits for a second request.
+const STYLESHEET = /<link rel="stylesheet" crossorigin href="(\/assets\/[^"]+\.css)">/;
 const HEAD_BLOCK = /<!--seo:start-->[\s\S]*?<!--seo:end-->/;
+const built = await readFile(`${dist}/index.html`, 'utf8');
+const cssHref = built.match(STYLESHEET)?.[1];
+if (!cssHref) throw new Error('prerender: built stylesheet <link> not found in dist/index.html');
+const css = await readFile(`${dist}${cssHref}`, 'utf8');
+const template = built.replace(STYLESHEET, () => `<style>${css}</style>`);
 if (!template.includes(ROOT_MARKER)) throw new Error('prerender: #root marker not found in dist/index.html');
 if (!HEAD_BLOCK.test(template)) throw new Error('prerender: <!--seo:start/end--> block not found in dist/index.html');
 

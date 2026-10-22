@@ -40,7 +40,7 @@ export default function Contact() {
   const { t } = useTranslation();
 
   return (
-    <section id="contact" className={styles.contact} aria-labelledby="contact-heading">
+    <section id="contact" className={`${styles.contact} defer-render`} aria-labelledby="contact-heading">
       <div className="section-head">
         <h2 id="contact-heading">{t('nav.contact')}</h2>
         <span>{t('contact.reply')}</span>

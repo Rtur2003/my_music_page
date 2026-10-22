@@ -21,6 +21,7 @@ export default function ProjectList() {
   const timelineRef = useRef(null);
   const [filter, setFilter] = useState('all');
   const [expanded, setExpanded] = useState(false);
+  const [spotifyLoaded, setSpotifyLoaded] = useState(false);
   const { release: current, playing, play } = usePlayer();
   const { lang } = useTranslation();
   const en = lang === 'en';
@@ -34,86 +35,103 @@ export default function ProjectList() {
     : null;
 
   useGSAP(
-    () => {
-      const media = gsap.matchMedia();
-      media.add(
-        '(min-width: 801px) and (min-height: 640px) and (prefers-reduced-motion: no-preference)',
-        () => {
-          const stage = stageRef.current;
-          const panels = [...railRef.current.children];
-          const buttons = [...stage.querySelectorAll('[data-release-nav]')];
-          stage.dataset.immersive = 'true';
-          let active = -1;
-          const syncPanel = (time) => {
-            const next = time < 1.1 ? 0 : time < 2.3 ? 1 : 2;
-            if (next === active) return;
-            active = next;
+    (_context, contextSafe) => {
+      let media;
+      // Built once the page is idle, not inside the hydration task: the stage sits
+      // below the fold, and the stacked layout reads fine until then.
+      const setup = contextSafe(() => {
+        media = gsap.matchMedia();
+        media.add(
+          '(min-width: 801px) and (min-height: 640px) and (prefers-reduced-motion: no-preference)',
+          () => {
+            const stage = stageRef.current;
+            const panels = [...railRef.current.children];
+            const buttons = [...stage.querySelectorAll('[data-release-nav]')];
+            stage.dataset.immersive = 'true';
+            let active = -1;
+            const syncPanel = (time) => {
+              const next = time < 1.1 ? 0 : time < 2.3 ? 1 : 2;
+              if (next === active) return;
+              active = next;
+              panels.forEach((panel, index) => {
+                panel.inert = index !== next;
+                panel.setAttribute('aria-hidden', String(index !== next));
+                buttons[index]?.setAttribute('aria-pressed', String(index === next));
+              });
+            };
+            const timeline = gsap.timeline({
+              scrollTrigger: {
+                trigger: stage,
+                start: 'top top',
+                end: () => `+=${stage.clientHeight * 2.7}`,
+                pin: true,
+                scrub: 0.7,
+                invalidateOnRefresh: true,
+              },
+              onUpdate() { syncPanel(this.time()); },
+            });
+            timelineRef.current = timeline;
+            timeline.to({}, { duration: 3.3 });
             panels.forEach((panel, index) => {
-              panel.inert = index !== next;
-              panel.setAttribute('aria-hidden', String(index !== next));
-              buttons[index]?.setAttribute('aria-pressed', String(index === next));
+              const start = index === 0 ? 0 : index * 1.2 - 0.4;
+              // The record leaves its sleeve while the panel is on screen.
+              timeline.fromTo(panel.querySelector(`.${styles.panelDisc}`),
+                { xPercent: 4, rotation: 0 }, { xPercent: 40, rotation: 220, duration: index === 2 ? 1.3 : 1.7, ease: 'none' }, start);
+              if (index === 0) return;
+              timeline.to(panels[index - 1], { autoAlpha: 0, duration: 0.65 }, start)
+                .fromTo(panel, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.65 }, start)
+                .fromTo(panel.querySelector(`.${styles.artwork}`),
+                  { yPercent: 15, rotation: 7, scale: 0.94 },
+                  { yPercent: 0, rotation: -3, scale: 1, duration: 0.8, ease: 'power2.out' }, start)
+                .fromTo(panel.querySelector(`.${styles.info}`),
+                  { y: 26 }, { y: 0, duration: 0.8, ease: 'power2.out' }, start);
             });
-          };
-          const timeline = gsap.timeline({
-            scrollTrigger: {
-              trigger: stage,
-              start: 'top top',
-              end: () => `+=${stage.clientHeight * 2.7}`,
-              pin: true,
-              scrub: 0.7,
-              invalidateOnRefresh: true,
-            },
-            onUpdate() { syncPanel(this.time()); },
-          });
-          timelineRef.current = timeline;
-          timeline.to({}, { duration: 3.3 });
-          panels.forEach((panel, index) => {
-            const start = index === 0 ? 0 : index * 1.2 - 0.4;
-            // The record leaves its sleeve while the panel is on screen.
-            timeline.fromTo(panel.querySelector(`.${styles.panelDisc}`),
-              { xPercent: 4, rotation: 0 }, { xPercent: 40, rotation: 220, duration: index === 2 ? 1.3 : 1.7, ease: 'none' }, start);
-            if (index === 0) return;
-            timeline.to(panels[index - 1], { autoAlpha: 0, duration: 0.65 }, start)
-              .fromTo(panel, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.65 }, start)
-              .fromTo(panel.querySelector(`.${styles.artwork}`),
-                { yPercent: 15, rotation: 7, scale: 0.94 },
-                { yPercent: 0, rotation: -3, scale: 1, duration: 0.8, ease: 'power2.out' }, start)
-              .fromTo(panel.querySelector(`.${styles.info}`),
-                { y: 26 }, { y: 0, duration: 0.8, ease: 'power2.out' }, start);
-          });
-          timeline.fromTo(`.${styles.progress} span`, { scaleX: 0 },
-            { scaleX: 1, duration: 3.3, ease: 'none' }, 0);
-          syncPanel(0);
-          return () => {
-            delete stage.dataset.immersive;
-            timelineRef.current = null;
-            panels.forEach((panel) => {
-              panel.inert = false;
-              panel.removeAttribute('aria-hidden');
+            timeline.fromTo(`.${styles.progress} span`, { scaleX: 0 },
+              { scaleX: 1, duration: 3.3, ease: 'none' }, 0);
+            syncPanel(0);
+            return () => {
+              delete stage.dataset.immersive;
+              timelineRef.current = null;
+              panels.forEach((panel) => {
+                panel.inert = false;
+                panel.removeAttribute('aria-hidden');
+              });
+            };
+          },
+        );
+        // Stacked layout (phones, short screens): scroll-linked drift per record.
+        media.add(
+          '(max-width: 800px) and (prefers-reduced-motion: no-preference), (max-height: 639px) and (prefers-reduced-motion: no-preference)',
+          () => {
+            [...railRef.current.children].forEach((panel) => {
+              const along = () => ({ trigger: panel, start: 'top bottom', end: 'bottom top', scrub: true });
+              gsap.fromTo(panel.querySelector(`.${styles.panelDisc}`),
+                { xPercent: 6, rotation: 0 }, { xPercent: 34, rotation: 200, ease: 'none', scrollTrigger: along() });
+              gsap.fromTo(panel.querySelector(`.${styles.artwork}`),
+                { rotation: 6, yPercent: 10 }, { rotation: -5, yPercent: -8, ease: 'none', scrollTrigger: along() });
             });
-          };
-        },
-      );
-      // Stacked layout (phones, short screens): scroll-linked drift per record.
-      media.add(
-        '(max-width: 800px) and (prefers-reduced-motion: no-preference), (max-height: 639px) and (prefers-reduced-motion: no-preference)',
-        () => {
-          [...railRef.current.children].forEach((panel) => {
-            const along = () => ({ trigger: panel, start: 'top bottom', end: 'bottom top', scrub: true });
-            gsap.fromTo(panel.querySelector(`.${styles.panelDisc}`),
-              { xPercent: 6, rotation: 0 }, { xPercent: 34, rotation: 200, ease: 'none', scrollTrigger: along() });
-            gsap.fromTo(panel.querySelector(`.${styles.artwork}`),
-              { rotation: 6, yPercent: 10 }, { rotation: -5, yPercent: -8, ease: 'none', scrollTrigger: along() });
-          });
-        },
-      );
-      return () => media.revert();
+          },
+        );
+      });
+      const idle = 'requestIdleCallback' in window;
+      const handle = idle ? window.requestIdleCallback(setup, { timeout: 1200 }) : window.setTimeout(setup, 300);
+      return () => {
+        if (idle) window.cancelIdleCallback(handle);
+        else window.clearTimeout(handle);
+        media?.revert();
+      };
     },
     { scope: rootRef },
   );
 
   // The archive's height changed: scroll-linked effects need fresh positions.
+  // (Not on first render: ScrollTrigger refreshes itself once the page has loaded.)
+  const mountedRef = useRef(false);
   useEffect(() => {
+    if (!mountedRef.current) {
+      mountedRef.current = true;
+      return undefined;
+    }
     const frame = requestAnimationFrame(() => ScrollTrigger.refresh());
     return () => cancelAnimationFrame(frame);
   }, [filter, releases, expanded]);
@@ -147,6 +165,8 @@ export default function ProjectList() {
                 <span className={styles.panelDisc} aria-hidden="true" />
                 <img
                   src={coverArt(track, true)}
+                  srcSet={`${coverArt(track)} 300w, ${coverArt(track, true)} 640w`}
+                  sizes="(max-width: 800px) 58vw, 36vw"
                   alt={en ? `${track.title} cover art` : `${track.title} kapak görseli`}
                   width="640"
                   height="640"
@@ -184,7 +204,7 @@ export default function ProjectList() {
           <span />
         </div>
       </div>
-      <div id="discography" className={styles.catalog}>
+      <div id="discography" className={`${styles.catalog} defer-render`}>
         <div className="section-head">
           <h2>{en ? 'Discography' : 'Diskografi'}</h2>
           <span>
@@ -222,14 +242,27 @@ export default function ProjectList() {
         <div className={styles.catalogBody}>
         <aside className={styles.popular} aria-labelledby="popular-heading">
           <h3 id="popular-heading">{en ? 'Most played on Spotify' : 'Spotify’da en çok dinlenenler'}</h3>
-          <iframe
-            title={en ? 'Hasan Arthur Altuntaş on Spotify: popular tracks' : 'Spotify’da Hasan Arthur Altuntaş: popüler parçalar'}
-            src={`https://open.spotify.com/embed/artist/${artistProfile.spotifyId}?utm_source=generator&theme=0`}
-            width="100%"
-            height="352"
-            loading="lazy"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-          />
+          {/* Spotify's player sets third-party cookies, so it loads only when asked. */}
+          {spotifyLoaded ? (
+            <iframe
+              title={en ? 'Hasan Arthur Altuntaş on Spotify: popular tracks' : 'Spotify’da Hasan Arthur Altuntaş: popüler parçalar'}
+              src={`https://open.spotify.com/embed/artist/${artistProfile.spotifyId}?utm_source=generator&theme=0`}
+              width="100%"
+              height="352"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            />
+          ) : (
+            <div className={styles.facade}>
+              <p>{en ? 'Spotify’s own player, with the current top tracks. It sets Spotify cookies once loaded.' : 'Spotify’ın kendi oynatıcısı, güncel en çok dinlenenlerle. Yüklenince Spotify çerezleri kullanılır.'}</p>
+              <button type="button" onClick={() => setSpotifyLoaded(true)}>
+                <Play size={15} aria-hidden="true" />
+                {en ? 'Load the Spotify player' : 'Spotify oynatıcısını yükle'}
+              </button>
+              <a href={artistProfile.spotifyUrl} target="_blank" rel="noopener">
+                {en ? 'Open in Spotify' : 'Spotify’da aç'} <ArrowUpRight size={14} aria-hidden="true" />
+              </a>
+            </div>
+          )}
         </aside>
         <ul
           id="discography-list"

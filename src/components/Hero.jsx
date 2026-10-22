@@ -14,6 +14,9 @@ const LAST_DIGIT = ['', 'den', 'den', 'ten', 'ten', 'ten', 'dan', 'den', 'den', 
 const TENS = ['den', 'dan', 'den', 'dan', 'tan', 'den', 'tan', 'ten', 'den', 'dan'];
 const since = (year) => LAST_DIGIT[year % 10] || TENS[Math.floor(year / 10) % 10];
 
+// Rendered width of the sleeve (Hero.module.css); seo.js preloads the same candidate.
+const SLEEVE_SIZES = '(max-width: 800px) 50vw, 29vw';
+
 export default function Hero() {
   const rootRef = useRef(null);
   const { lang } = useTranslation();
@@ -88,12 +91,22 @@ export default function Hero() {
       {/* Pointer-only extra: the play button below is the accessible control. */}
       <div className={styles.recordStage} aria-hidden="true" data-playing={playing ? '' : undefined}>
         <div className={styles.sleeve}>
-          <img key={onDeck.id} src={coverArt(onDeck, true)} alt="" width="640" height="640" fetchPriority="high" decoding="async" />
+          <img
+            key={onDeck.id}
+            src={coverArt(onDeck, true)}
+            srcSet={`${coverArt(onDeck)} 300w, ${coverArt(onDeck, true)} 640w`}
+            sizes={SLEEVE_SIZES}
+            alt=""
+            width="640"
+            height="640"
+            fetchPriority="high"
+            decoding="async"
+          />
         </div>
         <div className={styles.record}>
           <Turntable onTap={() => play(onDeck)} beatTarget={rootRef}>
             <div className={styles.recordLabel}>
-              <img src="/assets/images/logo-mark.webp" alt="" width="105" height="140" loading="lazy" />
+              <img src="/assets/images/logo-mark-224.webp" srcSet="/assets/images/logo-mark-112.webp 84w, /assets/images/logo-mark-224.webp 168w" sizes="(max-width: 800px) 11vw, 7vw" alt="" width="105" height="140" loading="lazy" />
               <span>Hasan Arthur Altuntaş</span>
               <i />
             </div>

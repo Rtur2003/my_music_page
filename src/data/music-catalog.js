@@ -1,4 +1,5 @@
 import releases from './releases.json';
+import localCovers from './local-covers.json';
 
 // releases.json is refreshed at build time (scripts/sync-catalog.js: Apple dates +
 // Spotify ids) and live at runtime (worker /api/releases → ReleasesContext). Newest first.
@@ -49,8 +50,11 @@ export function yearRange(list) {
 }
 
 // Both CDNs serve the same cover at other sizes: Spotify by hash prefix
-// (00001e02 = 300px, 0000b273 = 640px), Apple by the size in the path.
+// (00001e02 = 300px, 0000b273 = 640px), Apple by the size in the path. The newest
+// release's cover is also copied to /covers at build time (scripts/sync-covers.js),
+// since it is the hero image and the page's largest paint.
 export function coverArt(release, large = false) {
+  if (localCovers[release.id]) return `/covers/${release.id}-${large ? 640 : 300}.jpg`;
   if (!large) return release.cover;
   return release.cover
     .replace('ab67616d00001e02', 'ab67616d0000b273')

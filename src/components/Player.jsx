@@ -90,7 +90,7 @@ export default function Player() {
     : (en ? `Listen to ${shown.title}` : `${shown.title} dinle`);
 
   return (
-    <>
+    <aside aria-label={en ? 'Player' : 'Oynatıcı'}>
       <div
         ref={deckRef}
         className={styles.deck}
@@ -172,6 +172,6 @@ export default function Player() {
           </a>
         </div>
       )}
-    </>
+    </aside>
   );
 }

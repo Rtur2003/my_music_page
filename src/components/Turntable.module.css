@@ -13,6 +13,12 @@
 
 .platter:active { cursor: grabbing; }
 
+/* Resting drift, on the compositor. JS adds its own turn through `transform`. */
+@media (prefers-reduced-motion: no-preference) {
+  .platter { animation: drift 40s linear infinite; }
+}
+@keyframes drift { to { rotate: 360deg; } }
+
 .grooves {
   position: absolute;
   inset: 0;

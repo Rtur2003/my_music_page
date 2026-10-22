@@ -74,7 +74,7 @@ function releaseSchema(release) {
     name: release.title,
     url: albumUrl(release),
     ...(spotifyAlbumUrl(release) && appleAlbumUrl(release) && { sameAs: [appleAlbumUrl(release)] }),
-    image: coverArt(release, true),
+    image: absolute(coverArt(release, true)),
     byArtist: { '@id': `${SITE}/#artist` },
     albumReleaseType: RELEASE_TYPES[release.type],
     ...(release.tracks && { numTracks: release.tracks }),
@@ -145,6 +145,9 @@ export function structuredData(lang, today = new Date().toISOString().slice(0, 1
   return JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c');
 }
 
+// Covers can be site-relative (the self-hosted newest one); feeds need absolute URLs.
+const absolute = (url) => (url.startsWith('/') ? `${SITE}${url}` : url);
+
 const esc = (value) => String(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 // Everything language-specific in <head>, between markers so the prerender can swap it.
@@ -160,7 +163,7 @@ export function headTags(lang) {
     `<link rel="alternate" hreflang="tr" href="${pageUrl('tr')}">`,
     `<link rel="alternate" hreflang="en" href="${pageUrl('en')}">`,
     `<link rel="alternate" hreflang="x-default" href="${pageUrl('tr')}">`,
-    `<link rel="preload" as="image" href="${coverArt(musicCatalog[0], true)}" fetchpriority="high">`,
+    `<link rel="preload" as="image" href="${coverArt(musicCatalog[0], true)}" imagesrcset="${coverArt(musicCatalog[0])} 300w, ${coverArt(musicCatalog[0], true)} 640w" imagesizes="(max-width: 800px) 50vw, 29vw" fetchpriority="high">`,
     '<meta property="og:type" content="profile">',
     `<meta property="og:site_name" content="${NAME}">`,
     `<meta property="og:title" content="${esc(m.ogTitle)}">`,
@@ -193,7 +196,7 @@ export function sitemapXml(today = new Date().toISOString().slice(0, 10)) {
     .map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${pageUrl(l)}"/>`)
     .concat(`    <xhtml:link rel="alternate" hreflang="x-default" href="${pageUrl('tr')}"/>`)
     .join('\n');
-  const images = [OG_IMAGE, ...musicCatalog.map((r) => coverArt(r, true))]
+  const images = [OG_IMAGE, ...musicCatalog.map((r) => absolute(coverArt(r, true)))]
     .map((src) => `    <image:image><image:loc>${src}</image:loc></image:image>`)
     .join('\n');
   const entry = (lang) => `  <url>\n    <loc>${pageUrl(lang)}</loc>\n    <lastmod>${today}</lastmod>\n${alternates}\n${images}\n  </url>`;

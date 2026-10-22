@@ -10,7 +10,7 @@ export default function Software() {
   const updated = new Intl.DateTimeFormat(en ? 'en-GB' : 'tr-TR', { month: 'long', year: 'numeric' });
 
   return (
-    <section id="software" className={`${styles.software}`} aria-labelledby="software-heading">
+    <section id="software" className={`${styles.software} defer-render`} aria-labelledby="software-heading">
       <div className={`section-head ${styles.head}`}>
         <h2 id="software-heading">{en ? 'Software' : 'Yazılım'}</h2>
         <span>{TRACKS.length} {en ? 'projects' : 'proje'}</span>

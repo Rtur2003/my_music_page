@@ -89,7 +89,7 @@ export default function Navbar() {
           onClick={(e) => handleScroll(e, 'hero')}
           aria-label={t('nav.home')}
         >
-          <img src="/assets/images/logo-mark.webp" alt="" className={styles.brandMark} width="28" height="37" />
+          <img src="/assets/images/logo-mark-112.webp" alt="" className={styles.brandMark} width="28" height="37" />
           <span className={`${styles.brandName} font-display`} aria-hidden="true">Hasan&nbsp;Arthur</span>
         </a>
 
@@ -114,12 +114,13 @@ export default function Navbar() {
             hrefLang={otherLang}
             lang={otherLang}
             className={styles.langToggle}
-            aria-label={t('nav.switchLang')}
             onClick={() => {
               try { window.localStorage.setItem(LANG_PREF_KEY, otherLang); } catch { /* storage blocked */ }
             }}
           >
+            {/* The visible label stays part of the accessible name (WCAG 2.5.3). */}
             {otherLang.toUpperCase()}
+            <span className="sr-only">: {t('nav.switchLang')}</span>
           </a>
           <button
             type="button"

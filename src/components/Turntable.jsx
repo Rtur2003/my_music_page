@@ -3,10 +3,11 @@ import * as engine from '../player/engine';
 import styles from './Turntable.module.css';
 
 // The hero record as an instrument. It turns at 33⅓ rpm while the deck plays and
-// coasts to a slow drift when it stops; you can push it by hand. Its grooves light
-// up with the live spectrum of the preview: bass on the outer rings, air near the label.
+// coasts down when it stops; you can push it by hand. Its grooves light up with the
+// live spectrum of the preview: bass on the outer rings, air near the label.
+// At rest a CSS animation keeps a slow drift on the compositor, and this loop sleeps:
+// it only runs while something plays, a hand is on the record, or it is still coasting.
 const PLAY_SPEED = 200; // degrees per second, 33⅓ rpm
-const IDLE_SPEED = 9;
 const RINGS = 34;
 const LIGHT = '241, 241, 239';
 
@@ -54,7 +55,7 @@ export default function Turntable({ onTap, beatTarget, children }) {
     const levels = new Float32Array(RINGS);
     let size = 0;
     let angle = -16;
-    let speed = IDLE_SPEED;
+    let speed = 0;
     let beat = 0;
     let lit = false;
     let visible = true;
@@ -75,7 +76,7 @@ export default function Turntable({ onTap, beatTarget, children }) {
       last = now;
       const playing = engine.readBands(bands);
       if (!drag) {
-        const target = playing ? PLAY_SPEED : IDLE_SPEED;
+        const target = playing ? PLAY_SPEED : 0;
         // Motor: ~1 s to reach speed; a stopped platter coasts for about two.
         speed += (target - speed) * (1 - Math.exp(-dt * (playing ? 2.2 : 0.8)));
         angle += speed * dt;
@@ -96,7 +97,8 @@ export default function Turntable({ onTap, beatTarget, children }) {
       beat = Math.max(bass * bass, beat * 0.86);
       beatTarget?.current?.style.setProperty('--beat', beat.toFixed(3));
 
-      if (visible) frame = requestAnimationFrame(tick);
+      const busy = playing || drag || Math.abs(speed) > 0.5 || lit || beat > 0.001;
+      if (visible && busy) frame = requestAnimationFrame(tick);
     };
     const run = () => {
       if (!frame) {
@@ -115,6 +117,7 @@ export default function Turntable({ onTap, beatTarget, children }) {
       if (event.button !== 0) return;
       platter.setPointerCapture(event.pointerId);
       drag = { at: pointerAngle(event), t: performance.now(), x: event.clientX, y: event.clientY, moved: 0, started: performance.now() };
+      run();
     };
     const onMove = (event) => {
       if (!drag) return;
@@ -148,10 +151,12 @@ export default function Turntable({ onTap, beatTarget, children }) {
     platter.addEventListener('pointermove', onMove);
     platter.addEventListener('pointerup', onUp);
     platter.addEventListener('pointercancel', onCancel);
-    run();
+    // Wake up when playback starts or stops anywhere on the page.
+    const unsubscribe = engine.subscribe(run);
 
     return () => {
       cancelAnimationFrame(frame);
+      unsubscribe();
       observer.disconnect();
       io.disconnect();
       platter.removeEventListener('pointerdown', onDown);

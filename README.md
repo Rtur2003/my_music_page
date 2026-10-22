@@ -7,17 +7,17 @@ Music site of Hasan Arthur Altuntaş — React 19 + Vite 8, GSAP/Lenis motion, d
 ```bash
 npm run dev      # dev server (client-rendered)
 npm run build    # client build → SSR build → prerender into dist/index.html
-npm run preview  # serve dist/ locally
+npm run preview  # serve dist/ like production: CSP from _headers, brotli, real 404s, /api/releases → 204
 npm run lint     # oxlint
 ```
 
 ## How the build works
 
-- `vite.config.js` generates the JSON-LD graph (Person, MusicGroup, albums) from `src/data/music-catalog.js`, so structured data always matches the UI.
-- `scripts/prerender.js` renders `<App />` with `react-dom/server` and injects it into `dist/index.html`; `src/main.jsx` hydrates it. Crawlers and link previews get real HTML.
-- `src/components/Backdrop.jsx` is one fixed, animated background behind every section. Sections set `data-tone`; the one crossing the viewport centre retints it (tones live in `Backdrop.module.css`). Keep section backgrounds transparent.
-- `src/player/PlayerContext.jsx` + `src/components/Player.jsx`: one Spotify player for the whole page (plain embed, no third-party script, strict CSP). Any "listen" button calls `usePlayer().play(release)`; the small record that follows the page opens and closes it.
-- Release data lives in `src/data/music-catalog.js`; cover URLs in `src/data/artwork.json` (Spotify CDN, 300px — `coverArt(url, true)` returns the 640px variant).
+- `prebuild` refreshes the data the page is built from: `sync-catalog.js` (releases + Apple previews → `src/data/releases.json`), `sync-repos.js` (GitHub stars/language/last push → `src/data/repos.json`) and `sync-covers.js` (newest cover → `public/covers/`, so the hero image, the LCP element, is served from the site itself). Each keeps the previous data if a source is down.
+- `scripts/prerender.js` renders `<App />` with `react-dom/server` for both languages, inlines the stylesheet and writes `dist/index.html` and `dist/en/index.html`; `src/main.jsx` hydrates it. Crawlers and link previews get real HTML.
+- One surface, one type family: Archivo (SIL OFL, self-hosted in `public/fonts/`), with its width axis for display type. Red (`--color-signal`) only means "live".
+- `src/player/engine.js` plays a release's 30-second Apple preview through Web Audio and exposes its spectrum. `src/components/Turntable.jsx` turns the hero record with it and lights its grooves; `Player.jsx` is the transport with a live meter. "Full track" (or a release without a preview) falls back to the plain Spotify / Apple Music embed. Any "listen" button calls `usePlayer().play(release)`.
+- `src/components/Timeline.jsx` plots every release by date (height = track count); the archive below is its table view.
 
 ## SEO
 
@@ -39,7 +39,7 @@ The language comes from the URL; the TR/EN switch is a real link, so both pages 
 
 The page never goes stale, in three layers:
 
-1. **Always on, no setup:** the official Spotify artist embed in the discography shows the current popular tracks.
+1. **Always on, no setup:** the official Spotify artist embed shows the current popular tracks. It loads on request, since it sets third-party cookies.
 2. **Runtime (Worker):** `worker/index.js` serves `GET /api/releases`: every release from Apple's public iTunes API (exact dates, no key needed) merged by title with Spotify album ids (`shared/catalog.js`), cached 6 h at the edge. The page swaps it in on load; the hero follows the newest release. Releases with a Spotify id play in Spotify's embed, the rest in Apple Music's.
 3. **Build time:** `npm run build` runs `scripts/sync-catalog.js` first and rewrites `src/data/releases.json`, so the prerendered HTML, JSON-LD, sitemap and `llms.txt` list the full discography.
 
