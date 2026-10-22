@@ -1,5 +1,5 @@
-import releases from './releases.json';
-import localCovers from './local-covers.json';
+import releases from './releases.json' with { type: 'json' };
+import localCovers from './local-covers.json' with { type: 'json' };
 
 // releases.json is refreshed at build time (scripts/sync-catalog.js: Apple dates +
 // Spotify ids) and live at runtime (worker /api/releases → ReleasesContext). Newest first.

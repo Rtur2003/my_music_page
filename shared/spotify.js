@@ -1,7 +1,7 @@
 // Spotify Web API access shared by the Cloudflare Worker (live /api/releases)
 // and scripts/sync-catalog.js (build-time refresh). Client-credentials flow only:
 // no user data, just the public discography.
-export const ARTIST_ID = '6D5NDnftFDOelT5ssMe0ef';
+const ARTIST_ID = '6D5NDnftFDOelT5ssMe0ef';
 
 export async function getToken(clientId, clientSecret, fetchImpl = fetch) {
   const res = await fetchImpl('https://accounts.spotify.com/api/token', {
@@ -17,7 +17,7 @@ export async function getToken(clientId, clientSecret, fetchImpl = fetch) {
 }
 
 // Spotify files EPs under album_type "single"; 4+ tracks is its own EP rule.
-export function normalizeAlbum(album) {
+function normalizeAlbum(album) {
   const byClosestTo300 = [...(album.images ?? [])].sort((a, b) => Math.abs(a.width - 300) - Math.abs(b.width - 300));
   return {
     id: album.id,

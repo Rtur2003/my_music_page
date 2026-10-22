@@ -4,17 +4,17 @@
 import { albumUrl, appleAlbumUrl, artistProfile, coverArt, musicCatalog, spotifyAlbumUrl } from '../data/music-catalog.js';
 import { TRACKS } from '../data/projects.js';
 
-export const SITE = 'https://hasan-arthur-altuntas.com.tr';
-export const NAME = 'Hasan Arthur Altuntaş';
+const SITE = 'https://hasan-arthur-altuntas.com.tr';
+const NAME = 'Hasan Arthur Altuntaş';
 const OG_IMAGE = `${SITE}/assets/images/og-image.jpg`;
 const EMAIL = 'hasannarthurrr@gmail.com';
 
-export const LANGS = {
+const LANGS = {
   tr: { path: '/', htmlLang: 'tr', locale: 'tr_TR', bcp47: 'tr-TR' },
   en: { path: '/en/', htmlLang: 'en', locale: 'en_US', bcp47: 'en-US' },
 };
 
-export const pageUrl = (lang) => `${SITE}${LANGS[lang].path}`;
+const pageUrl = (lang) => `${SITE}${LANGS[lang].path}`;
 
 const SAME_AS = [
   artistProfile.spotifyUrl,
@@ -37,7 +37,7 @@ const KIND = {
   en: { album: 'album', ep: 'EP', single: 'single' },
 };
 
-export function meta(lang) {
+function meta(lang) {
   const latest = musicCatalog[0];
   const kind = KIND[lang][latest.type] ?? (lang === 'en' ? 'release' : 'yayın');
   if (lang === 'en') {
@@ -82,7 +82,7 @@ function releaseSchema(release) {
   };
 }
 
-export function structuredData(lang, today = new Date().toISOString().slice(0, 10)) {
+function structuredData(lang, today = new Date().toISOString().slice(0, 10)) {
   const m = meta(lang);
   const url = pageUrl(lang);
   const graph = [

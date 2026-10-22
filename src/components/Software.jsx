@@ -1,7 +1,7 @@
 import { ArrowUpRight } from 'lucide-react';
 import { useTranslation } from '../i18n/LanguageContext';
 import { TRACKS } from '../data/projects';
-import repos from '../data/repos.json';
+import repos from '../data/repos.json' with { type: 'json' };
 import styles from './Software.module.css';
 
 export default function Software() {

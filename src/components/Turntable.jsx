@@ -37,8 +37,11 @@ function drawGrooves(ctx, size, levels) {
 export default function Turntable({ onTap, beatTarget, children }) {
   const platterRef = useRef(null);
   const canvasRef = useRef(null);
+  // The latest tap handler, read by the long-lived pointer listeners below.
   const tapRef = useRef(onTap);
-  tapRef.current = onTap;
+  useEffect(() => {
+    tapRef.current = onTap;
+  }, [onTap]);
 
   useEffect(() => {
     const platter = platterRef.current;

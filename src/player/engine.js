@@ -79,7 +79,7 @@ export function status() {
   };
 }
 
-export const isPlaying = () => Boolean(audio && audio.src && !audio.paused && !audio.ended);
+const isPlaying = () => Boolean(audio && audio.src && !audio.paused && !audio.ended);
 
 // Log-spaced band energies (0–1) from ~40 Hz to ~14 kHz, written into `out`.
 // Returns false while nothing is playing, so callers can let their visuals rest.

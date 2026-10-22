@@ -3,6 +3,8 @@ import { useTranslation } from '../i18n/LanguageContext';
 import styles from './Contact.module.css';
 
 const EMAIL = 'hasannarthurrr@gmail.com';
+// Read once when the module loads (at build time for the prerendered page).
+const YEAR = new Date().getFullYear();
 
 // End credits: role on the left, names on the right, centred on one gutter.
 const CREDITS = [
@@ -71,7 +73,7 @@ export function Footer() {
   return (
     <footer className={styles.footer}>
       <div className={styles.footerBar}>
-        <small suppressHydrationWarning>&copy; {new Date().getFullYear()} Hasan Arthur Altuntaş</small>
+        <small suppressHydrationWarning>&copy; {YEAR} Hasan Arthur Altuntaş</small>
         <span>{t('contact.footerCredit')}</span>
         <a href="#hero" className={styles.backToTop}>
           {t('contact.backToTop')}

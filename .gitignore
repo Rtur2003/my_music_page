@@ -7,10 +7,39 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies and build output (dist/ is rebuilt on every deploy)
 node_modules
 dist
 dist-ssr
+.vite
+*.tsbuildinfo
 *.local
+
+# Cloudflare / Wrangler: local state and secrets
+.wrangler
+.dev.vars
+.dev.vars.*
+.env
+.env.*
+
+# Test and audit output
+coverage
+playwright-report
+test-results
+lighthouse*.json
+*.report.html
+*.report.json
+
+# Tool caches
+.cache
+.eslintcache
+.mypy_cache
+__pycache__
+.impeccable
+
+# Scratch files
+.tmp*
+*.tmp
 
 # Editor directories and files
 .vscode/*
@@ -18,6 +47,8 @@ dist-ssr
 .idea
 .claude/
 .DS_Store
+Thumbs.db
+desktop.ini
 *.suo
 *.ntvs*
 *.njsproj

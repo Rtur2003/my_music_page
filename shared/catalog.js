@@ -4,18 +4,18 @@
 //  - Spotify (Web API with keys, or the committed releases.json): album ids for
 //    the in-page Spotify player.
 // Shared by the Worker (live /api/releases) and scripts/sync-catalog.js (build).
-export const APPLE_ARTIST_ID = 1758593368;
+const APPLE_ARTIST_ID = 1758593368;
 
 const SUFFIX = / - (Single|EP)$/;
 
 // "Crimson Desert Going into Pywel(Remaster)" and "…Pywel (Remaster)" are the same record.
 // Titles made only of punctuation ("!", "?") keep their raw form so they stay distinct.
-export function titleKey(title) {
+function titleKey(title) {
   const bare = title.replace(SUFFIX, '').trim();
   return bare.normalize('NFKD').toLowerCase().replace(/[^a-z0-9]+/g, '') || `raw:${bare}`;
 }
 
-export function normalizeApple(collection) {
+function normalizeApple(collection) {
   const suffix = collection.collectionName.match(SUFFIX)?.[1];
   return {
     title: collection.collectionName.replace(SUFFIX, '').trim(),
@@ -32,7 +32,7 @@ export const PREVIEW_ORIGIN = 'https://audio-ssl.itunes.apple.com/';
 
 // The first track's preview of every release, by Apple collection id. Apple serves
 // these with CORS, so the page can read their spectrum.
-export async function fetchApplePreviews(fetchImpl = fetch) {
+async function fetchApplePreviews(fetchImpl = fetch) {
   const res = await fetchImpl(`https://itunes.apple.com/lookup?id=${APPLE_ARTIST_ID}&entity=song&limit=200&country=tr`);
   if (!res.ok) throw new Error(`itunes songs: HTTP ${res.status}`);
   const data = await res.json();
