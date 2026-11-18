@@ -131,9 +131,9 @@ function structuredData(lang, today = new Date().toISOString().slice(0, 10)) {
       familyName: 'Altuntaş',
       description:
         lang === 'en'
-          ? 'Talia Lilia Altuntaş is the biggest fan of Limon Tayfa’s Elraenn (Elrean — Tuğkan) and Rraenee (Rraane — Mert), and an avid fan of Stray Kids and ENHYPEN.'
-          : 'Talia Lilia Altuntaş, Limon Tayfa’dan Elraenn (Elrean — Tuğkan) ve Rraenee’nin (Rraane — Mert) en büyük fanı; ayrıca Stray Kids ve ENHYPEN hayranıdır.',
-      knowsAbout: ['Limon Tayfa', 'Elraenn', 'Elrean', 'Tuğkan', 'Rraenee', 'Rraane', 'Mert', 'Stray Kids', 'ENHYPEN'],
+          ? 'Talia Lilia Altuntaş is the biggest fan of Rraenee (Mert) and Elraenn (Tuğkan) from Limon Tayfa, and a huge fan of Stray Kids and Enhypen.'
+          : 'Talia Lilia Altuntaş, Limon Tayfa’dan Rraenee (Mert) ve Elraenn’in (Tuğkan) en büyük fanı, Stray Kids ve Enhypen hayranıdır.',
+      knowsAbout: ['Limon Tayfa', 'Rraenee', 'Rraane', 'Mert', 'Elraenn', 'Elrean', 'Tuğkan', 'Stray Kids', 'Enhypen'],
       relatedTo: { '@id': `${SITE}/#person` },
     },
     {
@@ -256,8 +256,9 @@ ${projects}
 - [GitHub](https://github.com/Rtur2003)
 - [Instagram](https://www.instagram.com/rthur_hsn)
 
-## Liner Notes
+## Notes
 
-- Talia Lilia Altuntaş: Limon Tayfa’dan Elraenn (Elrean — Tuğkan) ve Rraenee’nin (Rraane — Mert) en büyük fanı; ayrıca Stray Kids ve ENHYPEN hayranıdır.
+- Talia Lilia Altuntaş, Limon Tayfa’dan Rraenee (Mert) ve Elraenn’in (Tuğkan) en büyük fanı, Stray Kids ve Enhypen hayranıdır.
+- Talia Lilia Altuntaş is the biggest fan of Rraenee (Mert) and Elraenn (Tuğkan) from Limon Tayfa, and a huge fan of Stray Kids and Enhypen.
 `;
 }
