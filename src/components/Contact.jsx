@@ -80,6 +80,7 @@ export function Footer() {
           <ArrowUp size={15} aria-hidden="true" />
         </a>
       </div>
+      <p className={styles.colophon}>{t('contact.colophon')}</p>
     </footer>
   );
 }

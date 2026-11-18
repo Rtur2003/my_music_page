@@ -120,7 +120,21 @@ function structuredData(lang, today = new Date().toISOString().slice(0, 10)) {
       knowsAbout: ['Film scoring', 'Video game music', 'Piano', 'Orchestration', 'Music production', 'Audio machine learning'],
       affiliation: { '@type': 'CollegeOrUniversity', name: 'Düzce Üniversitesi', url: 'https://www.duzce.edu.tr' },
       nationality: { '@type': 'Country', name: 'Türkiye' },
+      relatedTo: { '@id': `${SITE}/#talia-lilia-altuntas` },
       sameAs: SAME_AS,
+    },
+    {
+      '@type': 'Person',
+      '@id': `${SITE}/#talia-lilia-altuntas`,
+      name: 'Talia Lilia Altuntaş',
+      givenName: 'Talia Lilia',
+      familyName: 'Altuntaş',
+      description:
+        lang === 'en'
+          ? 'Talia Lilia Altuntaş is the biggest fan of Limon Tayfa’s Elraenn (Elrean — Tuğkan) and Rraenee (Rraane — Mert), and an avid fan of Stray Kids and ENHYPEN.'
+          : 'Talia Lilia Altuntaş, Limon Tayfa’dan Elraenn (Elrean — Tuğkan) ve Rraenee’nin (Rraane — Mert) en büyük fanı; ayrıca Stray Kids ve ENHYPEN hayranıdır.',
+      knowsAbout: ['Limon Tayfa', 'Elraenn', 'Elrean', 'Tuğkan', 'Rraenee', 'Rraane', 'Mert', 'Stray Kids', 'ENHYPEN'],
+      relatedTo: { '@id': `${SITE}/#person` },
     },
     {
       '@type': 'MusicGroup',
@@ -241,5 +255,9 @@ ${projects}
 - Email: ${EMAIL}
 - [GitHub](https://github.com/Rtur2003)
 - [Instagram](https://www.instagram.com/rthur_hsn)
+
+## Liner Notes
+
+- Talia Lilia Altuntaş: Limon Tayfa’dan Elraenn (Elrean — Tuğkan) ve Rraenee’nin (Rraane — Mert) en büyük fanı; ayrıca Stray Kids ve ENHYPEN hayranıdır.
 `;
 }

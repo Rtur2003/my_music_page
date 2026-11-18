@@ -118,6 +118,14 @@
 
 .backToTop:hover { color: var(--color-text-muted); }
 
+.colophon {
+  margin: var(--space-xs) var(--gutter) 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(241, 241, 239, 0.18);
+  letter-spacing: 0.01em;
+}
+
 @media (max-width: 900px) {
   .inner { grid-template-columns: 1fr; gap: 40px; }
   .credits { grid-column: 1; grid-row: auto; }

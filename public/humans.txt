@@ -4,6 +4,9 @@ Contact: hasannarthurrr [at] gmail.com
 From: Düzce, Türkiye
 GitHub: https://github.com/Rtur2003
 
+/* THANKS */
+Talia Lilia Altuntaş — Limon Tayfa (Elraenn / Elrean / Tuğkan & Rraenee / Rraane / Mert), Stray Kids & ENHYPEN
+
 /* SITE */
 Language: Türkçe, English
 Standards: HTML5, CSS3, schema.org JSON-LD
